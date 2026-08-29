@@ -1,0 +1,215 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedSignedIn() {
+      return isSignedIn()
+        && request.auth.token.email is string
+        && request.auth.token.email_verified == true;
+    }
+
+    function getSignedInEmail() {
+      return request.auth.token.email;
+    }
+
+    function isReleaseNotesOwner() {
+      return isVerifiedSignedIn()
+        && getSignedInEmail() in ['surendarv638@gmail.com'];
+    }
+
+    function isReleaseNotesAdmin() {
+      return isReleaseNotesOwner()
+        || (isVerifiedSignedIn()
+          && exists(/databases/$(database)/documents/releaseNotesAdmins/$(getSignedInEmail())));
+    }
+
+    function isValidReleaseNotesAdminDoc(emailDocId) {
+      return request.resource.data.email is string
+        && request.resource.data.email == emailDocId
+        && (!('addedBy' in request.resource.data) || request.resource.data.addedBy is string);
+    }
+
+    function isSiteOwner() {
+      return isVerifiedSignedIn()
+        && getSignedInEmail().lower() == 'surendarv638@gmail.com';
+    }
+
+    function isSiteAdmin() {
+      return isSiteOwner()
+        || (isVerifiedSignedIn()
+          && exists(/databases/$(database)/documents/siteAdmins/$(getSignedInEmail().lower())));
+    }
+
+    function isValidSiteAdminDoc(emailDocId) {
+      return emailDocId == emailDocId.lower()
+        && request.resource.data.email is string
+        && request.resource.data.email.lower() == emailDocId
+        && request.resource.data.role == 'admin'
+        && request.resource.data.active is bool
+        && (!('addedBy' in request.resource.data) || request.resource.data.addedBy is string)
+        && (!('addedAt' in request.resource.data) || request.resource.data.addedAt is timestamp);
+    }
+
+    function isValidProductDoc(docId) {
+      return request.resource.data.keys().hasOnly(
+          ['slug','title','author','category','price','image','summary','description','tags','detailTags','gallery','productType','updatedAt'])
+        && request.resource.data.slug == docId
+        && request.resource.data.title is string && request.resource.data.title.size() > 0
+        && request.resource.data.description is string && request.resource.data.description.size() > 0
+        && request.resource.data.author is string
+        && request.resource.data.category is string
+        && request.resource.data.price is string
+        && request.resource.data.image is string
+        && request.resource.data.summary is string
+        && request.resource.data.productType is string && request.resource.data.productType.size() > 0
+        && request.resource.data.tags is list
+        && request.resource.data.detailTags is list
+        && (!('gallery' in request.resource.data) || request.resource.data.gallery is list)
+        && request.resource.data.updatedAt is string;
+    }
+
+    function isValidUpdatePayload() {
+      return request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.description is string
+        && request.resource.data.description.size() > 0
+        && request.resource.data.date is timestamp
+        && (!('image' in request.resource.data) || request.resource.data.image is string)
+        && request.resource.data.changes is map
+        && request.resource.data.changes.features is list
+        && request.resource.data.changes.improvements is list
+        && request.resource.data.changes.fixes is list
+        && (!('publishedBy' in request.resource.data) || request.resource.data.publishedBy is string)
+        && (!('updatedBy' in request.resource.data) || request.resource.data.updatedBy is string)
+        && (!('share' in request.resource.data)
+          || (
+            request.resource.data.share is map
+            && (!('slug' in request.resource.data.share) || request.resource.data.share.slug is string)
+            && (!('summary' in request.resource.data.share) || request.resource.data.share.summary is string)
+            && (!('title' in request.resource.data.share) || request.resource.data.share.title is string)
+          ));
+    }
+
+    // Public read for product catalog. Writes are gated to Super
+    // Admin/Admins granted via the siteAdmins collection (see below).
+    match /products/{docId} {
+      allow read: if true;
+      allow create, update: if isSiteAdmin() && isValidProductDoc(docId);
+      allow delete: if isSiteAdmin();
+    }
+
+    // Stats document per product slug.
+    // This keeps cards and detail pages readable for all users.
+    match /productStats/{productSlug} {
+      allow read: if true;
+
+      // Allow create/update for aggregate counters only.
+      allow create, update: if
+        request.resource.data.keys().hasOnly(['slug', 'likesCount', 'guestLikesCount', 'viewsCount', 'updatedAt'])
+        && request.resource.data.slug == productSlug
+        && request.resource.data.likesCount is int
+        && request.resource.data.guestLikesCount is int
+        && request.resource.data.viewsCount is int
+        && request.resource.data.likesCount >= 0
+        && request.resource.data.guestLikesCount >= 0
+        && request.resource.data.viewsCount >= 0;
+
+      // Do not allow deleting whole stats docs from client.
+      allow delete: if false;
+
+      // Per-user like marker docs.
+      match /likes/{uid} {
+        allow read: if request.auth != null && request.auth.uid == uid;
+        allow create, delete: if request.auth != null && request.auth.uid == uid;
+        allow update: if false;
+      }
+    }
+
+    match /releaseNotesAdmins/{emailDocId} {
+      allow get: if isReleaseNotesOwner()
+        || (isVerifiedSignedIn() && getSignedInEmail() == emailDocId);
+      allow list: if isReleaseNotesOwner();
+      allow create, update: if isReleaseNotesOwner() && isValidReleaseNotesAdminDoc(emailDocId);
+      allow delete: if isReleaseNotesOwner() && emailDocId != 'surendarv638@gmail.com';
+    }
+
+    // Site admin roster (Admin Page access). Super Admin is a single
+    // hardcoded email (see isSiteOwner()) and is never stored here; only
+    // Admins explicitly granted by the Super Admin live in this collection.
+    match /siteAdmins/{emailDocId} {
+      allow get: if isSiteOwner()
+        || (isVerifiedSignedIn() && getSignedInEmail().lower() == emailDocId);
+      allow list: if isSiteOwner();
+      allow create, update: if isSiteOwner() && isValidSiteAdminDoc(emailDocId);
+      allow delete: if isSiteOwner() && emailDocId != 'surendarv638@gmail.com';
+    }
+
+    match /updates-feed/{docId} {
+      allow read: if true;
+      allow create, update: if isReleaseNotesAdmin() && isValidUpdatePayload();
+      allow delete: if isReleaseNotesAdmin();
+    }
+
+    match /updatesFeed/{docId} {
+      allow read: if true;
+      allow create, update: if isReleaseNotesAdmin() && isValidUpdatePayload();
+      allow delete: if isReleaseNotesAdmin();
+    }
+
+    match /updates/{docId} {
+      allow read: if true;
+      allow create, update: if isReleaseNotesAdmin() && isValidUpdatePayload();
+      allow delete: if isReleaseNotesAdmin();
+    }
+
+    // User-saved collections (palettes, typefaces).
+    match /users/{userId}/collections/{collectionType} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create, update: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.uid == userId
+        && request.resource.data.entries is list;
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Per-account "sidebar notification" read-state, one doc per product
+    // the user has seen. Works identically for Google-signed-in users and
+    // guest (Anonymous Auth) sessions — both get a real request.auth.uid.
+    match /notificationReads/{uid}/items/{slug} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    match /urlBetaDailyCredits/{docId} {
+      // Users can read their own daily credit documents.
+      allow read: if request.auth != null
+        && (resource == null || resource.data.uid == request.auth.uid);
+
+      // Create: only your own document, used starts at 0, within daily limit.
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.day is string
+        && request.resource.data.used is int
+        && request.resource.data.used >= 0
+        && request.resource.data.used <= request.resource.data.limit
+        && request.resource.data.limit is int
+        && request.resource.data.limit > 0;
+
+      // Update: only your own, used can only go up by at most 1, cannot exceed limit.
+      allow update: if request.auth != null
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.day is string
+        && request.resource.data.used is int
+        && request.resource.data.used >= 0
+        && request.resource.data.used <= request.resource.data.limit
+        && request.resource.data.limit is int
+        && request.resource.data.limit > 0
+        && request.resource.data.used >= resource.data.used
+        && request.resource.data.used <= resource.data.used + 1;
+
+      allow delete: if false;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+MOTVIN/node_modules/
+
+# Package manager caches
+.npm-cache/
+npm-cache/
+.cache/
+
+# Vercel / Firebase local state
+.vercel/
+.firebase/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.test
+!.env.example
+
+# OS / editor
+.DS_Store
+.vscode/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Large Data Files
+real_icons_data.js
+real_logos_data.js

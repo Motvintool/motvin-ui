@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sort -t: -k3 -n)",
+      "Bash(node --check \"/Users/surendar-15488/New Backup/Disk/Draft Images/Sources/Demo/My design post site/JS/firebase-auth.js\")",
+      "Bash(node --check \"/Users/surendar-15488/New Backup/Disk/Draft Images/Sources/Demo/My design post site/COMPONENT/Sidebar/Sidebar.js\")",
+      "Bash(grep -n \"applySidebarProfileBadgeState\\({ signedIn: false, user: null }\\);\" \"/Users/surendar-15488/New Backup/Disk/Draft Images/Sources/Demo/My design post site/MOTVIN/js/app.js\")",
+      "Bash(node --check \"/Users/surendar-15488/New Backup/Disk/Draft Images/Sources/Demo/My design post site/MOTVIN/js/firebase-url-beta.js\")",
+      "Bash(node --check \"/Users/surendar-15488/New Backup/Disk/Draft Images/Sources/Demo/My design post site/MOTVIN/js/app.js\")",
+      "Bash(node --check \"/Users/surendar-15488/New Backup/Disk/Draft Images/Sources/Demo/My design post site/MOTVIN/updates/script.110f497c05.js\")",
+      "Bash(node --check \"/Users/surendar-15488/New Backup/Disk/Draft Images/Sources/Demo/My design post site/MOTVIN/updates/admin.8d71fd2002.js\")",
+      "Bash(node --check \"/Users/surendar-15488/New Backup/Disk/Draft Images/Sources/Demo/My design post site/ADMIN-PAGE/admin.js\")",
+      "Bash(xargs ls -la)",
+      "Bash(python3 -c ' *)",
+      "Bash(xargs -I{} sh -c 'echo \"== {} ==\"; cat \"{}\"')",
+      "Bash(awk 'NR>=1030 && NR<=5725 && /^        \\(if \\\\\\(.*\\\\\\) \\)?return;?\\\\s*$/ {print NR\": \"$0}' typeface.html)",
+      "Bash(awk 'NR>=1030 && NR<=5725' typeface.html)",
+      "Bash(grep -n \"^        if \\(!.*\\) {\\\\s*$\")",
+      "Bash(awk 'NR>=5266 && NR<=5725 {print NR\": \"$0}' typeface.html)",
+      "Bash(awk 'NR>=5266 && NR<=5725 && /^        [a-zA-Z_$]/ {print NR\": \"$0}' typeface.html)",
+      "Bash(grep -n \"^        if \\(!.*\\) {$\" typeface.html)",
+      "Bash(awk -F: '$1>1030 && $1<6210')",
+      "Bash(python3 -)",
+      "Bash(node --check /tmp/snippet.js)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(tail -c 300 /tmp/snippet.js)",
+      "Bash(node --check /tmp/snippet2.js)",
+      "Bash(echo \"exit:$?\")",
+      "Bash(node --check js/app.js)",
+      "Bash(grep -n \"COMMUNITY$\\\\|TESTIMONIALS$\\\\|^\\\\.lp-faq \\\\{\\\\|FAQ$\" index.css)",
+      "Bash(python3 -m http.server 8765)"
+    ]
+  }
+}

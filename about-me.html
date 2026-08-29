@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About Me - Siren.uix</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="CSS/theme.css" />
+<link rel="stylesheet" href="CSS/global.css" />
+<link rel="stylesheet" href="CSS/top-pane.css" />
+<link rel="stylesheet" href="COMPONENT/Button/Button.css" />
+<link rel="stylesheet" href="COMPONENT/Sidebar/Sidebar.css" />
+<link rel="stylesheet" href="CSS/main.css" data-page-style="true" />
+<link rel="stylesheet" href="CSS/about-me.css" data-page-style="true" />
+<script src="JS/product-cache.js"></script>
+
+  <link rel="icon" type="image/svg+xml" href="ASSET/Images/motvin%20logo%20(full%20color).svg" />
+</head>
+<body class="about-page">
+
+<div class="top-pane">
+  <div class="top-pane-tabs">
+    <a class="top-pane-tab top-pane-home-tab" href="/files" aria-label="Home">
+      <img src="ASSET/Icons/top-pane-home-icon.svg" alt="" />
+    </a>
+    <div id="shell-top-pane-product-tabs"></div>
+  </div>
+  <button class="top-pane-mobile-menu" type="button" aria-label="Open sidebar">
+    <img src="ASSET/Icons/top-pane-mobile-menu-icon.svg" alt="" />
+  </button>
+  <div class="top-pane-add">
+    <img src="ASSET/Icons/top-pane-add-icon.svg" alt="Add tab" />
+  </div>
+</div>
+<script>(function(){try{var rawSlugs=localStorage.getItem('openedProductSlugs');var s=rawSlugs?JSON.parse(rawSlugs):[];var p=document.querySelector('.top-pane');if(!s.length&&window.innerWidth>670){if(p)p.classList.add('top-pane--hidden');document.body.classList.add('top-pane-hidden');return;}var container=document.getElementById('shell-top-pane-product-tabs')||document.getElementById('detail-top-pane-product-tabs');if(!container||!s.length)return;var prodMap={};try{var cachedProdsRaw=localStorage.getItem('motvin_products_v1');if(cachedProdsRaw){var cachedProds=JSON.parse(cachedProdsRaw);if(Array.isArray(cachedProds)){for(var k=0;k<cachedProds.length;k++){var item=cachedProds[k];if(item&&item.slug)prodMap[item.slug]=item;}}}}catch(e){}var params=new URLSearchParams(window.location.search);var reqProduct=params.get('product');var reqCategory=params.get('category');var path=window.location.pathname.toLowerCase();var activeSlug=null;if(reqProduct){activeSlug=reqProduct;}else if(path.indexOf('filter-template.html')!==-1||path.indexOf('mobile-template.html')!==-1||path.indexOf('web-template.html')!==-1){var cat=reqCategory||(path.indexOf('mobile-template')!==-1?'mobile':(path.indexOf('web-template')!==-1?'web':'free-paid'));activeSlug='filter:'+cat;}var isHome=!activeSlug&&(path.endsWith('files.html')||path.endsWith('/')||path.endsWith('about-me.html')||path.endsWith('my-post.html')||path.endsWith('saved-templates.html'));var homeTab=document.querySelector('.top-pane-home-tab');if(homeTab){if(isHome){homeTab.classList.add('is-active');}else{homeTab.classList.remove('is-active');}}function titleCase(str){return String(str||'').replace(/^filter:/,'').replace(/[-_]+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});}var filterLabels={'mobile':'Mobile Templates','web':'Web Templates','free':'Free Templates','paid':'Paid Templates','free-paid':'Free & Paid Templates','recent':'Recent Templates'};var iconSvg='<svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.00004 5.33329H4.00671M6.66671 5.33329H6.67337M9.33337 5.33329H9.34004M2.66671 2.66663H13.3334C14.0698 2.66663 14.6667 3.26358 14.6667 3.99996V12C14.6667 12.7363 14.0698 13.3333 13.3334 13.3333H2.66671C1.93033 13.3333 1.33337 12.7363 1.33337 12V3.99996C1.33337 3.26358 1.93033 2.66663 2.66671 2.66663Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';var html='';for(var i=0;i<s.length;i++){var slug=s[i];var isActive=!isHome&&(slug===activeSlug);var title='';if(slug.indexOf('filter:')===0){title=filterLabels[slug.replace('filter:','')]||'Free & Paid Templates';}else if(prodMap[slug]&&prodMap[slug].title){title=prodMap[slug].title;}else{title=titleCase(slug);}html+='<div class="top-pane-tab'+(isActive?' is-active':'')+'" data-product-slug="'+slug+'">'+iconSvg+'<span>'+title+'</span><button class="tab-close" type="button" aria-label="Close tab"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /></svg></button></div>';}container.innerHTML=html;}catch(e){}})();</script>
+
+<div class="layout">
+  <aside class="sidebar sidebar-skeleton sidebar--responsive" data-sidebar-root data-sidebar-active="about" aria-hidden="true">
+    <div class="sidebar-skel-profile"><div class="sidebar-skel-profile-left"><span class="sidebar-skel-block sidebar-skel-avatar"></span><span class="sidebar-skel-block sidebar-skel-name"></span></div><span class="sidebar-skel-block sidebar-skel-notif"></span></div>
+    <div class="sidebar-skel-search"><span class="sidebar-skel-block sidebar-skel-search-bar"></span></div>
+    <div class="sidebar-skel-section"><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+    <div class="sidebar-skel-section"><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+    <div class="sidebar-skel-section"><span class="sidebar-skel-block sidebar-skel-section-title"></span><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+    <div class="sidebar-skel-section"><span class="sidebar-skel-block sidebar-skel-section-title"></span><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+    <div class="sidebar-skel-whatsapp"><span class="sidebar-skel-block sidebar-skel-whatsapp-card"></span></div>
+    <div class="sidebar-skel-section"><span class="sidebar-skel-block sidebar-skel-starred-toggle"></span><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+  </aside>
+
+  <main class="main main-shell-fade-in">
+    <div class="about-shell">
+      <section class="about-intro">
+        <div class="about-intro-copy-col">
+          <div class="about-role-badge">
+            <img src="ASSET/Icons/filter-all-templates-icon.svg" alt="" />
+            <span>Product Designer</span>
+          </div>
+          <h2 class="about-hero-title">Hey, I’m Surendar V</h2>
+          <p class="about-hero-copy">I am excited to introduce myself as a UX/UI designer who is passionate about creating intuitive and user-friendly digital experiences. My goal is to understand your needs and translate them into design solutions that exceed your expectations. With several years of experience in the field, I have worked on a variety of projects, ranging from mobile apps to e-commerce websites. My work involves analyzing user behavior, creating user personas.</p>
+          <p class="about-hero-copy">I am passionate about collaborating with my clients to create successful designs that help their businesses grow. I believe that by combining my technical skills with a keen sense of empathy.</p>
+          <div class="about-socials">
+            <a class="about-social-link" href="https://www.instagram.com/siren.uix/" target="_blank" rel="noopener" aria-label="Instagram">
+              <img src="ASSET/Icons/social-instagram.svg" alt="Instagram" />
+            </a>
+            <a class="about-social-link" href="https://www.behance.net/" target="_blank" rel="noopener" aria-label="Behance">
+              <img src="ASSET/Icons/nav-behance.svg" alt="Behance" />
+            </a>
+            <a class="about-social-link" href="https://chat.whatsapp.com/JxLUrQpNpaXJ4ido6muIW6" target="_blank" rel="noopener" aria-label="WhatsApp Community">
+              <img src="ASSET/Icons/whatsapp-icon.svg" alt="WhatsApp" />
+            </a>
+          </div>
+        </div>
+        <div class="about-profile-photo-wrap">
+          <img class="about-profile-photo" src="ASSET/Images/about image.png" alt="Surendar V" />
+        </div>
+      </section>
+
+      <section class="about-facts">
+        <h3 class="about-section-title">Quick-fire facts</h3>
+        <div class="about-fact-list" id="about-fact-list"></div>
+      </section>
+
+      <section class="about-tools">
+        <h3 class="about-section-title">User Interface Tools</h3>
+        <div class="about-tools-grid" id="about-tools-grid"></div>
+      </section>
+
+      <section class="about-contact-wrap">
+        <div class="about-contact-card">
+          <div class="about-contact-copy">
+            <h3 class="about-section-title">Got Questions?</h3>
+            <p>I’m always excited to collaborate on innovative and exciting projects</p>
+          </div>
+          <div class="about-contact-grid">
+            <div class="about-contact-item">
+              <span class="about-contact-icon"><img src="ASSET/Icons/nav-contact-me.svg" alt="" /></span>
+              <div>
+                <p class="about-contact-label">E-mail</p>
+                <p class="about-contact-value">surendarvuix@gmail.com</p>
+              </div>
+            </div>
+            <div class="about-contact-item">
+              <span class="about-contact-icon"><img src="ASSET/Icons/mobile-menu-contact-icon.svg" alt="" /></span>
+              <div>
+                <p class="about-contact-label">Phone</p>
+                <p class="about-contact-value">+91 6382102514</p>
+              </div>
+            </div>
+          </div>
+          <a class="about-connect-btn" href="mailto:surendarvuix@gmail.com">
+            <img src="ASSET/Icons/nav-contact-me.svg" alt="" />
+            <span>Connect Me</span>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-avatar">
+            <img src="ASSET/Images/avatar.png" alt="Siren.uix" />
+          </div>
+          <span class="footer-brand-name">SIREN.UIX</span>
+        </div>
+        <nav class="footer-nav">
+          <a href="/about-me">ABOUT ME</a>
+          <a href="#">CONTACT</a>
+          <a href="/files">MARKETPLACE</a>
+        </nav>
+        <nav class="footer-socials">
+          <a href="https://www.instagram.com/siren.uix/" target="_blank" rel="noopener" aria-label="Instagram">
+            <img src="ASSET/Icons/social-instagram.svg" alt="Instagram" />
+          </a>
+          <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <img src="ASSET/Icons/social-linkedin.svg" alt="LinkedIn" />
+          </a>
+          <a href="#" target="_blank" rel="noopener" aria-label="X / Twitter">
+            <img src="ASSET/Icons/social-x.svg" alt="X" />
+          </a>
+        </nav>
+      </div>
+
+      <div class="footer-border-strip">
+        <img src="ASSET/Icons/footer-border-start.svg" alt="" style="width:394px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script src="JS/theme-manager.js"></script>
+<script src="JS/firebase-config.js"></script>
+<script src="JS/firebase-auth.js"></script>
+<script src="JS/firebase-product-stats.js"></script>
+<script src="JS/product-cache.js"></script>
+<script src="JS/product-data-source.js"></script>
+<script src="COMPONENT/Button/Button.js"></script>
+<script src="COMPONENT/Sidebar/Sidebar.js"></script>
+<script src="JS/main-shell-router.js"></script>
+<script src="JS/top-pane-product-tabs.js"></script>
+<script src="FLOAT SITE/float-nav.js"></script>
+<script src="JS/saved-templates.js"></script>
+<script src="JS/main.js"></script>
+<script src="JS/my-post.js"></script>
+<script src="JS/filter-template.js"></script>
+<script src="JS/mobile-template.js"></script>
+<script src="JS/web-template.js"></script>
+<script src="JS/about-me.js"></script>
+<script src="JS/recents.js"></script>
+
+</body>
+</html>

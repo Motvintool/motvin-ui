@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Product Detail - Siren.uix Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="CSS/theme.css" />
+<link rel="stylesheet" href="CSS/global.css" />
+<link rel="stylesheet" href="CSS/top-pane.css" />
+<link rel="stylesheet" href="COMPONENT/Button/Button.css" />
+<link rel="stylesheet" href="COMPONENT/Sidebar/Sidebar.css" />
+<link rel="stylesheet" href="COMPONENT/Product Card/ProductCard.css" />
+<link rel="stylesheet" href="CSS/main.css" />
+<link rel="stylesheet" href="CSS/product-detail.css" />
+<script src="JS/product-cache.js"></script>
+<script>
+(function(){try{var s=new URLSearchParams(window.location.search).get('product');if(s&&window.ProductCache&&window.ProductCache.getOneSync){var p=window.ProductCache.getOneSync(s);if(p){document.documentElement.classList.add('motvin-has-cache');document.addEventListener('DOMContentLoaded',function(){var ft=document.getElementById('detail-frame-title');if(ft)ft.textContent=p.detailPageTitle||p.title||'';var hl=document.getElementById('detail-headline');if(hl)hl.textContent=p.detailHeadline||p.title||'';var cn=document.getElementById('detail-creator-name');if(cn)cn.textContent=p.author||'';var img=document.getElementById('detail-hero-image');if(img&&p.image)img.src=p.image;});}}}catch(e){}})();
+</script>
+
+  <link rel="icon" type="image/svg+xml" href="ASSET/Images/motvin%20logo%20(full%20color).svg" />
+</head>
+<body class="detail-page">
+
+<div class="top-pane">
+  <div class="top-pane-tabs">
+    <a class="top-pane-tab top-pane-home-tab" href="/files" aria-label="Home">
+      <img src="ASSET/Icons/top-pane-home-icon.svg" alt="" />
+    </a>
+    <div id="detail-top-pane-product-tabs"></div>
+  </div>
+  <button class="top-pane-mobile-menu" type="button" aria-label="Open sidebar">
+    <img src="ASSET/Icons/top-pane-mobile-menu-icon.svg" alt="" />
+  </button>
+  <div class="top-pane-add">
+    <img src="ASSET/Icons/top-pane-add-icon.svg" alt="Add tab" />
+  </div>
+</div>
+<script>(function(){try{var rawSlugs=localStorage.getItem('openedProductSlugs');var s=rawSlugs?JSON.parse(rawSlugs):[];var p=document.querySelector('.top-pane');if(!s.length&&window.innerWidth>670){if(p)p.classList.add('top-pane--hidden');document.body.classList.add('top-pane-hidden');return;}var container=document.getElementById('shell-top-pane-product-tabs')||document.getElementById('detail-top-pane-product-tabs');if(!container||!s.length)return;var prodMap={};try{var cachedProdsRaw=localStorage.getItem('motvin_products_v1');if(cachedProdsRaw){var cachedProds=JSON.parse(cachedProdsRaw);if(Array.isArray(cachedProds)){for(var k=0;k<cachedProds.length;k++){var item=cachedProds[k];if(item&&item.slug)prodMap[item.slug]=item;}}}}catch(e){}var params=new URLSearchParams(window.location.search);var reqProduct=params.get('product');var reqCategory=params.get('category');var path=window.location.pathname.toLowerCase();var activeSlug=null;if(reqProduct){activeSlug=reqProduct;}else if(path.indexOf('filter-template.html')!==-1||path.indexOf('mobile-template.html')!==-1||path.indexOf('web-template.html')!==-1){var cat=reqCategory||(path.indexOf('mobile-template')!==-1?'mobile':(path.indexOf('web-template')!==-1?'web':'free-paid'));activeSlug='filter:'+cat;}var isHome=!activeSlug&&(path.endsWith('files.html')||path.endsWith('/')||path.endsWith('about-me.html')||path.endsWith('my-post.html')||path.endsWith('saved-templates.html'));var homeTab=document.querySelector('.top-pane-home-tab');if(homeTab){if(isHome){homeTab.classList.add('is-active');}else{homeTab.classList.remove('is-active');}}function titleCase(str){return String(str||'').replace(/^filter:/,'').replace(/[-_]+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});}var filterLabels={'mobile':'Mobile Templates','web':'Web Templates','free':'Free Templates','paid':'Paid Templates','free-paid':'Free & Paid Templates','recent':'Recent Templates'};var iconSvg='<svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.00004 5.33329H4.00671M6.66671 5.33329H6.67337M9.33337 5.33329H9.34004M2.66671 2.66663H13.3334C14.0698 2.66663 14.6667 3.26358 14.6667 3.99996V12C14.6667 12.7363 14.0698 13.3333 13.3334 13.3333H2.66671C1.93033 13.3333 1.33337 12.7363 1.33337 12V3.99996C1.33337 3.26358 1.93033 2.66663 2.66671 2.66663Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';var html='';for(var i=0;i<s.length;i++){var slug=s[i];var isActive=!isHome&&(slug===activeSlug);var title='';if(slug.indexOf('filter:')===0){title=filterLabels[slug.replace('filter:','')]||'Free & Paid Templates';}else if(prodMap[slug]&&prodMap[slug].title){title=prodMap[slug].title;}else{title=titleCase(slug);}html+='<div class="top-pane-tab'+(isActive?' is-active':'')+'" data-product-slug="'+slug+'">'+iconSvg+'<span>'+title+'</span><button class="tab-close" type="button" aria-label="Close tab"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /></svg></button></div>';}container.innerHTML=html;}catch(e){}})();</script>
+
+<div class="main main-shell-fade-in">
+
+<header class="detail-frame-header">
+  <div class="detail-frame-main">
+    <div class="detail-frame-icon" aria-hidden="true">
+      <img src="ASSET/Icons/detail-frame-header-icon.svg" alt="" />
+    </div>
+    <div class="detail-frame-copy">
+      <h1 class="detail-frame-title" id="detail-frame-title">&nbsp;</h1>
+      <p class="detail-frame-subtitle" id="detail-frame-subtitle"></p>
+    </div>
+  </div>
+  <a class="detail-back-link" href="/files">
+    <img src="ASSET/Icons/detail-back-button-icon.svg" alt="" />
+    <span>Back</span>
+  </a>
+</header>
+
+<nav class="detail-breadcrumb" aria-label="Breadcrumb">
+  <a class="detail-breadcrumb-link" href="/files">Home</a>
+  <span class="detail-breadcrumb-separator" aria-hidden="true">/</span>
+  <a class="detail-breadcrumb-link" href="/files">Marketplace</a>
+  <span class="detail-breadcrumb-separator" aria-hidden="true">/</span>
+  <span class="detail-breadcrumb-category" id="detail-breadcrumb-category"></span>
+  <span class="detail-breadcrumb-separator" aria-hidden="true">/</span>
+  <span class="detail-breadcrumb-current" id="detail-breadcrumb-title"></span>
+</nav>
+
+<main class="detail-page-shell">
+
+  <!-- Skeleton loader: removed by JS once Firebase data renders -->
+  <div class="detail-skeleton" aria-hidden="true">
+    <div class="detail-skel-hero">
+      <div class="detail-skel-copy">
+        <div class="detail-skel-creator">
+          <span class="detail-skel detail-skel--avatar"></span>
+          <span class="detail-skel detail-skel--name"></span>
+        </div>
+        <div class="detail-skel-headline-wrap">
+          <span class="detail-skel detail-skel--headline-line1"></span>
+          <span class="detail-skel detail-skel--headline-line2"></span>
+          <span class="detail-skel detail-skel--meta"></span>
+        </div>
+        <div class="detail-skel-cta">
+          <span class="detail-skel detail-skel--btn"></span>
+          <span class="detail-skel detail-skel--btn"></span>
+          <span class="detail-skel detail-skel--btn-sm"></span>
+        </div>
+        <span class="detail-skel detail-skel--intro"></span>
+      </div>
+      <span class="detail-skel detail-skel--hero-img"></span>
+    </div>
+
+    <div class="detail-skel-divider"></div>
+
+    <div class="detail-skel-grid">
+      <div class="detail-skel-about">
+        <span class="detail-skel detail-skel--section-title"></span>
+        <span class="detail-skel detail-skel--text-line" style="width:92%"></span>
+        <span class="detail-skel detail-skel--text-line" style="width:86%"></span>
+        <span class="detail-skel detail-skel--text-line" style="width:95%"></span>
+        <span class="detail-skel detail-skel--text-line" style="width:78%"></span>
+        <span class="detail-skel detail-skel--text-line" style="width:88%"></span>
+        <span class="detail-skel detail-skel--text-line" style="width:62%"></span>
+      </div>
+      <div class="detail-skel-side">
+        <span class="detail-skel detail-skel--section-title"></span>
+        <span class="detail-skel detail-skel--pill"></span>
+        <span class="detail-skel detail-skel--text-line" style="width:70%"></span>
+        <span class="detail-skel detail-skel--text-line" style="width:55%"></span>
+        <div class="detail-skel-side-divider"></div>
+        <span class="detail-skel detail-skel--section-title"></span>
+        <div class="detail-skel-icons">
+          <span class="detail-skel detail-skel--icon"></span>
+          <span class="detail-skel detail-skel--icon"></span>
+          <span class="detail-skel detail-skel--icon"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="detail-hero-section">
+    <div class="detail-copy-column">
+      <div class="detail-copy-head">
+        <div class="detail-creator-row">
+        <img class="detail-creator-avatar" src="ASSET/Images/avatar.png" alt="Creator" />
+        <span class="detail-creator-name" id="detail-creator-name"></span>
+      </div>
+
+        <div class="detail-headline-wrap">
+          <h2 class="detail-headline" id="detail-headline">&nbsp;</h2>
+          <p class="detail-meta-line" id="detail-meta-line"></p>
+        </div>
+      </div>
+
+      <div class="detail-cta-block">
+        <div class="detail-cta-row">
+          <a class="detail-buy-link" id="detail-buy-link" href="#">
+            <img class="detail-btn-icon" src="ASSET/Icons/detail-preview-link-icon.svg" alt="" />
+            <span id="detail-buy-text">Buy Now</span>
+          </a>
+          <a class="detail-preview-link" id="detail-preview-link" href="#" target="_blank" rel="noopener">
+            <img class="detail-btn-icon" src="ASSET/Icons/detail-preview-link-icon.svg" alt="" />
+            <span id="detail-preview-text">Open</span>
+          </a>
+          <div class="detail-more-wrap">
+            <button class="detail-more-link" id="detail-more-link" type="button" aria-label="More actions" aria-haspopup="menu" aria-expanded="false">
+              <img class="detail-btn-icon" src="ASSET/Icons/detail-cta-more-icon.svg" alt="" />
+            </button>
+            <div class="detail-more-menu" id="detail-more-menu" role="menu" hidden>
+              <button class="detail-more-menu-item" id="detail-more-save" type="button" role="menuitem">
+                <span class="detail-more-menu-item-main">
+                  <span class="detail-more-menu-icon" aria-hidden="true">
+                    <img src="ASSET/Icons/detail-more-save.svg" alt="" />
+                  </span>
+                  <span>Save</span>
+                </span>
+              </button>
+              <button class="detail-more-menu-item" id="detail-more-like" type="button" role="menuitem">
+                <span class="detail-more-menu-item-main">
+                  <span class="detail-more-menu-icon" aria-hidden="true">
+                    <img src="ASSET/Icons/product-card-stat-like.svg" alt="" />
+                  </span>
+                  <span>Like</span>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p class="detail-intro-copy"><a id="detail-learn-more-link" href="#" target="_blank" rel="noopener">Learn more</a></p>
+      </div>
+    </div>
+
+    <div class="detail-hero-image-wrap">
+      <img id="detail-hero-image" src="ASSET/Images/product-screenshot.png" alt="" />
+    </div>
+  </section>
+
+  <div class="detail-divider"></div>
+
+  <section class="detail-content-grid">
+    <article class="detail-about-column">
+      <h3 class="detail-section-title">About</h3>
+      <p class="detail-about-paragraph" id="detail-about-intro"></p>
+      <div class="detail-feature-list-wrap">
+        <p class="detail-feature-heading" id="detail-feature-heading">What's Inside:</p>
+        <ul class="detail-feature-list" id="detail-feature-list"></ul>
+      </div>
+      <p class="detail-about-paragraph" id="detail-about-outro"></p>
+    </article>
+
+    <aside class="detail-side-column">
+      <section class="detail-side-block">
+        <h3 class="detail-section-title">Details</h3>
+        <div class="detail-category-pill">
+          <img src="ASSET/Icons/nav-mobile-templates.svg" alt="" />
+          <span id="detail-category-pill-text">-</span>
+        </div>
+        <div class="detail-tag-cloud" id="detail-tag-cloud"></div>
+      </section>
+
+      <div class="detail-side-divider"></div>
+
+      <section class="detail-side-block">
+        <h3 class="detail-section-title">Follow Me</h3>
+        <div class="detail-follow-links">
+          <a class="detail-follow-link" href="https://www.instagram.com/siren.uix/" target="_blank" rel="noopener" aria-label="Instagram">
+            <img src="ASSET/Icons/nav-instagram.svg" alt="Instagram" />
+          </a>
+          <a class="detail-follow-link" href="https://www.behance.net/" target="_blank" rel="noopener" aria-label="Behance">
+            <img src="ASSET/Icons/nav-behance.svg" alt="Behance" />
+          </a>
+          <a class="detail-follow-link" href="#" target="_blank" rel="noopener" aria-label="X">
+            <img src="ASSET/Icons/social-x.svg" alt="X" />
+          </a>
+        </div>
+      </section>
+
+      <div class="detail-side-divider"></div>
+
+      <a class="detail-source-link" id="detail-source-link" href="#" target="_blank" rel="noopener">
+        <span class="detail-source-badge">F</span>
+        <span>For Figma</span>
+      </a>
+
+      <div class="detail-side-divider"></div>
+
+      <section class="detail-license-block">
+        <p class="detail-license-copy"><span id="detail-last-updated"></span> <span>Licensed under</span> <a id="detail-license-link" href="#" target="_blank" rel="noopener"></a></p>
+        <a class="detail-report-link" href="#">Report Resources</a>
+      </section>
+    </aside>
+  </section>
+
+  <section class="detail-similar-section">
+    <div class="detail-similar-head">
+      <div class="detail-similar-title-wrap">
+        <h3 class="detail-section-title">Similar Templates</h3>
+        <span class="detail-similar-count" id="detail-similar-count">0</span>
+      </div>
+      <a class="detail-see-all-link" href="filter-template.html?category=free-paid">
+        <span>See all templates</span>
+        <img src="ASSET/Icons/chevron-dropdown.svg" alt="" />
+      </a>
+    </div>
+    <div class="detail-related-grid product-grid" id="related-templates-grid"></div>
+  </section>
+
+  <div class="detail-divider detail-divider-after-similar"></div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-avatar">
+          <img src="ASSET/Images/avatar.png" alt="Siren.uix" />
+        </div>
+        <span class="footer-brand-name">SIREN.UIX</span>
+      </div>
+      <nav class="footer-nav">
+        <a href="#">ABOUT ME</a>
+        <a href="#">CONTACT</a>
+        <a href="#">MARKETPLACE</a>
+      </nav>
+      <nav class="footer-socials">
+        <a href="https://www.instagram.com/siren.uix/" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="ASSET/Icons/social-instagram.svg" alt="Instagram" />
+        </a>
+        <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <img src="ASSET/Icons/social-linkedin.svg" alt="LinkedIn" />
+        </a>
+        <a href="#" target="_blank" rel="noopener" aria-label="X / Twitter">
+          <img src="ASSET/Icons/social-x.svg" alt="X" />
+        </a>
+      </nav>
+    </div>
+
+    <div class="footer-border-strip">
+      <img src="ASSET/Icons/footer-border-start.svg" alt="" style="width:394px;" />
+      <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+      <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+      <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+      <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+      <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+      <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+      <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+      <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+      <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+    </div>
+  </footer>
+</main>
+
+<script src="JS/theme-manager.js"></script>
+<script src="JS/firebase-config.js"></script>
+<script src="JS/firebase-auth.js"></script>
+<script src="JS/firebase-product-stats.js"></script>
+<script src="JS/product-cache.js"></script>
+<script src="JS/product-data-source.js"></script>
+<script src="COMPONENT/Button/Button.js"></script>
+<script src="COMPONENT/Product%20Card/ProductCard.js"></script>
+<script src="JS/top-pane-product-tabs.js"></script>
+<script src="FLOAT SITE/float-nav.js"></script>
+<script src="JS/saved-templates.js"></script>
+<script src="JS/product-detail.js"></script>
+
+</body>
+</html>

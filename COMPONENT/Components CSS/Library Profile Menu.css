@@ -1,0 +1,115 @@
+/* --- Profile Dropdown Menu --- */
+.mi-profile-menu-container {
+  position: relative;
+  display: inline-flex;
+}
+
+.mi-profile-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 250px;
+  background: #fefefe;
+  border: 1px solid #efebe7;
+  border-radius: 16px;
+  padding: 4px;
+  box-shadow: 0px 1px 1px rgba(37,37,34,0.02), 0px 18px 24px rgba(37,37,34,0.06);
+  z-index: 10000;
+  display: none;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.mi-profile-dropdown.is-open {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mi-profile-dropdown-inner {
+  background: #f7f7f7;
+  border: 1px solid #efebe7;
+  border-radius: 12px;
+  padding: 12px 6px 6px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mi-profile-user-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mi-profile-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 10px;
+}
+
+.mi-profile-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #000;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mi-profile-email {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mi-profile-divider-wrap {
+  padding: 0 10px;
+}
+
+.mi-profile-divider {
+  height: 1px;
+  background: #efebe7;
+  width: 100%;
+}
+
+.mi-profile-menu-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.mi-profile-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 7px;
+  text-decoration: none;
+  color: #252522;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  transition: background 0.15s ease;
+  cursor: pointer;
+}
+
+.mi-profile-item:hover {
+  background: #ebebeb;
+}
+
+.mi-profile-item img {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+

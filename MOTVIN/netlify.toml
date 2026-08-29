@@ -1,0 +1,18 @@
+[build]
+  publish = "."
+
+# Keep service worker fresh across deploys
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/updates"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/updates/*"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"

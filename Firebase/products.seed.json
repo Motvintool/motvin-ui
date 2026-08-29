@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "mobile-ui-pack",
+    "title": "Mobile UI Pack",
+    "author": "Motvin",
+    "category": "Mobile Templates",
+    "price": "Free",
+    "image": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
+    "summary": "Clean mobile app screens.",
+    "description": "A starter mobile template set.",
+    "tags": ["UI", "Mobile"],
+    "detailTags": ["Figma", "App"],
+    "productType": "template",
+    "updatedAt": "2026-07-08T10:00:00Z"
+  },
+  {
+    "slug": "dashboard-kit",
+    "title": "Dashboard Kit",
+    "author": "Motvin",
+    "category": "Web Templates",
+    "price": "$19",
+    "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+    "summary": "Modern web admin layout.",
+    "description": "Reusable dashboard sections.",
+    "tags": ["Dashboard", "Web"],
+    "detailTags": ["Admin", "Components"],
+    "productType": "template",
+    "updatedAt": "2026-07-08T11:00:00Z"
+  },
+  {
+    "slug": "branding-post-1",
+    "title": "Branding Post #1",
+    "author": "Motvin",
+    "category": "Design Post",
+    "price": "Free",
+    "image": "https://images.unsplash.com/photo-1455390582262-044cdead277a",
+    "summary": "Brand identity exploration.",
+    "description": "Typography and color direction.",
+    "tags": ["Brand", "Typography"],
+    "detailTags": ["Case Study", "Identity"],
+    "productType": "design-post",
+    "updatedAt": "2026-07-08T12:00:00Z"
+  }
+]

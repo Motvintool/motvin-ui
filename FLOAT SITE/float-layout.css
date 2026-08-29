@@ -1,0 +1,611 @@
+/* float-layout.css: Float mode layout — hides sidebar and top-pane, full-page content with float nav bar. */
+
+/* ── Hide Classic chrome ── */
+body[data-layout="float"] .top-pane,
+body[data-layout="float"] .layout > .sidebar {
+  display: none !important;
+}
+
+/* ── Layout becomes full-width ── */
+body[data-layout="float"] .layout {
+  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+body[data-layout="float"] .layout > .main {
+  margin-left: 0 !important;
+  height: calc(100vh - 48px);
+  padding-top: 0;
+  width: 100%;
+  overflow-y: auto;
+}
+
+/* ── Sidebar responsive override reset ── */
+body[data-layout="float"] .layout > .sidebar.sidebar--responsive {
+  display: none !important;
+}
+
+/* ═══════════════════════════════════════
+   Float Nav Bar
+═══════════════════════════════════════ */
+.float-nav {
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  width: 100%;
+  height: 56px;
+  background: var(--surface-page, #2e2e2e);
+  border-bottom: 1px solid var(--surface-border, #464646);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 12px;
+  flex-shrink: 0;
+  overflow: visible;
+  scrollbar-width: none;
+}
+
+.float-nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* Sidebar profile reused in float nav */
+.float-nav .sidebar-profile {
+  padding: 10px 16px 10px 6px;
+  height: 56px;
+  gap: 20px;
+  display: inline-flex;
+  width: auto;
+  border: none;
+  border-bottom: none;
+  border-right: 1px solid var(--surface-border, #464646);
+  border-radius: 0;
+  flex-shrink: 0;
+  background: transparent;
+}
+
+.float-nav .float-nav-profile-link {
+  text-decoration: none;
+}
+
+.float-nav .sidebar-profile .sidebar-profile-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.float-nav .sidebar-profile .sidebar-profile-left:hover,
+.float-nav .sidebar-profile.is-profile-menu-open .sidebar-profile-left {
+  background: var(--surface-topheader-sidebghover-3, #424242);
+}
+
+.float-nav .sidebar-profile .sidebar-profile-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.float-nav .sidebar-profile .sidebar-profile-chevron {
+  width: 10px;
+  height: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.float-nav .sidebar-profile .sidebar-profile-chevron img {
+  width: 10px;
+  height: 10px;
+  display: block;
+  transform: rotate(90deg);
+}
+
+.float-nav .sidebar-profile .sidebar-avatar {
+  width: 28px;
+  height: 28px;
+}
+
+.float-nav .sidebar-profile .sidebar-profile-name {
+  font-size: 12px;
+  line-height: 22px;
+  font-weight: 500;
+  color: var(--text-color-text);
+  white-space: nowrap;
+}
+
+.float-nav .sidebar-profile .sidebar-profile-right {
+  height: auto;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.float-nav .sidebar-profile .sidebar-notification-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+.float-nav .sidebar-profile .sidebar-notification-toggle img {
+  width: 16px;
+  height: 16px;
+}
+
+
+.float-nav .sidebar-profile .sidebar-notification-popover {
+  position: fixed;
+  width: 320px;
+  z-index: 2147483646 !important;
+}
+
+.float-nav .sidebar-profile .sidebar-profile-menu {
+  z-index: 2147483646 !important;
+}
+
+.float-nav .sidebar-theme-submenu {
+  z-index: 2147483647 !important;
+}
+
+.float-nav-center {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Nav items list */
+.float-nav-items {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.float-nav-items::-webkit-scrollbar {
+  display: none;
+  
+}
+
+/* Individual nav item */
+.float-nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border-right: none;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-color-subtext, #b9b9b9);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  background: transparent;
+  border-top: none;
+  border-left: none;
+  border-bottom: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.float-nav-item:hover {
+  background: transparent;
+  color: var(--text-color-text, #ffffff);
+}
+
+.float-nav-item.is-active {
+  background: var(--surface-topheader-sidebghover-3, #424242);
+  border-radius: 100px;
+  color: var(--text-color-text, #ffffff);
+}
+
+.float-nav-item img {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  display: block;
+}
+
+[data-theme="light"] .float-nav-item img,
+[data-theme="light"] .float-nav .sidebar-profile .sidebar-notification-toggle img {
+  filter: brightness(0) saturate(100%);
+}
+
+.float-nav-item-badge {
+  background: var(--surface-tag, rgba(255,255,255,0.06));
+  border-radius: 100px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-color-text, #ffffff);
+  line-height: 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Right side of float nav */
+.float-nav-tail {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.float-nav .search-bar {
+  height: 38px;
+  min-width: 170px;
+  width: clamp(170px, 24vw, 220px);
+  /* border: 1px solid var(--surface-border, #464646); */
+  border-radius: 100px;
+  background: var(--surface-topheader-sidebg, #383838);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 16px;
+}
+
+.float-nav .search-bar img {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.float-nav .search-bar .search-bar-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text-color-text, #ffffff);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 16px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+}
+
+.float-nav .search-bar .search-bar-input::placeholder {
+  color: var(--text-color-subtext, #b9b9b9);
+}
+
+.float-nav .search-bar:focus-within {
+  box-shadow: 0 0 0 1px var(--primary-default, #008FF0);
+}
+
+.float-nav-layout-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid var(--surface-border, #464646);
+  border-radius: 100px;
+  background: var(--surface-page, #383838);
+  color: var(--text-color-subtext, #b9b9b9);
+  font-size: 11px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.float-nav-layout-toggle:hover {
+  /* background: var(--surface-topheader-sidebghover-3, #424242); */
+  /* color: var(--text-color-text, #ffffff); */
+  border: 1px solid var(--border-color-hover, #636363);
+}
+
+.float-nav-layout-toggle-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
+}
+
+/* Float mode: Template card matches Figma node 72:4973 */
+body[data-layout="float"] .product-card--template {
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  min-height: 220px;
+  overflow: visible;
+  box-shadow: none;
+}
+
+body[data-layout="float"] .product-card--template:hover {
+  box-shadow: none;
+}
+
+body[data-layout="float"] .product-card--template .product-category-chip {
+  display: none;
+}
+
+body[data-layout="float"] .product-card--template .product-img-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+body[data-layout="float"] .product-card--template .product-info {
+  padding: 12px 0;
+  gap: 5px;
+  align-items: flex-start;
+}
+
+body[data-layout="float"] .product-card--template .product-meta {
+  gap: 6px;
+}
+
+body[data-layout="float"] .product-card--template .product-name {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+body[data-layout="float"] .product-card--template .product-author {
+  gap: 4px;
+  font-size: 12px;
+  line-height: normal;
+}
+
+body[data-layout="float"] .product-card--template .product-stats {
+  gap: 6px;
+}
+
+body[data-layout="float"] .product-card--template .product-stat {
+  gap: 2px;
+}
+
+body[data-layout="float"] .product-card--template .product-stat img {
+  width: 14px;
+  height: 14px;
+}
+
+body[data-layout="float"] .product-card--template .product-price {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: normal;
+}
+
+/* Float mode: Design post card aligned with float card style */
+body[data-layout="float"] .product-card--design-post {
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  overflow: visible;
+  box-shadow: none;
+}
+
+body[data-layout="float"] .product-card--design-post:hover {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+body[data-layout="float"] .product-card--design-post .product-category-chip {
+  display: none;
+}
+
+body[data-layout="float"] .product-card--design-post .product-img-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+body[data-layout="float"] .product-card--design-post .product-info {
+  padding: 12px 0;
+  gap: 5px;
+  align-items: flex-start;
+}
+
+body[data-layout="float"] .product-card--design-post .product-meta {
+  gap: 6px;
+}
+
+body[data-layout="float"] .product-card--design-post .product-name {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: normal;
+}
+
+body[data-layout="float"] .product-card--design-post .product-author {
+  gap: 4px;
+  font-size: 12px;
+  line-height: normal;
+}
+
+body[data-layout="float"] .product-card--design-post .product-stats {
+  gap: 6px;
+}
+
+body[data-layout="float"] .product-card--design-post .product-stat {
+  gap: 2px;
+}
+
+body[data-layout="float"] .product-card--design-post .product-stat img {
+  width: 14px;
+  height: 14px;
+}
+
+body[data-layout="float"] .product-grid {
+  gap: 30px;
+}
+
+@media (max-width: 920px) {
+  .float-nav {
+    gap: 10px;
+    padding: 0 8px;
+  }
+
+  .float-nav .search-bar {
+    min-width: 140px;
+    width: 170px;
+  }
+
+  .float-nav .sidebar-profile {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+@media (max-width: 670px) {
+  body[data-layout="float"] {
+    padding-top: 50px;
+  }
+
+  body[data-layout="float"] .top-pane {
+    display: flex !important;
+  }
+
+  body[data-layout="float"] .float-nav {
+    display: none !important;
+  }
+
+  body[data-layout="float"] .layout {
+    min-height: calc(100vh - 50px);
+    height: calc(100vh - 50px);
+  }
+
+  body[data-layout="float"] .layout > .main {
+    height: calc(100vh - 50px);
+  }
+}
+
+/* ═══════════════════════════════════════
+   Smooth Layout Mode Switch Animations
+═══════════════════════════════════════ */
+
+/* Smooth transitions for main layout containers */
+.layout,
+.layout > .main,
+.top-pane,
+.layout > .sidebar,
+.float-nav {
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              margin-left 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+              width 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+              padding 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.35s ease,
+              box-shadow 0.35s ease;
+}
+
+/* Ambient glow overlay during layout switch */
+.layout-switch-ambient-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 20%, rgba(92, 74, 228, 0.16), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.38s ease;
+}
+
+body.is-layout-switching .layout-switch-ambient-glow {
+  opacity: 1;
+}
+
+body.is-layout-switching {
+  overflow-x: hidden;
+}
+
+body.is-layout-switching .layout > .main {
+  transform: scale(0.992);
+  opacity: 0.88;
+  filter: blur(1px);
+}
+
+/* ── SWITCHING TO FLOAT MODE ── */
+body.switching-to-float .top-pane {
+  display: flex !important;
+  transform: translateY(-100%) scaleY(0.95);
+  opacity: 0;
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+body.switching-to-float .layout > .sidebar {
+  display: flex !important;
+  transform: translateX(-100%) scale(0.96);
+  opacity: 0;
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+body.switching-to-float .float-nav {
+  display: flex !important;
+  animation: floatNavEnter 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes floatNavEnter {
+  0% {
+    transform: translateY(-100%) scale(0.97);
+    opacity: 0;
+    filter: blur(6px);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* ── SWITCHING TO CLASSIC MODE ── */
+body.switching-to-classic .float-nav {
+  display: flex !important;
+  transform: translateY(-100%) scale(0.97);
+  opacity: 0;
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+body.switching-to-classic .top-pane {
+  display: flex !important;
+  animation: classicTopPaneEnter 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+body.switching-to-classic .layout > .sidebar {
+  display: flex !important;
+  animation: classicSidebarEnter 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes classicTopPaneEnter {
+  0% {
+    transform: translateY(-100%) scaleY(0.95);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  100% {
+    transform: translateY(0) scaleY(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes classicSidebarEnter {
+  0% {
+    transform: translateX(-100%) scale(0.96);
+    opacity: 0;
+    filter: blur(4px);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+

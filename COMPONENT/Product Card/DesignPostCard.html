@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Design Post Card</title>
+<link rel="stylesheet" href="../../CSS/global.css" />
+<link rel="stylesheet" href="./ProductCard.css" />
+<style>
+  body {
+    margin: 0;
+    padding: 32px;
+    background: #f5f6fa;
+    font-family: Inter, sans-serif;
+  }
+
+  .preview-wrap {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .preview-title {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #242731;
+  }
+</style>
+
+  <link rel="icon" type="image/svg+xml" href="../../ASSET/Images/motvin%20logo%20(full%20color).svg" />
+</head>
+<body>
+  <div class="preview-wrap">
+    <h1 class="preview-title">Design Post Card</h1>
+    <a class="product-card product-card--design-post" data-product-slug="latest-post-showcase" href="#">
+      <div class="product-img-wrap">
+        <span class="product-category-chip">Mobile &amp; Web Posts</span>
+        <img src="../../ASSET/Images/slide1.png" alt="Latest Post Showcase" />
+      </div>
+      <div class="product-info">
+        <div class="product-meta">
+          <span class="product-name">Latest Post Showcase</span>
+          <div class="product-author">
+            <span>By Siren.uix</span>
+            <span class="product-author-dot">•</span>
+            <span class="product-stats">
+              <span class="product-stat"><img src="../../ASSET/Icons/product-card-stat-like.svg" alt="" /><span>43</span></span>
+              <span class="product-stat"><img src="../../ASSET/Icons/product-card-stat-trend.svg" alt="" /><span>1.2K</span></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <template id="design-post-card-markup">
+    <a class="product-card product-card--design-post" data-product-slug="{{slug}}"{{hiddenFilterAttr}} href="{{href}}">
+      <div class="product-img-wrap">
+        <span class="product-category-chip">{{categoryChip}}</span>
+        <img src="{{image}}" alt="{{title}}" />
+      </div>
+      <div class="product-info">
+        <div class="product-meta">
+          <span class="product-name">{{title}}</span>
+          <div class="product-author">
+            <span>By {{author}}</span>
+            <span class="product-author-dot">•</span>
+            <span class="product-stats">
+              <span class="product-stat product-stat--like{{likeActiveClass}}" data-like-action="true" data-product-slug="{{slug}}" data-liked="{{likedValue}}" role="button" tabindex="0" aria-label="Like {{title}}" aria-pressed="{{likedValue}}"><img src="{{likeIcon}}" alt="" /><span data-stat-like>{{likeCount}}</span></span>
+              <span class="product-stat"><img src="ASSET/Icons/product-card-stat-trend.svg" alt="" /><span data-stat-trend>{{trendCount}}</span></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </a>
+  </template>
+</body>
+</html>

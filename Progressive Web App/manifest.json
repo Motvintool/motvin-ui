@@ -1,0 +1,29 @@
+{
+  "name": "Motvin Design Marketplace",
+  "short_name": "Motvin",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f1020",
+  "theme_color": "#5c4ae4",
+  "description": "Installable shell for Motvin Design Marketplace.",
+  "icons": [
+    {
+      "src": "/Progressive%20Web%20App/branding/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/Progressive%20Web%20App/branding/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/Progressive%20Web%20App/branding/logo-install.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

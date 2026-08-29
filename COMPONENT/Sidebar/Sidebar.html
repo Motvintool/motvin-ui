@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sidebar Component Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../CSS/global.css" />
+<link rel="stylesheet" href="../Button/Button.css" />
+<link rel="stylesheet" href="./Sidebar.css" />
+
+  <link rel="icon" type="image/svg+xml" href="../../ASSET/Images/motvin%20logo%20(full%20color).svg" />
+</head>
+<body style="margin:0; padding:24px; background:var(--surface-page);">
+  <div style="display:flex; gap:24px; align-items:flex-start; flex-wrap:wrap;">
+    <div data-sidebar-root data-sidebar-active="discover" data-sidebar-variant="desktop"></div>
+    <div data-sidebar-root data-sidebar-active="discover" data-sidebar-variant="tablet"></div>
+  </div>
+
+  <div class="sidebar-navtab-showcase" id="sidebar-navtab-showcase"></div>
+
+  <script src="../Button/Button.js"></script>
+  <script src="./Sidebar.js"></script>
+  <script>
+    (function mountNavTabShowcase() {
+      var root = document.getElementById('sidebar-navtab-showcase');
+      if (!root || !window.SidebarComponent) return;
+
+      var columns = [
+        {
+          state: 'default',
+          items: [
+            { href: '#', icon: '../../ASSET/Icons/nav-discover-templates.svg', label: 'Discover Templates' },
+            { href: '#', icon: '../../ASSET/Icons/nav-mobile-templates.svg', label: 'Mobile Templates', badge: '12' },
+            { href: '#', icon: '../../ASSET/Icons/nav-instagram.svg', label: 'Instagram', badge: '12', trailingChevron: true, external: true },
+            { href: '#', icon: '../../ASSET/Icons/nav-behance.svg', label: 'Behance', badge: '12', trailingChevron: true, external: true },
+          ],
+        },
+        {
+          state: 'hover',
+          items: [
+            { href: '#', icon: '../../ASSET/Icons/nav-discover-templates.svg', label: 'Discover Templates' },
+            { href: '#', icon: '../../ASSET/Icons/nav-mobile-templates.svg', label: 'Mobile Templates', badge: '12' },
+            { href: '#', icon: '../../ASSET/Icons/nav-instagram.svg', label: 'Instagram', badge: '12', trailingChevron: true, external: true },
+            { href: '#', icon: '../../ASSET/Icons/nav-behance.svg', label: 'Behance', badge: '12', trailingChevron: true, external: true },
+          ],
+        },
+        {
+          state: 'active',
+          items: [
+            { href: '#', icon: '../../ASSET/Icons/nav-discover-templates.svg', label: 'Discover Templates' },
+            { href: '#', icon: '../../ASSET/Icons/nav-mobile-templates.svg', label: 'Mobile Templates', badge: '12' },
+            { href: '#', icon: '../../ASSET/Icons/nav-instagram.svg', label: 'Instagram', badge: '12', trailingChevron: true, external: true },
+            { href: '#', icon: '../../ASSET/Icons/nav-behance.svg', label: 'Behance', badge: '12', trailingChevron: true, external: true },
+          ],
+        },
+      ];
+
+      root.innerHTML = columns.map(function (column) {
+        return '<div class="sidebar-navtab-showcase-column"><div class="sidebar-navtab-showcase-stack">' +
+          column.items.map(function (item) {
+            return window.SidebarComponent.createNavTab({
+              href: item.href,
+              icon: item.icon.replace('../../', ''),
+              label: item.label,
+              badge: item.badge,
+              trailingChevron: item.trailingChevron,
+              external: item.external,
+              state: column.state,
+              isActive: column.state === 'active'
+            });
+          }).join('') +
+          '</div></div>';
+      }).join('');
+    })();
+  </script>
+</body>
+</html>

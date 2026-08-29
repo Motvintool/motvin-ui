@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Templates - Siren.uix Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="CSS/theme.css" />
+<link rel="stylesheet" href="CSS/global.css" />
+<link rel="stylesheet" href="CSS/top-pane.css" />
+<link rel="stylesheet" href="COMPONENT/Button/Button.css" />
+<link rel="stylesheet" href="COMPONENT/Sidebar/Sidebar.css" />
+<link rel="stylesheet" href="COMPONENT/Product%20Card/ProductCard.css" />
+<link rel="stylesheet" href="CSS/main.css" data-page-style="true" />
+<link rel="stylesheet" href="CSS/filter-template.css" data-page-style="true" />
+<script src="JS/product-cache.js"></script>
+
+  <link rel="icon" type="image/svg+xml" href="ASSET/Images/motvin%20logo%20(full%20color).svg" />
+</head>
+<body>
+
+<div class="top-pane">
+  <div class="top-pane-tabs">
+    <a class="top-pane-tab top-pane-home-tab" href="/files" aria-label="Home">
+      <img src="ASSET/Icons/top-pane-home-icon.svg" alt="" />
+    </a>
+    <div id="shell-top-pane-product-tabs"></div>
+  </div>
+  <button class="top-pane-mobile-menu" type="button" aria-label="Open sidebar">
+    <img src="ASSET/Icons/top-pane-mobile-menu-icon.svg" alt="" />
+  </button>
+  <div class="top-pane-add">
+    <img src="ASSET/Icons/top-pane-add-icon.svg" alt="Add tab" />
+  </div>
+</div>
+<script>(function(){try{var rawSlugs=localStorage.getItem('openedProductSlugs');var s=rawSlugs?JSON.parse(rawSlugs):[];var p=document.querySelector('.top-pane');if(!s.length&&window.innerWidth>670){if(p)p.classList.add('top-pane--hidden');document.body.classList.add('top-pane-hidden');return;}var container=document.getElementById('shell-top-pane-product-tabs')||document.getElementById('detail-top-pane-product-tabs');if(!container||!s.length)return;var prodMap={};try{var cachedProdsRaw=localStorage.getItem('motvin_products_v1');if(cachedProdsRaw){var cachedProds=JSON.parse(cachedProdsRaw);if(Array.isArray(cachedProds)){for(var k=0;k<cachedProds.length;k++){var item=cachedProds[k];if(item&&item.slug)prodMap[item.slug]=item;}}}}catch(e){}var params=new URLSearchParams(window.location.search);var reqProduct=params.get('product');var reqCategory=params.get('category');var path=window.location.pathname.toLowerCase();var activeSlug=null;if(reqProduct){activeSlug=reqProduct;}else if(path.indexOf('filter-template.html')!==-1||path.indexOf('mobile-template.html')!==-1||path.indexOf('web-template.html')!==-1){var cat=reqCategory||(path.indexOf('mobile-template')!==-1?'mobile':(path.indexOf('web-template')!==-1?'web':'free-paid'));activeSlug='filter:'+cat;}var isHome=!activeSlug&&(path.endsWith('files.html')||path.endsWith('/')||path.endsWith('about-me.html')||path.endsWith('my-post.html')||path.endsWith('saved-templates.html'));var homeTab=document.querySelector('.top-pane-home-tab');if(homeTab){if(isHome){homeTab.classList.add('is-active');}else{homeTab.classList.remove('is-active');}}function titleCase(str){return String(str||'').replace(/^filter:/,'').replace(/[-_]+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});}var filterLabels={'mobile':'Mobile Templates','web':'Web Templates','free':'Free Templates','paid':'Paid Templates','free-paid':'Free & Paid Templates','recent':'Recent Templates'};var iconSvg='<svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.00004 5.33329H4.00671M6.66671 5.33329H6.67337M9.33337 5.33329H9.34004M2.66671 2.66663H13.3334C14.0698 2.66663 14.6667 3.26358 14.6667 3.99996V12C14.6667 12.7363 14.0698 13.3333 13.3334 13.3333H2.66671C1.93033 13.3333 1.33337 12.7363 1.33337 12V3.99996C1.33337 3.26358 1.93033 2.66663 2.66671 2.66663Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';var html='';for(var i=0;i<s.length;i++){var slug=s[i];var isActive=!isHome&&(slug===activeSlug);var title='';if(slug.indexOf('filter:')===0){title=filterLabels[slug.replace('filter:','')]||'Free & Paid Templates';}else if(prodMap[slug]&&prodMap[slug].title){title=prodMap[slug].title;}else{title=titleCase(slug);}html+='<div class="top-pane-tab'+(isActive?' is-active':'')+'" data-product-slug="'+slug+'">'+iconSvg+'<span>'+title+'</span><button class="tab-close" type="button" aria-label="Close tab"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /></svg></button></div>';}container.innerHTML=html;}catch(e){}})();</script>
+
+<div class="layout">
+  <aside class="sidebar sidebar-skeleton sidebar--responsive" data-sidebar-root data-sidebar-active="discover" aria-hidden="true">
+    <div class="sidebar-skel-profile"><div class="sidebar-skel-profile-left"><span class="sidebar-skel-block sidebar-skel-avatar"></span><span class="sidebar-skel-block sidebar-skel-name"></span></div><span class="sidebar-skel-block sidebar-skel-notif"></span></div>
+    <div class="sidebar-skel-search"><span class="sidebar-skel-block sidebar-skel-search-bar"></span></div>
+    <div class="sidebar-skel-section"><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+    <div class="sidebar-skel-section"><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+    <div class="sidebar-skel-section"><span class="sidebar-skel-block sidebar-skel-section-title"></span><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+    <div class="sidebar-skel-section"><span class="sidebar-skel-block sidebar-skel-section-title"></span><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+    <div class="sidebar-skel-whatsapp"><span class="sidebar-skel-block sidebar-skel-whatsapp-card"></span></div>
+    <div class="sidebar-skel-section"><span class="sidebar-skel-block sidebar-skel-starred-toggle"></span><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+  </aside>
+
+  <main class="main main-shell-fade-in">
+    <header class="detail-frame-header">
+      <div class="detail-frame-main">
+        <div class="detail-frame-icon" aria-hidden="true">
+          <img src="ASSET/Icons/detail-frame-header-icon.svg" alt="" />
+        </div>
+        <div class="detail-frame-copy">
+          <h1 class="detail-frame-title" id="detail-frame-title">Filter Templates</h1>
+          <p class="detail-frame-subtitle" id="detail-frame-subtitle">Discover design files, templates, plugins, and widgets from creators around the world.</p>
+        </div>
+      </div>
+      <a class="detail-back-link" href="/files">
+        <img src="ASSET/Icons/detail-back-button-icon.svg" alt="" />
+        <span>Back</span>
+      </a>
+    </header>
+
+    <div class="hero">
+
+      <div class="hero-deco-grid" style="width:120px; height:140px;">
+        <div class="deco-bar-card" style="margin-left:0; margin-top:70.9px; transform:rotate(1.94deg);">
+          <div class="deco-dot" style="background:var(--netural-other-2);"></div>
+          <div class="deco-bar" style="background:var(--netural-other-2);"></div>
+        </div>
+        <div class="deco-bar-card" style="margin-left:7.56px; margin-top:100.83px;">
+          <div class="deco-dot" style="background:var(--netural-other-3);"></div>
+          <div class="deco-bar" style="background:var(--netural-other-3);"></div>
+        </div>
+        <div style="margin-left:4.1px; margin-top:0;">
+          <div class="deco-icon-card" style="transform:rotate(-19.34deg);">
+            <img src="ASSET/Icons/hero-deco-icon-left.svg" alt="" style="transform:rotate(-1.94deg);" />
+          </div>
+        </div>
+        <div style="margin-left:86.31px; margin-top:6.18px;">
+          <div class="deco-icon-card" style="transform:rotate(11.38deg);">
+            <img src="ASSET/Icons/hero-deco-icon-left.svg" alt="" style="transform:rotate(-1.94deg);" />
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-center">
+        <p class="hero-title">Discover community-made <span class="highlight">Marketplace</span>, <span class="muted">templates, icon sets</span>, and more</p>
+        <div class="search-input-btn" role="search">
+          <div class="search-bar">
+            <img src="ASSET/Icons/search-icon.svg" alt="" />
+            <input id="template-search-input" class="search-bar-input" type="search" placeholder="Explore design templates" aria-label="Search templates" />
+          </div>
+          <div class="search-suggestions" id="search-suggestions" hidden></div>
+        </div>
+      </div>
+
+      <div class="hero-deco-grid" style="width:126px; height:140px;">
+        <div class="deco-bar-card" style="width:97.415px; height:36.08px; margin-left:20.04px; margin-top:67.8px; transform:rotate(1.94deg);">
+          <div class="deco-dot" style="width:12.027px; height:12.027px; background:var(--netural-other-2);"></div>
+          <div class="deco-bar" style="width:60.133px; height:12.027px; background:var(--netural-other-2);"></div>
+        </div>
+        <div class="deco-bar-card" style="width:97.415px; height:36.08px; margin-left:27.62px; margin-top:92.29px;">
+          <div class="deco-dot" style="width:12.027px; height:12.027px; background:var(--netural-other-3);"></div>
+          <div class="deco-bar" style="width:60.133px; height:12.027px; background:var(--netural-other-3);"></div>
+        </div>
+        <div style="margin-left:0; margin-top:7.7px;">
+          <div class="deco-icon-card" style="width:38.485px; height:38.485px; transform:rotate(-19.34deg);">
+            <img src="ASSET/Icons/hero-deco-icon-right.svg" alt="" style="width:19.792px; height:19.792px; transform:rotate(-1.94deg);" />
+          </div>
+        </div>
+        <div style="margin-left:88.75px; margin-top:0;">
+          <div class="deco-icon-card" style="width:38.485px; height:38.485px; transform:rotate(11.38deg);">
+            <img src="ASSET/Icons/hero-deco-icon-right.svg" alt="" style="width:19.792px; height:19.792px; transform:rotate(-1.94deg);" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="content filter-template-content">
+      <h1 class="section-title" id="filter-page-title">Free &amp; Paid Templates</h1>
+      <p class="section-subtitle" id="filter-page-subtitle">Discover design files, templates, plugins, and widgets from creators around the world.</p>
+
+      <div class="filter-row" id="filter-row-state">
+        <button class="filter-btn" type="button" aria-label="Active category">
+          <img class="icon" src="ASSET/Icons/filter-free-paid-icon.svg" alt="" />
+          <span id="filter-primary-label">Free &amp; Paid Templates</span>
+          <img class="chevron" src="ASSET/Icons/chevron-dropdown.svg" alt="" />
+        </button>
+        <button class="filter-btn" type="button" aria-label="Active scope">
+          <img class="icon" src="ASSET/Icons/filter-all-templates-icon.svg" alt="" />
+          <span id="filter-secondary-label">All Templates</span>
+          <img class="chevron" src="ASSET/Icons/chevron-dropdown.svg" alt="" />
+        </button>
+      </div>
+
+      <div class="template-section">
+        <div class="section-row-header">
+          <div class="section-row-left">
+            <img id="filter-section-icon" src="ASSET/Icons/filter-free-paid-icon.svg" alt="" />
+            <span class="section-row-title" id="filter-section-title">Free &amp; Paid Templates</span>
+            <span class="section-count" id="filter-section-count">0</span>
+          </div>
+        </div>
+
+        <div class="product-grid" id="filter-templates-grid"></div>
+        <div class="filter-empty-state" id="filter-empty-state" hidden>
+          <div class="filter-empty-illustration" aria-hidden="true">
+            <span class="filter-empty-aura"></span>
+            <span class="filter-empty-window">
+              <span class="filter-empty-window-dots"></span>
+              <span class="filter-empty-window-lines"></span>
+            </span>
+            <span class="filter-empty-lens"></span>
+            <span class="filter-empty-spark filter-empty-spark--one"></span>
+            <span class="filter-empty-spark filter-empty-spark--two"></span>
+          </div>
+          <p class="filter-empty-title" id="filter-empty-title">No templates found</p>
+          <p class="filter-empty-copy" id="filter-empty-state-message">No templates found for this category yet.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-avatar">
+            <img src="ASSET/Images/avatar.png" alt="Siren.uix" />
+          </div>
+          <span class="footer-brand-name">SIREN.UIX</span>
+        </div>
+        <nav class="footer-nav">
+          <a href="#">ABOUT ME</a>
+          <a href="#">CONTACT</a>
+          <a href="#">MARKETPLACE</a>
+        </nav>
+        <nav class="footer-socials">
+          <a href="https://www.instagram.com/siren.uix/" target="_blank" rel="noopener" aria-label="Instagram">
+            <img src="ASSET/Icons/social-instagram.svg" alt="Instagram" />
+          </a>
+          <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <img src="ASSET/Icons/social-linkedin.svg" alt="LinkedIn" />
+          </a>
+          <a href="#" target="_blank" rel="noopener" aria-label="X / Twitter">
+            <img src="ASSET/Icons/social-x.svg" alt="X" />
+          </a>
+        </nav>
+      </div>
+
+      <div class="footer-border-strip">
+        <img src="ASSET/Icons/footer-border-start.svg" alt="" style="width:394px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script src="JS/theme-manager.js"></script>
+<script src="JS/firebase-config.js"></script>
+<script src="JS/firebase-auth.js"></script>
+<script src="JS/firebase-product-stats.js"></script>
+<script src="JS/product-cache.js"></script>
+<script src="JS/product-data-source.js"></script>
+<script src="COMPONENT/Button/Button.js"></script>
+<script src="COMPONENT/Sidebar/Sidebar.js"></script>
+<script src="COMPONENT/Product%20Card/ProductCard.js"></script>
+<script src="JS/main-shell-router.js"></script>
+<script src="JS/top-pane-product-tabs.js"></script>
+<script src="FLOAT SITE/float-nav.js"></script>
+<script src="JS/saved-templates.js"></script>
+<script src="JS/main.js"></script>
+<script src="JS/my-post.js"></script>
+<script src="JS/filter-template.js"></script>
+<script src="JS/mobile-template.js"></script>
+<script src="JS/web-template.js"></script>
+<script src="JS/about-me.js"></script>
+<script src="JS/recents.js"></script>
+
+</body>
+</html>

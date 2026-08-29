@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup: Motvin</title>
+  <link rel="stylesheet" href="CSS/signup.css">
+  <link rel="stylesheet" href="CSS/motvin-icons.css">
+  <link rel="icon" type="image/svg+xml" href="ASSET/Images/motvin%20logo%20(full%20color).svg" />
+</head>
+<body>
+
+  <a href="/" class="auth-page-logo">
+    <div class="auth-page-logo-icon">
+      <img src="ASSET/svg/Motvin/login/login-signup-motvin-logo.svg" alt="Motvin" style="width: 100%; height: 100%;">
+    </div>
+    <p class="auth-page-logo-text">motvin</p>
+  </a>
+
+  <div class="auth-modal-content" style="box-shadow: none;">
+    <div class="auth-modal-header">
+      <h2>Create Account</h2>
+      <p>Start your journey with us today.</p>
+    </div>
+    
+    <button class="auth-google-btn" id="auth-google-btn">
+      <img src="ASSET/Icons/google.svg" alt="Google Logo" onerror="this.src='https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg'" />
+      Continue with Google
+    </button>
+
+    <div class="auth-divider">
+      <span>or</span>
+    </div>
+
+    <form id="signup-form">
+      <div class="auth-input-group">
+        <label for="auth-email">Email</label>
+        <input type="email" id="auth-email" required />
+      </div>
+      
+      <div class="auth-input-group">
+        <label for="auth-password">Password</label>
+        <input type="password" id="auth-password" required />
+      </div>
+
+      <div id="auth-error-msg" class="auth-error-msg" style="display: none;"></div>
+
+      <button type="submit" class="auth-submit-btn" id="auth-submit-btn">Sign up</button>
+    </form>
+
+    <div class="auth-modal-footer">
+      <span>Already have an account? </span>
+      <a href="/login">Log in</a>
+    </div>
+  </div>
+
+  <a href="#" class="auth-page-footer" id="manageCookiesBtn">Manage Your Cookie Preferences</a>
+
+  <!-- Cookies Banner -->
+  <div class="cookies-banner" id="cookiesBanner" style="display: none;">
+    <div class="cookies-banner-content">
+      <div class="cookies-banner-header">
+        <div class="cookies-banner-title-wrap">
+          <img src="ASSET/Icons/cookies.svg" alt="Cookies" class="cookies-icon">
+          <p class="cookies-title">Cookie preferences</p>
+        </div>
+        <button class="cookies-close-btn" aria-label="Close" id="cookieCloseBtn">
+          <img src="ASSET/Icons/cookie-close.svg" alt="Close">
+        </button>
+      </div>
+
+      <!-- Accept All State -->
+      <div class="cookies-state-accept" id="cookiesStateAccept">
+        <p class="cookies-desc">
+          Essential cookies keep Motvin secure and working. Optional analytics help us improve your experience. 
+          <a href="#" target="_blank" class="cookies-link">Learn more about cookies</a>
+        </p>
+        <div class="cookies-actions">
+          <button class="btn-cookies-primary" id="btnAcceptAll">Accept All</button>
+          <button class="btn-cookies-secondary" id="btnSettings">Settings</button>
+        </div>
+      </div>
+
+      <!-- Settings State -->
+      <div class="cookies-state-settings" id="cookiesStateSettings" style="display: none;">
+        <div class="cookies-settings-list">
+          
+          <div class="cookie-setting-item">
+            <div class="cookie-setting-header">
+              <div class="cookie-setting-name">
+                <img src="ASSET/Icons/bullet.svg" alt="Bullet" class="cookie-bullet">
+                <p>Essential cookies</p>
+              </div>
+              <div class="cookie-switch disabled">
+                <div class="cookie-switch-track"><div class="cookie-switch-thumb"></div></div>
+              </div>
+            </div>
+            <p class="cookie-setting-desc">These cookies are essential for Motvin to function properly.</p>
+          </div>
+          
+          <div class="cookie-divider"></div>
+          
+          <div class="cookie-setting-item">
+            <div class="cookie-setting-header">
+              <div class="cookie-setting-name">
+                <img src="ASSET/Icons/bullet.svg" alt="Bullet" class="cookie-bullet">
+                <p>Analytics cookies</p>
+              </div>
+              <label class="cookie-switch">
+                <input type="checkbox" id="analyticsCookieToggle">
+                <div class="cookie-switch-track"><div class="cookie-switch-thumb"></div></div>
+              </label>
+            </div>
+            <p class="cookie-setting-desc">Helps us understand how visitors use Motvin to improve features and performance.</p>
+          </div>
+
+        </div>
+        <div class="cookies-actions">
+          <button class="btn-cookies-primary" id="btnSavePreferences">Submit</button>
+          <button class="btn-cookies-secondary" id="btnCancelSettings">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="JS/firebase-config.js"></script>
+  <script src="JS/firebase-auth.js"></script>
+  <script src="JS/signup.js"></script>
+</body>
+</html>

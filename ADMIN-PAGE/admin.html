@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Cards Admin</title>
+  <script src="../JS/theme-manager.js"></script>
+  <link rel="stylesheet" href="./admin.css" />
+
+  <link rel="icon" type="image/svg+xml" href="../ASSET/Images/motvin%20logo%20(full%20color).svg" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../files.html" class="nav-logo">SIREN.UIX<span class="nav-logo-sub">Admin</span></a>
+      <div class="nav-right">
+        <span class="auth-pill" id="auth-pill">Checking access...</span>
+        <button class="nav-link nav-link-button" id="sign-out-button" type="button" hidden>Sign out</button>
+        <button class="nav-btn" id="sign-in-button" type="button">Sign in with Google</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="header header-left">
+    <div class="container container-wide">
+      <p class="eyebrow">Motvin Workspace</p>
+      <h1>Product Cards Admin</h1>
+      <p>Manage product cards in the <strong id="collection-name">products</strong> collection.</p>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div class="container container-wide">
+
+      <section id="access-gate" class="admin-panel" hidden>
+        <h2 class="panel-title" id="access-gate-title">Sign in required</h2>
+        <p class="panel-copy" id="access-gate-copy">Sign in with an authorized Google account to manage products.</p>
+      </section>
+
+      <div id="admin-content" class="admin-layout" hidden>
+        <section class="admin-panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Editor</h2>
+              <p class="panel-copy" id="editor-mode">Create mode</p>
+            </div>
+            <div id="status-chip" class="auth-pill">
+              <span class="status-text">Waiting for load...</span>
+            </div>
+          </div>
+
+          <div id="success-banner" class="status-banner" data-tone="success" hidden role="status" aria-live="polite">
+            <span id="success-banner-text">Product added successfully.</span>
+          </div>
+
+          <div id="admin-message" class="status-banner" hidden role="status" aria-live="polite"></div>
+
+          <form id="product-form" class="release-form">
+            <div class="form-grid">
+              <label class="field">
+                <span class="field-label">Slug</span>
+                <input class="field-input" name="slug" type="text" required placeholder="landing-kit-pro" />
+              </label>
+              <label class="field">
+                <span class="field-label">Product type</span>
+                <select class="field-input" name="productType" required>
+                  <option value="template">template</option>
+                  <option value="design-post">design-post</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="form-grid">
+              <label class="field">
+                <span class="field-label">Title</span>
+                <input class="field-input" name="title" type="text" required />
+              </label>
+              <label class="field">
+                <span class="field-label">Author</span>
+                <input class="field-input" name="author" type="text" required />
+              </label>
+            </div>
+
+            <div class="form-grid">
+              <label class="field">
+                <span class="field-label">Category</span>
+                <input class="field-input" name="category" type="text" required />
+              </label>
+              <label class="field">
+                <span class="field-label">Price</span>
+                <input class="field-input" name="price" type="text" placeholder="Free or $29" required />
+              </label>
+            </div>
+
+            <div class="image-inputs" data-single-image-fields>
+              <label class="field">
+                <span class="field-label">Image URL</span>
+                <input class="field-input" name="image" type="url" required placeholder="https://..." />
+              </label>
+            </div>
+
+            <div class="image-inputs" data-design-post-gallery-fields hidden>
+              <label class="field">
+                <span class="field-label">Gallery image 1 URL</span>
+                <input class="field-input" name="galleryImage1" type="url" placeholder="https://..." />
+              </label>
+              <label class="field">
+                <span class="field-label">Gallery image 2 URL</span>
+                <input class="field-input" name="galleryImage2" type="url" placeholder="https://..." />
+              </label>
+              <label class="field">
+                <span class="field-label">Gallery image 3 URL</span>
+                <input class="field-input" name="galleryImage3" type="url" placeholder="https://..." />
+              </label>
+            </div>
+
+            <div class="image-preview-card">
+              <div class="image-preview-head">
+                <span class="image-preview-label">Image preview</span>
+              </div>
+              <img class="image-preview-media" id="image-preview" src="" alt="Product preview" />
+            </div>
+
+            <label class="field">
+              <span class="field-label">Summary</span>
+              <input class="field-input" name="summary" type="text" />
+            </label>
+
+            <label class="field">
+              <span class="field-label">Description</span>
+              <textarea class="field-input field-textarea" name="description" rows="4"></textarea>
+            </label>
+
+            <div class="form-grid">
+              <label class="field">
+                <span class="field-label">Tags (comma separated)</span>
+                <input class="field-input" name="tags" type="text" placeholder="Web, Landing" />
+              </label>
+              <label class="field">
+                <span class="field-label">What's Inside (use / separator)</span>
+                <input class="field-input" name="detailTags" type="text" placeholder="Screen 1 / Screen 2 / Screen 3" />
+              </label>
+            </div>
+
+            <label class="field">
+              <span class="field-label">Updated at (ISO)</span>
+              <input class="field-input" name="updatedAt" type="text" placeholder="2026-07-09T10:00:00Z" />
+            </label>
+
+            <div class="form-actions">
+              <button type="submit" class="nav-btn">Save to Firebase</button>
+              <button id="duplicate-btn" type="button" class="nav-link nav-link-button">Duplicate</button>
+              <button id="reset-btn" type="button" class="nav-link nav-link-button">Reset form</button>
+              <button id="delete-btn" type="button" class="nav-link nav-link-button nav-link-danger">Delete product</button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="admin-sidebar">
+          <section class="admin-panel admin-panel-compact">
+            <div class="panel-head panel-head-compact">
+              <div>
+                <h2 class="panel-title">Products</h2>
+                <p class="panel-copy">Pick an entry to edit or remove it.</p>
+              </div>
+              <button id="new-btn" type="button" class="nav-link nav-link-button">New</button>
+            </div>
+            <label class="field">
+              <input class="field-input" id="search-input" type="search" placeholder="Search products..." autocomplete="off" />
+            </label>
+            <div class="entry-list" id="product-list"></div>
+            <button id="refresh-btn" type="button" class="nav-link nav-link-button admin-inline-link">Refresh list</button>
+          </section>
+
+          <section class="admin-panel admin-panel-compact" id="users-management-section" hidden>
+            <div class="panel-head panel-head-compact">
+              <div>
+                <h2 class="panel-title">Users management</h2>
+                <p class="panel-copy">Only these accounts can manage products. Super Admin only.</p>
+              </div>
+            </div>
+
+            <form class="admin-access-form" id="add-admin-form">
+              <label class="field">
+                <span class="field-label">Add admin email</span>
+                <input class="field-input" type="email" id="add-admin-email" placeholder="person@example.com" />
+              </label>
+              <button class="nav-btn" type="submit" id="add-admin-button">Add admin</button>
+            </form>
+
+            <div class="entry-list admin-access-list" id="users-list"></div>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <script src="../JS/firebase-config.js"></script>
+  <script src="../JS/firebase-auth.js"></script>
+  <script src="../JS/product-cache.js"></script>
+  <script src="./admin.js"></script>
+</body>
+</html>

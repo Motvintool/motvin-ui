@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/motvin",
+      "destination": "/motvin/",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/motvin/(.*)",
+      "destination": "/MOTVIN/$1"
+    },
+    { "source": "/update", "destination": "/updates/index.html" },
+    { "source": "/releasenotes", "destination": "/updates/index.html" },
+    { "source": "/releasenote", "destination": "/updates/index.html" },
+    { "source": "/icon", "destination": "/icons.html" },
+    { "source": "/icons", "destination": "/icons.html" },
+    { "source": "/iconstore", "destination": "/icons.html" },
+    { "source": "/iconstores", "destination": "/icons.html" }
+  ],
+  "cleanUrls": true
+}

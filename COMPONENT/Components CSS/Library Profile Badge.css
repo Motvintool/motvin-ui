@@ -1,0 +1,60 @@
+/* --- Profile Badge --- */
+.mi-top-avatar-wrap {
+  width: 40px;
+  height: 40px;
+  border: 1.8px solid #5c4ae4;
+  border-radius: 50%;
+  padding: 1.8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.mi-top-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.mi-top-avatar-wrap.mi-logged-out {
+  border: none;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+}
+
+/* --- Initials Avatar Design --- */
+.mi-top-avatar-wrap.mi-initials-mode {
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
+.mi-avatar-initials-outer {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1.8px solid #2B9FF4;
+  padding: 3.1px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mi-avatar-initials-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #2B9FF4;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+}

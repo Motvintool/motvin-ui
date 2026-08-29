@@ -1,0 +1,15 @@
+{
+  "name": "code2design-protected",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "clean": "echo \"No dist folder in use\""
+  },
+  "devDependencies": {
+    "firebase-tools": "^15.14.0"
+  },
+  "dependencies": {
+    "firebase": "^12.12.0"
+  }
+}

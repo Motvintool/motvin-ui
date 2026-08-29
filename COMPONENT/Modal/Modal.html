@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modal Component Showcase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../CSS/theme.css" />
+  <link rel="stylesheet" href="../../CSS/global.css" />
+  <link rel="stylesheet" href="Modal.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      background: #121212;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .modal-showcase-btn {
+      padding: 10px 20px;
+      background: #008ff0;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: background 0.15s ease;
+    }
+
+    .modal-showcase-btn:hover {
+      background: #0077c8;
+    }
+  </style>
+
+  <link rel="icon" type="image/svg+xml" href="../../ASSET/Images/motvin%20logo%20(full%20color).svg" />
+</head>
+
+<body>
+  <!-- Modal Component Markup -->
+  <div class="recents-modal-backdrop" id="recents-rename-modal">
+    <div class="recents-modal-panel">
+      <div class="recents-modal-header">
+        <h3 class="recents-modal-title" id="recents-rename-modal-heading">Rename Color Palette</h3>
+        <button class="recents-modal-close" id="recents-rename-close" type="button" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M1 1l12 12M13 1L1 13" />
+          </svg>
+        </button>
+      </div>
+      <div class="recents-modal-body">
+        <label class="recents-modal-label" for="recents-rename-input">Title</label>
+        <input type="text" class="recents-modal-input" id="recents-rename-input" value="Color Palette 1"
+          autocomplete="off" />
+      </div>
+      <div class="recents-modal-footer">
+        <button class="recents-modal-btn recents-modal-btn--secondary" id="recents-rename-cancel"
+          type="button">Cancel</button>
+        <button class="recents-modal-btn recents-modal-btn--primary" id="recents-rename-save" type="button">Save
+          Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="Modal.js"></script>
+  <script>
+    document.getElementById('open-modal-demo-btn').addEventListener('click', () => {
+      if (window.ModalComponent) {
+        window.ModalComponent.open({
+          heading: 'Rename Color Palette',
+          value: 'Color Palette 1',
+          onSave: (val) => alert('Saved: ' + val)
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

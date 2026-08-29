@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>Recents - Motvin</title>
+  <meta name="theme-color" content="#5c4ae4" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="CSS/theme.css" />
+  <link rel="stylesheet" href="CSS/global.css" />
+  <link rel="stylesheet" href="CSS/top-pane.css" />
+  <link rel="stylesheet" href="COMPONENT/Button/Button.css" />
+  <link rel="stylesheet" href="COMPONENT/Sidebar/Sidebar.css" />
+  <link rel="stylesheet" href="COMPONENT/Product%20Card/ProductCard.css" />
+  <link rel="stylesheet" href="COMPONENT/Modal/Modal.css" />
+  <link rel="stylesheet" href="CSS/main.css" data-page-style="true" />
+  <link rel="stylesheet" href="CSS/recents.css" data-page-style="true" />
+  <script src="JS/product-cache.js"></script>
+  <script src="MOTVIN/componet/toast-notification/toast-notification.js" defer></script>
+  <link rel="icon" type="image/svg+xml" href="ASSET/Images/motvin%20logo%20(full%20color).svg" />
+</head>
+
+<body>
+
+  <!-- ═══════════════ TOP PANE ═══════════════ -->
+  <div class="top-pane">
+    <div class="top-pane-tabs">
+      <a class="top-pane-tab top-pane-home-tab" href="/files" aria-label="Home">
+        <img src="ASSET/Icons/top-pane-home-icon.svg" alt="" />
+      </a>
+      <div id="shell-top-pane-product-tabs"></div>
+    </div>
+    <button class="top-pane-mobile-menu" type="button" aria-label="Open sidebar">
+      <img src="ASSET/Icons/top-pane-mobile-menu-icon.svg" alt="" />
+    </button>
+    <div class="top-pane-add">
+      <img src="ASSET/Icons/top-pane-add-icon.svg" alt="Add tab" />
+    </div>
+  </div>
+  <script>(function () { try { var rawSlugs = localStorage.getItem('openedProductSlugs'); var s = rawSlugs ? JSON.parse(rawSlugs) : []; var p = document.querySelector('.top-pane'); if (!s.length && window.innerWidth > 670) { if (p) p.classList.add('top-pane--hidden'); document.body.classList.add('top-pane-hidden'); return; } var container = document.getElementById('shell-top-pane-product-tabs') || document.getElementById('detail-top-pane-product-tabs'); if (!container || !s.length) return; var prodMap = {}; try { var cachedProdsRaw = localStorage.getItem('motvin_products_v1'); if (cachedProdsRaw) { var cachedProds = JSON.parse(cachedProdsRaw); if (Array.isArray(cachedProds)) { for (var k = 0; k < cachedProds.length; k++) { var item = cachedProds[k]; if (item && item.slug) prodMap[item.slug] = item; } } } } catch (e) { } var params = new URLSearchParams(window.location.search); var reqProduct = params.get('product'); var reqCategory = params.get('category'); var path = window.location.pathname.toLowerCase(); var activeSlug = null; if (reqProduct) { activeSlug = reqProduct; } else if (path.indexOf('filter-template.html') !== -1 || path.indexOf('mobile-template.html') !== -1 || path.indexOf('web-template.html') !== -1) { var cat = reqCategory || (path.indexOf('mobile-template') !== -1 ? 'mobile' : (path.indexOf('web-template') !== -1 ? 'web' : 'free-paid')); activeSlug = 'filter:' + cat; } var isHome = !activeSlug && (path.endsWith('files.html') || path.endsWith('/') || path.endsWith('about-me.html') || path.endsWith('my-post.html') || path.endsWith('recents.html') || path.endsWith('saved-templates.html')); var homeTab = document.querySelector('.top-pane-home-tab'); if (homeTab) { if (isHome) { homeTab.classList.add('is-active'); } else { homeTab.classList.remove('is-active'); } } function titleCase(str) { return String(str || '').replace(/^filter:/, '').replace(/[-_]+/g, ' ').replace(/\b\w/g, function (c) { return c.toUpperCase(); }); } var filterLabels = { 'mobile': 'Mobile Templates', 'web': 'Web Templates', 'free': 'Free Templates', 'paid': 'Paid Templates', 'free-paid': 'Free & Paid Templates', 'recent': 'Recent Templates' }; var iconSvg = '<svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.00004 5.33329H4.00671M6.66671 5.33329H6.67337M9.33337 5.33329H9.34004M2.66671 2.66663H13.3334C14.0698 2.66663 14.6667 3.26358 14.6667 3.99996V12C14.6667 12.7363 14.0698 13.3333 13.3334 13.3333H2.66671C1.93033 13.3333 1.33337 12.7363 1.33337 12V3.99996C1.33337 3.26358 1.93033 2.66663 2.66671 2.66663Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'; var html = ''; for (var i = 0; i < s.length; i++) { var slug = s[i]; var isActive = !isHome && (slug === activeSlug); var title = ''; if (slug.indexOf('filter:') === 0) { title = filterLabels[slug.replace('filter:', '')] || 'Free & Paid Templates'; } else if (prodMap[slug] && prodMap[slug].title) { title = prodMap[slug].title; } else { title = titleCase(slug); } html += '<div class="top-pane-tab' + (isActive ? ' is-active' : '') + '" data-product-slug="' + slug + '">' + iconSvg + '<span>' + title + '</span><button class="tab-close" type="button" aria-label="Close tab"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /></svg></button></div>'; } container.innerHTML = html; } catch (e) { } })();</script>
+
+  <div class="layout">
+    <aside class="sidebar sidebar-skeleton sidebar--responsive" data-sidebar-root data-sidebar-active="recents"
+      aria-hidden="true">
+      <div class="sidebar-skel-profile">
+        <div class="sidebar-skel-profile-left"><span class="sidebar-skel-block sidebar-skel-avatar"></span><span
+            class="sidebar-skel-block sidebar-skel-name"></span></div><span
+          class="sidebar-skel-block sidebar-skel-notif"></span>
+      </div>
+      <div class="sidebar-skel-search"><span class="sidebar-skel-block sidebar-skel-search-bar"></span></div>
+      <div class="sidebar-skel-section">
+        <div class="nav-tab nav-tab--state-default sidebar-skel-nav-item">
+          <div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span
+              class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span
+            class="sidebar-skel-block sidebar-skel-nav-badge"></span>
+        </div>
+      </div>
+      <div class="sidebar-skel-section">
+        <div class="nav-tab nav-tab--state-default sidebar-skel-nav-item">
+          <div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span
+              class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span
+            class="sidebar-skel-block sidebar-skel-nav-badge"></span>
+        </div>
+        <div class="nav-tab nav-tab--state-default sidebar-skel-nav-item">
+          <div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span
+              class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span
+            class="sidebar-skel-block sidebar-skel-nav-badge"></span>
+        </div>
+      </div>
+      <div class="sidebar-skel-section"><span class="sidebar-skel-block sidebar-skel-section-title"></span>
+        <div class="nav-tab nav-tab--state-default sidebar-skel-nav-item">
+          <div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span
+              class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span
+            class="sidebar-skel-block sidebar-skel-nav-badge"></span>
+        </div>
+        <div class="nav-tab nav-tab--state-default sidebar-skel-nav-item">
+          <div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span
+              class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span
+            class="sidebar-skel-block sidebar-skel-nav-badge"></span>
+        </div>
+      </div>
+      <div class="sidebar-skel-whatsapp"><span class="sidebar-skel-block sidebar-skel-whatsapp-card"></span></div>
+      <div class="sidebar-skel-section"><span class="sidebar-skel-block sidebar-skel-starred-toggle"></span>
+        <div class="nav-tab nav-tab--state-default sidebar-skel-nav-item">
+          <div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span
+              class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span
+            class="sidebar-skel-block sidebar-skel-nav-badge"></span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ═══════════════ MAIN ═══════════════ -->
+    <main class="main main-shell-fade-in recents-main">
+      <div class="recents-search-banner">
+        <div class="recents-search-banner-inner">
+          <h1 class="recents-banner-title">Motvin</h1>
+          <div class="recents-banner-actions">
+            <button class="Typescale-btn" type="button">
+              <span class="recents-banner-btn-icon recents-banner-btn-icon--purple">
+                <img src="ASSET/Icons/banner-typeface-icon.svg" alt="" />
+              </span>
+              <span class="recents-banner-btn-text">Typeface Generator</span>
+            </button>
+            <button class="color-btn" type="button">
+              <span class="recents-banner-btn-icon recents-banner-btn-icon--blue">
+                <img src="ASSET/Icons/banner-palette-icon.svg" alt="" />
+              </span>
+              <span class="recents-banner-btn-text">Generate Palettes</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="recents-container">
+        <div class="recents-header">
+          <div class="recents-tabs">
+            <div class="all-files-tab is-active">All files</div>
+            <div class="archived-tab">Archived</div>
+          </div>
+          <div class="recents-filters">
+            <button class="recents-filter-btn">
+              All
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+            <button class="recents-filter-btn">
+              Last Viewed
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="recents-grid" id="recents-grid">
+          <article class="main-shell-product-card-skeleton" aria-hidden="true">
+            <span class="main-shell-product-card-skeleton-media"></span>
+            <span class="main-shell-product-card-skeleton-body">
+              <span class="main-shell-product-card-skeleton-line main-shell-product-card-skeleton-line--title"></span>
+              <span class="main-shell-product-card-skeleton-line main-shell-product-card-skeleton-line--meta"></span>
+            </span>
+          </article>
+          <article class="main-shell-product-card-skeleton" aria-hidden="true">
+            <span class="main-shell-product-card-skeleton-media"></span>
+            <span class="main-shell-product-card-skeleton-body">
+              <span class="main-shell-product-card-skeleton-line main-shell-product-card-skeleton-line--title"></span>
+              <span class="main-shell-product-card-skeleton-line main-shell-product-card-skeleton-line--meta"></span>
+            </span>
+          </article>
+          <article class="main-shell-product-card-skeleton" aria-hidden="true">
+            <span class="main-shell-product-card-skeleton-media"></span>
+            <span class="main-shell-product-card-skeleton-body">
+              <span class="main-shell-product-card-skeleton-line main-shell-product-card-skeleton-line--title"></span>
+              <span class="main-shell-product-card-skeleton-line main-shell-product-card-skeleton-line--meta"></span>
+            </span>
+          </article>
+          <article class="main-shell-product-card-skeleton" aria-hidden="true">
+            <span class="main-shell-product-card-skeleton-media"></span>
+            <span class="main-shell-product-card-skeleton-body">
+              <span class="main-shell-product-card-skeleton-line main-shell-product-card-skeleton-line--title"></span>
+              <span class="main-shell-product-card-skeleton-line main-shell-product-card-skeleton-line--meta"></span>
+            </span>
+          </article>
+        </div>
+      </div>
+
+      <!-- Footer for OAuth Compliance & Disclaimer -->
+      <!-- <footer style="margin-top: auto; padding: 32px 32px 16px; text-align: center; color: var(--text-secondary, #64748b); width: 100%;">
+      <p style="font-family: Inter, sans-serif; font-size: 11px; color: var(--text-muted, #94a3b8); margin: 0;">
+        Motvin is an AI-powered UI design platform. <a href="/about-me" style="color: inherit; text-decoration: underline;">Learn more.</a>
+      </p>
+    </footer> -->
+    </main>
+  </div>
+
+  <!-- Context Menu directly below active tab -->
+  <div class="recents-context-menu" id="recents-context-menu" hidden>
+    <div class="recents-context-menu-panel">
+      <div class="recents-context-menu-options" role="menu" id="recents-context-menu-options">
+        <!-- Options injected dynamically by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="JS/theme-manager.js"></script>
+  <script>
+    window.__MOTVIN_ENV__ = window.__MOTVIN_ENV__ || {
+      FIREBASE_API_KEY: "AIzaSyBgW94s3aYLnz8_6g9bli42Ev_kNbOAyIM",
+      FIREBASE_AUTH_DOMAIN: "motvin-prod.firebaseapp.com",
+      FIREBASE_PROJECT_ID: "motvin-prod",
+      FIREBASE_APP_ID: "1:177361046673:web:7c69a0e2d1755b89558330",
+      FIREBASE_MESSAGING_SENDER_ID: "177361046673",
+      FIREBASE_STORAGE_BUCKET: "motvin-prod.firebasestorage.app",
+      GA_MEASUREMENT_ID: "G-4DTKXD35BH",
+    };
+  </script>
+  <script src="JS/firebase-config.js"></script>
+  <script src="JS/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore-compat.js"></script>
+  <script src="MOTVIN/js/firebase-url-beta.js"></script>
+  <script src="JS/firebase-product-stats.js"></script>
+  <script src="JS/product-cache.js"></script>
+  <script src="JS/product-data-source.js"></script>
+  <script src="COMPONENT/Button/Button.js"></script>
+  <script src="COMPONENT/Modal/Modal.js"></script>
+  <script src="COMPONENT/Sidebar/Sidebar.js"></script>
+  <script src="COMPONENT/Product%20Card/ProductCard.js"></script>
+  <script src="JS/main-shell-router.js"></script>
+  <script src="JS/top-pane-product-tabs.js"></script>
+  <script src="FLOAT SITE/float-nav.js"></script>
+  <script src="JS/saved-templates.js"></script>
+  <script src="JS/main.js"></script>
+  <script src="JS/my-post.js"></script>
+  <script src="JS/filter-template.js"></script>
+  <script src="JS/mobile-template.js"></script>
+  <script src="JS/web-template.js"></script>
+  <script src="JS/about-me.js"></script>
+  <script src="JS/recents.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js?v=0.2.1').catch(function () {
+          // Ignore registration errors silently in unsupported environments.
+        });
+      });
+    }
+  </script>
+
+  <toast-notification id="toastNotification"></toast-notification>
+</body>
+
+</html>

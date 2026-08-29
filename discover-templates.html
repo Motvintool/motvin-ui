@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Motvin - Design Marketplace</title>
+<link rel="manifest" href="Progressive%20Web%20App/manifest.json" />
+<meta name="theme-color" content="#5c4ae4" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="CSS/theme.css" />
+<!-- Shared tokens/common styles: CSS/global.css -->
+<link rel="stylesheet" href="CSS/global.css" />
+<link rel="stylesheet" href="CSS/top-pane.css" />
+<link rel="stylesheet" href="COMPONENT/Button/Button.css" />
+<link rel="stylesheet" href="COMPONENT/Sidebar/Sidebar.css" />
+<link rel="stylesheet" href="COMPONENT/Product%20Card/ProductCard.css" />
+<!-- Page-specific styles for files.html only: CSS/main.css -->
+<link rel="stylesheet" href="CSS/main.css" data-page-style="true" />
+<script src="JS/product-cache.js"></script>
+  <link rel="icon" type="image/svg+xml" href="ASSET/Images/motvin%20logo%20(full%20color).svg" />
+</head>
+<body>
+
+<!-- ═══════════════ TOP PANE (browser tab bar) ═══════════════ -->
+<div class="top-pane">
+  <div class="top-pane-tabs">
+    <a class="top-pane-tab top-pane-home-tab" href="/files" aria-label="Home">
+      <img src="ASSET/Icons/top-pane-home-icon.svg" alt="" />
+    </a>
+    <div id="shell-top-pane-product-tabs"></div>
+  </div>
+  <button class="top-pane-mobile-menu" type="button" aria-label="Open sidebar">
+    <img src="ASSET/Icons/top-pane-mobile-menu-icon.svg" alt="" />
+  </button>
+  <div class="top-pane-add">
+    <img src="ASSET/Icons/top-pane-add-icon.svg" alt="Add tab" />
+  </div>
+</div>
+<script>(function(){try{var rawSlugs=localStorage.getItem('openedProductSlugs');var s=rawSlugs?JSON.parse(rawSlugs):[];var p=document.querySelector('.top-pane');if(!s.length&&window.innerWidth>670){if(p)p.classList.add('top-pane--hidden');document.body.classList.add('top-pane-hidden');return;}var container=document.getElementById('shell-top-pane-product-tabs')||document.getElementById('detail-top-pane-product-tabs');if(!container||!s.length)return;var prodMap={};try{var cachedProdsRaw=localStorage.getItem('motvin_products_v1');if(cachedProdsRaw){var cachedProds=JSON.parse(cachedProdsRaw);if(Array.isArray(cachedProds)){for(var k=0;k<cachedProds.length;k++){var item=cachedProds[k];if(item&&item.slug)prodMap[item.slug]=item;}}}}catch(e){}var params=new URLSearchParams(window.location.search);var reqProduct=params.get('product');var reqCategory=params.get('category');var path=window.location.pathname.toLowerCase();var activeSlug=null;if(reqProduct){activeSlug=reqProduct;}else if(path.indexOf('filter-template.html')!==-1||path.indexOf('mobile-template.html')!==-1||path.indexOf('web-template.html')!==-1){var cat=reqCategory||(path.indexOf('mobile-template')!==-1?'mobile':(path.indexOf('web-template')!==-1?'web':'free-paid'));activeSlug='filter:'+cat;}var isHome=!activeSlug&&(path.endsWith('files.html')||path.endsWith('/')||path.endsWith('about-me.html')||path.endsWith('my-post.html')||path.endsWith('saved-templates.html'));var homeTab=document.querySelector('.top-pane-home-tab');if(homeTab){if(isHome){homeTab.classList.add('is-active');}else{homeTab.classList.remove('is-active');}}function titleCase(str){return String(str||'').replace(/^filter:/,'').replace(/[-_]+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});}var filterLabels={'mobile':'Mobile Templates','web':'Web Templates','free':'Free Templates','paid':'Paid Templates','free-paid':'Free & Paid Templates','recent':'Recent Templates'};var iconSvg='<svg class="tab-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.00004 5.33329H4.00671M6.66671 5.33329H6.67337M9.33337 5.33329H9.34004M2.66671 2.66663H13.3334C14.0698 2.66663 14.6667 3.26358 14.6667 3.99996V12C14.6667 12.7363 14.0698 13.3333 13.3334 13.3333H2.66671C1.93033 13.3333 1.33337 12.7363 1.33337 12V3.99996C1.33337 3.26358 1.93033 2.66663 2.66671 2.66663Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';var html='';for(var i=0;i<s.length;i++){var slug=s[i];var isActive=!isHome&&(slug===activeSlug);var title='';if(slug.indexOf('filter:')===0){title=filterLabels[slug.replace('filter:','')]||'Free & Paid Templates';}else if(prodMap[slug]&&prodMap[slug].title){title=prodMap[slug].title;}else{title=titleCase(slug);}html+='<div class="top-pane-tab'+(isActive?' is-active':'')+'" data-product-slug="'+slug+'">'+iconSvg+'<span>'+title+'</span><button class="tab-close" type="button" aria-label="Close tab"><svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L9 9M9 1L1 9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" /></svg></button></div>';}container.innerHTML=html;}catch(e){}})();</script>
+
+<div class="layout">
+  <aside class="sidebar sidebar-skeleton sidebar--responsive" data-sidebar-root data-sidebar-active="discover" aria-hidden="true">
+    <div class="sidebar-skel-profile"><div class="sidebar-skel-profile-left"><span class="sidebar-skel-block sidebar-skel-avatar"></span><span class="sidebar-skel-block sidebar-skel-name"></span></div><span class="sidebar-skel-block sidebar-skel-notif"></span></div>
+    <div class="sidebar-skel-search"><span class="sidebar-skel-block sidebar-skel-search-bar"></span></div>
+    <div class="sidebar-skel-section"><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+    <div class="sidebar-skel-section"><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+    <div class="sidebar-skel-section"><span class="sidebar-skel-block sidebar-skel-section-title"></span><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+    <div class="sidebar-skel-section"><span class="sidebar-skel-block sidebar-skel-section-title"></span><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+    <div class="sidebar-skel-whatsapp"><span class="sidebar-skel-block sidebar-skel-whatsapp-card"></span></div>
+    <div class="sidebar-skel-section"><span class="sidebar-skel-block sidebar-skel-starred-toggle"></span><div class="nav-tab nav-tab--state-default sidebar-skel-nav-item"><div class="nav-tab-left"><span class="sidebar-skel-block sidebar-skel-nav-icon"></span><span class="sidebar-skel-block sidebar-skel-nav-text"></span></div><span class="sidebar-skel-block sidebar-skel-nav-badge"></span></div></div>
+  </aside>
+
+  <!-- ═══════════════ MAIN ═══════════════ -->
+  <main class="main main-shell-fade-in">
+
+    <!-- Hero / Search Banner -->
+    <div class="hero">
+
+      <div class="hero-deco-grid" style="width:120px; height:140px;">
+        <div class="deco-bar-card" style="margin-left:0; margin-top:70.9px; transform:rotate(1.94deg);">
+          <div class="deco-dot" style="background:var(--netural-other-2);"></div>
+          <div class="deco-bar" style="background:var(--netural-other-2);"></div>
+        </div>
+        <div class="deco-bar-card" style="margin-left:7.56px; margin-top:100.83px;">
+          <div class="deco-dot" style="background:var(--netural-other-3);"></div>
+          <div class="deco-bar" style="background:var(--netural-other-3);"></div>
+        </div>
+        <div style="margin-left:4.1px; margin-top:0;">
+          <div class="deco-icon-card" style="transform:rotate(-19.34deg);">
+            <img src="ASSET/Icons/hero-deco-icon-left.svg" alt="" style="transform:rotate(-1.94deg);" />
+          </div>
+        </div>
+        <div style="margin-left:86.31px; margin-top:6.18px;">
+          <div class="deco-icon-card" style="transform:rotate(11.38deg);">
+            <img src="ASSET/Icons/hero-deco-icon-left.svg" alt="" style="transform:rotate(-1.94deg);" />
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-center">
+        <p class="hero-title">Discover community-made <span class="highlight">Marketplace</span>, <span class="muted">templates, icon sets</span>, and more</p>
+        <div class="search-input-btn" role="search">
+          <div class="search-bar">
+            <img src="ASSET/Icons/search-icon.svg" alt="" />
+            <input id="template-search-input" class="search-bar-input" type="search" placeholder="Explore design templates" aria-label="Search templates" />
+          </div>
+          <div class="search-suggestions" id="search-suggestions" hidden></div>
+        </div>
+      </div>
+
+      <div class="hero-deco-grid" style="width:126px; height:140px;">
+        <div class="deco-bar-card" style="width:97.415px; height:36.08px; margin-left:20.04px; margin-top:67.8px; transform:rotate(1.94deg);">
+          <div class="deco-dot" style="width:12.027px; height:12.027px; background:var(--netural-other-2);"></div>
+          <div class="deco-bar" style="width:60.133px; height:12.027px; background:var(--netural-other-2);"></div>
+        </div>
+        <div class="deco-bar-card" style="width:97.415px; height:36.08px; margin-left:27.62px; margin-top:92.29px;">
+          <div class="deco-dot" style="width:12.027px; height:12.027px; background:var(--netural-other-3);"></div>
+          <div class="deco-bar" style="width:60.133px; height:12.027px; background:var(--netural-other-3);"></div>
+        </div>
+        <div style="margin-left:0; margin-top:7.7px;">
+          <div class="deco-icon-card" style="width:38.485px; height:38.485px; transform:rotate(-19.34deg);">
+            <img src="ASSET/Icons/hero-deco-icon-right.svg" alt="" style="width:19.792px; height:19.792px; transform:rotate(-1.94deg);" />
+          </div>
+        </div>
+        <div style="margin-left:88.75px; margin-top:0;">
+          <div class="deco-icon-card" style="width:38.485px; height:38.485px; transform:rotate(11.38deg);">
+            <img src="ASSET/Icons/hero-deco-icon-right.svg" alt="" style="width:19.792px; height:19.792px; transform:rotate(-1.94deg);" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+      <h2 class="section-title">Discover All Templates</h2>
+      <p class="section-subtitle">Discover design files, templates, plugins, and widgets from creators around the world.</p>
+
+      <div class="filter-row">
+        <div class="free-paid-dropdown-wrap" data-free-paid-root>
+          <button class="filter-btn filter-btn--free-paid" type="button" data-filter="free-paid" aria-haspopup="menu" aria-expanded="false">
+            <img class="icon" src="ASSET/Icons/filter-free-paid-icon.svg" alt="" />
+            <span data-free-paid-label>Free &amp; Paid</span>
+            <img class="chevron" src="ASSET/Icons/chevron-dropdown.svg" alt="" />
+          </button>
+
+          <div class="free-paid-dropdown" data-free-paid-dropdown hidden>
+            <div class="free-paid-dropdown-panel">
+              <div class="free-paid-dropdown-title">Discover Templates</div>
+              <div class="free-paid-dropdown-options" role="menu" aria-label="Filter templates by price">
+                <button class="free-paid-dropdown-option is-active" type="button" role="menuitemradio" aria-checked="true" data-category-option="free-paid">
+                  <span class="free-paid-dropdown-option-left">
+                    <img src="ASSET/Icons/dropdown-free-paid-icon.svg" alt="" />
+                    <span>Free &amp; Paid</span>
+                  </span>
+                  <span class="free-paid-dropdown-count" data-category-count="free-paid">0</span>
+                </button>
+                <button class="free-paid-dropdown-option" type="button" role="menuitemradio" aria-checked="false" data-category-option="free">
+                  <span class="free-paid-dropdown-option-left">
+                    <img src="ASSET/Icons/dropdown-free-icon.svg" alt="" />
+                    <span>Free Templates</span>
+                  </span>
+                  <span class="free-paid-dropdown-count" data-category-count="free">0</span>
+                </button>
+                <button class="free-paid-dropdown-option" type="button" role="menuitemradio" aria-checked="false" data-category-option="paid">
+                  <span class="free-paid-dropdown-option-left">
+                    <img src="ASSET/Icons/dropdown-paid-icon.svg" alt="" />
+                    <span>Paid Templates</span>
+                  </span>
+                  <span class="free-paid-dropdown-count" data-category-count="paid">0</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="all-templates-dropdown-wrap" data-all-templates-root>
+          <button class="filter-btn filter-btn--all-templates" type="button" data-filter="all-templates" aria-haspopup="menu" aria-expanded="false">
+            <img class="icon" src="ASSET/Icons/filter-all-templates-icon.svg" alt="" />
+            <span data-all-templates-label>All Templates</span>
+            <img class="chevron" src="ASSET/Icons/chevron-dropdown.svg" alt="" />
+          </button>
+
+          <div class="all-templates-dropdown" data-all-templates-dropdown hidden>
+            <div class="all-templates-dropdown-panel">
+              <div class="all-templates-dropdown-title">Discover Designs</div>
+              <div class="all-templates-dropdown-options" role="menu" aria-label="Filter design feed">
+                <button class="all-templates-dropdown-option is-active" type="button" role="menuitemradio" aria-checked="true" data-secondary-category-option="all-templates">
+                  <span class="all-templates-dropdown-option-left">
+                    <img src="ASSET/Icons/dropdown-all-templates-icon.svg" alt="" />
+                    <span>All Templates</span>
+                  </span>
+                  <span class="all-templates-dropdown-count" data-secondary-category-count="all-templates">0</span>
+                </button>
+                <button class="all-templates-dropdown-option" type="button" role="menuitemradio" aria-checked="false" data-secondary-category-option="trending">
+                  <span class="all-templates-dropdown-option-left">
+                    <img src="ASSET/Icons/dropdown-trending-icon.svg" alt="" />
+                    <span>Trending</span>
+                  </span>
+                  <span class="all-templates-dropdown-count" data-secondary-category-count="trending">0</span>
+                </button>
+                <button class="all-templates-dropdown-option" type="button" role="menuitemradio" aria-checked="false" data-secondary-category-option="popular">
+                  <span class="all-templates-dropdown-option-left">
+                    <img src="ASSET/Icons/dropdown-popular-icon.svg" alt="" />
+                    <span>Popular</span>
+                  </span>
+                  <span class="all-templates-dropdown-count" data-secondary-category-count="popular">0</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Free Templates -->
+      <div class="template-section">
+        <div class="section-row-header">
+          <div class="section-row-left">
+            <img src="ASSET/Icons/filter-free-paid-icon.svg" alt="" id="primary-section-icon" />
+            <span class="section-row-title" id="primary-section-title">Free Templates</span>
+            <span class="section-count" id="primary-section-count">21</span>
+          </div>
+          <a class="see-all" href="filter-template.html?category=free" data-template-category="free" id="primary-see-all-link">
+            See all templates
+            <img src="ASSET/Icons/chevron-dropdown.svg" alt="" style="transform:rotate(0deg);" />
+          </a>
+        </div>
+
+        <div class="product-grid" id="free-templates-grid"></div>
+      </div>
+
+      <div class="divider-wrap"><div class="line"></div></div>
+
+      <!-- Recent Templates -->
+      <div class="template-section">
+        <div class="section-row-header">
+          <div class="section-row-left">
+            <span class="section-row-title" id="secondary-section-title">Recent Templates</span>
+            <span class="section-count" id="secondary-section-count">4</span>
+          </div>
+          <a class="see-all" href="filter-template.html?category=recent" data-template-category="recent" id="secondary-see-all-link">
+            See all templates
+            <img src="ASSET/Icons/chevron-dropdown.svg" alt="" />
+          </a>
+        </div>
+
+        <div class="product-grid" id="recent-templates-grid"></div>
+      </div>
+
+    </div>
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-avatar">
+            <img src="ASSET/Images/avatar.png" alt="Siren.uix" />
+          </div>
+          <span class="footer-brand-name">SIREN.UIX</span>
+        </div>
+        <nav class="footer-nav">
+          <a href="#">ABOUT ME</a>
+          <a href="#">CONTACT</a>
+          <a href="#">MARKETPLACE</a>
+        </nav>
+        <nav class="footer-socials">
+          <a href="https://www.instagram.com/siren.uix/" target="_blank" rel="noopener" aria-label="Instagram">
+            <img src="ASSET/Icons/social-instagram.svg" alt="Instagram" />
+          </a>
+          <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <img src="ASSET/Icons/social-linkedin.svg" alt="LinkedIn" />
+          </a>
+          <a href="#" target="_blank" rel="noopener" aria-label="X / Twitter">
+            <img src="ASSET/Icons/social-x.svg" alt="X" />
+          </a>
+        </nav>
+      </div>
+
+      <div class="footer-border-strip">
+        <img src="ASSET/Icons/footer-border-start.svg" alt="" style="width:394px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+        <img src="ASSET/Icons/footer-border-segment.svg" alt="" style="width:399px;" />
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<script src="JS/theme-manager.js"></script>
+<script src="JS/firebase-config.js"></script>
+<script src="JS/firebase-auth.js"></script>
+<script src="JS/firebase-product-stats.js"></script>
+<script src="JS/product-cache.js"></script>
+<script src="JS/product-data-source.js"></script>
+<script src="COMPONENT/Button/Button.js"></script>
+<script src="COMPONENT/Sidebar/Sidebar.js"></script>
+<script src="COMPONENT/Product%20Card/ProductCard.js"></script>
+<script src="JS/main-shell-router.js"></script>
+<script src="JS/top-pane-product-tabs.js"></script>
+<script src="FLOAT SITE/float-nav.js"></script>
+<script src="JS/saved-templates.js"></script>
+<script src="JS/main.js"></script>
+<script src="JS/my-post.js"></script>
+<script src="JS/filter-template.js"></script>
+<script src="JS/mobile-template.js"></script>
+<script src="JS/web-template.js"></script>
+<script src="JS/about-me.js"></script>
+<script src="JS/recents.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js?v=0.2.1').catch(function () {
+      // Ignore registration errors silently in unsupported environments.
+    });
+  });
+}
+</script>
+
+</body>
+</html>

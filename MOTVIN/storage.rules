@@ -1,0 +1,26 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner() {
+      return isSignedIn() && request.auth.token.email == 'surendarv638@gmail.com';
+    }
+
+    function isAllowedAdmin() {
+      return isSignedIn()
+        && exists(/databases/(default)/documents/releaseNotesAdmins/$(request.auth.token.email));
+    }
+
+    function canManageReleaseImages() {
+      return isOwner() || isAllowedAdmin();
+    }
+
+    match /release-notes/{allPaths=**} {
+      allow read: if true;
+      allow write: if canManageReleaseImages();
+    }
+  }
+}

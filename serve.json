@@ -1,0 +1,16 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    { "source": "/update", "destination": "/updates/index.html" },
+    { "source": "/releasenotes", "destination": "/updates/index.html" },
+    { "source": "/releasenote", "destination": "/updates/index.html" },
+    { "source": "/icon", "destination": "/icons.html" },
+    { "source": "/icons", "destination": "/icons.html" },
+    { "source": "/iconstore", "destination": "/icons.html" },
+    { "source": "/iconstores", "destination": "/icons.html" }
+  ]
+}

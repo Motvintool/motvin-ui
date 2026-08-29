@@ -1,0 +1,1244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <base href="/MOTVIN/">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DTKXD35BH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4DTKXD35BH');
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Motvin (beta) v0.2</title>
+    <meta name="description" content="Convert HTML layouts into design-ready artboards. The fastest way to go from code to Figma." />
+    <meta name="theme-color" content="#4647D3" />
+    <meta name="color-scheme" content="light" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Motvin (beta)" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <script>
+      (function () {
+        try {
+          var hostname = window.location.hostname || "";
+          if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1") {
+            document.documentElement.classList.add("local-inspect-preview");
+          }
+
+          var key = "motvin.instant-page-switch";
+          var target = (sessionStorage.getItem(key) || "").trim().toLowerCase();
+          var savedUiMode = (localStorage.getItem("code2design-ui-mode") || "floating").trim().toLowerCase();
+          document.documentElement.classList.add(
+            savedUiMode === "standard"
+              ? "ui-mode-standard-preload"
+              : "ui-mode-floating-preload",
+          );
+          if (target === "files.html") {
+            document.documentElement.classList.add("instant-page-switch");
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- DNS prefetch for external resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://mcp.figma.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link rel="manifest" href="./progressive%20web%20app/manifest.json" />
+    <link
+      rel="apple-touch-icon"
+      href="./progressive%20web%20app/branding/icon-192.png"
+    />
+    <link rel="prefetch" href="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%2015.4178%2013.3001'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20id='Vector'%20d='M12.7383%204.88542H12.6501M8.20104%200.650127H7.21676C6.71234%200.650127%206.46012%200.650127%206.23394%200.729186C6.09581%200.777461%205.96603%200.84692%205.84924%200.935071C5.65799%201.07942%205.51809%201.28926%205.2383%201.70895C5.095%201.92391%204.88378%202.24074%204.79959%202.32922C4.59098%202.54844%204.31744%202.69483%204.01932%202.7468C3.899%202.76777%203.76983%202.76777%203.51149%202.76777C2.81967%202.76777%202.47377%202.76777%202.19093%202.84784C1.4834%203.04812%200.930411%203.6011%200.730124%204.30864C0.650063%204.59147%200.650063%204.93738%200.650063%205.62921V8.41483C0.650063%2010.4114%200.650063%2011.4096%201.27031%2012.0299C1.89055%2012.6501%202.88883%2012.6501%204.88536%2012.6501H10.5324C12.5289%2012.6501%2013.5272%2012.6501%2014.1475%2012.0299C14.7677%2011.4096%2014.7677%2010.4114%2014.7677%208.41483V5.62921C14.7677%204.93738%2014.7677%204.59147%2014.6877%204.30864C14.4873%203.6011%2013.9344%203.04812%2013.2269%202.84784C12.944%202.76777%2012.5981%202.76777%2011.9063%202.76777C11.6479%202.76777%2011.5188%202.76777%2011.3985%202.7468C11.1003%202.69483%2010.8268%202.54844%2010.6182%202.32922C10.534%202.24073%2010.3228%201.9239%2010.1795%201.70895C9.89968%201.28926%209.75977%201.07942%209.56855%200.935071C9.45172%200.84692%209.32198%200.777461%209.18384%200.729186C8.95768%200.650127%208.70547%200.650127%208.20104%200.650127ZM10.5324%207.35601C10.5324%208.91537%209.26827%2010.1795%207.7089%2010.1795C6.14949%2010.1795%204.88536%208.91537%204.88536%207.35601C4.88536%205.79665%206.14949%204.53248%207.7089%204.53248C9.26827%204.53248%2010.5324%205.79665%2010.5324%207.35601ZM12.8265%204.88542C12.8265%204.98288%2012.7476%205.06189%2012.6501%205.06189C12.5526%205.06189%2012.4736%204.98288%2012.4736%204.88542C12.4736%204.78796%2012.5526%204.70895%2012.6501%204.70895C12.7476%204.70895%2012.8265%204.78796%2012.8265%204.88542Z'%20stroke='var(--stroke-0,%20black)'%20stroke-width='1.3'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e" as="image" />
+    <link rel="prefetch" href="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%2014.3%2014.3'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20id='Vector'%20d='M4.98331%200.650001V13.65M9.31662%200.650001V13.65M13.65%204.98333H0.650102M13.65%209.31667H0.650102M7.87218%200.650001H6.42775C3.70409%200.650001%202.34227%200.650001%201.49613%201.49613C0.650001%202.34228%200.650001%203.70411%200.650001%206.42778V7.87222C0.650001%2010.5959%200.650001%2011.9578%201.49613%2012.8038C2.34227%2013.65%203.70409%2013.65%206.42775%2013.65H7.87218C10.5958%2013.65%2011.9577%2013.65%2012.8038%2012.8038C13.6499%2011.9578%2013.6499%2010.5959%2013.6499%207.87222V6.42778C13.6499%203.70411%2013.6499%202.34228%2012.8038%201.49613C11.9577%200.650001%2010.5958%200.650001%207.87218%200.650001Z'%20stroke='var(--stroke-0,%20black)'%20stroke-width='1.3'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e" as="image" />
+    <link rel="prefetch" href="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%2014.3%2014.3'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='Vector'%3e%3cpath%20d='M8.11648%205.70556H6.18352C5.07527%205.70556%204.52116%205.70556%204.32281%205.33937C4.12447%204.97318%204.41815%204.49236%205.00551%203.53073L5.97198%201.94836C6.50072%201.08278%206.76506%200.65%207.15%200.65C7.53495%200.65%207.79928%201.08278%208.32802%201.94836L9.2945%203.53073C9.88188%204.49236%2010.1755%204.97318%209.97721%205.33937C9.77882%205.70556%209.22473%205.70556%208.11648%205.70556Z'%20stroke='var(--stroke-0,%20%235C4AE4)'%20stroke-width='1.3'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M11.1222%2013.65C12.5183%2013.65%2013.65%2012.5183%2013.65%2011.1222C13.65%209.72617%2012.5183%208.59444%2011.1222%208.59444C9.72617%208.59444%208.59445%209.72617%208.59445%2011.1222C8.59445%2012.5183%209.72617%2013.65%2011.1222%2013.65Z'%20stroke='var(--stroke-0,%20%235C4AE4)'%20stroke-width='1.3'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M5.46212%2013.008C5.70556%2012.6437%205.70556%2012.1366%205.70556%2011.1222C5.70556%2010.1079%205.70556%209.60072%205.46212%209.23643C5.35674%209.07869%205.22132%208.94328%205.0636%208.83791C4.69928%208.59444%204.19211%208.59444%203.17778%208.59444C2.16345%208.59444%201.65628%208.59444%201.29196%208.83791C1.13424%208.94328%200.99882%209.07869%200.893434%209.23643C0.650001%209.60072%200.650001%2010.1079%200.650001%2011.1222C0.650001%2012.1366%200.650001%2012.6437%200.893434%2013.008C0.99882%2013.1657%201.13424%2013.3012%201.29196%2013.4065C1.65628%2013.65%202.16345%2013.65%203.17778%2013.65C4.19211%2013.65%204.69928%2013.65%205.0636%2013.4065C5.22132%2013.3012%205.35674%2013.1657%205.46212%2013.008Z'%20stroke='var(--stroke-0,%20%235C4AE4)'%20stroke-width='1.3'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e" as="image" />
+    <link rel="prefetch" href="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%2014.8%2013.3'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20id='Vector'%20d='M0.65%202.9H2.9M2.9%202.9C2.9%202.20109%202.9%201.85164%203.01418%201.57597C3.16642%201.20844%203.45844%200.916423%203.82597%200.76418C4.10164%200.65%204.45109%200.650001%205.15%200.650001C5.84891%200.650001%206.19835%200.65%206.47405%200.76418C6.84155%200.916423%207.1336%201.20844%207.28585%201.57597C7.4%201.85164%207.4%202.20109%207.4%202.9C7.4%203.59891%207.4%203.94837%207.28585%204.22403C7.1336%204.59157%206.84155%204.88358%206.47405%205.03582C6.19835%205.15%205.84891%205.15%205.15%205.15C4.45109%205.15%204.10164%205.15%203.82597%205.03582C3.45844%204.88358%203.16642%204.59157%203.01418%204.22403C2.9%203.94837%202.9%203.59891%202.9%202.9ZM0.65%2010.4H5.15M11.9%2010.4H14.15M11.9%2010.4C11.9%209.70108%2011.9%209.35165%2011.7858%209.07595C11.6336%208.70845%2011.3415%208.4164%2010.974%208.26415C10.6983%208.15%2010.3489%208.15%209.65%208.15C8.95107%208.15%208.60165%208.15%208.32595%208.26415C7.95845%208.4164%207.6664%208.70845%207.51415%209.07595C7.4%209.35165%207.4%209.70108%207.4%2010.4C7.4%2011.0989%207.4%2011.4484%207.51415%2011.7241C7.6664%2012.0916%207.95845%2012.3836%208.32595%2012.5359C8.60165%2012.65%208.95107%2012.65%209.65%2012.65C10.3489%2012.65%2010.6983%2012.65%2010.974%2012.5359C11.3415%2012.3836%2011.6336%2012.0916%2011.7858%2011.7241C11.9%2011.4484%2011.9%2011.0989%2011.9%2010.4ZM9.65%202.9H14.15'%20stroke='var(--stroke-0,%20black)'%20stroke-width='1.3'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e" as="image" />
+    <link rel="prefetch" href="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%2013.3%2013.3'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20id='Vector'%20d='M6.65%2012.65C9.96374%2012.65%2012.65%209.96373%2012.65%206.65C12.65%203.33629%209.96374%200.65%206.65%200.65C4.42916%200.65%202.49012%201.85659%201.4527%203.65M0.650003%200.65V1.50211C0.650003%202.96336%200.650003%203.69399%201.1215%204.09341C1.593%204.49283%202.31369%204.37272%203.75507%204.13249L4.65%203.98333'%20stroke='var(--stroke-0,%20black)'%20stroke-width='1.3'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e" as="image" />
+    <link rel="prefetch" href="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%2013.3%2013.3'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20id='Vector'%20d='M6.65%2012.65C9.96374%2012.65%2012.65%209.96373%2012.65%206.65C12.65%203.33629%209.96374%200.65%206.65%200.65C4.42916%200.65%202.49012%201.85659%201.4527%203.65M0.650003%200.65V1.50211C0.650003%202.96336%200.650003%203.69399%201.1215%204.09341C1.593%204.49283%202.31369%204.37272%203.75507%204.13249L4.65%203.98333'%20stroke='var(--stroke-0,%20black)'%20stroke-width='1.3'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e" as="image" />
+    <link rel="prefetch" href="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%2015.3%2011.3'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='Vector'%3e%3cpath%20d='M14.3308%204.96786C14.5436%205.27236%2014.65%205.42464%2014.65%205.65C14.65%205.87536%2014.5436%206.02764%2014.3308%206.33214C13.3745%207.70043%2010.9324%2010.65%207.65%2010.65C4.36755%2010.65%201.92547%207.70043%200.969228%206.33214C0.756407%206.02764%200.65%205.87536%200.65%205.65C0.65%205.42464%200.756407%205.27236%200.969228%204.96786C1.92547%203.5996%204.36755%200.65%207.65%200.65C10.9324%200.65%2013.3745%203.5996%2014.3308%204.96786Z'%20stroke='var(--stroke-0,%20black)'%20stroke-width='1.3'/%3e%3cpath%20d='M9.75%205.65C9.75%204.4665%208.80983%203.50714%207.65%203.50714C6.49017%203.50714%205.55%204.4665%205.55%205.65C5.55%206.8335%206.49017%207.79286%207.65%207.79286C8.80983%207.79286%209.75%206.8335%209.75%205.65Z'%20stroke='var(--stroke-0,%20black)'%20stroke-width='1.3'/%3e%3c/g%3e%3c/svg%3e" as="image" />
+    <link rel="prefetch" href="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%2011.9667%2011.9667'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20id='Vector'%20d='M11.3167%205.98333V6.65C11.3167%208.84987%2011.3167%209.9498%2010.6332%2010.6333C9.94983%2011.3167%208.84989%2011.3167%206.65003%2011.3167H5.31669C3.11678%2011.3167%202.01683%2011.3167%201.33342%2010.6333C0.650001%209.9498%200.650001%208.84987%200.650001%206.65V5.31667C0.650001%203.11678%200.650001%202.01683%201.33342%201.33342C2.01683%200.650001%203.11678%200.650001%205.31669%200.650001H5.98336'%20stroke='var(--stroke-0,%20black)'%20stroke-width='1.3'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e" as="image" />
+    <link rel="prefetch" href="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%207.96667%207.96667'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20id='Vector'%20d='M2.65%200.650005H5.31667C6.25947%200.650005%206.73087%200.650005%207.0238%200.942898C7.31667%201.23579%207.31667%201.7072%207.31667%202.65V5.31667M6.65%201.31667L0.65%207.31667'%20stroke='var(--stroke-0,%20black)'%20stroke-width='1.3'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e" as="image" />
+    <script>
+      window.__MOTVIN_ENV__ = window.__MOTVIN_ENV__ || {
+        FIREBASE_API_KEY: "AIzaSyBgW94s3aYLnz8_6g9bli42Ev_kNbOAyIM",
+        FIREBASE_AUTH_DOMAIN: "motvin-prod.firebaseapp.com",
+        FIREBASE_PROJECT_ID: "motvin-prod",
+        FIREBASE_APP_ID: "1:177361046673:web:7c69a0e2d1755b89558330",
+        FIREBASE_MESSAGING_SENDER_ID: "177361046673",
+        FIREBASE_STORAGE_BUCKET: "motvin-prod.firebasestorage.app",
+        GA_MEASUREMENT_ID: "G-4DTKXD35BH",
+      };
+    </script>
+    <script src="../JS/firebase-config.js" defer></script>
+    <script src="../JS/firebase-auth.js" defer></script>
+    <script src="../JS/theme-manager.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.12.0/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/12.12.0/firebase-auth-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore-compat.js" defer></script>
+    <script src="./js/firebase-url-beta.js" defer></script>
+    <script src="./componet/Tooltip/tooltip.js" defer></script>
+    <script src="./componet/toast-notification/toast-notification.js" defer></script>
+    <script src="./js/history-popup-standalone.js" defer></script>
+    <script src="./js/storage.js" defer></script>
+    <script src="./componet/sidemenu/styles-panel.js" defer></script>
+    <script src="./componet/sidemenu/project-folder-card.js" defer></script>
+    <script src="./js/app.js" defer></script>
+    <link rel="stylesheet" href="./css/tooltip.css">
+    <link rel="stylesheet" href="./css/storage.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="icon" type="image/svg+xml" href="../ASSET/Images/motvin%20logo%20(full%20color).svg" />
+</head>
+
+  <body class="app-sync-pending">
+    <script>
+      (function () {
+        try {
+          var savedUiMode = (localStorage.getItem("code2design-ui-mode") || "floating").trim().toLowerCase();
+          document.body.classList.add(savedUiMode === "standard" ? "ui-mode-standard" : "ui-mode-floating");
+        } catch (e) {
+          document.body.classList.add("ui-mode-floating");
+        }
+      })();
+    </script>
+    <div
+      id="appSyncOverlay"
+      class="app-sync-overlay"
+      role="status"
+      aria-live="polite"
+    >
+      <span class="toolbar-sync-spinner" aria-hidden="true"></span>
+      <span class="app-sync-credit">Created by siren.uix</span>
+    </div>
+
+    <div
+      id="mobileDesktopNotice"
+      class="mobile-desktop-notice"
+      role="dialog"
+      aria-live="polite"
+      aria-label="Desktop recommended notice"
+    >
+      <div class="mobile-desktop-notice-card">
+        <!-- <span class="mobile-desktop-notice-chip">Best on Desktop</span> -->
+        <div class="mobile-desktop-notice-logo-wrap">
+          <svg
+            class="mobile-desktop-notice-logo"
+            width="64"
+            height="64"
+            viewBox="0 0 64 64"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-label="Motvin (beta) logo"
+            role="img"
+          >
+            <rect width="64" height="64" rx="14" fill="#5C4AE4" />
+            <path
+              d="M25.8091 25.156L24.3623 22.034L21.2403 20.5873L24.3623 19.1405L25.8091 16.0186L27.2558 19.1405L30.3778 20.5873L27.2558 22.034L25.8091 25.156ZM43.3225 42.6695L41.8758 39.5475L38.7538 38.1007L41.8758 36.654L43.3225 33.532L44.7693 36.654L47.8913 38.1007L44.7693 39.5475L43.3225 42.6695ZM20.6312 47.5428L16.367 43.2786C16.0624 42.9741 15.9102 42.606 15.9102 42.1745C15.9102 41.743 16.0624 41.375 16.367 41.0704L33.3475 24.09C33.6521 23.7854 34.0201 23.6331 34.4516 23.6331C34.8831 23.6331 35.2511 23.7854 35.5557 24.09L39.8198 28.3541C40.1244 28.6587 40.2767 29.0267 40.2767 29.4582C40.2767 29.8897 40.1244 30.2578 39.8198 30.5623L22.8394 47.5428C22.5348 47.8474 22.1668 47.9997 21.7353 47.9997C21.3038 47.9997 20.9358 47.8474 20.6312 47.5428ZM21.7734 44.3447L32.6622 33.3797L30.5301 31.2477L19.5651 42.1365L21.7734 44.3447Z"
+              fill="white"
+            />
+            <path
+              opacity="0.95"
+              d="M43.2465 21.7294L44.6932 24.8513L46.14 21.7294L49.262 20.2826L46.14 18.8358L44.6932 15.7139L43.2465 18.8358L40.1245 20.2826L43.2465 21.7294Z"
+              fill="white"
+            />
+            <path
+              opacity="0.34"
+              d="M48.9839 29.8508L49.4903 30.9435L49.9967 29.8508L51.0893 29.3444L49.9967 28.838L49.4903 27.7454L48.9839 28.838L47.8912 29.3444L48.9839 29.8508Z"
+              fill="white"
+            />
+          </svg>
+        </div>
+        <h1 class="mobile-desktop-notice-title">
+          Motvin looks best on desktop.
+        </h1>
+        <!-- <p class="mobile-desktop-notice-text">Code2design Tool UI looks better on desktop.</p> -->
+        <p class="mobile-desktop-notice-subtext">
+          Please open this tool on a laptop or desktop for the best experience.
+        </p>
+        <!-- <div class="mobile-desktop-notice-points" aria-hidden="true">
+        <span class="mobile-desktop-notice-point">✨ Better canvas space</span>
+        <span class="mobile-desktop-notice-point">⚡ Faster workflow</span>
+      </div> -->
+      </div>
+    </div>
+
+    <div class="app-container">
+      <!-- Sidebar Left: Explorer -->
+      <aside class="sidebar sidebar-left">
+        <div class="sidebar-panel sidebar-two-col">
+          <!-- Explorer Content (Right) -->
+          <div class="explorer-content">
+            <div class="explorer-header">
+              <span class="explorer-title"
+                >Motvin <span class="explorer-title-badge">Beta</span></span
+              >
+              <div class="sidebar-panel-toggle-pill" id="sidebarPanelToggle">
+                <div class="sidebar-panel-toggle-icon">
+                  <svg
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M16.7573 16.7573C15.5979 17.9167 13.7319 17.9167 10 17.9167C6.26805 17.9167 4.40208 17.9167 3.2427 16.7573C2.08333 15.5979 2.08333 13.7319 2.08333 10C2.08333 6.26805 2.08333 4.40207 3.2427 3.2427C4.40208 2.08333 6.26805 2.08333 10 2.08333C13.7319 2.08333 15.5979 2.08333 16.7573 3.2427C17.9167 4.40208 17.9167 6.26805 17.9167 10C17.9167 13.7319 17.9167 15.5979 16.7573 16.7573Z"
+                      stroke="currentColor"
+                      stroke-width="1.25"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M7.5 17.9167V2.08333"
+                      stroke="currentColor"
+                      stroke-width="1.25"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="preview-card-wrap">
+              <project-folder-card
+                folder-name="Project 1 Folder"
+              ></project-folder-card>
+            </div>
+
+            <div class="sidemenu-tree">
+              <!-- Code2design accordion group -->
+              <div class="tree-accordion" id="accordionCode2design">
+                <div class="tree-tab" id="tabCode2design">
+                  <div class="tree-tab-content">
+                    <!-- Chevron: down when open, right when closed -->
+                    <div class="tree-tab-chevron">
+                      <img
+                        class="tree-tab-chevron-img"
+                        src="data:image/svg+xml,%3csvg%20width='14'%20height='14'%20viewBox='0%200%2014%2014'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M10.5%205.25003C10.5%205.25003%207.92231%208.75%207%208.75C6.07763%208.75%203.5%205.25%203.5%205.25'%20stroke='black'%20stroke-width='1.25'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                        data-default-src="assets/icon/icon-tree-chevron.svg"
+                        data-hover-src="assets/icon/icon-tree-chevron.svg"
+                        data-active-src="assets/icon/icon-tree-chevron.svg"
+                        alt=""
+                        loading="eager"
+                        decoding="sync"
+                        fetchpriority="high"
+                      />
+                    </div>
+                    <!-- Icon states: default/hover/active -->
+                    <div class="tree-tab-icon">
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 14 18"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M6.67025 8.63276e-05C7.12609 -0.000549948 7.52984 -0.00127 7.91008 0.1399C7.98832 0.168951 8.06496 0.202807 8.13976 0.240456C8.50368 0.42352 8.78896 0.724177 9.11087 1.06376L12.9374 5.08873C13.3112 5.48071 13.6425 5.82898 13.8218 6.28403C14.001 6.73923 14.0008 7.23225 13.9999 7.7876V10.6966C14 12.1882 13.9996 13.3907 13.8788 14.3364C13.7533 15.3182 13.4848 16.1448 12.8609 16.8015C12.2367 17.4581 11.4505 17.7412 10.5171 17.8732C9.61815 18.0004 8.47504 18 7.05697 18C5.6389 18 4.38183 18.0004 3.48279 17.8732C2.54937 17.7412 1.76325 17.4581 1.13905 16.8015C0.515006 16.1448 0.246575 15.3183 0.121088 14.3364C0.000240563 13.3907 -2.34681e-05 12.1883 5.31719e-07 10.6966V6.86697C-1.54682e-05 5.58319 -7.5161e-06 4.54776 0.0913999 3.72418C0.186007 2.87209 0.38767 2.14173 0.861708 1.52325C1.03559 1.29641 1.23203 1.08971 1.44765 0.906788C2.03565 0.408082 2.73047 0.196068 3.5406 0.0965658C4.32359 0.000437934 5.44986 6.95835e-05 6.67025 8.63276e-05ZM6.04449 9.34095C5.78258 8.96882 5.28147 8.88886 4.92575 9.16271V9.16355L4.9234 9.16522C4.92216 9.16614 4.92011 9.16757 4.91794 9.16933C4.91356 9.17267 4.907 9.17711 4.89919 9.18322C4.88329 9.19561 4.86066 9.2137 4.832 9.2363C4.77445 9.28185 4.69279 9.34723 4.59529 9.42685C4.40112 9.58542 4.13966 9.8051 3.87575 10.045C3.61588 10.2811 3.33512 10.5532 3.11326 10.8159C3.00313 10.9463 2.89018 11.0948 2.80076 11.25C2.73409 11.3658 2.63031 11.5687 2.60545 11.8199L2.59999 11.9303L2.60545 12.0406C2.6303 12.2919 2.73408 12.4947 2.80076 12.6105C2.89017 12.7657 3.00313 12.9142 3.11326 13.0447C3.3351 13.3073 3.61588 13.5795 3.87575 13.8156C4.13966 14.0554 4.40112 14.2751 4.59529 14.4337C4.69278 14.5133 4.77445 14.5787 4.832 14.6242C4.86065 14.6468 4.88329 14.6649 4.89919 14.6774C4.907 14.6834 4.91356 14.6878 4.91794 14.6913C4.92011 14.693 4.92215 14.6944 4.9234 14.6953L4.92497 14.697L4.92575 14.6978C5.28147 14.9717 5.78177 14.8917 6.04369 14.5196C6.30569 14.1473 6.22993 13.6229 5.87417 13.3487H5.87337L5.87025 13.3463C5.86713 13.3439 5.86201 13.34 5.85545 13.3348C5.84209 13.3245 5.82185 13.3087 5.79609 13.2883C5.74426 13.2474 5.66954 13.1875 5.57962 13.1142C5.39886 12.9665 5.16019 12.766 4.92419 12.5516C4.68425 12.3336 4.46477 12.1173 4.31169 11.936C4.31012 11.9341 4.30855 11.9321 4.307 11.9303C4.30855 11.9284 4.31012 11.9264 4.31169 11.9246C4.46477 11.7432 4.68425 11.5269 4.92419 11.3089C5.16019 11.0945 5.39886 10.8941 5.57962 10.7464C5.66954 10.673 5.74426 10.6132 5.79609 10.5722C5.82185 10.5518 5.84209 10.5361 5.85545 10.5257C5.86209 10.5205 5.86713 10.5166 5.87025 10.5142L5.87417 10.5118C6.22977 10.2376 6.30625 9.71326 6.04449 9.34095ZM9.07416 9.16271C8.71848 8.88886 8.21736 8.96882 7.95544 9.34095C7.69368 9.71326 7.77008 10.2376 8.12576 10.5118L8.1296 10.5142C8.1328 10.5166 8.13784 10.5205 8.14448 10.5257C8.15784 10.5361 8.178 10.5518 8.20384 10.5722C8.2556 10.6132 8.3304 10.673 8.42024 10.7464C8.60104 10.8941 8.83968 11.0945 9.07576 11.3089C9.31567 11.5269 9.53511 11.7432 9.68823 11.9246C9.68983 11.9264 9.69135 11.9284 9.69287 11.9303C9.69135 11.9321 9.68983 11.9341 9.68823 11.936C9.53511 12.1173 9.31567 12.3336 9.07576 12.5516C8.83976 12.766 8.60104 12.9665 8.42024 13.1142C8.3304 13.1875 8.25568 13.2474 8.20384 13.2883C8.178 13.3087 8.15784 13.3245 8.14448 13.3348C8.13784 13.34 8.1328 13.3439 8.1296 13.3463L8.12648 13.3487C7.77072 13.6229 7.69424 14.1473 7.95616 14.5196C8.21816 14.8917 8.71848 14.9717 9.07416 14.6978L9.07496 14.697L9.07648 14.6953C9.07776 14.6944 9.07984 14.693 9.082 14.6913C9.08632 14.6878 9.09287 14.6834 9.10071 14.6774C9.11663 14.6649 9.13928 14.6468 9.16791 14.6242C9.22543 14.5787 9.30711 14.5133 9.40463 14.4337C9.59879 14.2751 9.86023 14.0554 10.1241 13.8156C10.3841 13.5795 10.6648 13.3073 10.8866 13.0447C10.9968 12.9142 11.1097 12.7657 11.1992 12.6105C11.2658 12.4947 11.3696 12.2919 11.3945 12.0406L11.3999 11.9303L11.3945 11.8199C11.3696 11.5687 11.2658 11.3658 11.1992 11.25C11.1097 11.0948 10.9968 10.9463 10.8866 10.8159C10.6648 10.5532 10.3841 10.2811 10.1241 10.045C9.86023 9.8051 9.59879 9.58542 9.40463 9.42685C9.30711 9.34723 9.22543 9.28185 9.16791 9.2363C9.13928 9.2137 9.11663 9.19561 9.10071 9.18322C9.09295 9.17711 9.08632 9.17267 9.082 9.16933C9.07984 9.16757 9.07776 9.16614 9.07648 9.16522L9.07496 9.16355L9.07416 9.16271ZM7.39217 1.69167C7.39217 2.8314 7.39209 3.37373 7.48512 4.09781C7.58192 4.85118 7.78904 5.48585 8.27024 5.9897C8.75176 6.49363 9.35879 6.71088 10.0789 6.81219C10.7722 6.90973 11.2912 6.91032 12.3851 6.9103C12.3397 6.79494 12.2553 6.68553 11.7609 6.16548L8.07728 2.29014C7.65096 1.84167 7.53744 1.7301 7.39217 1.68431V1.69167Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </div>
+                    <span class="tree-tab-text">Code2design</span>
+                  </div>
+                </div>
+
+                <div class="tree-sub-list"></div>
+              </div>
+
+              <!-- Styles accordion group (closed by default) -->
+              <div class="tree-accordion" id="accordionStyles">
+                <div class="tree-tab" id="tabStyles">
+                  <div class="tree-tab-content">
+                    <div class="tree-tab-chevron">
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                      >
+                        <path
+                          d="M10.5 5.25003C10.5 5.25003 7.92231 8.75 7 8.75C6.07763 8.75 3.5 5.25 3.5 5.25"
+                          stroke="black"
+                          stroke-width="1.25"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="tree-tab-icon">
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M8 0C3.58172 0 0 3.58101 0 7.9984C0 12.4158 3.58172 15.9968 8 15.9968C8.03833 15.9968 8.08208 15.9975 8.13023 15.9981C8.39799 16.0022 8.79903 16.008 9.12945 15.9156C9.34378 15.8557 9.58623 15.7423 9.77265 15.5187C9.96435 15.2887 10.0465 15.0027 10.0465 14.6947C10.0465 14.0689 9.72532 13.5938 9.50541 13.2685L9.4813 13.2329C9.29987 12.9638 9.18824 12.7887 9.13972 12.6047C9.10058 12.456 9.09477 12.2653 9.24339 11.9681C9.42221 11.6106 9.6288 11.4669 9.90586 11.3865C10.2402 11.2894 10.6739 11.2846 11.3351 11.2846H11.3436C11.9759 11.2846 12.7528 11.2846 13.6604 11.155C14.5571 11.0269 15.1958 10.6656 15.5755 10.038C15.9295 9.453 16 8.72369 16 7.9984C16 3.58101 12.4183 0 8 0ZM4.08412 9.51371C3.68894 9.62011 3.45442 10.0281 3.56031 10.425C3.6662 10.822 4.0724 11.0574 4.46759 10.9511L4.47402 10.9494C4.8692 10.843 5.10372 10.4351 4.99783 10.0381C4.89194 9.64124 4.48574 9.40567 4.09055 9.512L4.08412 9.51371ZM4.46512 5.39427C4.46512 4.4697 5.21478 3.72019 6.13953 3.72019C7.06426 3.72019 7.81395 4.4697 7.81395 5.39427C7.81395 6.31884 7.06426 7.06836 6.13953 7.06836C5.21478 7.06836 4.46512 6.31884 4.46512 5.39427ZM11.3488 4.46422C10.4241 4.46422 9.67442 5.21374 9.67442 6.13831C9.67442 7.06285 10.4241 7.81239 11.3488 7.81239C12.2736 7.81239 13.0233 7.06285 13.0233 6.13831C13.0233 5.21374 12.2736 4.46422 11.3488 4.46422Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </div>
+                    <span class="tree-tab-text">Styles</span>
+                  </div>
+                </div>
+                <div class="tree-sub-list"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="sidebar-collapse-tab" id="sidebarCollapseTab">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 12L10 8L6 4"
+              stroke="currentColor"
+              stroke-width="1.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main id="canvasViewport">
+        <div id="canvasContainer">
+          <!-- Preview Frame -->
+          <div id="canvasPreview" class="canvas-preview">
+            <!-- Figma Selection UI Labels & Handles -->
+            <div class="artboard-label-top-left">1</div>
+            <div class="artboard-label-top-right">&lt;/&gt;</div>
+
+            <div class="selection-handle tl"></div>
+            <div class="selection-handle tr"></div>
+            <div class="selection-handle bl"></div>
+            <div class="selection-handle br"></div>
+
+            <div class="artboard-dimension-label">1440 × 901 Hug</div>
+
+            <iframe id="previewFrame"></iframe>
+            <!-- Overlay to capture mouse events for panning when clicking on the iframe -->
+            <div
+              id="canvasOverlay"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 10;
+              "
+            ></div>
+          </div>
+        </div>
+
+        <!-- Bottom Toolbar -->
+        <div class="canvas-toolbar">
+          <div class="figma-select-wrap" id="toolbarAddWrap">
+            <button
+              id="toolbarAddBtn"
+              class="figma-tool-btn figma-tool-btn-primary"
+              title="Add"
+              aria-haspopup="menu"
+              aria-expanded="false"
+            >
+              <img src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M7.5%202V13M2%207.5H13'%20stroke='black'%20stroke-linecap='round'/%3e%3c/g%3e%3c/svg%3e" alt="" />
+            </button>
+
+            <div
+              id="toolbarAddMenu"
+              class="figma-align-menu figma-add-menu"
+              role="menu"
+              aria-label="Add menu"
+            >
+              <button
+                class="figma-align-menu-item"
+                data-action="undo"
+                role="menuitem"
+              >
+                <img
+                  src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M8%2014C11.3137%2014%2014%2011.3137%2014%208C14%204.68629%2011.3137%202%208%202C5.77915%202%203.84012%203.20659%202.80269%205M2%202V2.85211C2%204.31336%202%205.04399%202.4715%205.44341C2.943%205.84283%203.66369%205.72272%205.10507%205.48249L6%205.33333'%20stroke='black'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                  alt=""
+                  loading="eager"
+                  decoding="sync"
+                  fetchpriority="high"
+                />
+                <span>Undo</span>
+              </button>
+              <button
+                class="figma-align-menu-item"
+                data-action="redo"
+                role="menuitem"
+              >
+                <img
+                  class="figma-add-redo-icon"
+                  src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M8%2014C4.68627%2014%202%2011.3137%202%208C2%204.68629%204.68627%202%208%202C10.2208%202%2012.1599%203.20659%2013.1973%205M14%202V2.85211C14%204.31336%2014%205.04399%2013.5285%205.44341C13.057%205.84283%2012.3363%205.72272%2010.8949%205.48249L10%205.33333'%20stroke='black'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                  alt=""
+                  loading="eager"
+                  decoding="sync"
+                  fetchpriority="high"
+                />
+                <span>Redo</span>
+              </button>
+              <button
+                class="figma-align-menu-item"
+                data-action="delete"
+                role="menuitem"
+              >
+                <img
+                  src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M16.25%204.58331L15.7336%2012.9376C15.6016%2015.072%2015.5357%2016.1392%2015.0007%2016.9066C14.7361%2017.2859%2014.3956%2017.6061%2014.0006%2017.8466C13.2017%2018.3333%2012.1325%2018.3333%209.99392%2018.3333C7.8526%2018.3333%206.78192%2018.3333%205.98254%2017.8457C5.58733%2017.6047%205.24667%2017.284%204.98223%2016.904C4.4474%2016.1355%204.38287%2015.0667%204.25384%2012.9293L3.75%204.58331'%20stroke='%2394A3B8'%20stroke-width='1.5'%20stroke-linecap='round'/%3e%3cpath%20d='M2.5%204.58335H17.5M13.3797%204.58335L12.8109%203.4098C12.433%202.63024%2012.244%202.24045%2011.9181%201.99736C11.8458%201.94344%2011.7693%201.89547%2011.6892%201.85394C11.3283%201.66669%2010.8951%201.66669%2010.0287%201.66669C9.14067%201.66669%208.69667%201.66669%208.32973%201.86179C8.24842%201.90503%208.17082%201.95494%208.09774%202.011C7.76803%202.26394%207.58386%202.66798%207.21551%203.47607L6.71077%204.58335'%20stroke='%2394A3B8'%20stroke-width='1.5'%20stroke-linecap='round'/%3e%3cpath%20d='M7.91663%2013.75V8.75'%20stroke='%2394A3B8'%20stroke-width='1.5'%20stroke-linecap='round'/%3e%3cpath%20d='M12.0834%2013.75V8.75'%20stroke='%2394A3B8'%20stroke-width='1.5'%20stroke-linecap='round'/%3e%3c/svg%3e"
+                  alt=""
+                  loading="eager"
+                  decoding="sync"
+                  fetchpriority="high"
+                />
+                <span>Delete</span>
+              </button>
+              <button
+                class="figma-align-menu-item"
+                data-action="fit"
+                role="menuitem"
+              >
+                <img
+                  src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%20clip-path='url(%23clip0_2116_31549)'%3e%3cpath%20d='M6.00065%204.66634H10.0007C12.2005%204.66634%2013.3005%204.66634%2013.9839%205.34976C14.6673%206.03317%2014.6673%207.13314%2014.6673%209.33301V9.99967C14.6673%2012.1995%2014.6673%2013.2995%2013.9839%2013.9829C13.3005%2014.6663%2012.2005%2014.6663%2010.0007%2014.6663H9.33398C7.13412%2014.6663%206.03415%2014.6663%205.35074%2013.9829C4.66732%2013.2995%204.66732%2012.1995%204.66732%209.99967V5.99967M1.33398%204.66634H3.33398M4.66732%203.33301V1.33301'%20stroke='black'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_2116_31549'%3e%3crect%20width='16'%20height='16'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+                  alt=""
+                  loading="eager"
+                  decoding="sync"
+                  fetchpriority="high"
+                />
+                <span>Fit Canva</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="figma-divider"></div>
+
+          <div class="figma-tools-cluster right-padding">
+            <div class="figma-select-wrap" id="toolbarAlignWrap">
+              <div class="figma-select-group">
+                <button
+                  class="figma-tool-btn figma-select-mode-btn"
+                  title="Select mode"
+                >
+                  <img src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%20clip-path='url(%23clip0_2116_893)'%3e%3cpath%20d='M13.334%203.99967V11.9997M13.334%203.99967C14.0704%203.99967%2014.6673%203.40272%2014.6673%202.66634C14.6673%201.92996%2014.0704%201.33301%2013.334%201.33301C12.5976%201.33301%2012.0007%201.92996%2012.0007%202.66634M13.334%203.99967C12.5976%203.99967%2012.0007%203.40272%2012.0007%202.66634M13.334%2011.9997C12.5976%2011.9997%2012.0007%2012.5966%2012.0007%2013.333M13.334%2011.9997C14.0704%2011.9997%2014.6673%2012.5966%2014.6673%2013.333C14.6673%2014.0694%2014.0704%2014.6663%2013.334%2014.6663C12.5976%2014.6663%2012.0007%2014.0694%2012.0007%2013.333M12.0007%202.66634H4.00065M4.00065%202.66634C4.00065%203.40272%203.4037%203.99967%202.66732%203.99967M4.00065%202.66634C4.00065%201.92996%203.4037%201.33301%202.66732%201.33301C1.93094%201.33301%201.33398%201.92996%201.33398%202.66634C1.33398%203.40272%201.93094%203.99967%202.66732%203.99967M12.0007%2013.333H4.00065M4.00065%2013.333C4.00065%2014.0694%203.4037%2014.6663%202.66732%2014.6663C1.93094%2014.6663%201.33398%2014.0694%201.33398%2013.333C1.33398%2012.5966%201.93094%2011.9997%202.66732%2011.9997M4.00065%2013.333C4.00065%2012.5966%203.4037%2011.9997%202.66732%2011.9997M2.66732%2011.9997V3.99967'%20stroke='black'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_2116_893'%3e%3crect%20width='16'%20height='16'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e" alt="" />
+                </button>
+                <button
+                  id="toolbarAlignArrow"
+                  class="figma-arrow-btn"
+                  title="Align menu"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                >
+                  <img src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M11%206.5L8%209.5L5%206.5'%20stroke='black'%20stroke-opacity='0.93'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e" alt="" />
+                </button>
+              </div>
+
+              <div
+                id="toolbarAlignMenu"
+                class="figma-align-menu"
+                role="menu"
+                aria-label="Align menu"
+              >
+                <button
+                  class="figma-align-menu-item"
+                  data-align="top"
+                  role="menuitem"
+                >
+                  <img
+                    class="figma-align-icon-top"
+                    src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M14.6663%202.66671H1.33301M11.001%209.33184C11.5635%209.33184%2012.2129%209.38741%2012.5337%208.83184C12.6677%208.59977%2012.6677%208.28824%2012.6677%207.66517V6.99851C12.6677%206.37544%2012.6677%206.06391%2012.5337%205.83184C12.2129%205.27624%2011.5635%205.33184%2011.001%205.33184C10.4384%205.33184%209.78907%205.27624%209.46827%205.83184C9.33434%206.06391%209.33434%206.37544%209.33434%206.99851V7.66517C9.33434%208.28824%209.33434%208.59977%209.46827%208.83184C9.78907%209.38741%2010.4384%209.33184%2011.001%209.33184ZM5.00097%2013.3318C5.56357%2013.3318%206.2129%2013.3874%206.53367%2012.8318C6.66767%2012.5998%206.66767%2012.2882%206.66767%2011.6652V6.99851C6.66767%206.37544%206.66767%206.06391%206.53367%205.83184C6.2129%205.27624%205.56357%205.33184%205.00097%205.33184C4.43838%205.33184%203.78905%205.27624%203.46829%205.83184C3.33431%206.06391%203.33431%206.37544%203.33431%206.99851V11.6652C3.33431%2012.2882%203.33431%2012.5998%203.46829%2012.8318C3.78905%2013.3874%204.43838%2013.3318%205.00097%2013.3318Z'%20stroke='black'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                    alt=""
+                    loading="eager"
+                    decoding="sync"
+                    fetchpriority="high"
+                  />
+                  <span>Align Top</span>
+                </button>
+                <button
+                  class="figma-align-menu-item"
+                  data-align="bottom"
+                  role="menuitem"
+                >
+                  <img
+                    class="figma-align-icon-bottom"
+                    src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M14.6663%2013.3333H1.33301M11.001%206.66816C11.5635%206.66816%2012.2129%206.61259%2012.5337%207.16816C12.6677%207.40023%2012.6677%207.71176%2012.6677%208.33483V9.00149C12.6677%209.62456%2012.6677%209.93609%2012.5337%2010.1682C12.2129%2010.7238%2011.5635%2010.6682%2011.001%2010.6682C10.4384%2010.6682%209.78907%2010.7238%209.46827%2010.1682C9.33434%209.93609%209.33434%209.62456%209.33434%209.00149V8.33483C9.33434%207.71176%209.33434%207.40023%209.46827%207.16816C9.78907%206.61259%2010.4384%206.66816%2011.001%206.66816ZM5.00097%202.66817C5.56357%202.66817%206.2129%202.61259%206.53367%203.16817C6.66767%203.40022%206.66767%203.71176%206.66767%204.33484V9.00149C6.66767%209.62456%206.66767%209.93609%206.53367%2010.1682C6.2129%2010.7238%205.56357%2010.6682%205.00097%2010.6682C4.43838%2010.6682%203.78905%2010.7238%203.46829%2010.1682C3.33431%209.93609%203.33431%209.62456%203.33431%209.00149V4.33484C3.33431%203.71176%203.33431%203.40022%203.46829%203.16817C3.78905%202.61259%204.43838%202.66817%205.00097%202.66817Z'%20stroke='black'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                    data-default-src="assets/icon/icon-align-bottom.svg"
+                    data-hover-src="assets/icon/icon-align-bottom.svg"
+                    alt=""
+                    loading="eager"
+                    decoding="sync"
+                    fetchpriority="high"
+                  />
+                  <span>Align Bottom</span>
+                </button>
+                <button
+                  class="figma-align-menu-item"
+                  data-align="left"
+                  role="menuitem"
+                >
+                  <img
+                    class="figma-align-icon-left"
+                    src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M2.66732%201.33305L2.66732%2014.6664M9.33245%204.99838C9.33245%204.43585%209.38802%203.78652%208.83245%203.46572C8.60038%203.33172%208.28885%203.33171%207.66578%203.33171L6.99912%203.33171C6.37605%203.33171%206.06452%203.33172%205.83245%203.46572C5.27685%203.78652%205.33245%204.43585%205.33245%204.99838C5.33245%205.56098%205.27685%206.21032%205.83245%206.53112C6.06452%206.66505%206.37605%206.66505%206.99912%206.66505L7.66578%206.66505C8.28885%206.66505%208.60038%206.66505%208.83245%206.53112C9.38802%206.21032%209.33245%205.56098%209.33245%204.99838ZM13.3324%2010.9984C13.3324%2010.4358%2013.388%209.78649%2012.8324%209.46572C12.6004%209.33172%2012.2889%209.33172%2011.6658%209.33172L6.99912%209.33172C6.37605%209.33172%206.06452%209.33172%205.83245%209.46572C5.27685%209.78649%205.33245%2010.4358%205.33245%2010.9984C5.33245%2011.561%205.27685%2012.2103%205.83245%2012.5311C6.06452%2012.6651%206.37605%2012.6651%206.99912%2012.6651L11.6658%2012.6651C12.2889%2012.6651%2012.6004%2012.6651%2012.8324%2012.5311C13.388%2012.2103%2013.3324%2011.561%2013.3324%2010.9984Z'%20stroke='black'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                    alt=""
+                    loading="eager"
+                    decoding="sync"
+                    fetchpriority="high"
+                  />
+                  <span>Align Left</span>
+                </button>
+                <button
+                  class="figma-align-menu-item"
+                  data-align="right"
+                  role="menuitem"
+                >
+                  <img
+                    class="figma-align-icon-right"
+                    src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M13.3337%201.33305L13.3337%2014.6664M6.66852%204.99838C6.66852%204.43585%206.61296%203.78652%207.16853%203.46572C7.40059%203.33172%207.71213%203.33171%208.33519%203.33171L9.00186%203.33171C9.62492%203.33171%209.93646%203.33172%2010.1685%203.46572C10.7241%203.78652%2010.6685%204.43585%2010.6685%204.99838C10.6685%205.56098%2010.7241%206.21032%2010.1685%206.53112C9.93646%206.66505%209.62492%206.66505%209.00186%206.66505L8.33519%206.66505C7.71212%206.66505%207.40059%206.66505%207.16853%206.53112C6.61296%206.21032%206.66852%205.56098%206.66852%204.99838ZM2.66854%2010.9984C2.66854%2010.4358%202.61296%209.78649%203.16854%209.46572C3.40058%209.33172%203.71212%209.33172%204.3352%209.33172L9.00186%209.33172C9.62492%209.33172%209.93646%209.33172%2010.1685%209.46572C10.7241%209.78649%2010.6685%2010.4358%2010.6685%2010.9984C10.6685%2011.561%2010.7241%2012.2103%2010.1685%2012.5311C9.93646%2012.6651%209.62492%2012.6651%209.00186%2012.6651L4.3352%2012.6651C3.71212%2012.6651%203.40058%2012.6651%203.16854%2012.5311C2.61296%2012.2103%202.66854%2011.561%202.66854%2010.9984Z'%20stroke='black'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                    alt=""
+                    loading="eager"
+                    decoding="sync"
+                    fetchpriority="high"
+                  />
+                  <span>Align Right</span>
+                </button>
+              </div>
+            </div>
+
+            <button
+              id="toolbarUndoBtn"
+              class="figma-tool-btn"
+              title="Undo"
+              aria-label="Undo"
+            >
+              <img src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M8%2014C11.3137%2014%2014%2011.3137%2014%208C14%204.68629%2011.3137%202%208%202C5.77915%202%203.84012%203.20659%202.80269%205M2%202V2.85211C2%204.31336%202%205.04399%202.4715%205.44341C2.943%205.84283%203.66369%205.72272%205.10507%205.48249L6%205.33333'%20stroke='black'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e" alt="" />
+            </button>
+
+            <button
+              id="toolbarRedoBtn"
+              class="figma-tool-btn figma-redo-btn"
+              title="Redo"
+              aria-label="Redo"
+            >
+              <img
+                class="figma-redo-icon"
+                src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M8%2014C4.68627%2014%202%2011.3137%202%208C2%204.68629%204.68627%202%208%202C10.2208%202%2012.1599%203.20659%2013.1973%205M14%202V2.85211C14%204.31336%2014%205.04399%2013.5285%205.44341C13.057%205.84283%2012.3363%205.72272%2010.8949%205.48249L10%205.33333'%20stroke='black'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                alt=""
+                loading="eager"
+                decoding="sync"
+                fetchpriority="high"
+              />
+            </button>
+          </div>
+
+          <div class="figma-divider"></div>
+
+          <div class="figma-toggle" role="group" aria-label="Pointer mode">
+            <button
+              id="toolbarPointerToolBtn"
+              class="figma-toggle-btn active"
+              data-tool="pointer"
+              title="Pointer tool"
+              aria-pressed="true"
+            >
+              <img src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M6.53521%203.08649L10.5576%204.66046C12.8776%205.56829%2014.0376%206.02219%2013.9991%206.7422C13.9607%207.46227%2012.7501%207.7924%2010.3289%208.45273C9.608%208.64933%209.24753%208.74767%208.9976%208.99753C8.74766%209.24747%208.6494%209.60793%208.45273%2010.3289C7.79246%2012.75%207.46226%2013.9606%206.74226%2013.9991C6.02223%2014.0375%205.56832%2012.8775%204.6605%2010.5575L3.08652%206.53517C2.13607%204.10623%201.66084%202.89176%202.27632%202.27628C2.8918%201.66081%204.10627%202.13603%206.53521%203.08649Z'%20stroke='white'%20stroke-linejoin='round'/%3e%3c/svg%3e" alt="" />
+            </button>
+            <button
+              id="toolbarHandToolBtn"
+              class="figma-toggle-btn"
+              data-tool="hand"
+              title="Hand tool"
+              aria-pressed="false"
+            >
+              <img src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M12.4993%206.42105V9.36844C12.4993%2010.7411%2012.4993%2011.4274%2012.2987%2011.9738C11.9919%2012.8093%2011.3604%2013.4695%2010.5612%2013.7903C10.0386%2014%209.38209%2014%208.06908%2014C7.38052%2014%207.03624%2014%206.71584%2013.9264C6.22696%2013.8141%205.77252%2013.5765%205.39326%2013.235C5.14466%2013.0112%204.93809%2012.7233%204.52494%2012.1474L2.70446%209.60971C2.42473%209.21983%202.43277%208.68141%202.72402%208.30082C3.10464%207.80345%203.81432%207.76234%204.24516%208.21278L5.22776%209.24004V7.05263V4.21053C5.22776%203.68731%205.63474%203.26316%206.13679%203.26316C6.63881%203.26316%207.04582%203.68731%207.04582%204.21053M7.04582%204.21053V2.94737C7.04582%202.42415%207.45282%202%207.95485%202C8.45688%202%208.86388%202.42415%208.86388%202.94737V4.21053M7.04582%204.21053V7.05263M8.86388%204.21053C8.86388%203.68731%209.27088%203.26316%209.77291%203.26316C10.2749%203.26316%2010.6819%203.68731%2010.6819%204.21053V5.47368M8.86388%204.21053V7.05263M10.6819%205.47368C10.6819%204.95047%2011.0889%204.52632%2011.591%204.52632C12.093%204.52632%2012.5%204.95047%2012.5%205.47368V7.05263M10.6819%205.47368V7.05263'%20stroke='black'%20stroke-width='0.9'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e" alt="" />
+            </button>
+          </div>
+
+          <div class="figma-divider"></div>
+
+          <div class="figma-zoom-pill">
+            <span
+              id="zoomInput"
+              class="zoom-value"
+              contenteditable="true"
+              spellcheck="false"
+              >80%</span
+            >
+          </div>
+
+          <button
+            id="btnZoomFit"
+            class="toolbar-compat-hidden"
+            aria-hidden="true"
+            tabindex="-1"
+          ></button>
+          <span id="toolbarProjectName" class="project-name-hidden"
+            >Untitled Project</span
+          >
+        </div>
+      </main>
+
+      <!-- Sidebar Right: Properties -->
+      <aside class="sidebar sidebar-right">
+        <div class="sidebar-panel">
+          <div id="propertiesPanel">
+            <div class="sidebar-section">
+              <h3 class="section-title section-title-with-badge">
+                <span>Import Files</span>
+                <span
+                  class="sidebar-profile-badge"
+                  aria-hidden="true"
+                  data-auth-state="not-signed-in"
+                >
+                  <span class="sidebar-profile-badge-inner">
+                    <span class="sidebar-profile-badge-initial hidden">S</span>
+                    <img
+                      class="sidebar-profile-badge-avatar hidden"
+                      src=""
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span class="sidebar-profile-badge-icon">
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" />
+                        <path
+                          d="M4.75 19.25C6.41477 16.4208 8.83173 15 12 15C15.1683 15 17.5852 16.4208 19.25 19.25"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                  </span>
+                </span>
+              </h3>
+
+              <div class="tab-container">
+                <button id="fileConvertTab" class="tab-btn active">
+                  File Convert
+                </button>
+                <button id="urlConvertTab" class="tab-btn">URL (Beta)</button>
+              </div>
+
+              <!-- File Convert Content -->
+              <div id="fileConvertContent">
+                <div id="dropzoneWrapper">
+                  <div id="dropzone" class="dropzone-container">
+                    <div class="dropzone-icon">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.25 20.5C4.66439 20.5 3.30966 19.9422 2.1858 18.8266C1.06193 17.7109 0.5 16.3474 0.5 14.7359C0.5 13.3547 0.90947 12.124 1.72841 11.0437C2.54735 9.96354 3.61894 9.27292 4.94318 8.97187C5.37879 7.34271 6.25 6.02344 7.55682 5.01406C8.86364 4.00469 10.3447 3.5 12 3.5C14.0386 3.5 15.768 4.22161 17.1881 5.66484C18.6081 7.10807 19.3182 8.86562 19.3182 10.9375C20.5205 11.0792 21.518 11.606 22.3108 12.518C23.1036 13.4299 23.5 14.4969 23.5 15.7187C23.5 17.0469 23.0426 18.1758 22.1278 19.1055C21.2131 20.0352 20.1023 20.5 18.7955 20.5H13.0455C12.4705 20.5 11.9782 20.2919 11.5688 19.8758C11.1593 19.4596 10.9545 18.9594 10.9545 18.375V12.9031L9.28182 14.55L7.81818 13.0625L12 8.8125L16.1818 13.0625L14.7182 14.55L13.0455 12.9031V18.375H18.7955C19.5273 18.375 20.1458 18.1182 20.6511 17.6047C21.1564 17.0911 21.4091 16.4625 21.4091 15.7187C21.4091 14.975 21.1564 14.3464 20.6511 13.8328C20.1458 13.3193 19.5273 13.0625 18.7955 13.0625H17.2273V10.9375C17.2273 9.46771 16.7176 8.21484 15.6983 7.17891C14.679 6.14297 13.4462 5.625 12 5.625C10.5538 5.625 9.32102 6.14297 8.3017 7.17891C7.28239 8.21484 6.77273 9.46771 6.77273 10.9375H6.25C5.23939 10.9375 4.37689 11.3005 3.6625 12.0266C2.94811 12.7526 2.59091 13.6292 2.59091 14.6562C2.59091 15.6833 2.94811 16.5599 3.6625 17.2859C4.37689 18.012 5.23939 18.375 6.25 18.375H8.86364V20.5H6.25Z"
+                          fill="#5c4ae4"
+                        />
+                      </svg>
+                    </div>
+                    <div class="dropzone-title">Drop HTML files</div>
+                    <div class="dropzone-subtitle">
+                      Upload a file or folder to convert into design (up to 500MB)
+                    </div>
+                    <div class="browse-menu-wrapper">
+                      <button class="browse-btn" type="button" id="browseBtn">
+                        <span class="browse-btn-leading" aria-hidden="true">
+                          <img
+                            class="browse-btn-leading-icon"
+                            src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M8.00008%202.6665V13.3332M13.3334%207.99984H2.66675'%20stroke='%235448C7'%20stroke-width='1.2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e"
+                            alt=""
+                            loading="eager"
+                            decoding="sync"
+                            fetchpriority="high"
+                          />
+                        </span>
+                        <span class="new-upload-icon" aria-hidden="true"
+                          >＋</span
+                        >
+                        <span class="browse-btn-label">Browser File</span>
+                        <span class="browse-btn-trailing" aria-hidden="true">
+                          <img
+                            class="browse-btn-trailing-icon"
+                            src="data:image/svg+xml,%3csvg%20width='16'%20height='16'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M12%206.00003C12%206.00003%209.05407%2010%208%2010C6.94587%2010%204%206%204%206'%20stroke='%235448C7'%20stroke-width='1.25'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                            alt=""
+                            loading="eager"
+                            decoding="sync"
+                            fetchpriority="high"
+                          />
+                        </span>
+                      </button>
+                      <div id="btnDropdown" class="btn-dropdown hidden">
+                        <div class="dropdown-item" data-type="file">
+                          <img
+                            src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M6.66675%2014.1667H13.3334'%20stroke='%234A4B4C'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M6.66675%2010.8333H10.0001'%20stroke='%234A4B4C'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M10.8333%202.08335V2.50002C10.8333%204.85705%2010.8333%206.03555%2011.5655%206.76779C12.2978%207.50002%2013.4763%207.50002%2015.8333%207.50002H16.2499M16.6666%208.88077V11.6667C16.6666%2014.8094%2016.6666%2016.3808%2015.6903%2017.357C14.714%2018.3334%2013.1426%2018.3334%209.99992%2018.3334C6.85722%2018.3334%205.28588%2018.3334%204.30956%2017.357C3.33325%2016.3808%203.33325%2014.8094%203.33325%2011.6667V7.87989C3.33325%205.1757%203.33325%203.82361%204.07164%202.9078C4.22082%202.72278%204.38934%202.55425%204.57436%202.40508C5.49018%201.66669%206.84227%201.66669%209.54642%201.66669C10.1344%201.66669%2010.4283%201.66669%2010.6976%201.7617C10.7536%201.78145%2010.8084%201.80419%2010.862%201.82981C11.1196%201.95298%2011.3274%202.16085%2011.7432%202.57659L15.6903%206.52371C16.172%207.00543%2016.4128%207.24629%2016.5398%207.55257C16.6666%207.85885%2016.6666%208.19948%2016.6666%208.88077Z'%20stroke='%234A4B4C'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e"
+                            alt=""
+                            width="20"
+                            height="20"
+                          />
+                          <span>Upload HTML</span>
+                        </div>
+                        <div class="dropdown-item" data-type="folder">
+                          <img
+                            src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M2%2015.4444V6.53813C2%205.41512%202%204.85362%202.19466%204.41281C2.43736%203.86322%202.88788%203.42521%203.45318%203.18925C3.90657%203%204.47844%203%205.63921%203H6.03449C6.51855%203%206.9766%203.21306%207.28033%203.57951L8.734%205.33333M8.734%205.33333H13.2C14.3201%205.33333%2014.8802%205.33333%2015.308%205.54526C15.6843%205.73169%2015.9902%206.02915%2016.182%206.39502C16.4%206.81096%2016.4%207.35545%2016.4%208.44444V9.22222M8.734%205.33333H6M2.92642%2012.7334L3.16514%2012.1558C3.75223%2010.7349%204.04578%2010.0246%204.65792%209.6234C5.27005%209.22222%206.06045%209.22222%207.64125%209.22222H14.0895C16.2403%209.22222%2017.3157%209.22222%2017.7938%209.90566C18.2718%2010.5892%2017.8724%2011.5557%2017.0736%2013.4888L16.8349%2014.0665C16.2478%2015.4873%2015.9542%2016.1976%2015.3421%2016.5988C14.7299%2017%2013.9395%2017%2012.3587%2017H5.91049C3.75969%2017%202.68428%2017%202.20626%2016.3166C1.72823%2015.6331%202.12762%2014.6665%202.92642%2012.7334Z'%20stroke='%234A4B4C'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e"
+                            alt=""
+                            width="20"
+                            height="20"
+                          />
+                          <span>Upload folder</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- After Upload State -->
+                <div id="dropzoneLoaded" class="hidden">
+                  <div class="file-item-card" id="singleUploadCard">
+                    <div class="file-icon-box">
+                      <img
+                        id="previewIcon"
+                        src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M6.66675%2014.1667H13.3334'%20stroke='%234A4B4C'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M6.66675%2010.8333H10.0001'%20stroke='%234A4B4C'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M10.8333%202.08335V2.50002C10.8333%204.85705%2010.8333%206.03555%2011.5655%206.76779C12.2978%207.50002%2013.4763%207.50002%2015.8333%207.50002H16.2499M16.6666%208.88077V11.6667C16.6666%2014.8094%2016.6666%2016.3808%2015.6903%2017.357C14.714%2018.3334%2013.1426%2018.3334%209.99992%2018.3334C6.85722%2018.3334%205.28588%2018.3334%204.30956%2017.357C3.33325%2016.3808%203.33325%2014.8094%203.33325%2011.6667V7.87989C3.33325%205.1757%203.33325%203.82361%204.07164%202.9078C4.22082%202.72278%204.38934%202.55425%204.57436%202.40508C5.49018%201.66669%206.84227%201.66669%209.54642%201.66669C10.1344%201.66669%2010.4283%201.66669%2010.6976%201.7617C10.7536%201.78145%2010.8084%201.80419%2010.862%201.82981C11.1196%201.95298%2011.3274%202.16085%2011.7432%202.57659L15.6903%206.52371C16.172%207.00543%2016.4128%207.24629%2016.5398%207.55257C16.6666%207.85885%2016.6666%208.19948%2016.6666%208.88077Z'%20stroke='%234A4B4C'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e"
+                        alt="File"
+                        width="20"
+                        height="20"
+                      />
+                    </div>
+                    <div class="file-info-header">
+                      <p id="previewFileName" class="filename">screen.html</p>
+                      <div class="file-meta">
+                        <span id="previewFileSize">6.2 MB</span>
+                        <span class="bullet">•</span>
+                        <div class="status-ready-group">
+                          <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85782 7.69279 2.71537 9.79631 2.24013C11.8998 1.7649 14.1003 1.98232 16.07 2.85999"
+                              stroke="#059669"
+                              stroke-width="3"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M22 4L12 14.01L9 11.01"
+                              stroke="#059669"
+                              stroke-width="3"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                          <span class="status-ready-text">Ready</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button id="removeFileBtn" class="remove-btn">
+                      <img
+                        src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M16.25%204.58331L15.7336%2012.9376C15.6016%2015.072%2015.5357%2016.1392%2015.0007%2016.9066C14.7361%2017.2859%2014.3956%2017.6061%2014.0006%2017.8466C13.2017%2018.3333%2012.1325%2018.3333%209.99392%2018.3333C7.8526%2018.3333%206.78192%2018.3333%205.98254%2017.8457C5.58733%2017.6047%205.24667%2017.284%204.98223%2016.904C4.4474%2016.1355%204.38287%2015.0667%204.25384%2012.9293L3.75%204.58331'%20stroke='%2394A3B8'%20stroke-width='1.5'%20stroke-linecap='round'/%3e%3cpath%20d='M2.5%204.58335H17.5M13.3797%204.58335L12.8109%203.4098C12.433%202.63024%2012.244%202.24045%2011.9181%201.99736C11.8458%201.94344%2011.7693%201.89547%2011.6892%201.85394C11.3283%201.66669%2010.8951%201.66669%2010.0287%201.66669C9.14067%201.66669%208.69667%201.66669%208.32973%201.86179C8.24842%201.90503%208.17082%201.95494%208.09774%202.011C7.76803%202.26394%207.58386%202.66798%207.21551%203.47607L6.71077%204.58335'%20stroke='%2394A3B8'%20stroke-width='1.5'%20stroke-linecap='round'/%3e%3cpath%20d='M7.91663%2013.75V8.75'%20stroke='%2394A3B8'%20stroke-width='1.5'%20stroke-linecap='round'/%3e%3cpath%20d='M12.0834%2013.75V8.75'%20stroke='%2394A3B8'%20stroke-width='1.5'%20stroke-linecap='round'/%3e%3c/svg%3e"
+                        alt="Delete"
+                        width="20"
+                        height="20"
+                      />
+                    </button>
+                  </div>
+                  <div
+                    id="multiUploadList"
+                    class="multi-upload-list hidden"
+                  ></div>
+                </div>
+
+                <input
+                  id="fileInput"
+                  type="file"
+                  accept=".html,.htm,text/html"
+                  style="display: none"
+                />
+                <input
+                  id="folderInput"
+                  type="file"
+                  webkitdirectory
+                  directory
+                  multiple
+                  style="display: none"
+                />
+              </div>
+              <!-- End of fileConvertContent -->
+
+              <!-- URL Convert Content -->
+              <div id="urlConvertContent" class="hidden">
+                <div class="url-input-group">
+                  <input
+                    type="url"
+                    id="urlInput"
+                    class="url-text-input"
+                    placeholder="https://example.com"
+                    spellcheck="false"
+                    autocomplete="off"
+                  />
+                  <button
+                    id="fetchSiteBtn"
+                    class="fetch-site-btn"
+                    type="button"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 19.93C7.05 19.44 4 16.08 4 12C4 11.38 4.08 10.79 4.21 10.21L9 15V16C9 17.1 9.9 18 11 18V19.93ZM17.9 17.39C17.64 16.58 16.9 16 16 16H15V13C15 12.45 14.55 12 14 12H8V10H10C10.55 10 11 9.55 11 9V7H13C14.1 7 15 6.1 15 5V4.59C17.93 5.78 20 8.65 20 12C20 14.08 19.2 15.97 17.9 17.39Z"
+                        fill="#5448c7"
+                      />
+                    </svg>
+                    <span>Fetch Site</span>
+                  </button>
+                </div>
+
+                <div id="urlMultiUploadList" class="multi-upload-list hidden"></div>
+              </div>
+              <!-- End of urlConvertContent -->
+            </div>
+
+            <div class="sidebar-section-feature">
+              <h3 class="section-title">Viewport Dimensions</h3>
+              <div class="viewport-dimensions-container">
+                <div class="dimension-input-group">
+                  <label class="dimension-label">W</label>
+                  <input
+                    type="text"
+                    value="1440"
+                    class="dimension-input"
+                    id="viewportWidthInput"
+                  />
+                </div>
+                <div class="dimension-input-group">
+                  <label class="dimension-label">H</label>
+                  <input
+                    type="text"
+                    value="720"
+                    class="dimension-input"
+                    id="viewportHeightInput"
+                  />
+                </div>
+              </div>
+
+              <div class="options-container">
+                <div class="option-row">
+                  <span class="option-label">Use Auto Layout</span>
+                  <div class="toggle-switch on" id="autoLayoutToggle">
+                    <div class="toggle-handle"></div>
+                  </div>
+                </div>
+                <div class="option-row">
+                  <span class="option-label">Create style & variables</span>
+                  <div class="toggle-switch" id="styleVarsToggle">
+                    <div class="toggle-handle"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="summarySection" class="sidebar-section hidden">
+              <h3 class="section-title">Conversion Summary</h3>
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <div class="stat-header">
+                    <img
+                      src="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='SVG'%3e%3cpath%20id='Vector'%20d='M2.66667%203.33333C2.66667%202.96539%202.96539%202.66667%203.33333%202.66667H12.6667C13.0346%202.66667%2013.3333%202.96539%2013.3333%203.33333V12.6667C13.3333%2013.0346%2013.0346%2013.3333%2012.6667%2013.3333H3.33333C2.96539%2013.3333%202.66667%2013.0346%202.66667%2012.6667V3.33333V3.33333'%20stroke='var(--stroke-0,%20%235C4AE4)'%20stroke-width='1.33333'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                      alt=""
+                      width="16"
+                      height="16"
+                    />
+                    <span>Frames</span>
+                  </div>
+                  <div id="framesCount" class="stat-value">0</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-header">
+                    <img
+                      src="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='SVG'%3e%3cpath%20id='Vector'%20d='M2.66667%204H13.3333M2.66667%208H13.3333M8.66667%2012H13.3333'%20stroke='var(--stroke-0,%20%235C4AE4)'%20stroke-width='1.33333'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                      alt=""
+                      width="16"
+                      height="16"
+                    />
+                    <span>Texts</span>
+                  </div>
+                  <div id="textCount" class="stat-value">0</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-header">
+                    <img
+                      src="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='SVG'%3e%3cpath%20id='Vector'%20d='M2.66667%2010.6667L5.724%207.60933C6.24467%207.08882%207.08867%207.08882%207.60933%207.60933L10.6667%2010.6667M9.33333%209.33333L10.3907%208.276C10.9113%207.75549%2011.7553%207.75549%2012.276%208.276L13.3333%209.33333M9.33333%205.33333H9.34M4%2013.3333H12C12.7359%2013.3333%2013.3333%2012.7359%2013.3333%2012V4C13.3333%203.26411%2012.7359%202.66667%2012%202.66667H4C3.26411%202.66667%202.66667%203.26411%202.66667%204V12C2.66667%2012.7359%203.26411%2013.3333%204%2013.3333L2.66667%2010.6667'%20stroke='var(--stroke-0,%20%235C4AE4)'%20stroke-width='1.33333'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                      alt=""
+                      width="16"
+                      height="16"
+                    />
+                    <span>Images</span>
+                  </div>
+                  <div id="imageCount" class="stat-value">0</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-header">
+                    <img
+                      src="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20width='100%25'%20height='100%25'%20overflow='visible'%20style='display:%20block;'%20viewBox='0%200%2016%2016'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='SVG'%3e%3cpath%20id='Vector'%20d='M12.6667%207.33333H3.33333M12.6667%207.33333C13.4026%207.33333%2014%207.93078%2014%208.66667V12.6667C14%2013.4026%2013.4026%2014%2012.6667%2014H3.33333C2.59745%2014%202%2013.4026%202%2012.6667V8.66667C2%207.93078%202.59745%207.33333%203.33333%207.33333M12.6667%207.33333V6C12.6667%205.26411%2012.0692%204.66667%2011.3333%204.66667M3.33333%207.33333V6C3.33333%205.26411%203.93078%204.66667%204.66667%204.66667M4.66667%204.66667V3.33333C4.66667%202.59695%205.26362%202%206%202H10C10.7359%202%2011.3333%202.59745%2011.3333%203.33333V4.66667M4.66667%204.66667H11.3333'%20stroke='var(--stroke-0,%20%235C4AE4)'%20stroke-width='1.33333'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e"
+                      alt=""
+                      width="16"
+                      height="16"
+                    />
+                    <span>Containers</span>
+                  </div>
+                  <div id="containerCount" class="stat-value">0</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sidebar-action-area">
+              <!-- <p id="status" class="status-slate"></p> -->
+              <button id="convertButton" class="btn-primary" disabled>
+                <img
+                  src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M18.0333%203.03333L16.9667%201.96667C16.8729%201.87193%2016.7613%201.79673%2016.6383%201.7454C16.5153%201.69407%2016.3833%201.66765%2016.25%201.66765C16.1167%201.66765%2015.9847%201.69407%2015.8617%201.7454C15.7387%201.79673%2015.6271%201.87193%2015.5333%201.96667L1.96667%2015.5333C1.87193%2015.6271%201.79673%2015.7387%201.7454%2015.8617C1.69407%2015.9847%201.66765%2016.1167%201.66765%2016.25C1.66765%2016.3833%201.69407%2016.5153%201.7454%2016.6383C1.79673%2016.7613%201.87193%2016.8729%201.96667%2016.9667L3.03333%2018.0333C3.1271%2018.1281%203.23871%2018.2033%203.36173%2018.2546C3.48474%2018.3059%203.61671%2018.3324%203.75%2018.3324C3.88329%2018.3324%204.01526%2018.3059%204.13827%2018.2546C4.26129%2018.2033%204.3729%2018.1281%204.46667%2018.0333L18.0333%204.46667C18.1281%204.3729%2018.2033%204.26129%2018.2546%204.13827C18.3059%204.01526%2018.3324%203.88329%2018.3324%203.75C18.3324%203.61671%2018.3059%203.48474%2018.2546%203.36173C18.2033%203.23871%2018.1281%203.1271%2018.0333%203.03333Z'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M11.6667%205.83333L14.1667%208.33333'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M4.16667%205V8.33333'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M15.8333%2011.6667V15'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M8.33333%201.66667V3.33333'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M5.83333%206.66667H2.5'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M17.5%2013.3333H14.1667'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M9.16667%2017.5V19.1667'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e"
+                  alt=""
+                  width="20"
+                  height="20"
+                />
+                <span>Convert Design</span>
+              </button>
+
+              <button id="copyButton" class="btn-primary btn-copy hidden">
+                <img
+                  src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M7.5%2012.5C7.5%2010.143%207.5%208.9645%208.23223%208.23223C8.9645%207.5%2010.143%207.5%2012.5%207.5H13.3333C15.6903%207.5%2016.8688%207.5%2017.6011%208.23223C18.3333%208.9645%2018.3333%2010.143%2018.3333%2012.5V13.3333C18.3333%2015.6903%2018.3333%2016.8688%2017.6011%2017.6011C16.8688%2018.3333%2015.6903%2018.3333%2013.3333%2018.3333H12.5C10.143%2018.3333%208.9645%2018.3333%208.23223%2017.6011C7.5%2016.8688%207.5%2015.6903%207.5%2013.3333V12.5Z'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3cpath%20d='M14.1666%207.5C14.1646%205.03576%2014.1273%203.75934%2013.41%202.88536C13.2715%202.71657%2013.1167%202.56182%2012.948%202.4233C12.026%201.66667%2010.6562%201.66667%207.91667%201.66667C5.1771%201.66667%203.80732%201.66667%202.88536%202.4233C2.71657%202.56181%202.56182%202.71657%202.4233%202.88536C1.66667%203.80732%201.66667%205.1771%201.66667%207.91667C1.66667%2010.6562%201.66667%2012.026%202.4233%2012.948C2.56181%2013.1167%202.71657%2013.2715%202.88536%2013.41C3.75934%2014.1273%205.03576%2014.1646%207.5%2014.1666'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e"
+                  alt=""
+                  width="20"
+                  height="20"
+                />
+                <span>Copy to figma</span>
+              </button>
+            </div>
+          </div>
+          <!-- End of propertiesPanel -->
+
+          <div id="stylesPanel" class="hidden">
+            <styles-panel id="stylesPanelElement"></styles-panel>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div
+      id="commandPaletteOverlay"
+      class="command-palette-overlay hidden"
+      aria-hidden="true"
+    >
+      <div
+        class="command-palette"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command Palette"
+      >
+        <div class="command-palette-header">
+          <input
+            id="commandPaletteInput"
+            class="command-palette-input"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="Search commands, files, tags..."
+            aria-label="Search commands"
+          />
+        </div>
+        <div
+          id="commandPaletteList"
+          class="command-palette-list"
+          role="listbox"
+          aria-label="Search results"
+        ></div>
+        <div id="commandPaletteEmpty" class="command-palette-empty hidden">
+          No results found
+        </div>
+        <div class="command-palette-footer">
+          <span id="commandPaletteShortcutHint"
+            >⌘K to open • ↑↓ to navigate • Enter to run • Esc to close</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <toast-notification id="toastNotification"></toast-notification>
+
+    <!-- Storage Onboarding Overlay -->
+    <div
+      id="storageOnboardingOverlay"
+      class="storage-onboarding-overlay hidden"
+    >
+      <div class="storage-card storage-card-compact">
+        <section class="storage-pane storage-pane-info storage-pane-compact">
+          <!-- Top row: state icon + close button -->
+          <div class="storage-card-toprow">
+            <div
+              class="storage-icon storage-icon--primary"
+              id="storageIconPrimary"
+            >
+              <img
+                src="data:image/svg+xml,%3csvg%20width='56'%20height='56'%20viewBox='0%200%2056%2056'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3crect%20width='56'%20height='56'%20rx='28'%20fill='%235C4AE4'/%3e%3cpath%20d='M37.2857%2022.4286L36.1095%2019.8905L33.5714%2018.7143L36.1095%2017.5381L37.2857%2015L38.4619%2017.5381L41%2018.7143L38.4619%2019.8905L37.2857%2022.4286ZM23.0476%2022.4286L21.8714%2019.8905L19.3333%2018.7143L21.8714%2017.5381L23.0476%2015L24.2238%2017.5381L26.7619%2018.7143L24.2238%2019.8905L23.0476%2022.4286ZM37.2857%2036.6667L36.1095%2034.1286L33.5714%2032.9524L36.1095%2031.7762L37.2857%2029.2381L38.4619%2031.7762L41%2032.9524L38.4619%2034.1286L37.2857%2036.6667ZM18.8381%2040.6286L15.3714%2037.1619C15.1238%2036.9143%2015%2036.6151%2015%2036.2643C15%2035.9135%2015.1238%2035.6143%2015.3714%2035.3667L29.1762%2021.5619C29.4238%2021.3143%2029.723%2021.1905%2030.0738%2021.1905C30.4246%2021.1905%2030.7238%2021.3143%2030.9714%2021.5619L34.4381%2025.0286C34.6857%2025.2762%2034.8095%2025.5754%2034.8095%2025.9262C34.8095%2026.277%2034.6857%2026.5762%2034.4381%2026.8238L20.6333%2040.6286C20.3857%2040.8762%2020.0865%2041%2019.7357%2041C19.3849%2041%2019.0857%2040.8762%2018.8381%2040.6286ZM19.7667%2038.0286L28.619%2029.1143L26.8857%2027.381L17.9714%2036.2333L19.7667%2038.0286Z'%20fill='white'/%3e%3c/svg%3e"
+                alt="Local storage"
+                width="56"
+                height="56"
+              />
+            </div>
+            <div
+              class="storage-icon storage-icon--danger hidden"
+              id="storageIconDanger"
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 9V13M12 17H12.01M10.29 3.86L1.82 18A2 2 0 003.64 21H20.36A2 2 0 0022.18 18L13.71 3.86A2 2 0 0010.29 3.86Z"
+                  stroke="white"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <button
+              id="btnCloseModal"
+              class="storage-close-btn hidden"
+              aria-label="Close"
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path
+                  d="M11 3L3 11M3 3L11 11"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Header: title + description -->
+          <div class="storage-card-header">
+            <h2 class="storage-card-title" id="storageModalTitle">
+              Local Storage
+            </h2>
+            <p class="storage-card-desc" id="storageModalDesc">
+              Select a folder to store your projects locally
+            </p>
+          </div>
+
+          <!-- Section divider -->
+          <div class="storage-divider"></div>
+
+          <!-- Feature list — visible in onboarding (first-time) state -->
+          <ul id="storageModalFeatures" class="storage-features">
+            <li class="storage-feature-item">
+              <span class="storage-feature-check"
+                ><img
+                  src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M18.3327%2010.0001C18.3327%205.39771%2014.6017%201.66675%209.99935%201.66675C5.39697%201.66675%201.66602%205.39771%201.66602%2010.0001C1.66602%2014.6024%205.39697%2018.3334%209.99935%2018.3334C14.6017%2018.3334%2018.3327%2014.6024%2018.3327%2010.0001Z'%20stroke='%23059669'%20stroke-width='1.2'%20stroke-linecap='round'/%3e%3cpath%20d='M6.66602%2010.4167L8.74935%2012.5L13.3327%207.5'%20stroke='%23059669'%20stroke-width='1.2'%20stroke-linecap='round'/%3e%3c/svg%3e"
+                  alt=""
+                  aria-hidden="true"
+              /></span>
+              <span class="storage-feature-text"
+                >Your files stay on your device</span
+              >
+            </li>
+            <li class="storage-feature-item">
+              <span class="storage-feature-check"
+                ><img
+                  src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M18.3327%2010.0001C18.3327%205.39771%2014.6017%201.66675%209.99935%201.66675C5.39697%201.66675%201.66602%205.39771%201.66602%2010.0001C1.66602%2014.6024%205.39697%2018.3334%209.99935%2018.3334C14.6017%2018.3334%2018.3327%2014.6024%2018.3327%2010.0001Z'%20stroke='%23059669'%20stroke-width='1.2'%20stroke-linecap='round'/%3e%3cpath%20d='M6.66602%2010.4167L8.74935%2012.5L13.3327%207.5'%20stroke='%23059669'%20stroke-width='1.2'%20stroke-linecap='round'/%3e%3c/svg%3e"
+                  alt=""
+                  aria-hidden="true"
+              /></span>
+              <span class="storage-feature-text">No uploads. No cloud</span>
+            </li>
+            <li class="storage-feature-item">
+              <span class="storage-feature-check"
+                ><img
+                  src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M18.3327%2010.0001C18.3327%205.39771%2014.6017%201.66675%209.99935%201.66675C5.39697%201.66675%201.66602%205.39771%201.66602%2010.0001C1.66602%2014.6024%205.39697%2018.3334%209.99935%2018.3334C14.6017%2018.3334%2018.3327%2014.6024%2018.3327%2010.0001Z'%20stroke='%23059669'%20stroke-width='1.2'%20stroke-linecap='round'/%3e%3cpath%20d='M6.66602%2010.4167L8.74935%2012.5L13.3327%207.5'%20stroke='%23059669'%20stroke-width='1.2'%20stroke-linecap='round'/%3e%3c/svg%3e"
+                  alt=""
+                  aria-hidden="true"
+              /></span>
+              <span class="storage-feature-text">Fully offline workflow</span>
+            </li>
+          </ul>
+
+          <!-- Warning notice — visible in Storage Settings (connected) state -->
+          <div class="storage-warning hidden" id="storageWarningNotice">
+            <svg
+              class="storage-warning-icon"
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+            >
+              <path
+                d="M7 5.5V7.5M7 9.5H7.008M6.11 1.75L1.07 10.12C0.63 10.87 1.14 11.83 2.04 11.83H11.96C12.86 11.83 13.37 10.87 12.93 10.12L7.89 1.75C7.44 0.98 6.56 0.98 6.11 1.75Z"
+                stroke="currentColor"
+                stroke-width="1.3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <span
+              >Removing this folder will disconnect your local project storage.
+              Your files will not be deleted.</span
+            >
+          </div>
+
+          <!-- Action buttons -->
+          <div class="storage-actions">
+            <button id="btnSelectFolder" class="storage-btn-primary">
+              <img
+                src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M2%2015.4444V6.53813C2%205.41512%202%204.85362%202.19466%204.41281C2.43736%203.86322%202.88788%203.42521%203.45318%203.18925C3.90657%203%204.47844%203%205.63921%203H6.03449C6.51855%203%206.9766%203.21306%207.28033%203.57951L8.734%205.33333M8.734%205.33333H13.2C14.3201%205.33333%2014.8802%205.33333%2015.308%205.54526C15.6843%205.73169%2015.9902%206.02915%2016.182%206.39502C16.4%206.81096%2016.4%207.35545%2016.4%208.44444V9.22222M8.734%205.33333H6M2.92642%2012.7334L3.16514%2012.1558C3.75223%2010.7349%204.04578%2010.0246%204.65792%209.6234C5.27005%209.22222%206.06045%209.22222%207.64125%209.22222H14.0895C16.2403%209.22222%2017.3157%209.22222%2017.7938%209.90566C18.2718%2010.5892%2017.8724%2011.5557%2017.0736%2013.4888L16.8349%2014.0665C16.2478%2015.4873%2015.9542%2016.1976%2015.3421%2016.5988C14.7299%2017%2013.9395%2017%2012.3587%2017H5.91049C3.75969%2017%202.68428%2017%202.20626%2016.3166C1.72823%2015.6331%202.12762%2014.6665%202.92642%2012.7334Z'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/svg%3e"
+                alt="Add"
+                width="20"
+                height="20"
+              />
+              Add folder
+            </button>
+            <button id="btnRemoveFolder" class="storage-btn-danger hidden">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 6H21M8 6V4H16V6M19 6L18 20H6L5 6M10 11V17M14 11V17"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Disconnect Folder
+            </button>
+            <button id="btnSkip" class="storage-btn-ghost">Skip for now</button>
+          </div>
+        </section>
+
+        <section class="storage-pane storage-pane-recents storage-pane-compact">
+          <div class="storage-recents-header">
+            <h3 class="storage-recents-title">Recent Folders</h3>
+            <span class="storage-recents-count" id="recentFoldersCount"
+              >No folders yet</span
+            >
+          </div>
+          <div id="recentFoldersEmpty" class="storage-recents-empty">
+            <p>Connect a folder once to pin it here for <br />quick access.</p>
+            <button
+              id="recentFoldersCta"
+              type="button"
+              class="storage-recents-empty-btn"
+            >
+              Add folder
+            </button>
+          </div>
+          <div
+            id="recentFoldersList"
+            class="storage-recents-list"
+            aria-live="polite"
+          ></div>
+        </section>
+      </div>
+    </div>
+
+    <!-- History Expand Popup -->
+    <div class="history-popup-backdrop hidden" id="historyPopupBackdrop"></div>
+    <div class="history-popup hidden" id="historyPopup" role="dialog" aria-label="Expanded palette history" aria-modal="true">
+      <div class="history-popup-resize history-popup-resize--n" data-resize="n"></div>
+      <div class="history-popup-resize history-popup-resize--s" data-resize="s"></div>
+      <div class="history-popup-resize history-popup-resize--e" data-resize="e"></div>
+      <div class="history-popup-resize history-popup-resize--w" data-resize="w"></div>
+      <div class="history-popup-resize history-popup-resize--ne" data-resize="ne"></div>
+      <div class="history-popup-resize history-popup-resize--nw" data-resize="nw"></div>
+      <div class="history-popup-resize history-popup-resize--se" data-resize="se"></div>
+      <div class="history-popup-resize history-popup-resize--sw" data-resize="sw"></div>
+      <div class="history-popup-inner-clip history-popup-inner-clip--palette" data-history-section="palette">
+        <div class="history-popup-header" id="historyPopupHeader">
+          <button class="history-popup-title-btn history-popup-title-btn--palette" type="button" aria-expanded="false" aria-controls="historyPopupSectionMenu" data-history-section="palette">
+            <span class="history-popup-title">Colour Palettes</span>
+            <img src="data:image/svg+xml,%3csvg%20width='14'%20height='14'%20viewBox='0%200%2014%2014'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20opacity='0.8'%3e%3cpath%20d='M10.5%205.25003C10.5%205.25003%207.92231%208.75%207%208.75C6.07763%208.75%203.5%205.25%203.5%205.25'%20stroke='black'%20stroke-width='1.25'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e" alt="" aria-hidden="true" />
+          </button>
+          <div id="historyPopupSectionMenu" class="history-popup-section-menu hidden" role="menu">
+            <button class="history-popup-section-item is-active" type="button" role="menuitem" data-popup-section="palette">Colour Palettes</button>
+            <button class="history-popup-section-item" type="button" role="menuitem" data-popup-section="typeface">Typeface</button>
+          </div>
+          <button class="history-popup-close" type="button" aria-label="Close expanded view">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M11 3L3 11M3 3L11 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <div class="history-popup-search">
+          <svg class="history-popup-search-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 14L10.5 10.5M12 7C12 9.76142 9.76142 12 7 12C4.23858 12 2 9.76142 2 7C2 4.23858 4.23858 2 7 2C9.76142 2 12 4.23858 12 7Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          <input class="history-popup-search-input" type="text" placeholder="Search palettes…" id="historyPopupSearchInput" />
+          <button class="history-popup-filter-btn" id="historyPopupFilterBtn" type="button" aria-label="Filter">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="history-popup-filter-menu hidden" id="historyPopupFilterMenu">
+            <button class="history-popup-filter-item active" data-filter="recent" type="button">Recent</button>
+            <button class="history-popup-filter-item" data-filter="today" type="button">Today</button>
+            <button class="history-popup-filter-item" data-filter="yesterday" type="button">Yesterday</button>
+            <button class="history-popup-filter-item" data-filter="last7" type="button">Last 7 days</button>
+          </div>
+        </div>
+        <div class="history-popup-tabs">
+          <button class="history-popup-tab active" data-popup-tab="history" type="button">History</button>
+          <button class="history-popup-tab" data-popup-tab="deleted" type="button">Archive</button>
+        </div>
+        <div class="history-popup-list history-popup-list--palette" id="historyPopupList" role="list" data-history-section="palette">
+          <!-- Cloned from sidebar dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- App entry point - bundles all components, app logic & protection -->
+  </body>
+</html>

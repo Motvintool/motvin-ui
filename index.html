@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motvin: The creative toolkit for websites, colors, icons, AI, and more.</title>
+  <link rel="stylesheet" href="CSS/index.css?v=9">
+  <link rel="stylesheet" href="COMPONENT/Components CSS/Auth Modal.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;700&family=Noto+Sans:wght@300;400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="ASSET/Images/motvin%20logo%20(full%20color).svg" />
+</head>
+<body>
+  <!-- Sticky Header Wrapper -->
+  <div class="sticky-header">
+
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-left">
+        <a href="#" class="logo">
+          <img src="ASSET/Icons/motvin-logo.svg" alt="" class="mi-logo-mark">
+        </a>
+        <nav class="nav-links">
+          <a href="#" class="nav-item" id="products-dropdown-trigger">
+            <span style="--item-offset: 13px;">Products</span>
+            <img src="ASSET/Icons/desktop-arrow.svg" alt="" class="products-desktop-arrow" style="width: 18px; height: 18px;" />
+            <img src="ASSET/Icons/nav-drop-arrow.svg" alt="" class="products-mobile-arrow" style="width: 14px; height: 14px; opacity: 0.5;" />
+          </a>
+          <a href="#" class="nav-item" id="community-dropdown-trigger">
+            <span style="--item-offset: 13px;">Community</span>
+            <img src="ASSET/Icons/desktop-arrow.svg" alt="" class="community-desktop-arrow" style="width: 18px; height: 18px;">
+            <img src="ASSET/Icons/nav-drop-arrow.svg" alt="" class="community-mobile-arrow" style="width: 14px; height: 14px; opacity: 0.5;">
+          </a>
+          <div class="mi-nav-products-accordion" id="mi-nav-products-accordion">
+          </div>
+          <a href="#demo-section" class="nav-item"><span>Features</span></a>
+          <div class="mi-nav-community-accordion" id="mi-nav-community-accordion">
+          </div>
+          <a href="/updates/" target="_blank" class="nav-item"><span>Release Notes</span></a>
+          <a href="#faq-section" class="nav-item"><span>F&Q</span></a>
+        </nav>
+      </div>
+      <div class="nav-actions">
+        <div class="nav-extra-links">
+          <a href="/icons" class="nav-item">
+            <span>Icons Library</span>
+            <span class="mi-nav-badge">New</span>
+          </a>
+          <a href="#" class="nav-item" style="display: none;">
+            <img src="ASSET/Icons/community.svg" alt="Community" />
+            <span>Join Community</span>
+          </a>
+        </div>
+        <a href="#" class="btn-secondary" id="auth-signin-btn">
+          <span>Sign in</span>
+          <img src="ASSET/Icons/btn-arrow-black.svg" alt="" class="btn-secondary-arrow" />
+        </a>
+        <a href="#" class="btn-primary" id="auth-signup-btn">
+          <span>Get started for free</span>
+          <img src="ASSET/Icons/btn-arrow.svg" alt="" class="btn-primary-arrow" />
+        </a>
+        <a href="/files" class="btn-secondary" id="auth-dashboard-btn" style="display: none;"><span>Go to Dashboard</span></a>
+      </div>
+
+      <div class="mi-nav-mobile-cta-slot" id="nav-mobile-cta-slot"></div>
+      <!-- Mobile-only hamburger: opens a dropdown holding the relocated nav -->
+      <button class="mi-nav-hamburger" id="nav-hamburger-toggle" aria-label="Menu" aria-expanded="false"
+        aria-controls="nav-mobile-panel">
+        <img src="ASSET/Icons/nav-open.svg" alt="" class="mi-nav-hamburger-icon-open" />
+        <img src="ASSET/Icons/nav-close.svg" alt="" class="mi-nav-hamburger-icon-close" />
+      </button>
+    </div>
+  </header>
+
+  <!-- Products Dropdown Backdrop -->
+  <div class="dropdown-backdrop" id="dropdown-backdrop"></div>
+
+  <!-- Products Dropdown Menu -->
+  <div class="products-dropdown" id="products-dropdown">
+    <div class="products-dropdown-container">
+      
+      <!-- Left Column: Big Feature Cards -->
+      <div class="products-dropdown-left">
+        <p class="dropdown-heading">What you can do in Motvin</p>
+        <div class="dropdown-features">
+          <!-- Feature 1 -->
+          <a href="#" class="feature-card">
+            <div class="feature-card-header">
+              <h3>Convert websites</h3>
+              <img src="ASSET/Icons/arrow-redirect.svg" alt="" class="feature-card-arrow" />
+            </div>
+            <div class="feature-card-body">
+              <div class="feature-card-img-wrapper">
+                <img src="ASSET/Images/convert-websites.png" alt="Convert websites graphic" />
+              </div>
+              <p>Capture any website and turn it into ediable design layers.</p>
+            </div>
+          </a>
+          <!-- Feature 2 -->
+          <a href="#" class="feature-card">
+            <div class="feature-card-header">
+              <h3>Explore creative tools</h3>
+              <img src="ASSET/Icons/arrow-redirect.svg" alt="" class="feature-card-arrow" />
+            </div>
+            <div class="feature-card-body">
+              <div class="feature-card-img-wrapper">
+                <img src="ASSET/Images/explore-creative-tools.png" alt="Explore creative tools graphic" />
+              </div>
+              <p>Colors, icons, templates, and resources all in one place.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Product Links -->
+      <div class="products-dropdown-right">
+        <p class="dropdown-heading">Explore all products</p>
+        <div class="dropdown-products-grid">
+          
+          <!-- Motvin Convert -->
+          <a href="#" class="product-link">
+            <div class="product-link-icon" style="background-color: rgba(135,79,255,0.08);">
+              <img src="ASSET/svg/motvin-convert.svg" alt="" />
+            </div>
+            <div class="product-link-text">
+              <h4>Motvin Convert</h4>
+              <p>Turn any webite into an editable design</p>
+            </div>
+          </a>
+
+          <!-- Motvin Extension -->
+          <a href="#" class="product-link">
+            <div class="product-link-icon" style="background-color: rgba(0,182,255,0.08);">
+              <img src="ASSET/svg/motvin-extension.svg" alt="" />
+            </div>
+            <div class="product-link-text">
+              <h4>Motvin Extension</h4>
+              <p>Convert websites directly from your browser</p>
+            </div>
+          </a>
+
+          <!-- Motvin Icons -->
+          <a href="/icons" class="product-link">
+            <div class="product-link-icon" style="background-color: rgba(36,203,113,0.08);">
+              <img src="ASSET/svg/motvin-icons.svg" alt="" />
+            </div>
+            <div class="product-link-text">
+              <h4>Motvin Icons</h4>
+              <p>Explore 200k+ editable icons</p>
+            </div>
+          </a>
+
+          <!-- Motvin Typescales -->
+          <a href="#" class="product-link">
+            <div class="product-link-icon" style="background-color: rgba(255,55,55,0.08);">
+              <img src="ASSET/svg/motvin-typescales.svg" alt="" />
+            </div>
+            <div class="product-link-text">
+              <h4>Motvin Typescales</h4>
+              <p>Generate and customize typeface varients</p>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Community Dropdown Menu -->
+  <div class="community-dropdown" id="community-dropdown">
+    <div class="community-dropdown-container">
+      <p class="dropdown-heading">Whatsapp Community</p>
+      
+      <div class="community-cards-grid">
+        <!-- Community Card 1 -->
+        <a href="https://chat.whatsapp.com/JxLUrQpNpaXJ4ido6muIW6?s=cl&p=i&ilr=4" target="_blank" class="community-card">
+          <div class="community-icon-wrapper blue-tint">
+            <div class="community-icon-inner">
+              <img src="ASSET/Icons/whatsapp-icon.svg" alt="Whatsapp" />
+            </div>
+          </div>
+          <div class="community-card-content">
+            <div class="community-card-text">
+              <h4>Creative Mind's 1</h4>
+              <p>Join our original designer community</p>
+            </div>
+            <div class="community-pill">
+              <div class="community-avatars">
+                <img src="ASSET/Images/pic1.png" alt="Designer" />
+                <img src="ASSET/Images/pic2.png" alt="Designer" />
+                <img src="ASSET/Images/pic3.png" alt="Designer" />
+              </div>
+              <span class="community-count">2,000 Designers</span>
+              <img src="ASSET/Icons/arrow-redirect.svg" alt="Arrow" class="community-pill-arrow" />
+            </div>
+          </div>
+        </a>
+
+        <!-- Community Card 2 -->
+        <a href="https://chat.whatsapp.com/KJDBfXpJLukHwo76xnoTSA?s=cl&p=i&ilr=4" target="_blank" class="community-card">
+          <div class="community-icon-wrapper purple-tint">
+            <div class="community-icon-inner">
+              <img src="ASSET/Icons/whatsapp-icon1.svg" alt="Whatsapp" />
+            </div>
+          </div>
+          <div class="community-card-content">
+            <div class="community-card-text">
+              <h4>Creative Mind's 2</h4>
+              <p>Connect and grow with fellow designers</p>
+            </div>
+            <div class="community-pill">
+              <div class="community-avatars">
+                <img src="ASSET/Images/pic4.png" alt="Designer" />
+                <img src="ASSET/Images/pic5.png" alt="Designer" />
+                <img src="ASSET/Images/pic6.png" alt="Designer" />
+              </div>
+              <span class="community-count">2,000 Designers</span>
+              <img src="ASSET/Icons/arrow-redirect.svg" alt="Arrow" class="community-pill-arrow" />
+            </div>
+          </div>
+        </a>
+
+        <!-- Community Card 3 -->
+        <a href="https://chat.whatsapp.com/HP7TNbjBEE6CCfkGVMBqLA?s=cl&p=i&ilr=4" target="_blank" class="community-card">
+          <div class="community-icon-wrapper green-tint">
+            <div class="community-icon-inner">
+              <img src="ASSET/Icons/whatsapp-icon2.svg" alt="Whatsapp" />
+            </div>
+          </div>
+          <div class="community-card-content">
+            <div class="community-card-text">
+              <h4>Creative Mind's 3</h4>
+              <p>A growing space for designers and creators</p>
+            </div>
+            <div class="community-pill">
+              <div class="community-avatars">
+                <img src="ASSET/Images/pic7.png" alt="Designer" />
+                <img src="ASSET/Images/pic8.png" alt="Designer" />
+                <img src="ASSET/Images/pic9.png" alt="Designer" />
+              </div>
+              <span class="community-count">2,000 Designers</span>
+              <img src="ASSET/Icons/arrow-redirect.svg" alt="Arrow" class="community-pill-arrow" />
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile-only navigation: live nav nodes relocate here so their existing
+       dropdown and authentication behavior stays intact. -->
+  <div class="mi-nav-mobile-panel" id="nav-mobile-panel">
+    <div class="mi-nav-mobile-panel-main">
+      <div class="mi-nav-mobile-panel-header">
+        <a href="#" class="mi-nav-mobile-panel-logo" aria-label="Motvin home">
+          <img src="ASSET/Icons/motvin-logo.svg" alt="" />
+        </a>
+        <button class="mi-nav-mobile-panel-close" id="nav-mobile-panel-close" aria-label="Close menu">
+          <img src="ASSET/Icons/nav-close.svg" alt="" />
+        </button>
+      </div>
+      <div class="mi-nav-mobile-panel-content">
+        <div class="mi-nav-mobile-panel-list">
+          <div id="nav-mobile-links-slot"></div>
+          <div id="nav-mobile-actions-slot"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mi-nav-mobile-panel-actions">
+      <button class="mi-nav-mobile-panel-signup" id="nav-mobile-panel-signup" type="button">Get started</button>
+    </div>
+  </div>
+</div>
+
+  <main id="main-content">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-bg">
+      <div class="hero-bg-img">
+        <img alt="" src="ASSET/Images/Hero-section.png" />
+      </div>
+      <div class="hero-gradient"></div>
+    </div>
+    
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="badge-new">
+          <span>New</span>
+        </div>
+        <p>Website capture with one click</p>
+        <div class="badge-dot"></div>
+        <a href="#" class="badge-link">
+          <span>Get Now</span>
+          <img alt="" src="ASSET/svg/arrow-icon.svg" />
+        </a>
+      </div>
+      
+      <div class="hero-title-interactive">
+  <div class="hero-title-rows">
+    <div class="hero-title-row">
+      <span class="hero-title-text-main">Build Better Designs</span>
+      <div class="interactive-word-wrapper" data-state="convert-websites">
+        <span class="interactive-word">Convert Websites</span><span class="hero-title-comma">,</span>
+      </div>
+    </div>
+    <div class="hero-title-row">
+      <div class="interactive-word-wrapper" data-state="explore-colors">
+        <span class="interactive-word">Explore Colors</span><span class="hero-title-comma">,</span>
+      </div>
+      <div class="interactive-word-wrapper" data-state="icons">
+        <span class="interactive-word">Icons</span><span class="hero-title-comma">,</span>
+      </div>
+      <div class="interactive-word-wrapper" data-state="type-systems">
+        <span class="interactive-word">Type Systems</span><span class="hero-title-comma">,</span>
+      </div>
+      <span class="hero-title-text-main">And More</span>
+    </div>
+  </div>
+
+  <div class="hero-floating-graphics">
+    <!-- State: Convert Websites -->
+    <div class="hero-floating-state" id="floating-convert-websites">
+      <div class="container-left">
+        <div class="floating-item pos-cw-c2 exact-c2">
+          <div class="exact-c2-content">
+            <p class="exact-c2-title">Contrast</p>
+            <div class="exact-c2-details">
+              <p class="exact-c2-ratio"><span class="exact-c2-ratio-1">A</span><span class="exact-c2-ratio-2">A</span></p>
+              <p class="exact-c2-val">4.6:1</p>
+            </div>
+          </div>
+        </div>
+        <div class="floating-item pos-cw-c1 exact-c1">
+          <div class="exact-c1-top">
+            <div class="exact-c1-icon-container"><img src="ASSET/Icons/live-url.svg" /></div>
+            <p class="exact-c1-title">Live URL</p>
+          </div>
+          <div class="exact-c1-bottom">
+            <p class="exact-c1-url">https://motvin.com</p>
+            <img src="ASSET/Icons/live-enter.svg" />
+          </div>
+        </div>
+        <div class="floating-item pos-cw-c3 exact-c3">
+          <div class="exact-c3-top">
+            <div class="exact-c3-icon-container"><img src="ASSET/Icons/one-click-capture.svg" /></div>
+            <p class="exact-c3-title">One Click Capture</p>
+          </div>
+          <div class="exact-c3-bottom">
+            <div class="exact-c3-bottom-inner">
+              <img src="ASSET/Icons/capture-website-tick.svg" />
+              <p class="exact-c3-btn-text">Capture Website</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container-right">
+        <div class="floating-item pos-cw-c4 exact-c4">
+          <p class="exact-c4-title">Color Wheel</p>
+          <div class="exact-c4-img-container">
+            <img src="ASSET/Images/imgImage17.png" class="exact-c4-img" />
+          </div>
+        </div>
+        <div class="floating-item pos-cw-c6 exact-c6">
+          <div class="exact-c6-content">
+            <p class="exact-c6-title">Contrast</p>
+            <div class="exact-c6-details">
+              <p class="exact-c6-ratio"><span class="exact-c6-ratio-1">A</span><span class="exact-c6-ratio-2">A</span></p>
+              <p class="exact-c6-val">4.6:1</p>
+            </div>
+          </div>
+        </div>
+        <div class="floating-item pos-cw-c5 exact-c5">
+          <div class="exact-c5-top">
+            <div class="exact-c5-icon"><img src="ASSET/Icons/imgFrame4.svg" /></div>
+            <p class="exact-c5-title">Import HTML</p>
+          </div>
+          <div class="exact-c5-bottom">
+            <p class="exact-c5-url">files.html</p>
+            <img src="ASSET/Icons/imgGroup28569.svg" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- State: Explore Colors -->
+    <div class="hero-floating-state" id="floating-explore-colors">
+      <div class="container-left">
+        <div class="floating-item pos-ec-e1 exact-e1">
+          <p class="exact-e1-title">Brand Palette</p>
+          <div class="exact-e1-content">
+            <div class="exact-e1-colors">
+              <div class="exact-e1-ellipse"><img src="ASSET/Icons/imgEllipse1.svg" /></div>
+              <div class="exact-e1-ellipse"><img src="ASSET/Icons/imgEllipse2.svg" /></div>
+              <div class="exact-e1-ellipse"><img src="ASSET/Icons/imgEllipse3.svg" /></div>
+              <div class="exact-e1-ellipse"><img src="ASSET/Icons/imgEllipse4.svg" /></div>
+              <div class="exact-e1-ellipse"><img src="ASSET/Icons/imgEllipse5.svg" /></div>
+            </div>
+            <div class="exact-e1-add">
+              <div class="exact-e1-add-icon"><img src="ASSET/Icons/imgFrame.svg" /></div>
+              <p class="exact-e1-add-text">Add Color</p>
+            </div>
+          </div>
+        </div>
+        <div class="floating-item pos-ec-e3 exact-e3">
+          <div class="exact-e3-content">
+            <div class="exact-e3-img-container">
+              <img src="ASSET/Images/imgFrame2147237063.png" />
+            </div>
+            <p class="exact-e3-text">#754B4B</p>
+          </div>
+        </div>
+        <div class="floating-item pos-ec-e2 exact-e2">
+          <div class="exact-e2-content">
+            <p class="exact-e2-title">Contrast</p>
+            <div class="exact-e2-details">
+              <p class="exact-e2-ratio"><span class="exact-e2-ratio-1">A</span><span class="exact-e2-ratio-2">A</span></p>
+              <p class="exact-e2-val">4.6:1</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container-right">
+        <div class="floating-item pos-ec-e4 exact-e4">
+          <div class="exact-e4-content">
+            <p class="exact-e4-title">Color Wheel</p>
+            <div class="exact-e4-img-container">
+              <div class="exact-e4-img-container-inner">
+                <img src="ASSET/Images/imgImage17.png" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="floating-item pos-ec-e5 exact-e5">
+          <p class="exact-e5-title">Color Harmony</p>
+          <div class="exact-e5-content">
+            <div class="exact-e5-colors">
+              <div class="exact-e5-ellipse"><img src="ASSET/Icons/imgEllipse6.svg" /></div>
+              <div class="exact-e5-ellipse"><img src="ASSET/Icons/imgEllipse7.svg" /></div>
+              <div class="exact-e5-ellipse"><img src="ASSET/Icons/imgEllipse8.svg" /></div>
+              <div class="exact-e5-ellipse"><img src="ASSET/Icons/imgEllipse9.svg" /></div>
+              <div class="exact-e5-ellipse"><img src="ASSET/Icons/imgEllipse10.svg" /></div>
+            </div>
+            <p class="exact-e5-footer">Complementary</p>
+          </div>
+        </div>
+        <div class="floating-item pos-ec-e6 exact-e6">
+          <div class="exact-e6-content">
+            <p class="exact-e6-title">Contrast</p>
+            <div class="exact-e6-details">
+              <p class="exact-e6-ratio"><span class="exact-e6-ratio-1">A</span><span class="exact-e6-ratio-2">A</span></p>
+              <p class="exact-e6-val">4.6:1</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- State: Type Systems -->
+    <div class="hero-floating-state" id="floating-type-systems">
+      <div class="container-left">
+        <div class="floating-item pos-ts-t4 exact-t4">
+          <div class="exact-t4-content">
+            <p class="exact-t4-title">Inter</p>
+            <p class="exact-t4-subtitle">Font Family</p>
+          </div>
+        </div>
+        <div class="floating-item pos-ts-t3 exact-t3">
+          <div class="exact-t3-inner">
+            <div class="exact-t3-rotater">
+              <div class="exact-t3-content">
+                <p class="exact-t3-title">Body</p>
+                <p class="exact-t3-subtitle">16px / 24px</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="floating-item pos-ts-t1 exact-t1">
+          <div class="exact-t1-content">
+            <p class="exact-t1-title">H1</p>
+            <p class="exact-t1-subtitle">48px / 56px</p>
+          </div>
+        </div>
+        <div class="floating-item pos-ts-t2 exact-t2">
+          <p class="exact-t2-title">Aa</p>
+        </div>
+      </div>
+      <div class="container-right">
+        <div class="floating-item pos-ts-t8 exact-t8">
+          <div class="exact-t8-content">
+            <p class="exact-t8-title">Aa</p>
+            <p class="exact-t8-subtitle">Semibold</p>
+          </div>
+        </div>
+        <div class="floating-item pos-ts-t7 exact-t7">
+          <div class="exact-t7-inner">
+            <div class="exact-t7-rotater">
+              <div class="exact-t7-content">
+                <p class="exact-t7-title">Body</p>
+                <p class="exact-t7-subtitle">16px / 24px</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="floating-item pos-ts-t5 exact-t5">
+          <div class="exact-t5-content">
+            <p class="exact-t5-title">H2</p>
+            <p class="exact-t5-subtitle">32px / 40px</p>
+          </div>
+        </div>
+        <div class="floating-item pos-ts-t6 exact-t6">
+          <p class="exact-t6-title">16px</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- State: Icons -->
+    <div class="hero-floating-state" id="floating-icons">
+      <div class="container-left">
+        <div class="floating-item pos-ic-i1"><img src="ASSET/Icons/imgI1.svg" class="w-full h-full" /></div>
+        <div class="floating-item pos-ic-i2"><img src="ASSET/Icons/imgI2.svg" class="w-full h-full" /></div>
+        <div class="floating-item pos-ic-i3"><img src="ASSET/Icons/imgI3.svg" class="w-full h-full" /></div>
+        <div class="floating-item pos-ic-i4"><img src="ASSET/Icons/imgI4.svg" class="w-full h-full" /></div>
+      </div>
+      <div class="container-right">
+        <div class="floating-item pos-ic-i5"><img src="ASSET/Icons/imgI5.svg" class="w-full h-full" /></div>
+        <div class="floating-item pos-ic-i6"><img src="ASSET/Icons/imgI6.svg" class="w-full h-full" /></div>
+        <div class="floating-item pos-ic-i7"><img src="ASSET/Icons/imgI7.svg" class="w-full h-full" /></div>
+        <div class="floating-item pos-ic-i8"><img src="ASSET/Icons/imgI8.svg" class="w-full h-full" /></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+      <p class="hero-subtitle">
+        Trusted by 5,00,000+ designers and developers building better with Motvin.
+      </p>
+      
+      <div class="hero-cta">
+        <a href="#" class="btn-primary-large"><span>Join Community</span></a>
+        <div class="hero-rating">
+          <div class="rating-stars">
+            <img alt="Star" src="ASSET/svg/star-icon.svg" />
+            <span class="rating-score">4.7 <span class="rating-max">/ 5.0</span></span>
+          </div>
+          <p class="rating-users">8k+ Designers Joined</p>
+        </div>
+      </div>
+      
+      <div class="hero-demo">
+        <div class="demo-window">
+          <div class="demo-header">
+            <div class="demo-dot" style="background-color: #ff5b59;"></div>
+            <div class="demo-dot" style="background-color: #f5b900;"></div>
+            <div class="demo-dot" style="background-color: #0fc27b;"></div>
+          </div>
+          <div class="demo-body">
+            <video src="ASSET/Videos/typescale-demo.mov" autoplay loop muted playsinline poster="ASSET/Images/hero-demo.png.png"></video>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Color Widget (AI Palettes Generator) -->
+    <div class="color-widget">
+      <div class="cw-header">
+        <div class="cw-dot" style="background-color: #ff5b59;"></div>
+        <div class="cw-dot" style="background-color: #f5b900;"></div>
+        <div class="cw-dot" style="background-color: #0fc27b;"></div>
+      </div>
+      <div class="cw-body">
+        <div class="cw-title-bar">
+          <div class="cw-title-content">
+            <div class="cw-icon">✦</div>
+            <p class="cw-title-text">AI Palettes Generator</p>
+          </div>
+        </div>
+        <div class="cw-palette-container">
+          <div class="cw-palette-grid">
+            <div class="cw-palette-row first">
+              <div class="cw-color-block" style="background-color: #09090b;"></div>
+              <div class="cw-color-block" style="background-color: #18181b;"></div>
+              <div class="cw-color-block" style="background-color: #27272a;"></div>
+              <div class="cw-color-block" style="background-color: #3f3f46;"></div>
+              <div class="cw-color-block" style="background-color: #52525b;"></div>
+            </div>
+            <div class="cw-palette-row">
+              <div class="cw-color-block border-top" style="background-color: #2e1065;"></div>
+              <div class="cw-color-block border-top" style="background-color: #4c1d95;"></div>
+              <div class="cw-color-block border-top" style="background-color: #5c4ae4;"></div>
+              <div class="cw-color-block border-top" style="background-color: #9d8aff;"></div>
+              <div class="cw-color-block border-top" style="background-color: #c4b8ff;"></div>
+            </div>
+            <div class="cw-palette-row">
+              <div class="cw-color-block border-top" style="background-color: #ccc1ff;"></div>
+              <div class="cw-color-block border-top" style="background-color: #8b7eee;"></div>
+              <div class="cw-color-block border-top" style="background-color: #4f3daa;"></div>
+              <div class="cw-color-block border-top" style="background-color: #6d4fff;"></div>
+              <div class="cw-color-block border-top" style="background-color: #4322e2;"></div>
+            </div>
+            <div class="cw-palette-row">
+              <div class="cw-color-block border-top" style="background-color: #e8e8e8;"></div>
+              <div class="cw-color-block border-top" style="background-color: #d4d4d8;"></div>
+              <div class="cw-color-block border-top" style="background-color: #a1a1aa;"></div>
+              <div class="cw-color-block border-top" style="background-color: #71717a;"></div>
+              <div class="cw-color-block border-top" style="background-color: #3f3f46;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typescale Widget (AI Typescale Generator) -->
+    <div class="typescale-widget">
+      <div class="cw-header">
+        <div class="cw-dot" style="background-color: #ff5b59;"></div>
+        <div class="cw-dot" style="background-color: #f5b900;"></div>
+        <div class="cw-dot" style="background-color: #0fc27b;"></div>
+      </div>
+      
+      <div class="tw-top-container">
+        <div class="tw-title-bar">
+          <div class="tw-title-content">
+            <div class="tw-icon">✦</div>
+            <p class="tw-title-text">AI Typescale Generator</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tw-bottom-container">
+        <div class="tw-row">
+          <div class="tw-col-1"><p>Display</p></div>
+          <div class="tw-col-2"><p style="font-weight: bold; font-size: 20px; line-height: 28px;">Motvin</p></div>
+          <div class="tw-col-3"><p>96px / -3%</p></div>
+        </div>
+        <div class="tw-row">
+          <div class="tw-col-1"><p>H1</p></div>
+          <div class="tw-col-2"><p style="font-weight: bold; font-size: 16px; line-height: 22px;">Headline</p></div>
+          <div class="tw-col-3"><p>64px / -2.5%</p></div>
+        </div>
+        <div class="tw-row">
+          <div class="tw-col-1"><p>H2</p></div>
+          <div class="tw-col-2"><p style="font-weight: bold; font-size: 12px; line-height: 17px;">Section</p></div>
+          <div class="tw-col-3"><p>48px / -2%</p></div>
+        </div>
+        <div class="tw-row">
+          <div class="tw-col-1"><p>H3</p></div>
+          <div class="tw-col-2"><p style="font-weight: bold; font-size: 8px; line-height: 14px;">Subheading</p></div>
+          <div class="tw-col-3"><p>32px / -1.5%</p></div>
+        </div>
+        <div class="tw-row">
+          <div class="tw-col-1"><p>Body</p></div>
+          <div class="tw-col-2"><p style="font-weight: normal; font-size: 7px; line-height: 12px;">Paragraph</p></div>
+          <div class="tw-col-3"><p>16px / 1.6</p></div>
+        </div>
+        <div class="tw-row">
+          <div class="tw-col-1"><p>Small</p></div>
+          <div class="tw-col-2"><p style="font-weight: normal; font-size: 7px; line-height: 10px;">Caption</p></div>
+          <div class="tw-col-3"><p>12px / 1.5</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Demo Section -->
+  <section class="demo-section" id="demo-section">
+    <div class="demo-container">
+      <div class="demo-content-wrapper">
+        <div class="demo-header-container">
+          <div class="demo-title-group">
+            <p class="demo-subtitle">CanopyOS</p>
+            <h2 class="demo-title">
+              <span class="animated-word">Turn</span> <span class="animated-word">any</span> <span class="animated-word">live</span> <span class="animated-word">working</span> <span class="animated-word">websites</span> <span class="animated-word">into</span> <span class="animated-word">an</span> <span class="animated-word">editable.</span><br>
+              <span class="demo-title-light"><span class="animated-word">Super</span> <span class="animated-word">Fast.</span> <span class="animated-word">Easy,</span> <span class="animated-word">Powerful</span></span>
+            </h2>
+          </div>
+          <a href="#" class="demo-explore-btn">
+            <span>Explore Our Platform</span>
+            <svg class="demo-explore-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5.25 2.33334L9.91667 7.00001L5.25 11.6667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+        
+        <div class="demo-body-container">
+          <div class="demo-covers" aria-label="CanopyOS product previews">
+            <img class="demo-cover demo-cover-1" src="ASSET/Images/cover-1.png" alt="Abstract typography editor preview">
+            <img class="demo-cover demo-cover-2" src="ASSET/Images/cover-2.png" alt="Bitmap mosaic controls preview">
+            <img class="demo-cover demo-cover-3" src="ASSET/Images/cover-3.png" alt="Vector editing preview">
+            <img class="demo-cover demo-cover-4" src="ASSET/Images/cover-4.png" alt="Texture controls preview">
+          </div>
+          
+          <div class="demo-features-grid">
+            <div class="demo-feature-card">
+              <div class="demo-feature-icon-wrapper">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_716_12333)">
+                    <mask id="mask0_716_12333" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">
+                      <path d="M0 0H16V16H0V0Z" fill="white"/>
+                    </mask>
+                    <g mask="url(#mask0_716_12333)">
+                      <path d="M16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8Z" fill="#00B6FF"/>
+                    </g>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_716_12333">
+                      <rect width="16" height="16" fill="white"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+              </div>
+              <div class="demo-feature-text">
+                <h3>Design without limits</h3>
+                <p>Create stunning UI for websites, apps, and with total freedom.</p>
+              </div>
+              <a href="#" class="demo-feature-link">
+                <span>Explore design tools</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4.16666 10H15.8333M15.8333 10L10 4.16667M15.8333 10L10 15.8333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+            
+            <div class="demo-feature-card">
+              <div class="demo-feature-icon-wrapper">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_716_12348)">
+                    <mask id="mask0_716_12348" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">
+                      <path d="M0 0H16V16H0V0Z" fill="white"/>
+                    </mask>
+                    <g mask="url(#mask0_716_12348)">
+                      <path d="M13.1754 0C14.7354 0 16.0001 1.302 16.0001 2.908C16.0032 3.42335 15.8699 3.93036 15.6137 4.37753C15.3576 4.8247 14.9876 5.1961 14.5414 5.454C14.9876 5.71191 15.3576 6.0833 15.6137 6.53047C15.8699 6.97764 16.0032 7.48465 16.0001 8C16.0032 8.51542 15.8698 9.02247 15.6135 9.46964C15.3571 9.91682 14.987 10.2882 14.5407 10.546C14.987 10.8038 15.3571 11.1752 15.6135 11.6224C15.8698 12.0695 16.0032 12.5766 16.0001 13.092C16.0001 14.6987 14.7354 16 13.1754 16C12.0187 16 11.0247 15.2847 10.5874 14.26C10.1507 15.2853 9.15606 16 8.00006 16C6.84339 16 5.84939 15.2847 5.41272 14.2607C4.97539 15.2847 3.98139 16.0007 2.82472 16.0007C1.26472 16 5.51519e-05 14.6973 5.51519e-05 13.0913C5.51519e-05 11.9953 0.589388 11.0407 1.45872 10.5453C1.01264 10.2875 0.642721 9.91619 0.386533 9.46915C0.130344 9.02211 -0.00299395 8.51524 5.51519e-05 8C5.51519e-05 6.904 0.588722 5.95 1.45872 5.454C1.01254 5.1961 0.642559 4.8247 0.386365 4.37753C0.130171 3.93036 -0.00311188 3.42335 5.51519e-05 2.908C5.51519e-05 1.302 1.26472 0 2.82472 0C3.98139 0 4.97539 0.715333 5.41339 1.73933C5.84939 0.715333 6.84339 0 7.99939 0C9.15606 0 10.1501 0.715333 10.5874 1.74C11.0247 0.714667 12.0187 0 13.1754 0Z" fill="#24CB71"/>
+                    </g>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_716_12348">
+                      <rect width="16" height="16" fill="white"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+              </div>
+              <div class="demo-feature-text">
+                <h3>Build Smarter with AI</h3>
+                <p>Generate beautiful color palettes and type scales with AI in seconds.</p>
+              </div>
+              <a href="#" class="demo-feature-link">
+                <span>Explore build tools</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4.16666 10H15.8333M15.8333 10L10 4.16667M15.8333 10L10 15.8333" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Largest Icons Library Section -->
+  <section class="icons-library-section" id="icons-library-section">
+    <div class="il-sticky-wrapper">
+      <div class="il-container">
+        <div class="il-floating-logos">
+          <!-- Logo 1 -->
+          <div class="il-logo-wrapper" style="left: 33.71px; top: 115.29px; width: 94.404px; height: 94.404px;">
+            <div class="il-logo-rotate" style="transform: rotate(-11.56deg);">
+              <div class="il-logo-box" style="background-color: #efeeeb;">
+                <img src="ASSET/Icons/il-lucide.svg" style="width: 44px; height: 44px;" alt="">
+              </div>
+            </div>
+          </div>
+          <!-- Logo 2 -->
+          <div class="il-logo-wrapper" style="left: 308.31px; top: 105.6px; width: 97.98px; height: 97.98px;">
+            <div class="il-logo-rotate" style="transform: rotate(-15deg);">
+              <div class="il-logo-box" style="background-color: #7cce24;">
+                <img src="ASSET/Icons/il-heroicons.svg" style="width: 38.057px; height: 36px;" alt="">
+              </div>
+            </div>
+          </div>
+          <!-- Logo 3 -->
+          <div class="il-logo-wrapper" style="left: 605.26px; top: 109.53px; width: 80px; height: 80px;">
+            <div class="il-logo-box" style="background-color: #8b5cf6;">
+              <img src="ASSET/Icons/il-lucide1.svg" style="width: 44px; height: 44px;" alt="">
+            </div>
+          </div>
+          <!-- Logo 4 -->
+          <div class="il-logo-wrapper" style="left: 1018.28px; top: 49.09px; width: 80px; height: 80px;">
+            <img src="ASSET/Icons/il-container.svg" style="width: 80px; height: 80px;" alt="">
+          </div>
+          <!-- Logo 5 -->
+          <div class="il-logo-wrapper" style="left: 84.04px; top: 278.21px; width: 80px; height: 80px;">
+            <div class="il-logo-box" style="background-color: #c4e557;">
+              <img src="ASSET/Icons/il-group2087329045.svg" style="width: 44px; height: 44px;" alt="">
+            </div>
+          </div>
+          <!-- Logo 6 -->
+          <div class="il-logo-wrapper" style="left: 63.56px; top: 641.56px; width: 88.88px; height: 88.88px;">
+            <div class="il-logo-rotate" style="transform: rotate(-6.78deg);">
+              <div class="il-logo-box" style="background-color: #ffffff; border: 1px solid #d9d9d9;">
+                <img src="ASSET/Icons/il-group.svg" style="width: 44px; height: 44px;" alt="">
+              </div>
+            </div>
+          </div>
+          <!-- Logo 7 -->
+          <div class="il-logo-wrapper" style="left: 355.71px; top: 711.71px; width: 88.57px; height: 88.57px;">
+            <div class="il-logo-rotate" style="transform: rotate(-6.52deg);">
+              <div class="il-logo-box" style="background-color: #ffdbc9;">
+                <img src="ASSET/Icons/il-group2087329046.svg" style="width: 44px; height: 44px;" alt="">
+              </div>
+            </div>
+          </div>
+          <!-- Logo 8 -->
+          <div class="il-logo-wrapper" style="left: 1210.82px; top: 142.82px; width: 88.361px; height: 88.361px;">
+            <div class="il-logo-rotate" style="transform: rotate(-6.35deg);">
+              <div class="il-logo-box" style="background-color: #ffffff; border: 1px solid #d9d9d9;">
+                <img src="ASSET/Icons/il-group27copy3.svg" style="width: 44px; height: 44px;" alt="">
+              </div>
+            </div>
+          </div>
+          <!-- Logo 9 -->
+          <div class="il-logo-wrapper" style="left: 953px; top: 679px; width: 80px; height: 80px;">
+            <div class="il-logo-box" style="background-color: #418fde;">
+              <img src="ASSET/Icons/il-frame.svg" style="width: 44px; height: 44px;" alt="">
+            </div>
+          </div>
+          <!-- Logo 10 -->
+          <div class="il-logo-wrapper" style="left: 1223.71px; top: 615.71px; width: 92.585px; height: 92.585px;">
+            <div class="il-logo-rotate" style="transform: rotate(-9.92deg);">
+              <div class="il-logo-box" style="background-color: #000000;">
+                <img src="ASSET/Icons/il-frame2147237070.svg" style="width: 44px; height: 44px;" alt="">
+              </div>
+            </div>
+          </div>
+          <!-- Logo 11 -->
+          <div class="il-logo-wrapper" style="left: 1158.56px; top: 424.56px; width: 90.873px; height: 90.873px;">
+            <div class="il-logo-rotate" style="transform: rotate(-8.44deg);">
+              <div class="il-logo-box" style="background-color: #efeeeb;">
+                <img src="ASSET/Icons/il-feather1.svg" style="width: 44px; height: 44px;" alt="">
+              </div>
+            </div>
+          </div>
+          <!-- Logo 12 -->
+          <div class="il-logo-wrapper" style="left: 607.79px; top: 701.79px; width: 90.424px; height: 90.424px;">
+            <div class="il-logo-rotate" style="transform: rotate(8.06deg);">
+              <div class="il-logo-box" style="background-color: #151515;">
+                <img src="ASSET/Icons/il-slot.svg" style="width: 47px; height: 44px;" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="il-text-content">
+          <p class="il-subtitle">A world largest icon library</p>
+          <div class="il-titles">
+            <h2 class="il-title">102 Resources</h2>
+            <h2 class="il-title">212,300 Editable Icons</h2>
+            <h2 class="il-title">1282 Icon Categories</h2>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- How it Works Section -->
+  <section class="howitwork-section howitwork-redesign" aria-labelledby="howitwork-title">
+    <div class="howitwork-redesign-intro">
+      <h2 id="howitwork-title">The products you love are designed in <strong>Motvin</strong></h2>
+      <div class="howitwork-redesign-details">
+        <figure class="howitwork-redesign-quote">
+          <blockquote><span aria-hidden="true">“</span> Everyone is able to influence, inspire, and give input without ever leaving the design file. That creates a really transparent, open, and honest process throughout the whole project.<span aria-hidden="true">”</span></blockquote>
+          <figcaption>
+            <img src="ASSET/Images/howitwork-founder-figma.jpeg" alt="Surendar V" />
+            <div><strong>Surendar V</strong><span>Product Designer &amp; Founder</span></div>
+          </figcaption>
+        </figure>
+        <aside class="howitwork-redesign-stat" aria-label="Usage statistic">
+          <div><strong class="howitwork-count" data-count="95" data-suffix="%">0%</strong><p>95% of the Fortune 500 uses Figma</p></div>
+          <span>Based on data from March 2026.</span>
+        </aside>
+      </div>
+    </div>
+    <div class="howitwork-redesign-cta">
+      <div class="howitwork-redesign-divider"><img src="ASSET/svg/howitwork-divider.svg" alt="" /><p>Ideas no longer have to wait their turn</p><img src="ASSET/svg/howitwork-divider.svg" alt="" /></div>
+      <a href="#" class="howitwork-redesign-button" id="howitwork-signup-btn">Get started</a>
+    </div>
+  </section>
+
+
+  <!-- Templates Section -->
+  <section class="templates-section">
+    <div class="templates-container">
+      <div class="templates-header">
+        <div class="templates-title-col">
+          <p class="templates-subtitle">Resources</p>
+          <h2 class="templates-title">
+            High-quality templates for designers.<br>
+            <span class="templates-author">Made by <a href="#">@siren.uix</a> on Motvin</span>
+          </h2>
+        </div>
+        <div class="templates-nav-col">
+          <a href="#" class="demo-explore-btn btn-templates-explore">
+            <span>Browse all templates</span>
+            <svg class="demo-explore-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5.25 2.33334L9.91667 7.00001L5.25 11.6667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="templates-slider-nav">
+            <span class="templates-slide-count">1 of 6</span>
+            <div class="templates-nav-buttons">
+              <button class="nav-btn prev"><img src="ASSET/Icons/nav-btn next.svg" alt="Prev"></button>
+              <button class="nav-btn next"><img src="ASSET/Icons/nav-btn next.svg" style="transform: rotate(180deg);" alt="Next"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="templates-slider-container">
+        <div class="templates-track">
+          <!-- Template 1 -->
+          <div class="template-card">
+            <div class="template-image-wrapper" style="width: 384px; height: 480px;">
+              <img src="ASSET/Images/motvin-template1.png" alt="Claude UI">
+            </div>
+            <a href="#" class="template-link">
+              <u>Claude UI</u> <img src="ASSET/Icons/arrow-redirect.svg" alt="Link">
+            </a>
+          </div>
+          <!-- Template 2 -->
+          <div class="template-card">
+            <div class="template-image-wrapper" style="width: 286px; height: 358px;">
+              <img src="ASSET/Images/motvin-template2.png" alt="Smart Home App">
+            </div>
+            <a href="#" class="template-link">
+              <u>Smart Home App</u> <img src="ASSET/Icons/arrow-redirect.svg" alt="Link">
+            </a>
+          </div>
+          <!-- Template 3 -->
+          <div class="template-card">
+            <div class="template-image-wrapper" style="width: 342px; height: 427px;">
+              <img src="ASSET/Images/motvin-template3.png" alt="Whatsapp UI">
+            </div>
+            <a href="#" class="template-link">
+              <u>Whatsapp UI</u> <img src="ASSET/Icons/arrow-redirect.svg" alt="Link">
+            </a>
+          </div>
+          <!-- Template 4 -->
+          <div class="template-card">
+            <div class="template-image-wrapper" style="width: 342px; height: 427px;">
+              <img src="ASSET/Images/motvin-template4.png" alt="LinkedIn App">
+            </div>
+            <a href="#" class="template-link">
+              <u>LinkedIn App</u> <img src="ASSET/Icons/arrow-redirect.svg" alt="Link">
+            </a>
+          </div>
+          <!-- Template 5 -->
+          <div class="template-card">
+            <div class="template-image-wrapper" style="width: 283px; height: 354px;">
+              <img src="ASSET/Images/motvin-template5.png" alt="Medical App">
+            </div>
+            <a href="#" class="template-link">
+              <u>Medical App</u> <img src="ASSET/Icons/arrow-redirect.svg" alt="Link">
+            </a>
+          </div>
+          <!-- Template 6 -->
+          <div class="template-card">
+            <div class="template-image-wrapper" style="width: 469px; height: 586px;">
+              <img src="ASSET/Images/motvin-template6.png" alt="Gemini UI">
+            </div>
+            <a href="#" class="template-link">
+              <u>Gemini UI</u> <img src="ASSET/Icons/arrow-redirect.svg" alt="Link">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section" id="faq-section">
+    <div class="faq-category">
+      <span>Frequently & Questions</span>
+    </div>
+    
+    <div class="faq-container">
+      <div class="faq-header">
+        <p class="faq-subtitle"><span class="animated-word">Need</span> <span class="animated-word">help?</span></p>
+        <p class="faq-title"><span class="animated-word">Find</span> <span class="animated-word">what</span> <span class="animated-word">you</span> <span class="animated-word">need.</span></p>
+      </div>
+      
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            <p>What exactly is Motvin?</p>
+            <img alt="" src="ASSET/svg/figma-faq-toggle.svg" class="faq-icon" />
+          </div>
+          <div class="faq-answer">
+            <p>Motvin is an advanced design tool that allows you to easily capture and customize live websites directly into your canvas.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <p>Why do I need to sign in with Google?</p>
+            <img alt="" src="ASSET/svg/figma-faq-toggle.svg" class="faq-icon" />
+          </div>
+          <div class="faq-answer">
+            <p>Signing in with Google ensures your projects are safely stored and synced across your devices effortlessly.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <p>Can I use Motvin without signing in?</p>
+            <img alt="" src="ASSET/svg/figma-faq-toggle.svg" class="faq-icon" />
+          </div>
+          <div class="faq-answer">
+            <p>Currently, an account is required to use Motvin's core features so we can securely save your work.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <p>Is Motvin free to use?</p>
+            <img alt="" src="ASSET/svg/figma-faq-toggle.svg" class="faq-icon" />
+          </div>
+          <div class="faq-answer">
+            <p>We offer a free tier with core functionalities. Premium features are available through our subscription plans.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <p>What can the AI Color Palette Generator do?</p>
+            <img alt="" src="ASSET/svg/figma-faq-toggle.svg" class="faq-icon" />
+          </div>
+          <div class="faq-answer">
+            <p>It automatically extracts and generates stunning, accessible color palettes from any website or image you import.</p>
+          </div>
+        </div>
+        <div class="faq-item faq-item-last">
+          <div class="faq-question">
+            <p>How does website-to-design conversion work?</p>
+            <img alt="" src="ASSET/svg/figma-faq-toggle.svg" class="faq-icon" />
+          </div>
+          <div class="faq-answer">
+            <p>With just a single click, our engine parses the live HTML and CSS of a webpage and converts it into fully editable design layers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  </main>
+
+  <section class="explore-section" aria-labelledby="explore-section-title">
+    <div class="explore-section-container">
+      <h2 id="explore-section-title">Explore everything you can do with Motvin</h2>
+      <div class="explore-section-links">
+        <div class="explore-section-row">
+          <a class="explore-link explore-link-colors" href="#"><span>Explore Colors</span></a>
+          <img class="explore-decor explore-decor-one" src="ASSET/Images/decor1.png" alt="" />
+          <a class="explore-link explore-link-icons" href="/icons"><span>Icons Library</span></a>
+          <span class="explore-decor explore-decor-two" aria-hidden="true"><img src="ASSET/Images/decor2.png" alt="" /></span>
+        </div>
+        <div class="explore-section-row">
+          <span class="explore-decor explore-decor-three" aria-hidden="true"><span class="explore-decor-three-inner"><img src="ASSET/Images/decor3.png" alt="" /></span></span>
+          <a class="explore-link explore-link-logos" href="/logos"><span>Logos Library</span></a>
+          <a class="explore-link explore-link-started" href="#"><span>Get started</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer class="footer-section">
+    <div class="figma-footer-content">
+      <div class="figma-footer-top">
+        <div class="figma-footer-brand">
+          <img class="figma-footer-mark" src="ASSET/Icons/footer-logo.svg" alt="Motvin" />
+          <p>AI-powered UI design platform. Convert websites, generate design systems, and build modern interfaces faster.</p>
+          <div class="figma-footer-socials">
+            <a href="#" aria-label="Instagram"><img src="ASSET/Icons/instagram-icon.svg" alt="" /></a>
+            <a href="#" aria-label="LinkedIn"><img src="ASSET/Icons/linkedin-icon.svg" alt="" /></a>
+            <a href="#" aria-label="Behance"><img src="ASSET/Icons/behance-icon.svg" alt="" /></a>
+          </div>
+        </div>
+        <div class="figma-footer-links">
+          <div><h2>Tools</h2><a href="#">Color Generator</a><a href="#">Typescale</a><a href="#">Token Export</a><a href="#">HTML Export</a></div>
+          <div><h2>Resources</h2><a href="#">Documentation</a><a href="#">Blog</a><a href="#">Tutorials</a><a href="#">Community</a></div>
+          <div><h2>Library</h2><a href="/icons">Icons</a><a href="#">Logos</a></div>
+          <div><h2>Company</h2><a href="#">About</a><a href="#">Careers</a><a href="#">Contacts</a></div>
+        </div>
+      </div>
+      <img class="figma-footer-illustration" src="ASSET/svg/motvin-illustration.svg" alt="Motvin" />
+      <div class="footer-utility">
+        <button type="button" id="footer-cookie-settings">Cookie settings</button>
+        <span aria-hidden="true"></span>
+        <div class="figma-footer-language-menu">
+          <button type="button" class="figma-footer-language" aria-expanded="false" aria-controls="footer-language-options"><img src="ASSET/Icons/language.svg" alt="" /><span>English</span><img class="figma-footer-language-arrow" src="ASSET/Icons/desktop-arrow.svg" alt="" /></button>
+          <div class="figma-footer-language-options" id="footer-language-options" role="menu" aria-label="Select language">
+            <button type="button" role="menuitem" data-language="English">English</button>
+            <button type="button" role="menuitem" data-language="Español">Español</button>
+            <button type="button" role="menuitem" data-language="Hindi">Hindi</button>
+            <button type="button" role="menuitem" data-language="Deutsch">Deutsch</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="figma-footer-colors" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  </footer>
+  
+  <!-- Sticky Promo Banner -->
+  <div class="promo-banner" id="promoBanner">
+    <div class="promo-banner-left">
+      <img src="ASSET/svg/banner-intro.svg" alt="Banner Intro" class="promo-banner-img">
+      <p class="promo-banner-text">Discover the World’s Largest Library of 1,000,000+ Icons and Bring Every Creative Idea to Life</p>
+    </div>
+    <div class="promo-banner-right">
+      <a href="/icons" class="promo-banner-btn">Explore Icons</a>
+      <button class="promo-banner-close" aria-label="Close" id="promoBannerCloseBtn">
+        <img src="ASSET/svg/banner-close.svg" alt="Close">
+      </button>
+    </div>
+  </div>
+  
+
+  
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+  <!-- Cookies Banner -->
+  <div class="cookies-banner" id="cookiesBanner" style="display: none;">
+    <div class="cookies-banner-content">
+      <div class="cookies-banner-header">
+        <div class="cookies-banner-title-wrap">
+          <img src="ASSET/Icons/cookies.svg" alt="Cookies" class="cookies-icon">
+          <p class="cookies-title">Cookie preferences</p>
+        </div>
+        <button class="cookies-close-btn" aria-label="Close" id="cookieCloseBtn">
+          <img src="ASSET/Icons/cookie-close.svg" alt="Close">
+        </button>
+      </div>
+
+      <!-- Accept All State -->
+      <div class="cookies-state-accept" id="cookiesStateAccept">
+        <p class="cookies-desc">
+          Essential cookies keep Motvin secure and working. Optional analytics help us improve your experience. 
+          <a href="#" target="_blank" class="cookies-link">Learn more about cookies</a>
+        </p>
+        <div class="cookies-actions">
+          <button class="btn-cookies-primary" id="btnAcceptAll">Accept All</button>
+          <button class="btn-cookies-secondary" id="btnSettings">Settings</button>
+        </div>
+      </div>
+
+      <!-- Settings State -->
+      <div class="cookies-state-settings" id="cookiesStateSettings" style="display: none;">
+        <div class="cookies-settings-list">
+          
+          <div class="cookie-setting-item">
+            <div class="cookie-setting-header">
+              <div class="cookie-setting-name">
+                <img src="ASSET/Icons/bullet.svg" alt="Bullet" class="cookie-bullet">
+                <p>Essential cookies</p>
+              </div>
+              <div class="cookie-switch disabled">
+                <div class="cookie-switch-track"><div class="cookie-switch-thumb"></div></div>
+              </div>
+            </div>
+            <p class="cookie-setting-desc">These cookies are essential for Motvin to function properly.</p>
+          </div>
+          
+          <div class="cookie-divider"></div>
+          
+          <div class="cookie-setting-item">
+            <div class="cookie-setting-header">
+              <div class="cookie-setting-name">
+                <img src="ASSET/Icons/bullet.svg" alt="Bullet" class="cookie-bullet">
+                <p>Analytics cookies</p>
+              </div>
+              <label class="cookie-switch">
+                <input type="checkbox" id="analyticsCookieToggle">
+                <div class="cookie-switch-track"><div class="cookie-switch-thumb"></div></div>
+              </label>
+            </div>
+            <p class="cookie-setting-desc">Helps us understand how visitors use Motvin to improve features and performance.</p>
+          </div>
+
+        </div>
+        <div class="cookies-actions">
+          <button class="btn-cookies-primary" id="btnSavePreferences">Submit</button>
+          <button class="btn-cookies-secondary" id="btnCancelSettings">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <script src="JS/firebase-config.js"></script>
+  <script src="JS/firebase-auth.js"></script>
+  <script src="COMPONENT/Auth Modal.js"></script>
+  <script src="JS/index.js"></script>
+</body>
+</html>

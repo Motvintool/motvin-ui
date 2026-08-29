@@ -1,0 +1,59 @@
+<!--
+  Motvin Tooltip Usage Guide
+  -------------------------------------------------------------
+  This is a reference file only (not auto-rendered in app UI).
+
+  Tooltip engine file: componet/Tooltip/tooltip.js
+  Tooltip styles file: componet/Tooltip/tooltip.css
+
+  Required attribute:
+    data-tooltip="Help text"
+
+  Optional attributes:
+    data-tooltip-position="top|bottom|left|right|top-left|top-right|bottom-left|bottom-right"
+    data-tooltip-color="black|white"
+    data-tooltip-size="small|medium|large"
+-->
+
+<!-- Default (black, small, top-center) -->
+<button
+  data-tooltip="Help Text"
+  data-tooltip-position="top"
+  data-tooltip-color="black"
+  data-tooltip-size="small"
+>
+  Hover me
+</button>
+
+<!-- White, medium, left -->
+<button
+  data-tooltip="Left side help text"
+  data-tooltip-position="left"
+  data-tooltip-color="white"
+  data-tooltip-size="medium"
+>
+  Hover me
+</button>
+
+<!-- Black, large, top-right corner arrow -->
+<button
+  data-tooltip="Help Text"
+  data-tooltip-position="top-right"
+  data-tooltip-color="black"
+  data-tooltip-size="large"
+>
+  Hover me
+</button>
+
+<!-- Supported values quick reference -->
+<!--
+  data-tooltip-position:
+    top | bottom | left | right |
+    top-left | top-right | bottom-left | bottom-right
+
+  data-tooltip-color:
+    black | white
+
+  data-tooltip-size:
+    small | medium | large
+-->
