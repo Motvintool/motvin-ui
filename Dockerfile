@@ -1,28 +1,16 @@
-# Multi-stage build for Motvin UI (Static Site)
-FROM nginx:alpine
+FROM node:20-alpine
 
-WORKDIR /usr/share/nginx/html
+WORKDIR /app
 
-# Remove default nginx static assets
-RUN rm -rf ./*
+# Install serve
+RUN npm install -g serve
 
-# Copy all static files (excluding files in .dockerignore)
+# Copy all static files
 COPY . .
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Create runtime config and start server
+CMD sh -c 'echo "window.ENV = { API_URL: \"$API_URL\" };" > env-config.js && serve -s . -l 80'
 
-# Copy environment injection script
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
-
-# Expose port 80
 EXPOSE 80
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost:80/health || exit 1
-
-# Use custom entrypoint to inject env vars
-ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["nginx", "-g", "daemon off;"]
+HEALTHCHECK --interval=30s --timeout=3s CMD wget --quiet --tries=1 --spider http://localhost:80/ || exit 1
