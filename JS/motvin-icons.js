@@ -2501,8 +2501,14 @@ function renderStyled(icon, extra = {}) {
 }
 
 function renderSvg(paths, opts = {}) {
+  // We skip aggressive replacement for complex SVGs (masks/defs) to preserve their shapes and colors.
+  const hasComplexDefs = paths.includes("<mask") || paths.includes("<defs");
+
+  let cleanPaths = paths;
   // Strip hardcoded stroke-width from inner paths so the wrapper stroke takes priority
-  let cleanPaths = paths.replace(/stroke-width="[^"]*"/g, "");
+  if (opts.iconStyle !== "color" && !hasComplexDefs) {
+    cleanPaths = paths.replace(/stroke-width="[^"]*"/g, "");
+  }
 
   const size = opts.size ?? 24;
   const viewBox = opts.viewBox || "0 0 24 24";
@@ -2585,9 +2591,9 @@ function renderSvg(paths, opts = {}) {
       ? `stroke="none"`
       : `stroke="${color}" stroke-width="${adjustedStroke}" stroke-linecap="${cap}" stroke-linejoin="${join}"`;
 
-  // Strip hardcoded presentation attributes from inner paths so we can cleanly override them.
   // We skip this for 'color' icons (like emojis) so they retain their native multi-color styles!
-  if (opts.iconStyle !== "color") {
+  // We also skip it for complex SVGs (masks/defs) because naive regex replacement destroys mask shapes.
+  if (opts.iconStyle !== "color" && !hasComplexDefs) {
     cleanPaths = cleanPaths
       .replace(/stroke-width="[^"]*"/g, "")
       .replace(/stroke-linecap="[^"]*"/g, "")
@@ -2762,8 +2768,10 @@ function iconCard(icon) {
 }
 
 const ITEMS_PER_PAGE = 60;
+let currentRenderId = 0;
 
 async function renderGrid() {
+  const renderId = ++currentRenderId;
   saveFiltersLS();
 
   // Use API loader if available
@@ -2779,7 +2787,7 @@ async function renderGrid() {
 
     // Show skeleton loader - use mi-card styling with skeleton animation
     grid.className = `mi-grid density-${state.density}`;
-    const skeletonCards = Array.from({ length: 24 }, () =>
+    const skeletonCards = Array.from({ length: 60 }, () =>
       `<div class="mi-card" style="min-height: 120px; animation: skeleton-pulse 1.5s ease-in-out infinite; pointer-events: none;"></div>`
     ).join('');
     grid.innerHTML = skeletonCards;
@@ -2787,8 +2795,12 @@ async function renderGrid() {
     try {
       const total = await window.populateIconsFromAPI();
 
-      // After loading from API, use the populated ICONS array
-      const list = filterIcons();
+      // Abort if a newer renderGrid call was made while we were fetching
+      if (renderId !== currentRenderId) return;
+
+      // The API already filtered by query, category, style, etc. 
+      // We can just use the returned ICONS directly.
+      const list = ICONS;
       const actualTotal = list.length;
 
       renderGridContent(list, actualTotal, total);

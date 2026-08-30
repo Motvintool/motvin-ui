@@ -2,14 +2,14 @@
  * API Loader - Handles loading icons from API based on filters
  */
 
-(function() {
+(function () {
   'use strict';
 
   /**
    * Load icons from API based on current state (filters, search, pagination)
    * @returns {Promise<{icons: Array, total: number}>}
    */
-  window.loadIconsFromAPI = async function() {
+  window.loadIconsFromAPI = async function () {
     const q = state.query.trim();
     const page = state.page || 1;
     const limit = 60;
@@ -51,7 +51,7 @@
   /**
    * Populate REAL_ICONS and ICONS from API result
    */
-  window.populateIconsFromAPI = async function() {
+  window.populateIconsFromAPI = async function () {
     const result = await window.loadIconsFromAPI();
 
     console.log(`[API Loader] Loaded ${result.icons.length} icons (total: ${result.total})`);
@@ -72,7 +72,7 @@
         ...icon,
         source: sourceId,
         sourceName: collection ? collection.name : (icon.sourceName || icon.collectionName || sourceId),
-        svg: '', // SVG loaded via URL
+        svg: icon.svg || '', // SVG loaded via URL or provided by API
         // Ensure required fields exist
         id: icon.id || `${sourceId}_${icon.name}`,
         name: icon.name,
