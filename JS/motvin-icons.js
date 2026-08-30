@@ -4280,8 +4280,8 @@ function renderCollections() {
   $("#collections-grid").addEventListener("click", (e) => {
     const card = e.target.closest(".mi-coll-card");
     if (!card) return;
-    state.categoryFilter.clear();
-    state.categoryFilter.add(card.dataset.coll);
+    state.sourceFilter.clear();
+    state.sourceFilter.add(card.dataset.coll);
     state.page = 1;
     renderFilters();
     renderGrid();
