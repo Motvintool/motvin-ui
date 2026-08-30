@@ -1825,6 +1825,14 @@ const SOURCES = window.SOURCES || [
     author: "Streamline",
     marketSize: 500,
   },
+  {
+    id: "sirenuix",
+    name: "Sirenuix",
+    license: "MIT",
+    licenseUrl: "#",
+    author: "Custom",
+    marketSize: 2,
+  },
 ];
 
 const STYLES = ["outline", "solid", "rounded", "duotone", "thin", "bold"];
@@ -2297,7 +2305,7 @@ function createIconsArray() {
 let ICONS = createIconsArray();
 
 // Expose function to recreate ICONS when REAL_ICONS changes
-window.recreateIcons = function() {
+window.recreateIcons = function () {
   ICONS = createIconsArray();
   console.log('[Icons] Recreated ICONS array with', ICONS.length, 'icons');
 };
@@ -2515,7 +2523,7 @@ function renderSvg(paths, opts = {}) {
       isFillBased = false;
     }
   }
-  
+
   if (stroke > 0 && isFillBased) {
     stroke = 0;
   }
@@ -3483,7 +3491,7 @@ function openDetail(icon) {
   state.editorIcon = icon;
   updateBreadcrumbs(icon);
   renderTagsRow(icon);
-  
+
   // Re-enable CSS transitions (which were disabled in head to prevent FOUC)
   setTimeout(() => {
     const initStyle = document.getElementById('mi-init-style');
@@ -3518,7 +3526,7 @@ function openDetail(icon) {
   } else {
     $("#attr-license-link").removeAttribute("href");
   }
-  
+
   let attrText = "Required";
   let commText = "Allowed";
   const l = (icon.license || "").toLowerCase();
@@ -3530,7 +3538,7 @@ function openDetail(icon) {
   if (l.includes("nc") || l.includes("non-commercial") || l.includes("noncommercial")) {
     commText = "Not allowed";
   }
-  
+
   if ($("#attr-attribution")) $("#attr-attribution").textContent = attrText;
   if ($("#attr-commercial")) $("#attr-commercial").textContent = commText;
   const detailModal = $("#detail-modal");
@@ -4135,12 +4143,12 @@ function iconStats(icon) {
   elems.forEach((el) => {
     try {
       if (el.getTotalLength) totalLen += el.getTotalLength();
-    } catch {}
+    } catch { }
   });
   let bbox = { width: 24, height: 24 };
   try {
     bbox = svg.getBBox();
-  } catch {}
+  } catch { }
   tmp.remove();
   return {
     shapes: elems.length,
@@ -4261,12 +4269,12 @@ function renderCollections() {
       <div class="mi-coll-card" data-coll="${c.tag}">
         <div class="mi-coll-preview">
           ${preview
-            .slice(0, 8)
-            .map(
-              (ic) =>
-                `<div>${renderStyled(ic, { size: 22, color: "#0F1116" })}</div>`,
-            )
-            .join("")}
+          .slice(0, 8)
+          .map(
+            (ic) =>
+              `<div>${renderStyled(ic, { size: 22, color: "#0F1116" })}</div>`,
+          )
+          .join("")}
         </div>
         <div class="mi-coll-name">${c.name}</div>
         <div class="mi-coll-meta">
@@ -5158,7 +5166,7 @@ function wire() {
           url: link,
         });
         return;
-      } catch {}
+      } catch { }
     }
     const ok = await copyText(link);
     toast(ok ? "Share link copied" : "Copy failed");
@@ -5583,7 +5591,7 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
   const PROMO_KEY = "motvin_promo_hidden_until";
   const banner = document.querySelector(".mi-new-banner");
-  
+
   if (banner) {
     const hiddenUntil = localStorage.getItem(PROMO_KEY);
     if (hiddenUntil && Date.now() < parseInt(hiddenUntil, 10)) {
@@ -5943,7 +5951,7 @@ document.addEventListener("DOMContentLoaded", () => {
           rightPanel.style.right = "auto";
           detachBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="15" y1="3" x2="15" y2="21"></line></svg>`;
           detachBtn.title = "Dock Panel";
-        } catch (e) {}
+        } catch (e) { }
       }
     }
 
