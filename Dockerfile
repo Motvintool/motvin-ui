@@ -9,7 +9,8 @@ RUN npm install -g serve
 COPY . .
 
 # Create runtime config and start server
-CMD sh -c 'echo "window.ENV = { API_URL: \"$API_URL\" };" > env-config.js && serve -s . -l 80'
+# serve automatically uses serve.json for routing configuration
+CMD sh -c 'echo "window.ENV = { API_URL: \"$API_URL\" };" > env-config.js && serve -c serve.json . -l 80'
 
 EXPOSE 80
 
