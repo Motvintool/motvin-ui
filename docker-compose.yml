@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # Backend service
+  backend:
+    build: ../motvin-backend
+    container_name: motvin-backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../motvin-backend/data:/app/data:ro
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATA_ROOT=/app/data
+      - CACHE_MAX_COLLECTIONS=50
+      - CACHE_MAX_SIZE_MB=500
+      - CACHE_COLLECTION_TTL_HOURS=1
+      - CACHE_ICON_TTL_MINUTES=30
+      - LOG_LEVEL=info
+      - LOG_PRETTY=false
+      - CORS_ORIGINS=http://localhost,http://localhost:8080,https://motvin.com
+    restart: unless-stopped
+    mem_limit: 1g
+    cpus: "2"
+    networks:
+      - motvin-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  # Frontend UI service
+  ui:
+    build: .
+    container_name: motvin-ui
+    ports:
+      - "8080:80"
+    environment:
+      # Use localhost:3000 since both UI and backend expose ports to host
+      # Browser makes requests from host machine, not from inside Docker
+      - API_URL=http://localhost:3000/api/icons
+    env_file:
+      - .env  # Optional: Override with .env file
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - motvin-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+networks:
+  motvin-network:
+    driver: bridge

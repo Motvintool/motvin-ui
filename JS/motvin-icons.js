@@ -7,7 +7,8 @@
  */
 
 
-const SOURCES = [
+// Use SOURCES from stats API if available, otherwise use hardcoded list
+const SOURCES = window.SOURCES || [
   {
     id: "lucide",
     name: "Lucide",
@@ -2256,37 +2257,50 @@ for (const [categoryName, keywords] of Object.entries(CATEGORY_MAP)) {
   );
 }
 
-const ICONS =
-  typeof REAL_ICONS !== "undefined"
-    ? REAL_ICONS.map((ic, i) => {
-        const src = SOURCES.find((s) => s.id === ic.source) || SOURCES[0];
+// Function to create/recreate ICONS array from REAL_ICONS
+function createIconsArray() {
+  if (typeof REAL_ICONS === "undefined" || !REAL_ICONS || REAL_ICONS.length === 0) {
+    return [];
+  }
 
-        let cat = "Others";
-        const searchStr =
-          `${ic.name} ${(ic.tags || []).join(" ")}`.toLowerCase();
-        for (const [categoryName, regex] of Object.entries(
-          CATEGORY_REGEX_MAP,
-        )) {
-          if (regex.test(searchStr)) {
-            cat = categoryName;
-            break;
-          }
-        }
+  return REAL_ICONS.map((ic, i) => {
+    const src = SOURCES.find((s) => s.id === ic.source) || SOURCES[0];
 
-        return {
-          ...ic,
-          category: cat,
-          id: ic.id || "ic_" + i,
-          sourceIconId: `${src.id}:${ic.name}`,
-          license: src.license,
-          licenseUrl: src.licenseUrl,
-          author: src.author,
-          popularity: Math.round(1000 - i + Math.sin(i) * 200),
-          createdAt: Date.now() - i * 1e5,
-          updatedAt: Date.now(),
-        };
-      })
-    : [];
+    let cat = "Others";
+    const searchStr =
+      `${ic.name} ${(ic.tags || []).join(" ")}`.toLowerCase();
+    for (const [categoryName, regex] of Object.entries(
+      CATEGORY_REGEX_MAP,
+    )) {
+      if (regex.test(searchStr)) {
+        cat = categoryName;
+        break;
+      }
+    }
+
+    return {
+      ...ic,
+      category: cat,
+      id: ic.id || "ic_" + i,
+      sourceIconId: `${src.id}:${ic.name}`,
+      license: src.license,
+      licenseUrl: src.licenseUrl,
+      author: src.author,
+      popularity: Math.round(1000 - i + Math.sin(i) * 200),
+      createdAt: Date.now() - i * 1e5,
+      updatedAt: Date.now(),
+    };
+  });
+}
+
+// Initialize ICONS array (will be empty initially)
+let ICONS = createIconsArray();
+
+// Expose function to recreate ICONS when REAL_ICONS changes
+window.recreateIcons = function() {
+  ICONS = createIconsArray();
+  console.log('[Icons] Recreated ICONS array with', ICONS.length, 'icons');
+};
 const state = {
   query: localStorage.getItem("mi.query") || "",
   sourceFilter: new Set(
@@ -2338,6 +2352,11 @@ const state = {
   collections: JSON.parse(localStorage.getItem("mi.collections") || "[]"),
   folders: JSON.parse(localStorage.getItem("mi.folders") || "null"),
   activeFolderId: null,
+};
+
+// Helper to get total icon count from stats API or fallback to ICONS.length
+const getTotalIconCount = () => {
+  return (window.ICON_STATS && window.ICON_STATS.total) || ICONS.length || 0;
 };
 
 if (!state.folders) {
@@ -2445,6 +2464,20 @@ function styleOpts(style) {
 // Render an icon with its native style applied — used by the grid, similar
 // row, compare modal, etc. The editor overrides via editorRenderOpts.
 function renderStyled(icon, extra = {}) {
+  // If no SVG content, use CDN URL (API integration)
+  if (!icon.svg && icon.source && icon.name) {
+    const svgUrl = window.iconsAPI ? window.iconsAPI.getIconSVGUrl(icon.source, icon.name) : '';
+    const size = extra.size || state.globalSize || 24;
+    const color = state.globalColor || 'currentColor';
+
+    return `<img src="${svgUrl}"
+                 alt="${icon.name}"
+                 width="${size}"
+                 height="${size}"
+                 style="display:block;width:${size}px;height:${size}px;object-fit:contain;${color !== 'currentColor' ? `filter: brightness(0) saturate(100%) invert(${color === '#ffffff' ? '100%' : '0%'})` : ''}"
+                 onerror="this.style.display='none';console.error('Failed to load:', '${svgUrl}')" />`;
+  }
+
   const gc =
     state.globalColor !== "currentColor" ? state.globalColor : undefined;
   return renderSvg(icon.svg, {
@@ -2722,41 +2755,86 @@ function iconCard(icon) {
 
 const ITEMS_PER_PAGE = 60;
 
-function renderGrid() {
+async function renderGrid() {
   saveFiltersLS();
+
+  // Use API loader if available
+  if (typeof window.populateIconsFromAPI === 'function') {
+    const grid = $("#icon-grid");
+
+    // Show skeleton for results count - keep existing mi-skeleton class
+    const resultsCountEl = $("#results-count");
+    if (resultsCountEl) {
+      // mi-skeleton class is already in HTML, just ensure it's there
+      resultsCountEl.classList.add('mi-skeleton');
+    }
+
+    // Show skeleton loader - use mi-card styling with skeleton animation
+    grid.className = `mi-grid density-${state.density}`;
+    const skeletonCards = Array.from({ length: 24 }, () =>
+      `<div class="mi-card" style="min-height: 120px; animation: skeleton-pulse 1.5s ease-in-out infinite; pointer-events: none;"></div>`
+    ).join('');
+    grid.innerHTML = skeletonCards;
+
+    try {
+      const total = await window.populateIconsFromAPI();
+
+      // After loading from API, use the populated ICONS array
+      const list = filterIcons();
+      const actualTotal = list.length;
+
+      renderGridContent(list, actualTotal, total);
+    } catch (error) {
+      console.error('[renderGrid] Error loading from API:', error);
+      grid.innerHTML = `<div class="mi-empty"><h3>Failed to load icons</h3><p>${error.message}</p></div>`;
+    }
+    return;
+  }
+
+  // Fallback to client-side filtering if API not available
   const list = filterIcons();
   const total = list.length;
+  renderGridContent(list, total, total);
+}
+
+function renderGridContent(list, displayTotal, apiTotal) {
   const grid = $("#icon-grid");
   grid.className = `mi-grid density-${state.density}`;
 
-  if (!total) {
+  if (!displayTotal) {
     grid.innerHTML = `<div class="mi-empty"><h3>No icons match your filters</h3><p>Try clearing filters or a different search.</p></div>`;
     $("#pagination-wrapper").style.display = "none";
   } else {
-    // Pagination slicing
-    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+    // Pagination - for API mode, list is already paginated
+    const totalPages = Math.ceil((apiTotal || displayTotal) / ITEMS_PER_PAGE);
     if (state.page > totalPages) state.page = totalPages;
     if (state.page < 1) state.page = 1;
 
-    const startIdx = (state.page - 1) * ITEMS_PER_PAGE;
-    const paginatedList = list.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+    // If using API, list is already the right page, otherwise slice it
+    const paginatedList = (typeof window.populateIconsFromAPI === 'function')
+      ? list
+      : list.slice((state.page - 1) * ITEMS_PER_PAGE, state.page * ITEMS_PER_PAGE);
 
     grid.innerHTML = paginatedList.map(iconCard).join("");
-    renderPagination(total, totalPages);
+    renderPagination((apiTotal || displayTotal), totalPages);
   }
 
   const resultsCountEl = $("#results-count");
   if (resultsCountEl) {
-    resultsCountEl.textContent = total.toLocaleString();
-    resultsCountEl.classList.remove("mi-skeleton");
+    resultsCountEl.classList.remove('mi-skeleton');
+    resultsCountEl.style.opacity = '';
+    resultsCountEl.style.animation = '';
+    resultsCountEl.textContent = (apiTotal || displayTotal).toLocaleString();
   }
   $("#results-query").textContent = state.query ? `for "${state.query}"` : "";
+
   // Only show the stroke adjustment slider if there is at least one 'true stroke' icon in the current grid list
   const strokeSection = $("#rp-stroke-section");
   const strokeDivider = $("#rp-stroke-divider");
   if (strokeSection) {
     const showStroke = list.some(
       (ic) =>
+        ic && ic.style && ic.svg &&
         (ic.style === "outline" || ic.style === "thin") &&
         ic.svg.includes("stroke="),
     );
@@ -2937,8 +3015,15 @@ function renderFilters() {
     }
   };
 
-  const countBy = (key) =>
-    ICONS.reduce((m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m), {});
+  const countBy = (key) => {
+    // Use stats API data instead of reducing over ICONS array
+    if (window.ICON_STATS && window.getFilterCounts) {
+      const counts = window.getFilterCounts(key);
+      return counts;
+    }
+    // Fallback to old method if stats not loaded
+    return ICONS.reduce((m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m), {});
+  };
   const sc = countBy("source"),
     st = countBy("style"),
     lc = countBy("license"),
@@ -3123,7 +3208,7 @@ function renderFilters() {
         <div class="mi-rp-avatar" style="z-index: 1; margin-left: -6px"><img src="ASSET/Icons/Phosphor.svg" alt=""/></div>
       `;
       sourceAllTitle.textContent = "All Sources";
-      badgeLg.textContent = (ICONS.length || 0).toLocaleString();
+      badgeLg.textContent = getTotalIconCount().toLocaleString();
     } else {
       sourceAllContainer.classList.add("has-filters");
       sourceAllContainer.title = "Click to clear filters";
@@ -3600,8 +3685,22 @@ function editorRenderOpts(sizeOverride) {
   };
 }
 
-function renderCanvas() {
+async function renderCanvas() {
   if (!state.editorIcon) return;
+
+  // Fetch SVG if not loaded yet
+  if (!state.editorIcon.svg || state.editorIcon.svg === '') {
+    try {
+      const svgUrl = window.iconsAPI.getIconSVGUrl(state.editorIcon.source, state.editorIcon.name);
+      const response = await fetch(svgUrl);
+      const svgContent = await response.text();
+      state.editorIcon.svg = svgContent;
+    } catch (error) {
+      console.error('[renderCanvas] Failed to fetch SVG:', error);
+      return;
+    }
+  }
+
   updateResetButton();
   const e = state.editor;
   // Scale visual preview more aggressively than export size so the icon fills the canvas nicely.
@@ -5266,7 +5365,7 @@ function renderHeroStats() {
 
   const searchInput = $("#search-input");
   if (searchInput) {
-    searchInput.placeholder = `Search ${ICONS.length.toLocaleString()}+ icons...`;
+    searchInput.placeholder = `Search ${getTotalIconCount().toLocaleString()}+ icons...`;
   }
 }
 
@@ -5351,7 +5450,7 @@ function buildCategoryList() {
   let html = `
     <div class="mi-rp-cat-item ${isAllActive ? "is-active" : ""}" data-cat="all">
       <span class="mi-rp-cat-label">All</span>
-      <span class="mi-rp-cat-count">${ICONS.length.toLocaleString()}</span>
+      <span class="mi-rp-cat-count">${getTotalIconCount().toLocaleString()}</span>
     </div>
   `;
 
@@ -5422,7 +5521,7 @@ function buildTopCategoryDropdown() {
   let html = `
     <div class="mi-category-menu-item ${isAllActive ? "is-active" : ""}" data-cat="all">
       <span class="mi-category-menu-label">All Icons</span>
-      <span class="mi-category-menu-badge">${ICONS.length.toLocaleString()}</span>
+      <span class="mi-category-menu-badge">${getTotalIconCount().toLocaleString()}</span>
     </div>
   `;
 
@@ -5508,23 +5607,42 @@ document.addEventListener("DOMContentLoaded", () => {
     window.tooltipController.init();
   }
 
-  renderHeroStats();
-  renderFilters();
-  renderGrid();
-  renderCompareCount();
-  renderIconOfDay();
-  renderCollections();
-  renderCategoriesSection();
-  setupSidebarTabs();
-  buildCategoryList();
-  buildTopCategoryDropdown();
-  wire();
-  initRecolor();
+  // Wait for stats to load before initial render
+  if (window.STATS_LOADED) {
+    window.STATS_LOADED.then(() => {
+      renderHeroStats();
+      renderFilters();
+      renderGrid();
+      renderCompareCount();
+      renderIconOfDay();
+      renderCollections();
+      renderCategoriesSection();
+      setupSidebarTabs();
+      buildCategoryList();
+      buildTopCategoryDropdown();
+      wire();
+      initRecolor();
+    });
+  } else {
+    // Fallback if stats-bridge.js not loaded
+    renderHeroStats();
+    renderFilters();
+    renderGrid();
+    renderCompareCount();
+    renderIconOfDay();
+    renderCollections();
+    renderCategoriesSection();
+    setupSidebarTabs();
+    buildCategoryList();
+    buildTopCategoryDropdown();
+    wire();
+    initRecolor();
+  }
 
   // Dynamically update the overall live icons count in the sidebar
   const badgeLg = document.querySelector(".mi-rp-badge-lg");
   if (badgeLg) {
-    badgeLg.textContent = ICONS.length.toLocaleString();
+    badgeLg.textContent = getTotalIconCount().toLocaleString();
     badgeLg.classList.remove("mi-skeleton");
   }
 
