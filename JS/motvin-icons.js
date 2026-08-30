@@ -5506,10 +5506,8 @@ function buildTopCategoryDropdown() {
   const valDisplay = document.getElementById("cat-dropdown-val");
   if (!container || !catMenu || !valDisplay) return;
 
-  const catCounts = {};
-  ICONS.forEach((ic) => {
-    catCounts[ic.category] = (catCounts[ic.category] || 0) + 1;
-  });
+  // Use stats API for accurate counts instead of filtered ICONS array
+  const catCounts = (window.ICON_STATS && window.ICON_STATS.byCategory) || {};
 
   const cats = Object.keys(catCounts).sort((a, b) => {
     if (a === "Others") return 1;
