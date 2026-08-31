@@ -2289,8 +2289,8 @@ function createIconsArray() {
     return {
       ...ic,
       category: cat,
-      id: ic.id || "ic_" + i,
-      sourceIconId: `${src.id}:${ic.name}`,
+      id: ic.id || `${src.id}_${ic.style || "default"}_${ic.name || i}`,
+      sourceIconId: `${src.id}:${ic.style || "default"}:${ic.name}`,
       license: src.license,
       licenseUrl: src.licenseUrl,
       author: src.author,
@@ -2311,9 +2311,8 @@ window.recreateIcons = function () {
   }
   ICONS = createIconsArray();
   console.log('[Icons] Recreated ICONS array with', ICONS.length, 'icons');
-  if (typeof renderFilters === 'function') {
-    renderFilters();
-  }
+  if (typeof renderFilters === 'function') renderFilters();
+  if (typeof buildCategoryList === 'function') buildCategoryList();
 };
 const state = {
   query: localStorage.getItem("mi.query") || "",
@@ -2330,7 +2329,7 @@ const state = {
   categoryFilter: new Set(
     JSON.parse(localStorage.getItem("mi.categoryFilter") || "[]"),
   ),
-  sort: localStorage.getItem("mi.sort") || "relevance",
+  sort: localStorage.getItem("mi.sort") || "all",
   density: localStorage.getItem("mi.density") || "detailed",
   page: 1,
   perPage: 48,
@@ -2411,8 +2410,19 @@ function toast(msg) {
 }
 
 function saveLS() {
-  localStorage.setItem("mi.folders", JSON.stringify(state.folders));
-  localStorage.setItem("mi.collections", JSON.stringify(state.collections));
+  // Strip non-serializable fields (dirHandle, _itemCache with SVG data) before saving.
+  // _itemCache alone can easily exceed the 5MB localStorage limit.
+  const foldersToSave = state.folders.map(f => ({
+    id: f.id,
+    name: f.name,
+    iconIds: f.iconIds
+  }));
+  try {
+    localStorage.setItem("mi.folders", JSON.stringify(foldersToSave));
+    localStorage.setItem("mi.collections", JSON.stringify(state.collections));
+  } catch (e) {
+    console.error('[saveLS] localStorage quota exceeded or write failed:', e);
+  }
 }
 
 function getIconFolders(iconId) {
@@ -2750,6 +2760,23 @@ function filterIcons() {
   return list;
 }
 
+function sortGridItems(items) {
+  const list = [...items];
+  if (state.sort === "popular") {
+    list.sort((a, b) => b.popularity - a.popularity);
+  } else if (state.sort === "trending") {
+    list.sort((a, b) =>
+      b.popularity * Math.sin(b.id.length) -
+      a.popularity * Math.sin(a.id.length),
+    );
+  } else if (state.sort === "name-asc") {
+    list.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (state.sort === "name-desc") {
+    list.sort((a, b) => b.name.localeCompare(a.name));
+  }
+  return list;
+}
+
 // --------------------------------------------------------------------
 // Rendering
 // --------------------------------------------------------------------
@@ -2775,6 +2802,8 @@ function iconCard(icon) {
 
 const ITEMS_PER_PAGE = 60;
 let currentRenderId = 0;
+// Tracks only the icons currently on screen; guarded against race conditions (see renderGrid).
+let renderedIconsMap = new Map();
 
 async function renderGrid() {
   const renderId = ++currentRenderId;
@@ -2806,9 +2835,10 @@ async function renderGrid() {
 
       // The API already filtered by query, category, style, etc. 
       // We can just use the returned ICONS directly.
-      const list = ICONS;
+      const list = sortGridItems(ICONS);
       const actualTotal = list.length;
 
+      renderedIconsMap = new Map(list.map(ic => [ic.id, ic]));
       renderGridContent(list, actualTotal, total);
     } catch (error) {
       console.error('[renderGrid] Error loading from API:', error);
@@ -2828,8 +2858,13 @@ function renderGridContent(list, displayTotal, apiTotal) {
   grid.className = `mi-grid density-${state.density}`;
 
   if (!displayTotal) {
-    grid.innerHTML = `<div class="mi-empty"><h3>No icons match your filters</h3><p>Try clearing filters or a different search.</p></div>`;
-    $("#pagination-wrapper").style.display = "none";
+    if (state.showSaved) {
+      grid.innerHTML = `<div class="mi-empty"><h3>No icons are saved</h3><p>Create a collection to see the icons.</p></div>`;
+    } else {
+      grid.innerHTML = `<div class="mi-empty"><h3>No icons match your filters</h3><p>Try clearing filters or a different search.</p></div>`;
+    }
+    const pw = $("#pagination-wrapper");
+    if (pw) pw.style.display = "none";
   } else {
     // Pagination - for API mode, list is already paginated
     const totalPages = Math.ceil((apiTotal || displayTotal) / ITEMS_PER_PAGE);
@@ -4725,7 +4760,7 @@ function wire() {
   $("#icon-grid").addEventListener("click", (e) => {
     const card = e.target.closest(".mi-card");
     if (!card) return;
-    const icon = ICONS.find((x) => x.id === card.dataset.id);
+    const icon = renderedIconsMap.get(card.dataset.id) || ICONS.find((x) => x.id === card.dataset.id);
     if (!icon) return;
     if (e.target.closest("[data-cmp]")) {
       if (state.selected.has(icon.id)) state.selected.delete(icon.id);
@@ -4746,7 +4781,7 @@ function wire() {
           toast(ok ? `Copied "${icon.name}"` : "Copy failed"),
         );
       } else if (act.dataset.act === "save") {
-        window.CollectionManager.openModal(icon.id);
+        window.CollectionManager.openModal(icon.id, icon);
       }
       return;
     }
@@ -5279,7 +5314,7 @@ function wire() {
   }
   $("#btn-save-collection").addEventListener("click", () => {
     if (!state.editorIcon) return;
-    window.CollectionManager.openModal(state.editorIcon.id);
+    window.CollectionManager.openModal(state.editorIcon.id, state.editorIcon);
   });
   $("#btn-find-similar").addEventListener("click", () => {
     if (!state.editorIcon) return;
@@ -5309,7 +5344,7 @@ function wire() {
           toast(ok ? "Copied SVG" : "Copy failed"),
         );
       } else if (action.dataset.act === "save") {
-        window.CollectionManager.openModal(icon.id);
+        window.CollectionManager.openModal(icon.id, icon);
       }
       return;
     }
@@ -5440,6 +5475,7 @@ function setupSidebarTabs() {
 
       // Update global state and filter grid
       state.showSaved = target === "saved";
+      localStorage.setItem("mi.sidebarTab", target);
 
       // If categories tab is opened, make sure list is rendered
       if (target === "categories") {
@@ -5628,33 +5664,36 @@ document.addEventListener("DOMContentLoaded", () => {
     window.tooltipController.init();
   }
 
-  // Wait for stats to load before initial render
-  if (window.STATS_LOADED) {
-    window.STATS_LOADED.then(() => {
-      renderHeroStats();
-      renderFilters();
-      renderGrid();
-      renderCompareCount();
-      renderIconOfDay();
-      renderCollections();
-      renderCategoriesSection();
-      setupSidebarTabs();
-      buildCategoryList();
-      buildTopCategoryDropdown();
-      wire();
-      initRecolor();
-      
-      // Restore active sidebar tab seamlessly (MUST happen after setupSidebarTabs)
-      const savedTab = localStorage.getItem("mi.sidebarTab");
-      if (savedTab && savedTab !== "filters") {
-        const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
-        if (activeTabBtn) activeTabBtn.click();
-      }
+  function restoreSidebarTabUI(savedTab, panels) {
+    Object.entries(panels).forEach(([key, el]) => {
+      if (el) el.style.display = key === savedTab ? "block" : "none";
     });
-  } else {
-    // Fallback if stats-bridge.js not loaded
+    const innerPanel = document.querySelector(".mi-right-panel-inner");
+    if (innerPanel) {
+      Object.keys(panels).forEach((key) => innerPanel.classList.remove(`mi-rp-${key}`));
+      innerPanel.classList.add(`mi-rp-${savedTab}`);
+    }
+    const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
+    if (activeTabBtn) {
+      document.querySelectorAll(".mi-sidebar-item").forEach((t) => t.classList.remove("is-active"));
+      activeTabBtn.classList.add("is-active");
+      const title = document.getElementById("rp-header-title");
+      if (title) title.textContent = activeTabBtn.querySelector(".mi-sidebar-label")?.textContent || "";
+    }
+    if (savedTab === "saved" && typeof renderSavedPanel === "function") renderSavedPanel();
+    if (savedTab === "categories") buildCategoryList();
+  }
+
+  const initUI = () => {
     renderHeroStats();
     renderFilters();
+
+    // Set state before first renderGrid so showSaved is correct on initial load
+    const savedTab = localStorage.getItem("mi.sidebarTab");
+    if (savedTab && savedTab !== "filters") {
+      state.showSaved = savedTab === "saved";
+    }
+
     renderGrid();
     renderCompareCount();
     renderIconOfDay();
@@ -5665,13 +5704,25 @@ document.addEventListener("DOMContentLoaded", () => {
     buildTopCategoryDropdown();
     wire();
     initRecolor();
-    
-    // Restore active sidebar tab seamlessly (MUST happen after setupSidebarTabs)
-    const savedTab = localStorage.getItem("mi.sidebarTab");
+
+    // Apply saved tab UI without triggering another renderGrid
     if (savedTab && savedTab !== "filters") {
-      const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
-      if (activeTabBtn) activeTabBtn.click();
+      const panels = {
+        filters: document.getElementById("rp-tab-filters"),
+        categories: document.getElementById("rp-tab-categories"),
+        saved: document.getElementById("rp-tab-saved"),
+        plugins: document.getElementById("rp-tab-plugins"),
+        help: document.getElementById("rp-tab-help"),
+      };
+      restoreSidebarTabUI(savedTab, panels);
     }
+  };
+
+  // Wait for stats to load before initial render
+  if (window.STATS_LOADED) {
+    window.STATS_LOADED.then(initUI);
+  } else {
+    initUI();
   }
 
   // Dynamically update the overall live icons count in the sidebar
@@ -5684,6 +5735,26 @@ document.addEventListener("DOMContentLoaded", () => {
   // Remove skeleton loaders from sort tabs
   document.querySelectorAll(".mi-sort-tab.mi-skeleton").forEach((tab) => {
     tab.classList.remove("mi-skeleton");
+  });
+
+  document.querySelectorAll(".mi-sort-tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      state.sort = tab.dataset.sort;
+      state.page = 1;
+      document.querySelectorAll(".mi-sort-tab").forEach((item) => {
+        const isActive = item === tab;
+        item.classList.toggle("is-active", isActive);
+        item.setAttribute("aria-selected", String(isActive));
+      });
+      const select = $("#sort-select");
+      if (select) select.value = state.sort;
+      renderGrid();
+    });
+  });
+  document.querySelectorAll(".mi-sort-tab").forEach((tab) => {
+    const isActive = tab.dataset.sort === state.sort;
+    tab.classList.toggle("is-active", isActive);
+    tab.setAttribute("aria-selected", String(isActive));
   });
 
   // Deep-link: open the icon requested via ?icon=<id> as a full-page view
@@ -5983,6 +6054,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.CollectionManager.init({
     appType: "icons",
     getItems: () => ICONS,
+    saveLS: saveLS,
     onUpdate: () => {
       saveLS();
       if (typeof renderSavedPanel === "function") renderSavedPanel();
@@ -6043,6 +6115,7 @@ document
       const folderId = delBtn.dataset.del;
       if (confirm("Are you sure you want to delete this collection?")) {
         state.folders = state.folders.filter((f) => f.id !== folderId);
+        window.CollectionManager?.forgetDirectoryHandle(folderId);
         if (state.activeFolderId === folderId) state.activeFolderId = null;
         saveLS();
         renderSavedPanel();

@@ -1,530 +1,44 @@
 /* Motvin Illustrations — Illustration Library frontend. */
 
+// Populated from API stats (stats-bridge-illustrations.js)
+let SOURCES = window.SOURCES || [];
 
-const SOURCES = [
-  { id: "ira", name: "IRA Design", license: "MIT" },
-  { id: "flowbite", name: "Flowbite Illustrations", license: "MIT" },
-  { id: "opendoodles", name: "Open Doodles", license: "MIT" },
-  { id: "fluentemoji", name: "Fluent Emoji", license: "MIT" },
-  { id: "bioicons", name: "Bioicons", license: "MIT" },
-];
+const getTotalIllustrationCount = () =>
+  (window.ILLUSTRATION_STATS && window.ILLUSTRATION_STATS.total) || ICONS.length || 0;
 
-const STYLES = ["color", "solid"];
 
-const SOURCE_STYLE_BIAS = {
-  ira: ["color"],
-  fluentemoji: ["color"],
-  opendoodles: ["solid"],
-  flowbite: ["color"],
-  bioicons: ["color", "solid"],
-};
-
-function illustrationStyle(icon) {
-  if (icon.source === "flowbite") return "color";
-  if (icon.source === "opendoodles") return "solid";
-  if (icon.source !== "bioicons") return icon.style || "color";
-
-  const svg = icon.svg || "";
-  if (/<(?:linearGradient|radialGradient|pattern)\b|<style\b/i.test(svg)) {
-    return "color";
+function createIllustrationsArray() {
+  if (typeof REAL_ILLUSTRATIONS === "undefined" || !REAL_ILLUSTRATIONS || REAL_ILLUSTRATIONS.length === 0) {
+    return [];
   }
-  const colors = new Set(
-    [...svg.matchAll(/(?:fill|stroke)(?:=|:)\s*["']?(#[0-9a-f]{3,8})/gi)].map(
-      (match) => match[1].toLowerCase(),
-    ),
-  );
-  return colors.size <= 1 ? "solid" : "color";
+  return REAL_ILLUSTRATIONS.map((ic, i) => ({
+    ...ic,
+    category: ic.category || 'Others',
+    style: ic.style || 'flat',
+    id: ic.id || "ic_" + i,
+    sourceIconId: `${ic.source || "illustrations"}:${ic.name}`,
+    license: ic.license || 'Unknown',
+    licenseUrl: ic.licenseUrl || "",
+    author: ic.author || "",
+    popularity: Math.round(1000 - i + Math.sin(i) * 200),
+    createdAt: Date.now() - i * 1e5,
+    updatedAt: Date.now(),
+  }));
 }
 
+let ICONS = createIllustrationsArray();
+// Tracks only the icons currently on screen; guarded against race conditions (see renderGrid).
+let renderedIconsMap = new Map();
 
-
-
-// Semantic synonyms for search
-const SYNONYMS = {
-  notification: ["bell", "alert", "message", "mail"],
-  alert: ["bell", "alert-circle", "alert-triangle"],
-  ai: ["sparkles", "bot", "brain", "cpu"],
-  assistant: ["bot", "sparkles", "brain"],
-  revenue: ["dollar-sign", "trending-up", "bar-chart", "pie-chart"],
-  analytics: ["bar-chart", "pie-chart", "activity", "trending-up"],
-  dashboard: ["grid", "layers", "bar-chart", "activity"],
-  empty: ["file", "folder", "image"],
-  payment: ["credit-card", "dollar-sign", "shopping-cart"],
-  failed: ["x", "alert-circle", "alert-triangle"],
-  chat: ["message", "mail", "send"],
-  person: ["user", "users"],
-  alarm: ["bell", "clock"],
+window.recreateIllustrations = function () {
+  if (window.SOURCES && window.SOURCES.length > 0) {
+    SOURCES = window.SOURCES;
+  }
+  ICONS = createIllustrationsArray();
+  if (typeof renderFilters === 'function') renderFilters();
+  if (typeof buildCategoryList === 'function') buildCategoryList();
 };
 
-// --------------------------------------------------------------------
-// State
-// --------------------------------------------------------------------
-const CATEGORY_MAP = {
-  Arrows: [
-    "arrow",
-    "chevron",
-    "caret",
-    "direction",
-    "point",
-    "up",
-    "down",
-    "left",
-    "right",
-    "forward",
-    "back",
-    "next",
-    "prev",
-  ],
-  Communication: [
-    "phone",
-    "mail",
-    "chat",
-    "message",
-    "envelope",
-    "call",
-    "speech",
-    "comment",
-    "send",
-    "wifi",
-    "signal",
-    "network",
-    "bluetooth",
-  ],
-  Media: [
-    "play",
-    "pause",
-    "stop",
-    "video",
-    "music",
-    "audio",
-    "sound",
-    "volume",
-    "speaker",
-    "mic",
-    "cast",
-  ],
-  People: [
-    "user",
-    "person",
-    "people",
-    "avatar",
-    "profile",
-    "face",
-    "group",
-    "man",
-    "woman",
-    "boy",
-    "girl",
-  ],
-  Business: [
-    "briefcase",
-    "office",
-    "chart",
-    "graph",
-    "money",
-    "dollar",
-    "euro",
-    "coin",
-    "wallet",
-    "trend",
-    "bag",
-  ],
-  Weather: [
-    "sun",
-    "moon",
-    "cloud",
-    "rain",
-    "snow",
-    "wind",
-    "lightning",
-    "weather",
-    "storm",
-    "temp",
-  ],
-  Device: [
-    "laptop",
-    "mobile",
-    "phone",
-    "tablet",
-    "screen",
-    "monitor",
-    "keyboard",
-    "mouse",
-    "battery",
-    "cpu",
-    "device",
-    "desktop",
-    "computer",
-  ],
-  Navigation: [
-    "map",
-    "location",
-    "pin",
-    "gps",
-    "compass",
-    "globe",
-    "route",
-    "marker",
-    "local",
-  ],
-  File: [
-    "file",
-    "folder",
-    "document",
-    "archive",
-    "paper",
-    "copy",
-    "paste",
-    "clipboard",
-  ],
-  Security: [
-    "lock",
-    "key",
-    "shield",
-    "guard",
-    "protect",
-    "secure",
-    "password",
-    "unlock",
-  ],
-  Time: [
-    "clock",
-    "time",
-    "watch",
-    "hour",
-    "minute",
-    "calendar",
-    "date",
-    "schedule",
-  ],
-  Status: [
-    "check",
-    "cross",
-    "x",
-    "close",
-    "tick",
-    "success",
-    "warning",
-    "error",
-    "alert",
-    "info",
-    "bell",
-    "plus",
-    "minus",
-    "add",
-    "remove",
-    "delete",
-    "clear",
-    "cancel",
-    "badge",
-  ],
-  AI: ["ai", "robot", "bot", "sparkle", "magic", "brain", "smart", "machine"],
-  Editing: [
-    "edit",
-    "pencil",
-    "pen",
-    "write",
-    "draw",
-    "brush",
-    "crop",
-    "cut",
-    "paint",
-    "filter",
-    "view",
-    "eye",
-    "zoom",
-    "search",
-    "format",
-    "layout",
-    "list",
-    "table",
-    "sort",
-    "select",
-    "line",
-    "fill",
-    "border",
-  ],
-  Characters: [
-    "font",
-    "text",
-    "letter",
-    "character",
-    "type",
-    "bold",
-    "italic",
-    "heading",
-    "language",
-  ],
-  Hands: ["hand", "finger", "thumb", "point", "touch", "grab", "hold"],
-  Home: ["home", "house", "building", "roof", "door", "nest"],
-  Album: ["album", "photo", "picture", "image", "gallery"],
-  Camera: ["camera", "lens", "shutter", "focus"],
-  Nature: [
-    "leaf",
-    "tree",
-    "plant",
-    "flower",
-    "forest",
-    "wood",
-    "bug",
-    "animal",
-    "water",
-    "fire",
-    "drop",
-  ],
-  Finance: [
-    "bank",
-    "money",
-    "coin",
-    "card",
-    "credit",
-    "dollar",
-    "euro",
-    "wallet",
-    "pay",
-    "currency",
-  ],
-  Education: [
-    "book",
-    "school",
-    "learn",
-    "student",
-    "graduate",
-    "degree",
-    "hat",
-    "read",
-    "class",
-  ],
-  Transport: [
-    "car",
-    "bus",
-    "train",
-    "plane",
-    "truck",
-    "bike",
-    "ship",
-    "boat",
-    "vehicle",
-    "auto",
-  ],
-  Design: [
-    "layer",
-    "vector",
-    "palette",
-    "color",
-    "paint",
-    "canvas",
-    "grid",
-    "align",
-    "distribute",
-    "path",
-  ],
-  Commerce: [
-    "shop",
-    "cart",
-    "bag",
-    "store",
-    "buy",
-    "sell",
-    "price",
-    "tag",
-    "basket",
-  ],
-  Health: [
-    "health",
-    "medical",
-    "hospital",
-    "pill",
-    "heart",
-    "pulse",
-    "doctor",
-    "nurse",
-    "cross",
-  ],
-  Food: [
-    "food",
-    "drink",
-    "cup",
-    "coffee",
-    "meal",
-    "fork",
-    "knife",
-    "spoon",
-    "pizza",
-    "burger",
-    "apple",
-    "dining",
-  ],
-  Social: [
-    "share",
-    "like",
-    "thumb",
-    "heart",
-    "star",
-    "network",
-    "connect",
-    "link",
-  ],
-  Brands: [
-    "logo",
-    "brand",
-    "facebook",
-    "twitter",
-    "google",
-    "apple",
-    "microsoft",
-    "github",
-    "amazon",
-  ],
-  Sports: ["ball", "game", "sport", "play", "run", "jump", "swim", "fitness"],
-  Gaming: [
-    "game",
-    "play",
-    "console",
-    "controller",
-    "joystick",
-    "pixel",
-    "vr",
-    "dice",
-    "chess",
-  ],
-  Development: [
-    "code",
-    "bracket",
-    "terminal",
-    "bug",
-    "debug",
-    "program",
-    "api",
-    "server",
-    "database",
-    "web",
-  ],
-  System: [
-    "setting",
-    "gear",
-    "cog",
-    "option",
-    "config",
-    "power",
-    "off",
-    "on",
-    "switch",
-    "menu",
-    "tool",
-  ],
-  Shapes: [
-    "circle",
-    "square",
-    "triangle",
-    "rectangle",
-    "star",
-    "polygon",
-    "cube",
-    "shape",
-  ],
-  Music: ["music", "note", "clef", "melody", "song", "tune"],
-  Travel: ["travel", "bag", "luggage", "suitcase", "ticket", "flight", "trip"],
-};
-
-const LOGO_CATEGORIES = [
-  "Design",
-  "Technology",
-  "Development",
-  "Marketing",
-  "Social Media",
-  "Entertainment",
-  "Others",
-];
-function assignLogoCategory(ic, index) {
-  const name = (ic.name || "").toLowerCase();
-  const tags = (ic.tags || []).map((t) => t.toLowerCase());
-  const match = (kw) => name.includes(kw) || tags.some((t) => t.includes(kw));
-
-  if (
-    match("adobe") ||
-    match("figma") ||
-    match("sketch") ||
-    match("design") ||
-    match("invision") ||
-    match("canva")
-  )
-    return "Design";
-  if (
-    match("react") ||
-    match("vue") ||
-    match("angular") ||
-    match("node") ||
-    match("javascript") ||
-    match("python") ||
-    match("github") ||
-    match("api") ||
-    match("dev")
-  )
-    return "Development";
-  if (
-    match("apple") ||
-    match("google") ||
-    match("microsoft") ||
-    match("samsung") ||
-    match("intel") ||
-    match("tech")
-  )
-    return "Technology";
-  if (
-    match("facebook") ||
-    match("twitter") ||
-    match("instagram") ||
-    match("tiktok") ||
-    match("snapchat") ||
-    match("linkedin") ||
-    match("social")
-  )
-    return "Social Media";
-  if (
-    match("netflix") ||
-    match("spotify") ||
-    match("youtube") ||
-    match("twitch") ||
-    match("hulu") ||
-    match("entertainment") ||
-    match("music")
-  )
-    return "Entertainment";
-  if (
-    match("ad") ||
-    match("marketing") ||
-    match("seo") ||
-    match("analytics") ||
-    match("sales")
-  )
-    return "Marketing";
-
-  // Fallback to random but consistent category based on hash
-  const hash = (ic.id || ic.name || String(index))
-    .split("")
-    .reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  return LOGO_CATEGORIES[hash % LOGO_CATEGORIES.length];
-}
-
-const ICONS =
-  typeof REAL_ILLUSTRATIONS !== "undefined"
-    ? REAL_ILLUSTRATIONS.map((ic, i) => {
-        return {
-          ...ic,
-          category: ic.category || assignLogoCategory(ic, i),
-          style: illustrationStyle(ic),
-          id: ic.id || "ic_" + i,
-          sourceIconId: `${ic.source || "illustrations"}:${ic.name}`,
-          license: ic.license || "ISC",
-          licenseUrl: ic.licenseUrl || "",
-          author: ic.author || "Unknown",
-          popularity: Math.round(1000 - i + Math.sin(i) * 200),
-          createdAt: Date.now() - i * 1e5,
-          updatedAt: Date.now(),
-        };
-      })
-    : [];
 const state = {
   query: localStorage.getItem("mill.query") || "",
   sourceFilter: new Set(
@@ -540,7 +54,7 @@ const state = {
   categoryFilter: new Set(
     JSON.parse(localStorage.getItem("mill.categoryFilter") || "[]"),
   ),
-  sort: localStorage.getItem("mill.sort") || "relevance",
+  sort: localStorage.getItem("mill.sort") || "all",
   density: localStorage.getItem("mill.density") || "detailed",
   page: 1,
   perPage: 48,
@@ -620,7 +134,12 @@ function copyStackToast(message) {
 }
 
 function saveLS() {
-  localStorage.setItem("mill.folders", JSON.stringify(state.folders));
+  const foldersToSave = state.folders.map(f => ({
+    id: f.id,
+    name: f.name,
+    iconIds: f.iconIds
+  }));
+  localStorage.setItem("mill.folders", JSON.stringify(foldersToSave));
   localStorage.setItem("mill.collections", JSON.stringify(state.collections));
 }
 
@@ -692,7 +211,7 @@ function nativeSvgDataUrl(icon) {
 }
 
 function renderStyled(icon, extra = {}) {
-  if (icon.imageUrl || icon.source === "bioicons") {
+  if (icon.imageUrl) {
     const size = extra.size || state.globalSize;
     const label = String(icon.name).replace(/[&"<>]/g, (character) => ({ "&": "&amp;", '"': "&quot;", "<": "&lt;", ">": "&gt;" })[character]);
     const src = icon.imageUrl || nativeSvgDataUrl(icon);
@@ -914,8 +433,6 @@ function filterIcons() {
     }
     if (state.sourceFilter.size && !state.sourceFilter.has(ic.source))
       return false;
-    if (state.styleFilter.has("solid") && ic.source !== "opendoodles")
-      return false;
     if (state.styleFilter.size && !state.styleFilter.has(ic.style))
       return false;
     if (state.licenseFilter.size && !state.licenseFilter.has(ic.license))
@@ -975,44 +492,77 @@ function iconCard(icon) {
 }
 
 const ITEMS_PER_PAGE = 60;
+let currentRenderId = 0;
 
-function renderGrid() {
+async function renderGrid() {
+  const renderId = ++currentRenderId;
   saveFiltersLS();
+
+  if (typeof window.populateIllustrationsFromAPI === 'function') {
+    const grid = $("#icon-grid");
+    grid.className = `mi-grid density-${state.density}`;
+    const resultsCountEl = $("#results-count");
+    if (resultsCountEl) resultsCountEl.classList.add('mi-skeleton');
+    grid.innerHTML = Array.from({ length: 48 }, () =>
+      `<div class="mi-card" style="min-height:120px;animation:skeleton-pulse 1.5s ease-in-out infinite;pointer-events:none;"></div>`
+    ).join('');
+
+    try {
+      const total = await window.populateIllustrationsFromAPI();
+      if (renderId !== currentRenderId) return;
+      const list = filterIcons();
+      renderedIconsMap = new Map(list.map(ic => [ic.id, ic]));
+      renderGridContent(list, list.length, total);
+    } catch (error) {
+      console.error('[renderGrid] Error loading illustrations from API:', error);
+      grid.innerHTML = `<div class="mi-empty"><h3>Failed to load illustrations</h3><p>${error.message}</p></div>`;
+    }
+    return;
+  }
+
+  // Fallback: filter local ICONS array
   const list = filterIcons();
-  const total = list.length;
+  renderGridContent(list, list.length, list.length);
+}
+
+function renderGridContent(list, displayTotal, apiTotal) {
+  const total = displayTotal;
   const grid = $("#icon-grid");
   grid.className = `mi-grid density-${state.density}`;
 
   if (!total) {
-    grid.innerHTML = `<div class="mi-empty"><h3>No illustrations yet</h3><p>Illustrations will appear here soon.</p></div>`;
-    $("#pagination-wrapper").style.display = "none";
+    grid.innerHTML = state.showSaved
+      ? `<div class="mi-empty"><h3>No illustrations are saved</h3><p>Create a collection to see saved illustrations.</p></div>`
+      : `<div class="mi-empty"><h3>No illustrations found</h3><p>Try clearing filters or a different search.</p></div>`;
+    const pw = $("#pagination-wrapper");
+    if (pw) pw.style.display = "none";
   } else {
-    // Pagination slicing
-    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(apiTotal / ITEMS_PER_PAGE);
     if (state.page > totalPages) state.page = totalPages;
-    if (state.page < 1) state.page = 1; localStorage.setItem("mill.page", state.page);
+    if (state.page < 1) state.page = 1;
+    localStorage.setItem("mill.page", state.page);
 
-    const startIdx = (state.page - 1) * ITEMS_PER_PAGE;
-    const paginatedList = list.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+    // When using API loader the list is already paginated; fallback slices locally
+    const paginatedList = (typeof window.populateIllustrationsFromAPI === 'function')
+      ? list
+      : list.slice((state.page - 1) * ITEMS_PER_PAGE, state.page * ITEMS_PER_PAGE);
 
     grid.innerHTML = paginatedList.map(iconCard).join("");
-    renderPagination(total, totalPages);
+    renderPagination(apiTotal, totalPages);
   }
 
   const resultsCountEl = $("#results-count");
   if (resultsCountEl) {
-    resultsCountEl.textContent = total.toLocaleString();
+    resultsCountEl.textContent = (apiTotal || total).toLocaleString();
     resultsCountEl.classList.remove("mi-skeleton");
   }
   $("#results-query").textContent = state.query ? `for "${state.query}"` : "";
-  // Only show the stroke adjustment slider if there is at least one 'true stroke' icon in the current grid list
+
   const strokeSection = $("#rp-stroke-section");
   const strokeDivider = $("#rp-stroke-divider");
   if (strokeSection) {
     const showStroke = list.some(
-      (ic) =>
-        (ic.style === "outline" || ic.style === "thin") &&
-        ic.svg.includes("stroke="),
+      (ic) => (ic.style === "outline" || ic.style === "thin") && ic.svg?.includes("stroke="),
     );
     strokeSection.style.display = showStroke ? "" : "none";
     if (strokeDivider) strokeDivider.style.display = showStroke ? "" : "none";
@@ -1192,8 +742,12 @@ function renderFilters() {
     }
   };
 
-  const countBy = (key) =>
-    ICONS.reduce((m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m), {});
+  const countBy = (key) => {
+    if (window.ILLUSTRATION_STATS && window.getIllustrationFilterCounts) {
+      return window.getIllustrationFilterCounts(key);
+    }
+    return ICONS.reduce((m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m), {});
+  };
   const sc = countBy("source"),
     st = countBy("style"),
     lc = countBy("license"),
@@ -1308,23 +862,13 @@ function renderFilters() {
     }
   }
 
-  let activeStylesList = STYLES;
-  if (state.sourceFilter.size > 0) {
-    const activeStylesSet = new Set();
-    state.sourceFilter.forEach((src) => {
-      const srcStyles = SOURCE_STYLE_BIAS[src] || [];
-      srcStyles.forEach((s) => activeStylesSet.add(s.toLowerCase()));
-    });
-    if (activeStylesSet.size > 0) {
-      activeStylesList = STYLES.filter((s) => activeStylesSet.has(s));
-    }
-  }
+  const activeStylesList = Object.keys(st).filter(s => (st[s] || 0) > 0);
 
   buildStyleList(
     "#filter-style",
     activeStylesList.map((s) => ({
       value: s,
-      label: s === "color" ? "Default" : s[0].toUpperCase() + s.slice(1),
+      label: s[0].toUpperCase() + s.slice(1),
       count: st[s] || 0,
     })),
     "styleFilter",
@@ -1378,7 +922,10 @@ function renderFilters() {
         <div class="mi-rp-avatar" style="z-index: 1; margin-left: -6px"><img src="ASSET/Icons/icons-filled.svg" alt=""/></div>
       `;
       sourceAllTitle.textContent = "All Sources";
-      badgeLg.textContent = (ICONS.length || 0).toLocaleString();
+      const totalIllustrations = window.ILLUSTRATION_STATS
+        ? window.ILLUSTRATION_STATS.collections.reduce((sum, c) => sum + c.total, 0)
+        : ICONS.length;
+      badgeLg.textContent = totalIllustrations.toLocaleString();
     } else {
       sourceAllContainer.classList.add("has-filters");
       sourceAllContainer.title = "Click to clear filters";
@@ -1757,7 +1304,7 @@ function syncEditorControls() {
 
   // Solid illustrations use a single editable color; source-color artwork retains its original palette.
   const colorGrp = $("#grp-color-mode");
-  if (colorGrp) colorGrp.style.display = state.editorIcon?.source === "opendoodles" ? "" : "none";
+  if (colorGrp) colorGrp.style.display = state.editorIcon?.style === "solid" ? "" : "none";
 
   $("#ctrl-color").value = e.color;
   $("#ctrl-color-hex").value = e.color;
@@ -1788,7 +1335,8 @@ function syncEditorControls() {
   );
   const fillGrp = $("#grp-fill-mode");
   if (fillGrp) fillGrp.style.display = "none";
-  $("#grp-fill-color").style.display = e.fillMode === "solid" ? "flex" : "none";
+  const fillColorGrp = $("#grp-fill-color");
+  if (fillColorGrp) fillColorGrp.style.display = e.fillMode === "solid" ? "flex" : "none";
   $$("[data-cap]").forEach((b) =>
     b.classList.toggle("is-active", b.dataset.cap === e.cap),
   );
@@ -1819,9 +1367,12 @@ function updateShapeControlsVisibility() {
   const e = state.editor;
   const hasShape = e.shape !== "none";
   const isRounded = e.shape === "rounded";
-  $("#grp-icon-inset").style.display = hasShape ? "" : "none";
-  $("#grp-shape-color").style.display = hasShape ? "" : "none";
-  $("#grp-shape-radius").style.display = isRounded ? "" : "none";
+  const iconInsetGrp = $("#grp-icon-inset");
+  if (iconInsetGrp) iconInsetGrp.style.display = hasShape ? "" : "none";
+  const shapeColorGrp = $("#grp-shape-color");
+  if (shapeColorGrp) shapeColorGrp.style.display = hasShape ? "" : "none";
+  const shapeRadiusGrp = $("#grp-shape-radius");
+  if (shapeRadiusGrp) shapeRadiusGrp.style.display = isRounded ? "" : "none";
 }
 
 function editorRenderOpts(sizeOverride) {
@@ -1855,7 +1406,7 @@ function renderCanvas() {
   // Scale visual preview more aggressively than export size so the icon fills the canvas nicely.
   const visualSize = Math.max(96, Math.min(e.size * 8, 280));
   const inner = $("#canvas-inner");
-  if (state.editorIcon.imageUrl || state.editorIcon.source === "bioicons") {
+  if (state.editorIcon.imageUrl) {
     const src = state.editorIcon.imageUrl || nativeSvgDataUrl(state.editorIcon);
     inner.innerHTML = `<img src="${src}" alt="${String(state.editorIcon.name).replace(/[&"<>]/g, (character) => ({ "&": "&amp;", '"': "&quot;", "<": "&lt;", ">": "&gt;" })[character])}" style="display:block;width:${visualSize}px;height:${visualSize}px;max-width:100%;object-fit:contain">`;
   } else {
@@ -2836,7 +2387,7 @@ function wire() {
   $("#icon-grid").addEventListener("click", (e) => {
     const card = e.target.closest(".mi-card");
     if (!card) return;
-    const icon = ICONS.find((x) => x.id === card.dataset.id);
+    const icon = renderedIconsMap.get(card.dataset.id) || ICONS.find((x) => x.id === card.dataset.id);
     if (!icon) return;
     if (e.target.closest("[data-cmp]")) {
       if (state.selected.has(icon.id)) state.selected.delete(icon.id);
@@ -2857,7 +2408,7 @@ function wire() {
           toast(ok ? `Copied "${icon.name}"` : "Copy failed"),
         );
       } else if (act.dataset.act === "save") {
-        window.CollectionManager.openModal(icon.id);
+        window.CollectionManager.openModal(icon.id, icon);
       }
       return;
     }
@@ -3390,7 +2941,7 @@ function wire() {
   }
   $("#btn-save-collection").addEventListener("click", () => {
     if (!state.editorIcon) return;
-    window.CollectionManager.openModal(state.editorIcon.id);
+    window.CollectionManager.openModal(state.editorIcon.id, state.editorIcon);
   });
   $("#btn-find-similar").addEventListener("click", () => {
     if (!state.editorIcon) return;
@@ -3420,7 +2971,7 @@ function wire() {
           toast(ok ? "Copied SVG" : "Copy failed"),
         );
       } else if (action.dataset.act === "save") {
-        window.CollectionManager.openModal(icon.id);
+        window.CollectionManager.openModal(icon.id, icon);
       }
       return;
     }
@@ -3487,9 +3038,7 @@ function debounce(fn, ms) {
 // --------------------------------------------------------------------
 function renderHeroStats() {
   const totalMarket = 319252; // Hardcoded per user request
-  const totalStyles = new Set(
-    SOURCES.flatMap((s) => SOURCE_STYLE_BIAS[s.id] || []),
-  ).size;
+  const totalStyles = Object.keys(window.ILLUSTRATION_STATS?.byStyle || {}).length || 2;
   const fmt = (n) =>
     n >= 1e6
       ? (n / 1e6).toFixed(n >= 1e7 ? 0 : 1).replace(/\.0$/, "") + "M"
@@ -3551,6 +3100,7 @@ function setupSidebarTabs() {
 
       // Update global state and filter grid
       state.showSaved = target === "saved";
+      localStorage.setItem("mill.sidebarTab", target);
 
       // If categories tab is opened, make sure list is rendered
       if (target === "categories") {
@@ -3575,10 +3125,7 @@ function buildTopCategoryDropdown() {
 
   if (!menuList || !catDropdown || !catMenu) return;
 
-  const catCounts = {};
-  ICONS.forEach((ic) => {
-    catCounts[ic.category] = (catCounts[ic.category] || 0) + 1;
-  });
+  const catCounts = (window.ILLUSTRATION_STATS && window.ILLUSTRATION_STATS.byCategory) || {};
 
   const cats = Object.keys(catCounts).sort((a, b) => {
     if (a === "Others") return 1;
@@ -3590,7 +3137,7 @@ function buildTopCategoryDropdown() {
   let html = `
     <div class="mi-category-menu-item ${isAllActive ? "is-active" : ""}" data-cat="all">
       <span class="mi-category-menu-label">All Illustrations</span>
-      <span class="mi-category-menu-badge">${ICONS.length.toLocaleString()}</span>
+      <span class="mi-category-menu-badge">${getTotalIllustrationCount().toLocaleString()}</span>
     </div>
   `;
 
@@ -3658,10 +3205,7 @@ function buildCategoryList() {
   const container = document.getElementById("categories-list-container");
   if (!container) return;
 
-  const catCounts = {};
-  ICONS.forEach((ic) => {
-    catCounts[ic.category] = (catCounts[ic.category] || 0) + 1;
-  });
+  const catCounts = (window.ILLUSTRATION_STATS && window.ILLUSTRATION_STATS.byCategory) || {};
 
   const cats = Object.keys(catCounts).sort((a, b) => {
     if (a === "Others") return 1;
@@ -3673,7 +3217,7 @@ function buildCategoryList() {
   let html = `
     <div class="mi-rp-cat-item ${isAllActive ? "is-active" : ""}" data-cat="all">
       <span class="mi-rp-cat-label">All</span>
-      <span class="mi-rp-cat-count">${ICONS.length.toLocaleString()}</span>
+      <span class="mi-rp-cat-count">${getTotalIllustrationCount().toLocaleString()}</span>
     </div>
   `;
 
@@ -3749,6 +3293,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderHeroStats();
   renderFilters();
+
+  // Restore sidebar tab state BEFORE first renderGrid so state.showSaved is correct
+  const savedTab = localStorage.getItem("mill.sidebarTab");
+  if (savedTab && savedTab !== "filters") {
+    state.showSaved = savedTab === "saved";
+  }
+
   renderGrid();
   renderCompareCount();
   renderIconOfDay();
@@ -3758,6 +3309,34 @@ document.addEventListener("DOMContentLoaded", () => {
   buildCategoryList();
   wire();
   initRecolor();
+
+  // Apply saved tab UI after DOM is ready (panels, button highlight, saved panel)
+  if (savedTab && savedTab !== "filters") {
+    const panels = {
+      filters: document.getElementById("rp-tab-filters"),
+      categories: document.getElementById("rp-tab-categories"),
+      saved: document.getElementById("rp-tab-saved"),
+      plugins: document.getElementById("rp-tab-plugins"),
+      help: document.getElementById("rp-tab-help"),
+    };
+    Object.entries(panels).forEach(([key, el]) => {
+      if (el) el.style.display = key === savedTab ? "block" : "none";
+    });
+    const innerPanel = document.querySelector(".mi-right-panel-inner");
+    if (innerPanel) {
+      Object.keys(panels).forEach((key) => innerPanel.classList.remove(`mi-rp-${key}`));
+      innerPanel.classList.add(`mi-rp-${savedTab}`);
+    }
+    const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
+    if (activeTabBtn) {
+      document.querySelectorAll(".mi-sidebar-item").forEach((t) => t.classList.remove("is-active"));
+      activeTabBtn.classList.add("is-active");
+      const title = document.getElementById("rp-header-title");
+      if (title) title.textContent = activeTabBtn.querySelector(".mi-sidebar-label")?.textContent || "";
+    }
+    if (savedTab === "saved" && typeof renderSavedPanel === "function") renderSavedPanel();
+    if (savedTab === "categories") buildCategoryList();
+  }
 
   // Dynamically update the overall live icons count in the sidebar
   const badgeLg = document.querySelector(".mi-rp-badge-lg");
@@ -3771,6 +3350,26 @@ document.addEventListener("DOMContentLoaded", () => {
     tab.classList.remove("mi-skeleton");
   });
 
+  document.querySelectorAll(".mi-sort-tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      state.sort = tab.dataset.sort;
+      state.page = 1;
+      document.querySelectorAll(".mi-sort-tab").forEach((item) => {
+        const isActive = item === tab;
+        item.classList.toggle("is-active", isActive);
+        item.setAttribute("aria-selected", String(isActive));
+      });
+      const select = $("#sort-select");
+      if (select) select.value = state.sort;
+      renderGrid();
+    });
+  });
+  document.querySelectorAll(".mi-sort-tab").forEach((tab) => {
+    const isActive = tab.dataset.sort === state.sort;
+    tab.classList.toggle("is-active", isActive);
+    tab.setAttribute("aria-selected", String(isActive));
+  });
+
   // Deep-link: open the icon requested via ?icon=<id> as a full-page view
   const params = new URLSearchParams(window.location.search);
   const iconId = params.get("icon");
@@ -3780,13 +3379,6 @@ document.addEventListener("DOMContentLoaded", () => {
       openDetail(ic);
       setFullPage(true, ic.id);
     }
-  }
-
-  // Restore active sidebar tab seamlessly
-  const savedTab = localStorage.getItem("mill.sidebarTab");
-  if (savedTab && savedTab !== "filters") {
-    const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
-    if (activeTabBtn) activeTabBtn.click();
   }
 
   // Sidebar Resizer Logic
@@ -4075,6 +3667,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.CollectionManager.init({
     appType: "illustrations",
     getItems: () => ICONS,
+    saveLS: saveLS,
     onUpdate: () => {
       saveLS();
       if (typeof renderSavedPanel === "function") renderSavedPanel();
@@ -4135,6 +3728,7 @@ document
       const folderId = delBtn.dataset.del;
       if (confirm("Are you sure you want to delete this collection?")) {
         state.folders = state.folders.filter((f) => f.id !== folderId);
+        window.CollectionManager?.forgetDirectoryHandle(folderId);
         if (state.activeFolderId === folderId) state.activeFolderId = null;
         saveLS();
         renderSavedPanel();
