@@ -1,12 +1,12 @@
 /**
- * API Client for Motvin Icons Backend
+ * API Client for Motvin Logos Backend
  * Handles all communication with the NestJS backend API
  */
 
 // API URL Configuration
-// - Local development: http://localhost:3000/api/icons
-// - Docker development: http://localhost:3000/api/icons (via port mapping)
-// - Production: https://api.motvin.com/api/icons
+// - Local development: http://localhost:3000/api/logos
+// - Docker development: http://localhost:3000/api/logos (via port mapping)
+// - Production: https://api.motvin.com/api/logos
 const getAPIBaseURL = () => {
   // Check for environment config (injected by Docker/deployment)
   if (window.ENV && window.ENV.API_URL) {
@@ -19,16 +19,16 @@ const getAPIBaseURL = () => {
   // Local development or Docker (localhost:8080 for Docker UI)
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     // Use same localhost but backend port 3000
-    return 'http://localhost:3000/api/icons';
+    return 'http://localhost:3000/api/logos';
   }
 
   // Production - use separate API domain
-  return 'https://api.motvin.com/api/icons';
+  return 'https://api.motvin.com/api/logos';
 };
 
 const API_BASE_URL = getAPIBaseURL();
 
-class IconsAPIClient {
+class LogosAPIClient {
   constructor() {
     this.cache = new Map();
     this.pendingRequests = new Map();
@@ -109,7 +109,7 @@ class IconsAPIClient {
    * @param {string} collectionId - Collection ID
    * @param {object} options - {limit, offset, style, category, search}
    */
-  async getIcons(collectionId, options = {}) {
+  async getLogos(collectionId, options = {}) {
     const {
       limit = 60,
       offset = 0,
@@ -138,7 +138,7 @@ class IconsAPIClient {
    * @param {string} query - Search query (can be empty for browsing all)
    * @param {object} options - {limit, offset, collection, style, category}
    */
-  async searchIcons(query = '', options = {}) {  // Default empty string
+  async searchLogos(query = '', options = {}) {  // Default empty string
     const {
       limit = 60,
       offset = 0,
@@ -172,7 +172,7 @@ class IconsAPIClient {
    * @param {string} collectionId - Collection ID
    * @param {string} iconName - Icon name
    */
-  getIconSVGUrl(collectionId, iconName) {
+  getLogoSVGUrl(collectionId, iconName) {
     return `${API_BASE_URL}/${collectionId}/${iconName}.svg`;
   }
 
@@ -197,4 +197,4 @@ class IconsAPIClient {
 }
 
 // Create global instance
-window.iconsAPI = new IconsAPIClient();
+window.logosAPI = new LogosAPIClient();

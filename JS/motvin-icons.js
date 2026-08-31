@@ -5461,10 +5461,7 @@ function buildCategoryList() {
   const container = document.getElementById("categories-list-container");
   if (!container) return;
 
-  const catCounts = {};
-  ICONS.forEach((ic) => {
-    catCounts[ic.category] = (catCounts[ic.category] || 0) + 1;
-  });
+  const catCounts = (window.ICON_STATS && window.ICON_STATS.byCategory) || {};
 
   const cats = Object.keys(catCounts).sort((a, b) => {
     if (a === "Others") return 1;
@@ -5646,6 +5643,13 @@ document.addEventListener("DOMContentLoaded", () => {
       buildTopCategoryDropdown();
       wire();
       initRecolor();
+      
+      // Restore active sidebar tab seamlessly (MUST happen after setupSidebarTabs)
+      const savedTab = localStorage.getItem("mi.sidebarTab");
+      if (savedTab && savedTab !== "filters") {
+        const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
+        if (activeTabBtn) activeTabBtn.click();
+      }
     });
   } else {
     // Fallback if stats-bridge.js not loaded
@@ -5661,6 +5665,13 @@ document.addEventListener("DOMContentLoaded", () => {
     buildTopCategoryDropdown();
     wire();
     initRecolor();
+    
+    // Restore active sidebar tab seamlessly (MUST happen after setupSidebarTabs)
+    const savedTab = localStorage.getItem("mi.sidebarTab");
+    if (savedTab && savedTab !== "filters") {
+      const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
+      if (activeTabBtn) activeTabBtn.click();
+    }
   }
 
   // Dynamically update the overall live icons count in the sidebar
@@ -5684,13 +5695,6 @@ document.addEventListener("DOMContentLoaded", () => {
       openDetail(ic);
       setFullPage(true, ic.id);
     }
-  }
-
-  // Restore active sidebar tab seamlessly
-  const savedTab = localStorage.getItem("mi.sidebarTab");
-  if (savedTab && savedTab !== "filters") {
-    const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
-    if (activeTabBtn) activeTabBtn.click();
   }
 
   // Sidebar Resizer Logic

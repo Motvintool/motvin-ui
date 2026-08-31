@@ -15,7 +15,7 @@
       document.write('</style>');
     })();
   </script>
-  <link rel="stylesheet" href="CSS/motvin-icons.css?v=15" />
+  <link rel="stylesheet" href="CSS/motvin-icons.css?v=17" />
   <link rel="stylesheet" href="CSS/skeleton-loader.css" />
   <link rel="stylesheet" href="COMPONENT/Components CSS/Library Profile Menu.css" />
   <link rel="stylesheet" href="COMPONENT/Components CSS/Library Profile Badge.css" />
@@ -677,6 +677,10 @@
             if (savedTab === 'categories') headerTitle.textContent = 'Packs';
             else if (savedTab === 'saved') headerTitle.textContent = 'Saved';
           }
+          var innerPanel = document.querySelector('.mi-right-panel-inner');
+          if (innerPanel) {
+            innerPanel.className = 'mi-right-panel-inner mi-rp-' + savedTab;
+          }
         }
       })();
     </script>
@@ -1169,9 +1173,9 @@
   <!-- Environment configuration (generated at runtime in Docker) -->
   <script src="env-config.js"></script>
   <!-- API Integration: Load stats before main app -->
-  <script src="JS/api-client.js"></script>
+  <script src="JS/api-client.js?v=2"></script>
   <script src="JS/stats-bridge.js"></script>
-  <script src="JS/api-loader.js"></script>
+  <script src="JS/api-loader.js?v=2"></script>
   <!-- <script src="real_icons_data.js?v=39"></script> -->
   <script src="COMPONENT/Save Collection Modal.js"></script>
   <script src="COMPONENT/Pagination.js"></script>
@@ -1181,7 +1185,7 @@
   <script src="JS/firebase-auth.js"></script>
   <script src="COMPONENT/Auth Modal.js"></script>
   <script src="COMPONENT/Stack Toast.js"></script>
-  <script src="JS/motvin-icons.js?v=2"></script>
+  <script src="JS/motvin-icons.js?v=5"></script>
   <script>
     window.addEventListener('load', function() {
       setTimeout(function() {

@@ -1,15 +1,15 @@
 /**
- * API Loader - Handles loading icons from API based on filters
+ * API Loader - Handles loading logos from API based on filters
  */
 
 (function () {
   'use strict';
 
   /**
-   * Load icons from API based on current state (filters, search, pagination)
-   * @returns {Promise<{icons: Array, total: number}>}
+   * Load logos from API based on current state (filters, search, pagination)
+   * @returns {Promise<{logos: Array, total: number}>}
    */
-  window.loadIconsFromAPI = async function () {
+  window.loadLogosFromAPI = async function () {
     const q = state.query.trim();
     const page = state.page || 1;
     const limit = 60;
@@ -23,7 +23,7 @@
       const activeLicenseFilters = Array.from(state.licenseFilter || []);
 
       // ALWAYS use search API (works with empty query now for cross-collection browsing)
-      console.log(`[API Loader] ${q ? `Searching for "${q}"` : 'Loading icons across all collections'}...`);
+      console.log(`[API Loader] ${q ? `Searching for "${q}"` : 'Loading logos across all collections'}...`);
 
       const apiOptions = {
         limit,
@@ -48,65 +48,65 @@
         
         // If they want to see saved items but haven't saved any, return empty immediately
         if (savedIds.length === 0) {
-          return { icons: [], total: 0 };
+          return { logos: [], total: 0 };
         }
         apiOptions.ids = savedIds.join(',');
       }
 
-      const result = await window.iconsAPI.searchIcons(q, apiOptions);
+      const result = await window.logosAPI.searchLogos(q, apiOptions);
 
       return {
-        icons: result.results || [],
+        logos: result.results || [],
         total: result.total || 0
       };
 
     } catch (error) {
-      console.error('[API Loader] Failed to load icons:', error);
+      console.error('[API Loader] Failed to load logos:', error);
       return {
-        icons: [],
+        logos: [],
         total: 0
       };
     }
   };
 
   /**
-   * Populate REAL_ICONS and ICONS from API result
+   * Populate REAL_LOGOS and LOGOS from API result
    */
-  window.populateIconsFromAPI = async function () {
-    const result = await window.loadIconsFromAPI();
+  window.populateLogosFromAPI = async function () {
+    const result = await window.loadLogosFromAPI();
 
-    console.log(`[API Loader] Loaded ${result.icons.length} icons (total: ${result.total})`);
+    console.log(`[API Loader] Loaded ${result.logos.length} logos (total: ${result.total})`);
 
     // Get source names from stats
-    const collections = window.ICON_STATS?.collections || [];
+    const collections = window.LOGO_STATS?.collections || [];
     const getCollectionName = (id) => {
       const c = collections.find(col => col.id === id);
       return c ? c.name : id;
     };
 
-    // Populate REAL_ICONS
-    window.REAL_ICONS = result.icons.map(icon => {
-      const sourceId = icon.source || icon.collection;
+    // Populate REAL_LOGOS
+    window.REAL_LOGOS = result.logos.map(logo => {
+      const sourceId = logo.source || logo.collection;
       const collection = collections.find(c => c.id === sourceId);
 
       return {
-        ...icon,
+        ...logo,
         source: sourceId,
-        sourceName: collection ? collection.name : (icon.sourceName || icon.collectionName || sourceId),
-        svg: icon.svg || '', // SVG loaded via URL or provided by API
+        sourceName: collection ? collection.name : (logo.sourceName || logo.collectionName || sourceId),
+        svg: logo.svg || '', // SVG loaded via URL or provided by API
         // Ensure required fields exist
-        id: icon.id || `${sourceId}_${icon.name}`,
-        name: icon.name,
-        tags: icon.tags || [],
-        style: icon.style || 'outline',
-        viewBox: icon.viewBox || '0 0 24 24',
-        category: icon.category || 'UI'
+        id: logo.id || `${sourceId}_${logo.name}`,
+        name: logo.name,
+        tags: logo.tags || [],
+        style: logo.style || 'outline',
+        viewBox: logo.viewBox || '0 0 24 24',
+        category: logo.category || 'UI'
       };
     });
 
-    // Recreate ICONS array
-    if (typeof window.recreateIcons === 'function') {
-      window.recreateIcons();
+    // Recreate LOGOS array
+    if (typeof window.recreateLogos === 'function') {
+      window.recreateLogos();
     }
 
     return result.total;

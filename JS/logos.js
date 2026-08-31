@@ -9,7 +9,7 @@
  */
 
 
-const SOURCES = [
+let SOURCES = [
   {
     id: "logos",
     name: "SVG Logos",
@@ -58,9 +58,10 @@ const STYLES = ["color", "solid"];
 // real logo data carries its own style field.
 const SOURCE_STYLE_BIAS = {};
 
-
-
-
+// Helper to get total logo count from stats API or fallback to ICONS.length
+const getTotalLogoCount = () => {
+  return (window.LOGO_STATS && window.LOGO_STATS.total) || ICONS.length || 0;
+};
 // Semantic synonyms for search
 const SYNONYMS = {
   notification: ["bell", "alert", "message", "mail"],
@@ -81,373 +82,6 @@ const SYNONYMS = {
 // --------------------------------------------------------------------
 // State
 // --------------------------------------------------------------------
-const CATEGORY_MAP = {
-  Arrows: [
-    "arrow",
-    "chevron",
-    "caret",
-    "direction",
-    "point",
-    "up",
-    "down",
-    "left",
-    "right",
-    "forward",
-    "back",
-    "next",
-    "prev",
-  ],
-  Communication: [
-    "phone",
-    "mail",
-    "chat",
-    "message",
-    "envelope",
-    "call",
-    "speech",
-    "comment",
-    "send",
-    "wifi",
-    "signal",
-    "network",
-    "bluetooth",
-  ],
-  Media: [
-    "play",
-    "pause",
-    "stop",
-    "video",
-    "music",
-    "audio",
-    "sound",
-    "volume",
-    "speaker",
-    "mic",
-    "cast",
-  ],
-  People: [
-    "user",
-    "person",
-    "people",
-    "avatar",
-    "profile",
-    "face",
-    "group",
-    "man",
-    "woman",
-    "boy",
-    "girl",
-  ],
-  Business: [
-    "briefcase",
-    "office",
-    "chart",
-    "graph",
-    "money",
-    "dollar",
-    "euro",
-    "coin",
-    "wallet",
-    "trend",
-    "bag",
-  ],
-  Weather: [
-    "sun",
-    "moon",
-    "cloud",
-    "rain",
-    "snow",
-    "wind",
-    "lightning",
-    "weather",
-    "storm",
-    "temp",
-  ],
-  Device: [
-    "laptop",
-    "mobile",
-    "phone",
-    "tablet",
-    "screen",
-    "monitor",
-    "keyboard",
-    "mouse",
-    "battery",
-    "cpu",
-    "device",
-    "desktop",
-    "computer",
-  ],
-  Navigation: [
-    "map",
-    "location",
-    "pin",
-    "gps",
-    "compass",
-    "globe",
-    "route",
-    "marker",
-    "local",
-  ],
-  File: [
-    "file",
-    "folder",
-    "document",
-    "archive",
-    "paper",
-    "copy",
-    "paste",
-    "clipboard",
-  ],
-  Security: [
-    "lock",
-    "key",
-    "shield",
-    "guard",
-    "protect",
-    "secure",
-    "password",
-    "unlock",
-  ],
-  Time: [
-    "clock",
-    "time",
-    "watch",
-    "hour",
-    "minute",
-    "calendar",
-    "date",
-    "schedule",
-  ],
-  Status: [
-    "check",
-    "cross",
-    "x",
-    "close",
-    "tick",
-    "success",
-    "warning",
-    "error",
-    "alert",
-    "info",
-    "bell",
-    "plus",
-    "minus",
-    "add",
-    "remove",
-    "delete",
-    "clear",
-    "cancel",
-    "badge",
-  ],
-  AI: ["ai", "robot", "bot", "sparkle", "magic", "brain", "smart", "machine"],
-  Editing: [
-    "edit",
-    "pencil",
-    "pen",
-    "write",
-    "draw",
-    "brush",
-    "crop",
-    "cut",
-    "paint",
-    "filter",
-    "view",
-    "eye",
-    "zoom",
-    "search",
-    "format",
-    "layout",
-    "list",
-    "table",
-    "sort",
-    "select",
-    "line",
-    "fill",
-    "border",
-  ],
-  Characters: [
-    "font",
-    "text",
-    "letter",
-    "character",
-    "type",
-    "bold",
-    "italic",
-    "heading",
-    "language",
-  ],
-  Hands: ["hand", "finger", "thumb", "point", "touch", "grab", "hold"],
-  Home: ["home", "house", "building", "roof", "door", "nest"],
-  Album: ["album", "photo", "picture", "image", "gallery"],
-  Camera: ["camera", "lens", "shutter", "focus"],
-  Nature: [
-    "leaf",
-    "tree",
-    "plant",
-    "flower",
-    "forest",
-    "wood",
-    "bug",
-    "animal",
-    "water",
-    "fire",
-    "drop",
-  ],
-  Finance: [
-    "bank",
-    "money",
-    "coin",
-    "card",
-    "credit",
-    "dollar",
-    "euro",
-    "wallet",
-    "pay",
-    "currency",
-  ],
-  Education: [
-    "book",
-    "school",
-    "learn",
-    "student",
-    "graduate",
-    "degree",
-    "hat",
-    "read",
-    "class",
-  ],
-  Transport: [
-    "car",
-    "bus",
-    "train",
-    "plane",
-    "truck",
-    "bike",
-    "ship",
-    "boat",
-    "vehicle",
-    "auto",
-  ],
-  Design: [
-    "layer",
-    "vector",
-    "palette",
-    "color",
-    "paint",
-    "canvas",
-    "grid",
-    "align",
-    "distribute",
-    "path",
-  ],
-  Commerce: [
-    "shop",
-    "cart",
-    "bag",
-    "store",
-    "buy",
-    "sell",
-    "price",
-    "tag",
-    "basket",
-  ],
-  Health: [
-    "health",
-    "medical",
-    "hospital",
-    "pill",
-    "heart",
-    "pulse",
-    "doctor",
-    "nurse",
-    "cross",
-  ],
-  Food: [
-    "food",
-    "drink",
-    "cup",
-    "coffee",
-    "meal",
-    "fork",
-    "knife",
-    "spoon",
-    "pizza",
-    "burger",
-    "apple",
-    "dining",
-  ],
-  Social: [
-    "share",
-    "like",
-    "thumb",
-    "heart",
-    "star",
-    "network",
-    "connect",
-    "link",
-  ],
-  Brands: [
-    "logo",
-    "brand",
-    "facebook",
-    "twitter",
-    "google",
-    "apple",
-    "microsoft",
-    "github",
-    "amazon",
-  ],
-  Sports: ["ball", "game", "sport", "play", "run", "jump", "swim", "fitness"],
-  Gaming: [
-    "game",
-    "play",
-    "console",
-    "controller",
-    "joystick",
-    "pixel",
-    "vr",
-    "dice",
-    "chess",
-  ],
-  Development: [
-    "code",
-    "bracket",
-    "terminal",
-    "bug",
-    "debug",
-    "program",
-    "api",
-    "server",
-    "database",
-    "web",
-  ],
-  System: [
-    "setting",
-    "gear",
-    "cog",
-    "option",
-    "config",
-    "power",
-    "off",
-    "on",
-    "switch",
-    "menu",
-    "tool",
-  ],
-  Shapes: [
-    "circle",
-    "square",
-    "triangle",
-    "rectangle",
-    "star",
-    "polygon",
-    "cube",
-    "shape",
-  ],
-  Music: ["music", "note", "clef", "melody", "song", "tune"],
-  Travel: ["travel", "bag", "luggage", "suitcase", "ticket", "flight", "trip"],
-};
 
 const LOGO_CATEGORIES = [
   "Design",
@@ -529,8 +163,8 @@ function assignLogoCategory(ic, index) {
   return LOGO_CATEGORIES[hash % LOGO_CATEGORIES.length];
 }
 
-const ICONS =
-  typeof REAL_LOGOS !== "undefined"
+function createLogosArray() {
+  return typeof REAL_LOGOS !== "undefined"
     ? REAL_LOGOS.map((ic, i) => {
         return {
           ...ic,
@@ -546,6 +180,20 @@ const ICONS =
         };
       })
     : [];
+}
+
+let ICONS = createLogosArray();
+
+window.recreateLogos = function () {
+  if (window.SOURCES && window.SOURCES.length > 0) {
+    SOURCES = window.SOURCES;
+  }
+  ICONS = createLogosArray();
+  console.log('[Logos] Recreated ICONS array with', ICONS.length, 'logos');
+  if (typeof renderFilters === 'function') {
+    renderFilters();
+  }
+};
 const state = {
   query: localStorage.getItem("ml.query") || "",
   sourceFilter: new Set(
@@ -704,177 +352,25 @@ function styleOpts(style) {
 // Render an icon with its native style applied — used by the grid, similar
 // row, compare modal, etc. The editor overrides via editorRenderOpts.
 function renderStyled(icon, extra = {}) {
-  const gc =
-    state.globalColor !== "currentColor" ? state.globalColor : undefined;
   return renderSvg(icon.svg, {
     size: state.globalSize,
-    stroke: state.globalStroke,
-    iconStyle: icon.style,
-    sourceId: icon.source,
-    ...styleOpts(icon.style),
     viewBox: icon.viewBox,
-    ...(gc ? { color: gc } : {}),
     ...extra,
   });
 }
 
 function renderSvg(paths, opts = {}) {
-  // Strip hardcoded stroke-width from inner paths so the wrapper stroke takes priority
-  let cleanPaths = paths.replace(/stroke-width="[^"]*"/g, "");
-
   const size = opts.size ?? 24;
   const viewBox = opts.viewBox || "0 0 24 24";
-  let stroke = opts.stroke ?? 1.75;
-
-  // Calculate relative stroke width so the physical stroke visually matches the slider
-  // regardless of how large the SVG canvas is scaled.
-  const vwParts = viewBox.trim().split(/\s+/);
-  const vWidth = vwParts.length >= 3 ? parseFloat(vwParts[2]) : 24;
-  const scale = size / vWidth;
-  const adjustedStroke = stroke / scale;
-
-  let isFillBased = !paths.includes("stroke");
-  if (opts.iconStyle !== "solid" && opts.iconStyle !== "brands" && opts.iconStyle !== "color") {
-    const fillBasedSources = ["fontawesome", "material", "zondicons", "entypo", "typicons"];
-    if (!fillBasedSources.includes(opts.sourceId)) {
-      isFillBased = false;
-    }
-  }
-
-  if (stroke > 0 && isFillBased) {
-    stroke = 0;
-  }
-
-  const color = opts.color ?? "currentColor";
-  const cap = opts.cap ?? "round";
-  const join = opts.join ?? "round";
-  const pattern = opts.pattern ?? "solid";
-  const rot = opts.rotation ?? 0;
-  const flip = opts.flip ?? "none";
-  const opacity = (opts.opacity ?? 100) / 100;
-  const shadow = opts.shadow ?? 0;
-  const shape = opts.shape ?? "none";
-  const iconInset = opts.iconInset ?? 0;
-  const shapeRadius = opts.shapeRadius ?? 4;
-  const shapeColor = opts.shapeColor ?? "#EEEAFB";
-
-  // Background shape fills the viewBox — explicit stroke="none" so it doesn't
-  // inherit the icon's stroke.
-  let bg = "";
-  if (shape === "circle")
-    bg = `<circle cx="12" cy="12" r="12" fill="${shapeColor}" stroke="none"/>`;
-  else if (shape === "rect")
-    bg = `<rect x="0" y="0" width="24" height="24" fill="${shapeColor}" stroke="none"/>`;
-  else if (shape === "rounded")
-    bg = `<rect x="0" y="0" width="24" height="24" rx="${shapeRadius}" ry="${shapeRadius}" fill="${shapeColor}" stroke="none"/>`;
-
-  // Icon transform: when shape is active, scale icon down and center inside inset area
-  const tf = [];
-  if (shape !== "none" && iconInset > 0) {
-    const scale = (24 - 2 * iconInset) / 24;
-    tf.push(`translate(12 12) scale(${scale}) translate(-12 -12)`);
-  }
-  if (rot) tf.push(`rotate(${rot} 12 12)`);
-  if (flip === "h") tf.push("scale(-1 1) translate(-24 0)");
-  if (flip === "v") tf.push("scale(1 -1) translate(0 -24)");
-
-  const dashMap = { solid: "", dashed: "3 2", dotted: "0.2 2.2" };
-  const dashAttr = dashMap[pattern]
-    ? ` stroke-dasharray="${dashMap[pattern]}"`
-    : "";
-
-  const filter =
-    shadow > 0
-      ? `<defs><filter id="mi-shd" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="${shadow / 6}" stdDeviation="${shadow / 8}" flood-color="#0F1116" flood-opacity="0.25"/></filter></defs>`
-      : "";
-
-  let rootFill = opts.fillMode === "solid" ? opts.fillColor || color : "none";
-  // If the icon is fill-based, it MUST have a fill to be visible, even if the UI mode isn't solid.
-  if (isFillBased && opts.iconStyle !== "color") {
-    rootFill = color;
-  }
-  const fillOpaAttr =
-    opts.fillMode === "solid" && typeof opts.fillOpacity === "number"
-      ? ` fill-opacity="${opts.fillOpacity}"`
-      : "";
-  const strokeInl =
-    stroke === 0
-      ? `stroke="none"`
-      : `stroke="${color}" stroke-width="${adjustedStroke}" stroke-linecap="${cap}" stroke-linejoin="${join}"`;
-
-  // Strip hardcoded presentation attributes from inner paths so we can cleanly override them.
-  // We skip this for 'color' icons (like emojis) so they retain their native multi-color styles!
-  if (opts.iconStyle !== "color") {
-    cleanPaths = cleanPaths
-      .replace(/stroke-width="[^"]*"/g, "")
-      .replace(/stroke-linecap="[^"]*"/g, "")
-      .replace(/stroke-linejoin="[^"]*"/g, "");
-
-    cleanPaths = cleanPaths.replace(
-      /<(path|circle|rect|polygon|polyline|line|ellipse)([^>]*)>/g,
-      function (match, tag, attrs) {
-        const fillMatch = attrs.match(/fill="([^"]*)"/);
-        const isSelfClosing = attrs.trim().endsWith("/");
-        const pureAttrs = attrs.replace(/\/$/, "");
-
-        // Smart Stroke Logic
-        let pathStroke = strokeInl;
-        const strokeMatch = pureAttrs.match(/stroke="([^"]*)"/);
-        if (strokeMatch) {
-          const val = strokeMatch[1].toLowerCase();
-          if (val === "none") {
-            pathStroke = `stroke="none"`;
-          } else if (val === "#fff" || val === "#ffffff" || val === "white") {
-            pathStroke = strokeInl.replace(
-              /stroke="[^"]+"/,
-              'stroke="#ffffff"',
-            );
-          } else if (val === "#000" || val === "#000000" || val === "black") {
-            pathStroke = strokeInl.replace(
-              /stroke="[^"]+"/,
-              'stroke="#000000"',
-            );
-          }
-        } else if (!strokeMatch && isFillBased === false) {
-          if (fillMatch && fillMatch[1].toLowerCase() !== "none") {
-            pathStroke = `stroke="none"`;
-          } else {
-            pathStroke = strokeInl;
-          }
-        }
-
-        // Smart Fill Logic
-        let pathFill = rootFill;
-        if (opts.fillMode === "solid") {
-          pathFill = rootFill;
-        } else if (fillMatch) {
-          const val = fillMatch[1].toLowerCase();
-          if (val === "none") pathFill = "none";
-          else if (val === "#fff" || val === "#ffffff" || val === "white")
-            pathFill = "#ffffff";
-          else if (val === "#000" || val === "#000000" || val === "black")
-            pathFill = "#000000";
-          else pathFill = color;
-        }
-
-        let cleanAttrs = pureAttrs
-          .replace(/stroke="[^"]*"/g, "")
-          .replace(/fill="[^"]*"/g, "");
-        const endTag = isSelfClosing ? " />" : ">";
-        return `<${tag} ${cleanAttrs} fill="${pathFill}"${fillOpaAttr} ${pathStroke}${dashAttr}${endTag}`;
-      },
-    );
-  }
-
+  
+  // For logos, we explicitly do NOT modify strokes or fills.
+  // We want to keep the original branding and colors intact.
+  
   // Wrap paths in an inner SVG to map their native viewBox correctly into the 24x24 canvas.
-  // Use width="100%" height="100%" so vector editors scale it properly on paste.
-  const innerSvg = `<svg viewBox="${viewBox}" width="24" height="24" x="0" y="0" preserveAspectRatio="xMidYMid meet" fill-rule="evenodd" clip-rule="evenodd">${cleanPaths}</svg>`;
-
-  const iconAttrs = `opacity="${opacity}"${shadow > 0 ? ' filter="url(#mi-shd)"' : ""}${tf.length ? ` transform="${tf.join(" ")}"` : ""}${dashAttr}`;
-  const g = `<g ${iconAttrs}>${innerSvg}</g>`;
-  const svgColorAttr = opts.color ? ` color="${color}"` : "";
-
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24"${svgColorAttr}>${filter}${bg}${g}</svg>`;
+  // This matches motvin-icons.js and prevents non-square SVGs from overflowing.
+  const innerSvg = `<svg viewBox="${viewBox}" width="24" height="24" x="0" y="0" preserveAspectRatio="xMidYMid meet">${paths}</svg>`;
+  
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" class="mi-icon" aria-hidden="true">${innerSvg}</svg>`;
 }
 
 // --------------------------------------------------------------------
@@ -980,33 +476,81 @@ function iconCard(icon) {
 
 const ITEMS_PER_PAGE = 60;
 
-function renderGrid() {
+let currentRenderId = 0;
+
+async function renderGrid() {
+  const renderId = ++currentRenderId;
   saveFiltersLS();
+
+  // Use API loader if available
+  if (typeof window.populateLogosFromAPI === 'function') {
+    const grid = $("#icon-grid");
+
+    // Show skeleton for results count - keep existing mi-skeleton class
+    const resultsCountEl = $("#results-count");
+    if (resultsCountEl) {
+      resultsCountEl.classList.add('mi-skeleton');
+    }
+
+    // Show skeleton loader - use mi-card styling with skeleton animation
+    grid.className = `mi-grid density-${state.density}`;
+    const skeletonCards = Array.from({ length: 60 }, () =>
+      `<div class="mi-card" style="min-height: 120px; animation: skeleton-pulse 1.5s ease-in-out infinite; pointer-events: none;"></div>`
+    ).join('');
+    grid.innerHTML = skeletonCards;
+
+    try {
+      const total = await window.populateLogosFromAPI();
+
+      // Abort if a newer renderGrid call was made while we were fetching
+      if (renderId !== currentRenderId) return;
+
+      // The API already filtered by query, category, style, etc. 
+      // We can just use the returned ICONS directly.
+      const list = ICONS;
+      const actualTotal = list.length;
+
+      renderGridContent(list, actualTotal, total);
+    } catch (error) {
+      console.error('[renderGrid] Error loading from API:', error);
+      grid.innerHTML = `<div class="mi-empty"><h3>Failed to load logos</h3><p>${error.message}</p></div>`;
+    }
+    return;
+  }
+
+  // Fallback to client-side filtering if API not available
   const list = filterIcons();
   const total = list.length;
+  renderGridContent(list, total, total);
+}
+
+function renderGridContent(list, displayTotal, apiTotal) {
   const grid = $("#icon-grid");
   grid.className = `mi-grid density-${state.density}`;
 
-  if (!total) {
-    grid.innerHTML = `<div class="mi-empty"><h3>No icons match your filters</h3><p>Try clearing filters or a different search.</p></div>`;
+  if (!displayTotal) {
+    grid.innerHTML = `<div class="mi-empty"><h3>No logos match your filters</h3><p>Try clearing filters or a different search.</p></div>`;
     $("#pagination-wrapper").style.display = "none";
   } else {
     // Pagination slicing
-    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil((apiTotal || displayTotal) / ITEMS_PER_PAGE);
     if (state.page > totalPages) state.page = totalPages;
     if (state.page < 1) state.page = 1; localStorage.setItem("ml.page", state.page);
 
-    const startIdx = (state.page - 1) * ITEMS_PER_PAGE;
-    const paginatedList = list.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+    const paginatedList = (typeof window.populateLogosFromAPI === 'function')
+      ? list
+      : list.slice((state.page - 1) * ITEMS_PER_PAGE, state.page * ITEMS_PER_PAGE);
 
     grid.innerHTML = paginatedList.map(iconCard).join("");
-    renderPagination(total, totalPages);
+    renderPagination((apiTotal || displayTotal), totalPages);
   }
 
   const resultsCountEl = $("#results-count");
   if (resultsCountEl) {
-    resultsCountEl.textContent = total.toLocaleString();
-    resultsCountEl.classList.remove("mi-skeleton");
+    resultsCountEl.classList.remove('mi-skeleton');
+    resultsCountEl.style.opacity = '';
+    resultsCountEl.style.animation = '';
+    resultsCountEl.textContent = (apiTotal || displayTotal).toLocaleString();
   }
   $("#results-query").textContent = state.query ? `for "${state.query}"` : "";
   // Only show the stroke adjustment slider if there is at least one 'true stroke' icon in the current grid list
@@ -1163,6 +707,7 @@ function renderFilters() {
     }
   };
 
+
   // Generic List (e.g. License)
   const buildGenericList = (containerId, items, setKey) => {
     const set = state[setKey];
@@ -1196,8 +741,12 @@ function renderFilters() {
     }
   };
 
-  const countBy = (key) =>
-    ICONS.reduce((m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m), {});
+  const countBy = (key) => {
+    if (window.LOGO_STATS && window.getFilterCounts) {
+      return window.getFilterCounts(key);
+    }
+    return ICONS.reduce((m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m), {});
+  };
   const sc = countBy("source"),
     st = countBy("style"),
     lc = countBy("license"),
@@ -1382,7 +931,10 @@ function renderFilters() {
         <div class="mi-rp-avatar" style="z-index: 1; margin-left: -6px"><img src="ASSET/Icons/icons-filled.svg" alt=""/></div>
       `;
       sourceAllTitle.textContent = "All Sources";
-      badgeLg.textContent = (ICONS.length || 0).toLocaleString();
+      const totalLogos = window.LOGO_STATS 
+        ? window.LOGO_STATS.collections.reduce((sum, c) => sum + c.total, 0)
+        : ICONS.length;
+      badgeLg.textContent = totalLogos.toLocaleString();
     } else {
       sourceAllContainer.classList.add("has-filters");
       sourceAllContainer.title = "Click to clear filters";
@@ -3501,8 +3053,8 @@ function renderHeroStats() {
   $("#stat-styles").textContent = totalStyles;
 
   const searchInput = $("#search-input");
-  if (searchInput) {
-    searchInput.placeholder = `Search ${ICONS.length.toLocaleString()}+ icons...`;
+  if (searchInput && searchInput.placeholder) {
+    searchInput.placeholder = `Search ${getTotalLogoCount().toLocaleString()}+ logos...`;
   }
 }
 
@@ -3575,10 +3127,7 @@ function buildTopCategoryDropdown() {
 
   if (!menuList || !catDropdown || !catMenu) return;
 
-  const catCounts = {};
-  ICONS.forEach((ic) => {
-    catCounts[ic.category] = (catCounts[ic.category] || 0) + 1;
-  });
+  const catCounts = (window.LOGO_STATS && window.LOGO_STATS.byCategory) || {};
 
   const cats = Object.keys(catCounts).sort((a, b) => {
     if (a === "Others") return 1;
@@ -3590,7 +3139,7 @@ function buildTopCategoryDropdown() {
   let html = `
     <div class="mi-category-menu-item ${isAllActive ? "is-active" : ""}" data-cat="all">
       <span class="mi-category-menu-label">All Logos</span>
-      <span class="mi-category-menu-badge">${ICONS.length.toLocaleString()}</span>
+      <span class="mi-category-menu-badge">${getTotalLogoCount().toLocaleString()}</span>
     </div>
   `;
 
@@ -3658,10 +3207,7 @@ function buildCategoryList() {
   const container = document.getElementById("categories-list-container");
   if (!container) return;
 
-  const catCounts = {};
-  ICONS.forEach((ic) => {
-    catCounts[ic.category] = (catCounts[ic.category] || 0) + 1;
-  });
+  const catCounts = (window.LOGO_STATS && window.LOGO_STATS.byCategory) || {};
 
   const cats = Object.keys(catCounts).sort((a, b) => {
     if (a === "Others") return 1;
@@ -3673,7 +3219,7 @@ function buildCategoryList() {
   let html = `
     <div class="mi-rp-cat-item ${isAllActive ? "is-active" : ""}" data-cat="all">
       <span class="mi-rp-cat-label">All</span>
-      <span class="mi-rp-cat-count">${ICONS.length.toLocaleString()}</span>
+      <span class="mi-rp-cat-count">${getTotalLogoCount().toLocaleString()}</span>
     </div>
   `;
 
@@ -3705,14 +3251,17 @@ function buildCategoryList() {
 
       const searchClear = document.getElementById("search-clear");
       const searchIcon = document.querySelector(".mi-search-icon");
+      const searchInput = document.getElementById("search-input");
       if (searchClear && searchInput)
         searchClear.style.display = searchInput.value ? "flex" : "none";
       if (searchIcon && searchInput)
         searchIcon.style.display = searchInput.value ? "none" : "flex";
+        searchIcon.style.display = searchInput.value ? "none" : "flex";
 
       state.page = 1; localStorage.setItem("ml.page", state.page);
       renderGrid();
-      buildCategoryList(); // re-render to update active styling
+      buildCategoryList();
+      buildTopCategoryDropdown();
     });
   });
 }
@@ -3746,23 +3295,39 @@ document.addEventListener("DOMContentLoaded", () => {
     window.tooltipController.init();
   }
 
-  renderHeroStats();
-  renderFilters();
-  renderGrid();
-  renderCompareCount();
-  renderIconOfDay();
-  renderCollections();
-  renderCategoriesSection();
-  setupSidebarTabs();
-  buildCategoryList();
-  wire();
-  initRecolor();
+  const initUI = () => {
+    renderHeroStats();
+    renderFilters();
+    renderGrid();
+    renderCompareCount();
+    renderIconOfDay();
+    renderCollections();
+    renderCategoriesSection();
+    setupSidebarTabs();
+    buildCategoryList();
+    wire();
+    initRecolor();
+    
+    // Restore active sidebar tab seamlessly (MUST happen after setupSidebarTabs)
+    const savedTab = localStorage.getItem("ml.sidebarTab");
+    if (savedTab && savedTab !== "filters") {
+      const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
+      if (activeTabBtn) activeTabBtn.click();
+    }
+    
+    // Dynamically update the overall live icons count in the sidebar
+    const badgeLg = document.querySelector(".mi-rp-source-all .mi-rp-badge-lg");
+    if (badgeLg) {
+      badgeLg.textContent = getTotalLogoCount().toLocaleString();
+      badgeLg.classList.remove("mi-skeleton");
+    }
+  };
 
-  // Dynamically update the overall live icons count in the sidebar
-  const badgeLg = document.querySelector(".mi-rp-badge-lg");
-  if (badgeLg) {
-    badgeLg.textContent = ICONS.length.toLocaleString();
-    badgeLg.classList.remove("mi-skeleton");
+  // Wait for stats to load before initial render
+  if (window.STATS_LOADED) {
+    window.STATS_LOADED.then(initUI);
+  } else {
+    initUI();
   }
 
   // Remove skeleton loaders from sort tabs
@@ -3779,13 +3344,6 @@ document.addEventListener("DOMContentLoaded", () => {
       openDetail(ic);
       setFullPage(true, ic.id);
     }
-  }
-
-  // Restore active sidebar tab seamlessly
-  const savedTab = localStorage.getItem("ml.sidebarTab");
-  if (savedTab && savedTab !== "filters") {
-    const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
-    if (activeTabBtn) activeTabBtn.click();
   }
 
   // Sidebar Resizer Logic

@@ -1698,11 +1698,11 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-right-panel-inner.mi-rp-categories {
-  padding-left: 0;
+  padding-left: 0 !important;
 }
 
 .mi-right-panel-inner.mi-rp-categories .mi-rp-header {
-  padding-left: 20px;
+  padding-left: 20px !important;
 }
 
 .mi-rp-resizer {
@@ -2441,9 +2441,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   transition: all 0.2s ease;
 }
 
-.mi-rp-cat-item.is-skeleton {
-  padding-left: 0;
-}
+
 
 .mi-rp-cat-item.is-skeleton .mi-skeleton {
   height: 20px;

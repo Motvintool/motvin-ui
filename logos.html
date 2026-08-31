@@ -13,7 +13,7 @@
       document.write('</style>');
     })();
   </script>
-  <link rel="stylesheet" href="CSS/logos.css?v=14" />
+  <link rel="stylesheet" href="CSS/logos.css?v=16" />
   <link rel="stylesheet" href="COMPONENT/Components CSS/Library Profile Menu.css" />
   <link rel="stylesheet" href="COMPONENT/Components CSS/Library Profile Badge.css" />
   <link rel="stylesheet" href="COMPONENT/Components CSS/Auth Modal.css" />
@@ -607,6 +607,10 @@
             if (savedTab === 'categories') headerTitle.textContent = 'Packs';
             else if (savedTab === 'saved') headerTitle.textContent = 'Saved';
           }
+          var innerPanel = document.querySelector('.mi-right-panel-inner');
+          if (innerPanel) {
+            innerPanel.className = 'mi-right-panel-inner mi-rp-' + savedTab;
+          }
         }
       })();
     </script>
@@ -1085,7 +1089,9 @@
   </div>
 
   <script src="MOTVIN/componet/Tooltip/tooltip.js"></script>
-  <script src="real_logos_data.js?v=2"></script>
+  <script src="JS/api-client-logos.js?v=17"></script>
+  <script src="JS/stats-bridge-logos.js?v=2"></script>
+  <script src="JS/api-loader-logos.js?v=17"></script>
   <script src="COMPONENT/Save Collection Modal.js"></script>
   <script src="COMPONENT/Pagination.js"></script>
   <script src="JS/firebase-config.js"></script>
@@ -1094,7 +1100,7 @@
   <script src="JS/firebase-auth.js"></script>
   <script src="COMPONENT/Auth Modal.js"></script>
   <script src="COMPONENT/Stack Toast.js"></script>
-  <script src="JS/logos.js?v=2"></script>
+  <script src="JS/logos.js?v=10"></script>
   <script>
     window.addEventListener('load', function() {
       setTimeout(function() {
