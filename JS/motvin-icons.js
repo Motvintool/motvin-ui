@@ -8,7 +8,7 @@
 
 
 // Use SOURCES from stats API if available, otherwise use hardcoded list
-const SOURCES = window.SOURCES || [
+let SOURCES = window.SOURCES || [
   {
     id: "lucide",
     name: "Lucide",
@@ -42,7 +42,7 @@ const SOURCES = window.SOURCES || [
     marketSize: 5880,
   },
   {
-    id: "material",
+    id: "material-symbols",
     name: "Material Symbols",
     license: "Apache 2.0",
     licenseUrl: "https://fonts.google.com/icons",
@@ -1843,7 +1843,7 @@ const SOURCE_STYLE_BIAS = {
   heroicons: ["outline", "solid"],
   phosphor: ["thin", "outline", "bold", "duotone", "solid"],
   tabler: ["outline", "solid"],
-  material: ["outline", "solid", "rounded"],
+  "material-symbols": ["outline", "solid", "rounded"],
   feather: ["outline"],
   bootstrap: ["outline", "solid"],
   radix: ["outline", "solid"],
@@ -2306,8 +2306,14 @@ let ICONS = createIconsArray();
 
 // Expose function to recreate ICONS when REAL_ICONS changes
 window.recreateIcons = function () {
+  if (window.SOURCES && window.SOURCES.length > 0) {
+    SOURCES = window.SOURCES;
+  }
   ICONS = createIconsArray();
   console.log('[Icons] Recreated ICONS array with', ICONS.length, 'icons');
+  if (typeof renderFilters === 'function') {
+    renderFilters();
+  }
 };
 const state = {
   query: localStorage.getItem("mi.query") || "",
@@ -2524,7 +2530,7 @@ function renderSvg(paths, opts = {}) {
   // Prevent CSS stroke from bloating purely fill-based icons (like Gravity UI, FA, etc.).
   let isFillBased = !paths.includes("stroke");
   if (opts.iconStyle !== "solid" && opts.iconStyle !== "brands" && opts.iconStyle !== "color") {
-    const fillBasedSources = ["fontawesome", "material", "zondicons", "entypo", "typicons"];
+    const fillBasedSources = ["fontawesome", "material-symbols", "zondicons", "entypo", "typicons"];
     if (!fillBasedSources.includes(opts.sourceId)) {
       isFillBased = false;
     }
