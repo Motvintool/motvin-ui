@@ -148,7 +148,7 @@
           error: true,
         };
 
-        statsReject(err);
+        statsResolve(window.LOGO_STATS);
       });
   }
 

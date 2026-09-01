@@ -660,6 +660,21 @@ function renderFilters() {
         const v = item.dataset.val;
         if (set.has(v)) set.delete(v);
         else set.add(v);
+        if (setKey === "sourceFilter" && state.styleFilter.size > 0) {
+          const supportedStyles = new Set(
+            [...state.sourceFilter]
+              .flatMap((sourceId) => {
+                const source = SOURCES.find((entry) => entry.id === sourceId);
+                return source?.styles || [];
+              })
+              .map((style) => style.toLowerCase()),
+          );
+          if (supportedStyles.size > 0) {
+            state.styleFilter.forEach((style) => {
+              if (!supportedStyles.has(style)) state.styleFilter.delete(style);
+            });
+          }
+        }
         state.page = 1;
         localStorage.setItem("mill.page", state.page);
         renderGrid();
@@ -900,7 +915,18 @@ function renderFilters() {
     }
   }
 
-  const activeStylesList = Object.keys(st).filter((s) => (st[s] || 0) > 0);
+  const allStyles = Object.keys(st).filter((style) => st[style] > 0);
+  let activeStylesList = allStyles;
+  if (state.sourceFilter.size > 0) {
+    const supportedStyles = new Set();
+    state.sourceFilter.forEach((sourceId) => {
+      const source = SOURCES.find((entry) => entry.id === sourceId);
+      source?.styles?.forEach((style) =>
+        supportedStyles.add(style.toLowerCase()),
+      );
+    });
+    activeStylesList = allStyles.filter((style) => supportedStyles.has(style));
+  }
 
   buildStyleList(
     "#filter-style",

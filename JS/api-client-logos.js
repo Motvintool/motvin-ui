@@ -10,20 +10,23 @@
 const getAPIBaseURL = () => {
   // Check for environment config (injected by Docker/deployment)
   if (window.ENV && window.ENV.API_URL) {
-    return window.ENV.API_URL;
+    return window.ENV.API_URL.replace(
+      /\/api\/(icons|illustrations)$/,
+      "/api/logos",
+    );
   }
 
   const hostname = window.location.hostname;
   const port = window.location.port;
 
   // Local development or Docker (localhost:8080 for Docker UI)
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
     // Use same localhost but backend port 3000
-    return 'http://localhost:3000/api/logos';
+    return "http://localhost:3000/api/logos";
   }
 
   // Production - use separate API domain
-  return 'https://api.motvin.com/api/logos';
+  return "https://api.motvin.com/api/logos";
 };
 
 const API_BASE_URL = getAPIBaseURL();
@@ -32,7 +35,7 @@ class LogosAPIClient {
   constructor() {
     this.cache = new Map();
     this.pendingRequests = new Map();
-    this.CACHE_VERSION = 'v2'; // Increment when API changes
+    this.CACHE_VERSION = "v2"; // Increment when API changes
   }
 
   /**
@@ -55,25 +58,25 @@ class LogosAPIClient {
 
     // Make new request
     const promise = fetch(url)
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error(`API error: ${res.status}`);
         return res.json();
       })
-      .then(data => {
-        if (!data.success) throw new Error(data.error || 'API request failed');
+      .then((data) => {
+        if (!data.success) throw new Error(data.error || "API request failed");
 
         // Cache the result
         this.cache.set(versionedKey, {
           data: data.data,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
 
         this.pendingRequests.delete(versionedKey);
         return data.data;
       })
-      .catch(err => {
+      .catch((err) => {
         this.pendingRequests.delete(versionedKey);
-        console.error('API Error:', err);
+        console.error("API Error:", err);
         throw err;
       });
 
@@ -88,8 +91,8 @@ class LogosAPIClient {
   async getStats() {
     return this.fetch(
       `${API_BASE_URL}/stats`,
-      'stats',
-      3600000 // 1 hour cache
+      "stats",
+      3600000, // 1 hour cache
     );
   }
 
@@ -99,8 +102,8 @@ class LogosAPIClient {
   async getCollections() {
     return this.fetch(
       `${API_BASE_URL}/collections`,
-      'collections',
-      3600000 // 1 hour cache
+      "collections",
+      3600000, // 1 hour cache
     );
   }
 
@@ -113,19 +116,19 @@ class LogosAPIClient {
     const {
       limit = 60,
       offset = 0,
-      style = '',
-      category = '',
-      search = ''
+      style = "",
+      category = "",
+      search = "",
     } = options;
 
     const params = new URLSearchParams({
       limit: limit.toString(),
-      offset: offset.toString()
+      offset: offset.toString(),
     });
 
-    if (style) params.append('style', style);
-    if (category) params.append('category', category);
-    if (search) params.append('search', search);
+    if (style) params.append("style", style);
+    if (category) params.append("category", category);
+    if (search) params.append("search", search);
 
     const url = `${API_BASE_URL}/collection/${collectionId}/icons?${params}`;
     const cacheKey = `icons:${collectionId}:${params.toString()}`;
@@ -138,28 +141,29 @@ class LogosAPIClient {
    * @param {string} query - Search query (can be empty for browsing all)
    * @param {object} options - {limit, offset, collection, style, category}
    */
-  async searchLogos(query = '', options = {}) {  // Default empty string
+  async searchLogos(query = "", options = {}) {
+    // Default empty string
     const {
       limit = 60,
       offset = 0,
-      collection = '',
-      style = '',
-      category = '',
-      license = '',
-      ids = ''
+      collection = "",
+      style = "",
+      category = "",
+      license = "",
+      ids = "",
     } = options;
 
     const params = new URLSearchParams({
       q: query,
       limit: limit.toString(),
-      offset: offset.toString()
+      offset: offset.toString(),
     });
 
-    if (collection) params.append('collection', collection);
-    if (style) params.append('style', style);
-    if (category) params.append('category', category);
-    if (license) params.append('license', license);
-    if (ids) params.append('ids', ids);
+    if (collection) params.append("collection", collection);
+    if (style) params.append("style", style);
+    if (category) params.append("category", category);
+    if (license) params.append("license", license);
+    if (ids) params.append("ids", ids);
 
     const url = `${API_BASE_URL}/search?${params}`;
     const cacheKey = `search:${params.toString()}`;
@@ -191,7 +195,7 @@ class LogosAPIClient {
     return {
       cacheSize: this.cache.size,
       pendingRequests: this.pendingRequests.size,
-      cachedKeys: Array.from(this.cache.keys())
+      cachedKeys: Array.from(this.cache.keys()),
     };
   }
 }

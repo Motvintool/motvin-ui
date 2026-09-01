@@ -1552,6 +1552,13 @@ body.is-panel-floating .mi-main {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-weight: 600;
+  width: 100%;
+  max-width: 88px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .mi-card-actions {
@@ -5644,6 +5651,17 @@ body.mi-full .topbar-close svg {
     height: auto;
   }
 
+  body.mi-full .mi-new-body {
+    height: auto;
+    padding-bottom: 0;
+  }
+
+  body.mi-full .mi-new-body > .mi-new-left,
+  body.mi-full .mi-new-body > .mi-new-center,
+  body.mi-full .mi-new-body > .mi-new-right {
+    height: auto;
+  }
+
   .mi-new-left {
     width: 100%;
     border-radius: 0;
@@ -5760,8 +5778,39 @@ body.mi-full .topbar-close svg {
     height: 220px;
   }
 
+  .mi-new-canvas-inner {
+    width: min(280px, 100%);
+    height: min(280px, 100%);
+  }
+
+  .mi-new-canvas-inner > svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
   .mi-new-bottom-grid {
     grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
     gap: 10px;
+  }
+
+  .mi-new-bottom-grid .mi-card {
+    min-width: 0;
+    overflow: hidden;
+    padding: 12px 6px 10px;
+  }
+
+  .mi-new-bottom-grid .mi-card-preview {
+    width: 42px;
+    min-width: 0;
+    min-height: 42px;
+    height: 42px;
+    overflow: hidden;
+  }
+
+  .mi-new-bottom-grid .mi-card-preview svg {
+    width: 42px !important;
+    height: 42px !important;
+    max-width: 100%;
+    max-height: 100%;
   }
 }

@@ -89,7 +89,7 @@
           byCategory: {},
           error: true,
         };
-        statsReject(err);
+        statsResolve(window.ILLUSTRATION_STATS);
       });
   }
 

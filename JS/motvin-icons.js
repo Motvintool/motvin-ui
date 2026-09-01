@@ -987,7 +987,7 @@ function iconCard(icon) {
   `;
 }
 
-const ITEMS_PER_PAGE = 60;
+const ITEMS_PER_PAGE = 64;
 let currentRenderId = 0;
 // Tracks only the icons currently on screen; guarded against race conditions (see renderGrid).
 let renderedIconsMap = new Map();
@@ -1010,7 +1010,7 @@ async function renderGrid() {
     // Show skeleton loader - use mi-card styling with skeleton animation
     grid.className = `mi-grid density-${state.density}`;
     const skeletonCards = Array.from(
-      { length: 60 },
+      { length: ITEMS_PER_PAGE },
       () =>
         `<div class="mi-card" style="min-height: 120px; animation: skeleton-pulse 1.5s ease-in-out infinite; pointer-events: none;"></div>`,
     ).join("");
@@ -1160,6 +1160,21 @@ function renderFilters() {
         const v = item.dataset.val;
         if (set.has(v)) set.delete(v);
         else set.add(v);
+        if (setKey === "sourceFilter" && state.styleFilter.size > 0) {
+          const supportedStyles = new Set(
+            [...state.sourceFilter]
+              .flatMap((sourceId) => {
+                const source = SOURCES.find((entry) => entry.id === sourceId);
+                return source?.styles || SOURCE_STYLE_BIAS[sourceId] || [];
+              })
+              .map((style) => style.toLowerCase()),
+          );
+          if (supportedStyles.size > 0) {
+            state.styleFilter.forEach((style) => {
+              if (!supportedStyles.has(style)) state.styleFilter.delete(style);
+            });
+          }
+        }
         state.page = 1;
         renderGrid();
         renderFilters();
@@ -1403,12 +1418,11 @@ function renderFilters() {
   if (state.sourceFilter.size > 0) {
     const activeStylesSet = new Set();
     state.sourceFilter.forEach((src) => {
-      const srcStyles = SOURCE_STYLE_BIAS[src] || [];
+      const source = SOURCES.find((item) => item.id === src);
+      const srcStyles = source?.styles || SOURCE_STYLE_BIAS[src] || [];
       srcStyles.forEach((s) => activeStylesSet.add(s.toLowerCase()));
     });
-    if (activeStylesSet.size > 0) {
-      activeStylesList = STYLES.filter((s) => activeStylesSet.has(s));
-    }
+    activeStylesList = STYLES.filter((s) => activeStylesSet.has(s));
   }
 
   buildStyleList(
