@@ -1,4 +1,4 @@
-/* Motvin Logos — Logo page frontend
+/* Motvin Logos â€” Logo page frontend
  * This file is an independent copy of motvin-icons.js scoped to the Logos
  * page. Future logo-specific functionality (logo categories, brand search,
  * SVG export for logos, etc.) should be added here without affecting the
@@ -8,48 +8,8 @@
  * will be handled here when logo data sources are integrated.
  */
 
-let SOURCES = [
-  {
-    id: "logos",
-    name: "SVG Logos",
-    license: "Mixed",
-    licenseUrl: "https://github.com/gilbarbara/logos",
-    author: "Gil Barbara",
-    marketSize: 1861,
-  },
-  {
-    id: "simpleicons",
-    name: "Simple Icons",
-    license: "CC0",
-    licenseUrl: "https://simpleicons.org",
-    author: "Simple Icons",
-    marketSize: 3453,
-  },
-  {
-    id: "skillicons",
-    name: "Skill Icons",
-    license: "MIT",
-    licenseUrl: "https://skillicons.dev",
-    author: "Tandpfun",
-    marketSize: 400,
-  },
-  {
-    id: "devicon",
-    name: "Devicon",
-    license: "MIT",
-    licenseUrl: "https://devicon.dev",
-    author: "Devicon",
-    marketSize: 1036,
-  },
-  {
-    id: "vectorlogozone",
-    name: "VectorLogoZone",
-    license: "Various",
-    licenseUrl: "https://www.vectorlogo.zone/",
-    author: "VectorLogoZone",
-    marketSize: 3200,
-  },
-];
+// Sources are populated exclusively from the backend stats API.
+let SOURCES = window.SOURCES || [];
 
 // SOURCE_STYLE_BIAS is empty; styles are derived dynamically from API stats in renderFilters.
 const SOURCE_STYLE_BIAS = {};
@@ -167,7 +127,7 @@ function createLogosArray() {
           category: assignLogoCategory(ic, i),
           id: ic.id || "ic_" + i,
           sourceIconId: `${ic.source || "logos"}:${ic.name}`,
-          license: ic.license || "ISC",
+          license: ic.license || "Unknown",
           licenseUrl: ic.licenseUrl || "",
           author: ic.author || "Unknown",
           popularity: Math.round(1000 - i + Math.sin(i) * 200),
@@ -266,7 +226,7 @@ function toast(msg) {
     const labels = {
       "Copied SVG": "SVG copied",
       "Copied PNG image": "PNG copied",
-      "SVG copied — paste in Figma with ⌘V": "SVG copied",
+      "SVG copied â€” paste in Figma with âŒ˜V": "SVG copied",
       "Share link copied": "Link copied",
     };
     window.StackToast?.show(labels[msg] || msg);
@@ -334,12 +294,12 @@ function saveFiltersLS() {
   localStorage.setItem("ml.density", state.density);
 }
 
-// Map a style keyword → render options so a filtered "solid" or "duotone"
+// Map a style keyword â†’ render options so a filtered "solid" or "duotone"
 // actually looks solid or duotone, not just labeled that way.
 function styleOpts(style) {
   switch (style) {
     // Solid keeps a stroke so line-based icons (menu, minus, activity, etc.)
-    // remain visible — the fill covers closed shapes for a solid look.
+    // remain visible â€” the fill covers closed shapes for a solid look.
     case "solid":
       return { cap: "round", join: "round" };
     case "duotone":
@@ -355,7 +315,7 @@ function styleOpts(style) {
   }
 }
 
-// Render an icon with its native style applied — used by the grid, similar
+// Render an icon with its native style applied â€” used by the grid, similar
 // row, compare modal, etc. The editor overrides via editorRenderOpts.
 function renderStyled(icon, extra = {}) {
   return renderSvg(icon.svg, {
@@ -1050,7 +1010,7 @@ function updateFilterBadge() {
     }
 
     // Set tooltip attributes - use bullet points for better readability
-    const tooltipText = filterLines.map((part) => "• " + part).join(" ");
+    const tooltipText = filterLines.map((part) => "â€¢ " + part).join(" ");
     badge.setAttribute("data-tooltip", tooltipText);
     badge.setAttribute("data-tooltip-position", "bottom");
     badge.setAttribute("data-tooltip-color", "black");
@@ -1264,12 +1224,17 @@ function openDetail(icon) {
   renderCanvas();
   renderSimilar();
   renderMatchingIcons();
+  const sourceObj =
+    window.LOGO_STATS?.collections?.find(
+      (source) => source.id === icon.source,
+    ) || SOURCES.find((source) => source.id === icon.source);
+  const sourceName = sourceObj?.name || icon.sourceName || icon.source;
+  const license = sourceObj?.license || icon.license || "Unknown";
   $("#detail-name").textContent = icon.name;
-  $("#detail-source").textContent = icon.sourceName;
-  $("#detail-license").textContent = icon.license;
-  $("#attr-source").textContent = icon.sourceName;
-  $("#attr-license").textContent = icon.license;
-  const sourceObj = SOURCES.find((s) => s.id === icon.source);
+  $("#detail-source").textContent = sourceName;
+  $("#detail-license").textContent = license;
+  $("#attr-source").textContent = sourceName;
+  $("#attr-license").textContent = license;
   if (sourceObj && sourceObj.licenseUrl) {
     $("#attr-license-link").href = sourceObj.licenseUrl;
   } else {
@@ -1278,7 +1243,7 @@ function openDetail(icon) {
 
   let attrText = "Required";
   let commText = "Allowed";
-  const l = (icon.license || "").toLowerCase();
+  const l = license.toLowerCase();
   if (l.includes("cc0") || l === "free" || l === "wtfpl") {
     attrText = "Not required";
   } else if (
@@ -1365,7 +1330,7 @@ function syncEditorControls() {
   $("#ctrl-color").value = e.color;
   $("#ctrl-color-hex").value = e.color;
   $("#ctrl-rot").value = e.rotation;
-  $("#rot-val").textContent = e.rotation + "°";
+  $("#rot-val").textContent = e.rotation + "Â°";
   syncSliderVisual("ctrl-rot");
   $("#ctrl-pad").value = e.padding;
   $("#pad-val").textContent = e.padding;
@@ -1527,7 +1492,7 @@ function renderSimilar() {
   $("#similar-row").innerHTML = scored
     .map(({ x, s }) => {
       const pct = Math.min(99, 70 + Math.round(s / 3));
-      return `<div class="mi-similar-item" data-id="${x.id}" title="${x.name} — ${x.sourceName}">
+      return `<div class="mi-similar-item" data-id="${x.id}" title="${x.name} â€” ${x.sourceName}">
       ${renderStyled(x, { size: 24, color: "#0F1116" })}
       <span class="mi-similar-match">${pct}%</span>
     </div>`;
@@ -1663,7 +1628,7 @@ async function updateCodePreview() {
     return '<span style="color:' + color + '">' + text + "</span>";
   }
 
-  // Single-pass XML/SVG tokenizer — matches one token at a time so
+  // Single-pass XML/SVG tokenizer â€” matches one token at a time so
   // injected <span> tags are never re-processed by subsequent passes.
   function highlightXml(raw, kwList) {
     const escaped = esc(raw);
@@ -1683,7 +1648,7 @@ async function updateCodePreview() {
   function highlightXmlKw(raw, kwList) {
     let out = highlightXml(raw);
     // keyword pass runs on the already-highlighted string but only matches
-    // plain text (not inside existing span tags) — word-boundary is safe here
+    // plain text (not inside existing span tags) â€” word-boundary is safe here
     kwList.forEach((kw) => {
       // Replace the keyword only when it appears as a whole word outside a span
       out = out.replace(
@@ -1694,7 +1659,7 @@ async function updateCodePreview() {
     return out;
   }
 
-  // CSS: single-pass — selector, property, value
+  // CSS: single-pass â€” selector, property, value
   function highlightCss(raw) {
     const e = raw.replace(/&/g, "&amp;");
     return e.replace(
@@ -1897,7 +1862,7 @@ function iconStats(icon) {
   return {
     shapes: elems.length,
     length: Math.round(totalLen),
-    bbox: `${Math.round(bbox.width)} × ${Math.round(bbox.height)}`,
+    bbox: `${Math.round(bbox.width)} Ã— ${Math.round(bbox.height)}`,
   };
 }
 
@@ -1940,7 +1905,7 @@ function renderIconOfDay() {
     <div class="mi-iotd-preview">${renderStyled(ic, { size: 96, color: "#5C4AE4" })}</div>
     <div class="mi-iotd-body">
       <h3>${ic.name}</h3>
-      <p>Today's pick — a versatile ${ic.category} icon from ${ic.sourceName}. Customize size, stroke and color to fit your interface.</p>
+      <p>Today's pick â€” a versatile ${ic.category} icon from ${ic.sourceName}. Customize size, stroke and color to fit your interface.</p>
       <div class="mi-iotd-tags">
         <span class="mi-iotd-tag">${ic.sourceName}</span>
         <span class="mi-iotd-tag">${ic.style}</span>
@@ -2587,7 +2552,7 @@ function wire() {
   });
   $("#ctrl-rot").addEventListener("input", (e) => {
     editor.rotation = +e.target.value;
-    $("#rot-val").textContent = editor.rotation + "°";
+    $("#rot-val").textContent = editor.rotation + "Â°";
     syncSliderVisual("ctrl-rot");
     renderCanvas();
   });
@@ -2806,7 +2771,7 @@ function wire() {
     }
   });
 
-  // Tags row → search
+  // Tags row â†’ search
   $("#tags-row")?.addEventListener("click", (e) => {
     const chip = e.target.closest(".mi-tag-chip");
     if (!chip) return;
@@ -2907,7 +2872,7 @@ function wire() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Motvin Icons — ${state.editorIcon.name}`,
+          title: `Motvin Icons â€” ${state.editorIcon.name}`,
           url: link,
         });
         return;
@@ -3001,7 +2966,7 @@ function wire() {
   if (figmaButton) {
     figmaButton.addEventListener("click", async () => {
       const ok = await copyText(currentSvgString());
-      toast(ok ? "SVG copied — paste in Figma with ⌘V" : "Copy failed");
+      toast(ok ? "SVG copied â€” paste in Figma with âŒ˜V" : "Copy failed");
     });
   }
   $("#btn-save-collection").addEventListener("click", () => {

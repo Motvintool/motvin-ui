@@ -3,8 +3,8 @@
  * Provides global stats data to avoid loading all 300K+ icons
  */
 
-(function() {
-  'use strict';
+(function () {
+  "use strict";
 
   // Global stats object (populated by API call)
   window.LOGO_STATS = null;
@@ -24,27 +24,27 @@
    * @param {string} type - 'source' | 'style' | 'license' | 'category'
    * @returns {object} - Key-value pairs of filter values to counts
    */
-  window.getFilterCounts = function(type) {
+  window.getFilterCounts = function (type) {
     if (!window.LOGO_STATS) {
-      console.warn('Stats not loaded yet');
+      console.warn("Stats not loaded yet");
       return {};
     }
 
-    switch(type) {
-      case 'source':
+    switch (type) {
+      case "source":
         // Convert collections array to {id: total} object
         return window.LOGO_STATS.collections.reduce((acc, collection) => {
           acc[collection.id] = collection.total;
           return acc;
         }, {});
 
-      case 'style':
+      case "style":
         return window.LOGO_STATS.byStyle || {};
 
-      case 'license':
+      case "license":
         return window.LOGO_STATS.byLicense || {};
 
-      case 'category':
+      case "category":
         return window.LOGO_STATS.byCategory || {};
 
       default:
@@ -62,14 +62,14 @@
     window.REAL_LOGOS = [];
 
     // Recreate ICONS array
-    if (typeof window.recreateLogos === 'function') {
+    if (typeof window.recreateLogos === "function") {
       window.recreateLogos();
     }
 
     // Trigger render which will load icons from API
     setTimeout(() => {
-      if (typeof renderGrid === 'function') {
-        console.log('[Stats Bridge] Triggering initial renderGrid()');
+      if (typeof renderGrid === "function") {
+        console.log("[Stats Bridge] Triggering initial renderGrid()");
         renderGrid();
       }
     }, 100);
@@ -79,36 +79,54 @@
    * Load stats immediately
    */
   function loadStats() {
-    console.log('[Stats Bridge] Loading logo statistics...');
+    console.log("[Stats Bridge] Loading logo statistics...");
     const startTime = performance.now();
 
-    window.logosAPI.getStats()
-      .then(stats => {
+    window.logosAPI
+      .getStats()
+      .then((stats) => {
         // Compute total if the backend doesn't provide it at the top level
-        stats.total = stats.total || (stats.collections ? stats.collections.reduce((sum, c) => sum + (c.total || 0), 0) : 0);
+        stats.total =
+          stats.total ||
+          (stats.collections
+            ? stats.collections.reduce((sum, c) => sum + (c.total || 0), 0)
+            : 0);
         window.LOGO_STATS = stats;
         const loadTime = (performance.now() - startTime).toFixed(0);
 
         console.log(`[Stats Bridge] ✓ Loaded in ${loadTime}ms`);
-        console.log(`[Stats Bridge] Total logos: ${stats.total.toLocaleString()}`);
+        console.log(
+          `[Stats Bridge] Total logos: ${stats.total.toLocaleString()}`,
+        );
         console.log(`[Stats Bridge] Collections: ${stats.totalCollections}`);
-        console.log(`[Stats Bridge] Styles:`, Object.keys(stats.byStyle).length);
-        console.log(`[Stats Bridge] Licenses:`, Object.keys(stats.byLicense).length);
-        console.log(`[Stats Bridge] Categories:`, Object.keys(stats.byCategory).length);
+        console.log(
+          `[Stats Bridge] Styles:`,
+          Object.keys(stats.byStyle).length,
+        );
+        console.log(
+          `[Stats Bridge] Licenses:`,
+          Object.keys(stats.byLicense).length,
+        );
+        console.log(
+          `[Stats Bridge] Categories:`,
+          Object.keys(stats.byCategory).length,
+        );
 
         // Build SOURCES array from stats collections for compatibility
         if (!window.SOURCES || window.SOURCES.length === 0) {
-          window.SOURCES = stats.collections.map(c => ({
+          window.SOURCES = stats.collections.map((c) => ({
             id: c.id,
             name: c.name,
             total: c.total,
             styles: c.styles,
-            license: 'Mixed', // Will be enriched later if needed
-            licenseUrl: '',
-            author: '',
-            marketSize: c.total
+            license: c.license || "Unknown",
+            licenseUrl: c.licenseUrl || "",
+            author: "",
+            marketSize: c.total,
           }));
-          console.log(`[Stats Bridge] Built SOURCES array with ${window.SOURCES.length} collections`);
+          console.log(
+            `[Stats Bridge] Built SOURCES array with ${window.SOURCES.length} collections`,
+          );
         }
 
         statsResolve(stats);
@@ -116,8 +134,8 @@
         // Auto-load first page of icons from largest collection
         loadInitialIcons(stats);
       })
-      .catch(err => {
-        console.error('[Stats Bridge] ✗ Failed to load stats:', err);
+      .catch((err) => {
+        console.error("[Stats Bridge] ✗ Failed to load stats:", err);
 
         // Provide fallback empty stats to prevent UI breakage
         window.LOGO_STATS = {
@@ -127,7 +145,7 @@
           byStyle: {},
           byLicense: {},
           byCategory: {},
-          error: true
+          error: true,
         };
 
         statsReject(err);
@@ -138,7 +156,8 @@
   if (window.logosAPI) {
     loadStats();
   } else {
-    console.error('[Stats Bridge] logosAPI not available - load api-client.js first');
+    console.error(
+      "[Stats Bridge] logosAPI not available - load api-client.js first",
+    );
   }
-
 })();

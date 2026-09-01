@@ -1260,12 +1260,17 @@ function openDetail(icon) {
   renderCanvas();
   renderSimilar();
   renderMatchingIcons();
+  const sourceObj =
+    window.ILLUSTRATION_STATS?.collections?.find(
+      (source) => source.id === icon.source,
+    ) || SOURCES.find((source) => source.id === icon.source);
+  const sourceName = sourceObj?.name || icon.sourceName || icon.source;
+  const license = sourceObj?.license || icon.license || "Unknown";
   $("#detail-name").textContent = icon.name;
-  $("#detail-source").textContent = icon.sourceName;
-  $("#detail-license").textContent = icon.license;
-  $("#attr-source").textContent = icon.sourceName;
-  $("#attr-license").textContent = icon.license;
-  const sourceObj = SOURCES.find((s) => s.id === icon.source);
+  $("#detail-source").textContent = sourceName;
+  $("#detail-license").textContent = license;
+  $("#attr-source").textContent = sourceName;
+  $("#attr-license").textContent = license;
   if (sourceObj && sourceObj.licenseUrl) {
     $("#attr-license-link").href = sourceObj.licenseUrl;
   } else {
@@ -1274,7 +1279,7 @@ function openDetail(icon) {
 
   let attrText = "Required";
   let commText = "Allowed";
-  const l = (icon.license || "").toLowerCase();
+  const l = license.toLowerCase();
   if (l.includes("cc0") || l === "free" || l === "wtfpl") {
     attrText = "Not required";
   } else if (
