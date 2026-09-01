@@ -6,7 +6,6 @@
  * architecture. Do not misrepresent this in production.
  */
 
-
 // Use SOURCES from stats API if available, otherwise use hardcoded list
 let SOURCES = window.SOURCES || [
   {
@@ -1837,7 +1836,6 @@ let SOURCES = window.SOURCES || [
 
 const STYLES = ["outline", "solid", "rounded", "duotone", "thin", "bold"];
 
-
 const SOURCE_STYLE_BIAS = {
   lucide: ["outline"],
   heroicons: ["outline", "solid"],
@@ -2267,7 +2265,11 @@ for (const [categoryName, keywords] of Object.entries(CATEGORY_MAP)) {
 
 // Function to create/recreate ICONS array from REAL_ICONS
 function createIconsArray() {
-  if (typeof REAL_ICONS === "undefined" || !REAL_ICONS || REAL_ICONS.length === 0) {
+  if (
+    typeof REAL_ICONS === "undefined" ||
+    !REAL_ICONS ||
+    REAL_ICONS.length === 0
+  ) {
     return [];
   }
 
@@ -2275,11 +2277,8 @@ function createIconsArray() {
     const src = SOURCES.find((s) => s.id === ic.source) || SOURCES[0];
 
     let cat = "Others";
-    const searchStr =
-      `${ic.name} ${(ic.tags || []).join(" ")}`.toLowerCase();
-    for (const [categoryName, regex] of Object.entries(
-      CATEGORY_REGEX_MAP,
-    )) {
+    const searchStr = `${ic.name} ${(ic.tags || []).join(" ")}`.toLowerCase();
+    for (const [categoryName, regex] of Object.entries(CATEGORY_REGEX_MAP)) {
       if (regex.test(searchStr)) {
         cat = categoryName;
         break;
@@ -2310,9 +2309,9 @@ window.recreateIcons = function () {
     SOURCES = window.SOURCES;
   }
   ICONS = createIconsArray();
-  console.log('[Icons] Recreated ICONS array with', ICONS.length, 'icons');
-  if (typeof renderFilters === 'function') renderFilters();
-  if (typeof buildCategoryList === 'function') buildCategoryList();
+  console.log("[Icons] Recreated ICONS array with", ICONS.length, "icons");
+  if (typeof renderFilters === "function") renderFilters();
+  if (typeof buildCategoryList === "function") buildCategoryList();
 };
 const state = {
   query: localStorage.getItem("mi.query") || "",
@@ -2412,16 +2411,16 @@ function toast(msg) {
 function saveLS() {
   // Strip non-serializable fields (dirHandle, _itemCache with SVG data) before saving.
   // _itemCache alone can easily exceed the 5MB localStorage limit.
-  const foldersToSave = state.folders.map(f => ({
+  const foldersToSave = state.folders.map((f) => ({
     id: f.id,
     name: f.name,
-    iconIds: f.iconIds
+    iconIds: f.iconIds,
   }));
   try {
     localStorage.setItem("mi.folders", JSON.stringify(foldersToSave));
     localStorage.setItem("mi.collections", JSON.stringify(state.collections));
   } catch (e) {
-    console.error('[saveLS] localStorage quota exceeded or write failed:', e);
+    console.error("[saveLS] localStorage quota exceeded or write failed:", e);
   }
 }
 
@@ -2490,15 +2489,17 @@ function styleOpts(style) {
 function renderStyled(icon, extra = {}) {
   // If no SVG content, use CDN URL (API integration)
   if (!icon.svg && icon.source && icon.name) {
-    const svgUrl = window.iconsAPI ? window.iconsAPI.getIconSVGUrl(icon.source, icon.name) : '';
+    const svgUrl = window.iconsAPI
+      ? window.iconsAPI.getIconSVGUrl(icon.source, icon.name)
+      : "";
     const size = extra.size || state.globalSize || 24;
-    const color = state.globalColor || 'currentColor';
+    const color = state.globalColor || "currentColor";
 
     return `<img src="${svgUrl}"
                  alt="${icon.name}"
                  width="${size}"
                  height="${size}"
-                 style="display:block;width:${size}px;height:${size}px;object-fit:contain;${color !== 'currentColor' ? `filter: brightness(0) saturate(100%) invert(${color === '#ffffff' ? '100%' : '0%'})` : ''}"
+                 style="display:block;width:${size}px;height:${size}px;object-fit:contain;${color !== "currentColor" ? `filter: brightness(0) saturate(100%) invert(${color === "#ffffff" ? "100%" : "0%"})` : ""}"
                  onerror="this.style.display='none';console.error('Failed to load:', '${svgUrl}')" />`;
   }
 
@@ -2539,8 +2540,18 @@ function renderSvg(paths, opts = {}) {
 
   // Prevent CSS stroke from bloating purely fill-based icons (like Gravity UI, FA, etc.).
   let isFillBased = !paths.includes("stroke");
-  if (opts.iconStyle !== "solid" && opts.iconStyle !== "brands" && opts.iconStyle !== "color") {
-    const fillBasedSources = ["fontawesome", "material-symbols", "zondicons", "entypo", "typicons"];
+  if (
+    opts.iconStyle !== "solid" &&
+    opts.iconStyle !== "brands" &&
+    opts.iconStyle !== "color"
+  ) {
+    const fillBasedSources = [
+      "fontawesome",
+      "material-symbols",
+      "zondicons",
+      "entypo",
+      "typicons",
+    ];
     if (!fillBasedSources.includes(opts.sourceId)) {
       isFillBased = false;
     }
@@ -2765,9 +2776,10 @@ function sortGridItems(items) {
   if (state.sort === "popular") {
     list.sort((a, b) => b.popularity - a.popularity);
   } else if (state.sort === "trending") {
-    list.sort((a, b) =>
-      b.popularity * Math.sin(b.id.length) -
-      a.popularity * Math.sin(a.id.length),
+    list.sort(
+      (a, b) =>
+        b.popularity * Math.sin(b.id.length) -
+        a.popularity * Math.sin(a.id.length),
     );
   } else if (state.sort === "name-asc") {
     list.sort((a, b) => a.name.localeCompare(b.name));
@@ -2810,21 +2822,23 @@ async function renderGrid() {
   saveFiltersLS();
 
   // Use API loader if available
-  if (typeof window.populateIconsFromAPI === 'function') {
+  if (typeof window.populateIconsFromAPI === "function") {
     const grid = $("#icon-grid");
 
     // Show skeleton for results count - keep existing mi-skeleton class
     const resultsCountEl = $("#results-count");
     if (resultsCountEl) {
       // mi-skeleton class is already in HTML, just ensure it's there
-      resultsCountEl.classList.add('mi-skeleton');
+      resultsCountEl.classList.add("mi-skeleton");
     }
 
     // Show skeleton loader - use mi-card styling with skeleton animation
     grid.className = `mi-grid density-${state.density}`;
-    const skeletonCards = Array.from({ length: 60 }, () =>
-      `<div class="mi-card" style="min-height: 120px; animation: skeleton-pulse 1.5s ease-in-out infinite; pointer-events: none;"></div>`
-    ).join('');
+    const skeletonCards = Array.from(
+      { length: 60 },
+      () =>
+        `<div class="mi-card" style="min-height: 120px; animation: skeleton-pulse 1.5s ease-in-out infinite; pointer-events: none;"></div>`,
+    ).join("");
     grid.innerHTML = skeletonCards;
 
     try {
@@ -2833,15 +2847,15 @@ async function renderGrid() {
       // Abort if a newer renderGrid call was made while we were fetching
       if (renderId !== currentRenderId) return;
 
-      // The API already filtered by query, category, style, etc. 
+      // The API already filtered by query, category, style, etc.
       // We can just use the returned ICONS directly.
       const list = sortGridItems(ICONS);
       const actualTotal = list.length;
 
-      renderedIconsMap = new Map(list.map(ic => [ic.id, ic]));
+      renderedIconsMap = new Map(list.map((ic) => [ic.id, ic]));
       renderGridContent(list, actualTotal, total);
     } catch (error) {
-      console.error('[renderGrid] Error loading from API:', error);
+      console.error("[renderGrid] Error loading from API:", error);
       grid.innerHTML = `<div class="mi-empty"><h3>Failed to load icons</h3><p>${error.message}</p></div>`;
     }
     return;
@@ -2872,19 +2886,23 @@ function renderGridContent(list, displayTotal, apiTotal) {
     if (state.page < 1) state.page = 1;
 
     // If using API, list is already the right page, otherwise slice it
-    const paginatedList = (typeof window.populateIconsFromAPI === 'function')
-      ? list
-      : list.slice((state.page - 1) * ITEMS_PER_PAGE, state.page * ITEMS_PER_PAGE);
+    const paginatedList =
+      typeof window.populateIconsFromAPI === "function"
+        ? list
+        : list.slice(
+            (state.page - 1) * ITEMS_PER_PAGE,
+            state.page * ITEMS_PER_PAGE,
+          );
 
     grid.innerHTML = paginatedList.map(iconCard).join("");
-    renderPagination((apiTotal || displayTotal), totalPages);
+    renderPagination(apiTotal || displayTotal, totalPages);
   }
 
   const resultsCountEl = $("#results-count");
   if (resultsCountEl) {
-    resultsCountEl.classList.remove('mi-skeleton');
-    resultsCountEl.style.opacity = '';
-    resultsCountEl.style.animation = '';
+    resultsCountEl.classList.remove("mi-skeleton");
+    resultsCountEl.style.opacity = "";
+    resultsCountEl.style.animation = "";
     resultsCountEl.textContent = (apiTotal || displayTotal).toLocaleString();
   }
   $("#results-query").textContent = state.query ? `for "${state.query}"` : "";
@@ -2895,7 +2913,9 @@ function renderGridContent(list, displayTotal, apiTotal) {
   if (strokeSection) {
     const showStroke = list.some(
       (ic) =>
-        ic && ic.style && ic.svg &&
+        ic &&
+        ic.style &&
+        ic.svg &&
         (ic.style === "outline" || ic.style === "thin") &&
         ic.svg.includes("stroke="),
     );
@@ -2917,6 +2937,16 @@ function renderPagination(total, totalPages) {
 }
 
 function renderFilters() {
+  const getSourceIcon = (label) => {
+    const normalizedLabel = label.toLowerCase();
+    if (normalizedLabel.includes("hero")) return "Heroicons.svg";
+    if (normalizedLabel.includes("lucide")) return "Lucide.svg";
+    if (normalizedLabel.includes("simple")) return "icons-brand.svg";
+    if (normalizedLabel.includes("phosphor")) return "Phosphor.svg";
+    if (normalizedLabel.includes("tabler")) return "Tabler Icons.svg";
+    return null;
+  };
+
   // Sources (Checkbox style)
   const buildSourceList = (containerId, items, setKey) => {
     const set = state[setKey];
@@ -2925,16 +2955,7 @@ function renderFilters() {
     el.innerHTML = items
       .map((it) => {
         const active = set.has(it.value);
-        // Determine icon based on label name (fallback to a generic icon if not found)
-        let icon = "icons-basic.svg";
-        if (it.label.toLowerCase().includes("hero")) icon = "Heroicons.svg";
-        else if (it.label.toLowerCase().includes("lucide")) icon = "Lucide.svg";
-        else if (it.label.toLowerCase().includes("simple"))
-          icon = "icons-brand.svg";
-        else if (it.label.toLowerCase().includes("phosphor"))
-          icon = "Phosphor.svg";
-        else if (it.label.toLowerCase().includes("tabler"))
-          icon = "Tabler Icons.svg";
+        const icon = it.icon || "icons-basic.svg";
 
         return `
       <div class="mi-rp-item ${active ? "is-active" : ""}" data-val="${it.value}" style="cursor:pointer">
@@ -3083,7 +3104,10 @@ function renderFilters() {
       return counts;
     }
     // Fallback to old method if stats not loaded
-    return ICONS.reduce((m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m), {});
+    return ICONS.reduce(
+      (m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m),
+      {},
+    );
   };
   const sc = countBy("source"),
     st = countBy("style"),
@@ -3096,14 +3120,15 @@ function renderFilters() {
     value: s.id,
     label: s.name,
     count: fmtNum(sc[s.id] || 0),
+    icon: getSourceIcon(s.name),
   }));
   const selectedSourceVals = Array.from(state.sourceFilter).reverse();
   const selectedSources = selectedSourceVals
     .map((val) => allSourcesRaw.find((s) => s.value === val))
     .filter(Boolean);
-  const unselectedSources = allSourcesRaw.filter(
-    (s) => !state.sourceFilter.has(s.value),
-  );
+  const unselectedSources = allSourcesRaw
+    .filter((s) => !state.sourceFilter.has(s.value))
+    .sort((a, b) => Number(Boolean(b.icon)) - Number(Boolean(a.icon)));
   const allSources = [...selectedSources, ...unselectedSources];
 
   const visibleSources = allSources.slice(0, state.sourcesVisibleCount);
@@ -3547,7 +3572,7 @@ function openDetail(icon) {
 
   // Re-enable CSS transitions (which were disabled in head to prevent FOUC)
   setTimeout(() => {
-    const initStyle = document.getElementById('mi-init-style');
+    const initStyle = document.getElementById("mi-init-style");
     if (initStyle) initStyle.remove();
   }, 50);
 
@@ -3585,10 +3610,20 @@ function openDetail(icon) {
   const l = (icon.license || "").toLowerCase();
   if (l.includes("cc0") || l === "free" || l === "wtfpl") {
     attrText = "Not required";
-  } else if (l.includes("mit") || l.includes("isc") || l.includes("apache") || l.includes("ofl") || l.includes("zlib")) {
+  } else if (
+    l.includes("mit") ||
+    l.includes("isc") ||
+    l.includes("apache") ||
+    l.includes("ofl") ||
+    l.includes("zlib")
+  ) {
     attrText = "Required (in source)";
   }
-  if (l.includes("nc") || l.includes("non-commercial") || l.includes("noncommercial")) {
+  if (
+    l.includes("nc") ||
+    l.includes("non-commercial") ||
+    l.includes("noncommercial")
+  ) {
     commText = "Not allowed";
   }
 
@@ -3644,7 +3679,9 @@ function syncEditorControls() {
   );
 
   // Hide Fill, Stroke, and STROKE advanced section if the icon is fill-based
-  const isFillBased = state.editorIcon ? !state.editorIcon.svg.includes("stroke") : false;
+  const isFillBased = state.editorIcon
+    ? !state.editorIcon.svg.includes("stroke")
+    : false;
   const displayVal = isFillBased ? "none" : "";
 
   const strokeGroup = $("#ctrl-stroke")?.closest(".mi-ctrl-group");
@@ -3750,14 +3787,17 @@ async function renderCanvas() {
   if (!state.editorIcon) return;
 
   // Fetch SVG if not loaded yet
-  if (!state.editorIcon.svg || state.editorIcon.svg === '') {
+  if (!state.editorIcon.svg || state.editorIcon.svg === "") {
     try {
-      const svgUrl = window.iconsAPI.getIconSVGUrl(state.editorIcon.source, state.editorIcon.name);
+      const svgUrl = window.iconsAPI.getIconSVGUrl(
+        state.editorIcon.source,
+        state.editorIcon.name,
+      );
       const response = await fetch(svgUrl);
       const svgContent = await response.text();
       state.editorIcon.svg = svgContent;
     } catch (error) {
-      console.error('[renderCanvas] Failed to fetch SVG:', error);
+      console.error("[renderCanvas] Failed to fetch SVG:", error);
       return;
     }
   }
@@ -4115,7 +4155,7 @@ function requireLoginToDownload() {
     const user = window.FirebaseAuthService.getCurrentUser();
     if (!user || user.isAnonymous) {
       if (window.AuthModal) {
-        window.AuthModal.open('login');
+        window.AuthModal.open("login");
       }
       return false;
     }
@@ -4196,12 +4236,12 @@ function iconStats(icon) {
   elems.forEach((el) => {
     try {
       if (el.getTotalLength) totalLen += el.getTotalLength();
-    } catch { }
+    } catch {}
   });
   let bbox = { width: 24, height: 24 };
   try {
     bbox = svg.getBBox();
-  } catch { }
+  } catch {}
   tmp.remove();
   return {
     shapes: elems.length,
@@ -4271,7 +4311,10 @@ function renderIconOfDay() {
     }
     if (copyId) {
       const ic = ICONS.find((x) => x.id === copyId.dataset.copyId);
-      if (ic) copyText(renderSvg(ic.svg)).then((ok) => toast(ok ? "Copied SVG" : "Copy failed"));
+      if (ic)
+        copyText(renderSvg(ic.svg)).then((ok) =>
+          toast(ok ? "Copied SVG" : "Copy failed"),
+        );
     }
   });
 }
@@ -4322,12 +4365,12 @@ function renderCollections() {
       <div class="mi-coll-card" data-coll="${c.tag}">
         <div class="mi-coll-preview">
           ${preview
-          .slice(0, 8)
-          .map(
-            (ic) =>
-              `<div>${renderStyled(ic, { size: 22, color: "#0F1116" })}</div>`,
-          )
-          .join("")}
+            .slice(0, 8)
+            .map(
+              (ic) =>
+                `<div>${renderStyled(ic, { size: 22, color: "#0F1116" })}</div>`,
+            )
+            .join("")}
         </div>
         <div class="mi-coll-name">${c.name}</div>
         <div class="mi-coll-meta">
@@ -4760,7 +4803,9 @@ function wire() {
   $("#icon-grid").addEventListener("click", (e) => {
     const card = e.target.closest(".mi-card");
     if (!card) return;
-    const icon = renderedIconsMap.get(card.dataset.id) || ICONS.find((x) => x.id === card.dataset.id);
+    const icon =
+      renderedIconsMap.get(card.dataset.id) ||
+      ICONS.find((x) => x.id === card.dataset.id);
     if (!icon) return;
     if (e.target.closest("[data-cmp]")) {
       if (state.selected.has(icon.id)) state.selected.delete(icon.id);
@@ -5146,21 +5191,22 @@ function wire() {
       if (!state.editorIcon) return;
       const size = state.pngSize || 512;
       try {
-        cpBtn.style.opacity = '0.5';
+        cpBtn.style.opacity = "0.5";
         const dataUrl = await rasterizePng(size);
         const res = await fetch(dataUrl);
         const blob = await res.blob();
-        await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+        await navigator.clipboard.write([
+          new ClipboardItem({ "image/png": blob }),
+        ]);
         toast("Copied PNG image");
       } catch (e) {
         console.error(e);
         toast("Failed to copy PNG image");
       } finally {
-        cpBtn.style.opacity = '1';
+        cpBtn.style.opacity = "1";
       }
     });
   }
-
 
   // SVG-format dropdown
   const svgFmtBtn = $("#btn-svg-format");
@@ -5219,7 +5265,7 @@ function wire() {
           url: link,
         });
         return;
-      } catch { }
+      } catch {}
     }
     const ok = await copyText(link);
     toast(ok ? "Share link copied" : "Copy failed");
@@ -5648,11 +5694,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (hiddenUntil && Date.now() < parseInt(hiddenUntil, 10)) {
       banner.setAttribute("hidden", "");
     } else {
-      document.querySelector(".mi-new-banner-close")?.addEventListener("click", () => {
-        banner.setAttribute("hidden", "");
-        // 2 days in milliseconds: 2 * 24 * 60 * 60 * 1000 = 172800000
-        localStorage.setItem(PROMO_KEY, (Date.now() + 172800000).toString());
-      });
+      document
+        .querySelector(".mi-new-banner-close")
+        ?.addEventListener("click", () => {
+          banner.setAttribute("hidden", "");
+          // 2 days in milliseconds: 2 * 24 * 60 * 60 * 1000 = 172800000
+          localStorage.setItem(PROMO_KEY, (Date.now() + 172800000).toString());
+        });
     }
   }
 });
@@ -5670,17 +5718,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     const innerPanel = document.querySelector(".mi-right-panel-inner");
     if (innerPanel) {
-      Object.keys(panels).forEach((key) => innerPanel.classList.remove(`mi-rp-${key}`));
+      Object.keys(panels).forEach((key) =>
+        innerPanel.classList.remove(`mi-rp-${key}`),
+      );
       innerPanel.classList.add(`mi-rp-${savedTab}`);
     }
-    const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
+    const activeTabBtn = document.querySelector(
+      `.mi-sidebar-item[data-sidebar="${savedTab}"]`,
+    );
     if (activeTabBtn) {
-      document.querySelectorAll(".mi-sidebar-item").forEach((t) => t.classList.remove("is-active"));
+      document
+        .querySelectorAll(".mi-sidebar-item")
+        .forEach((t) => t.classList.remove("is-active"));
       activeTabBtn.classList.add("is-active");
       const title = document.getElementById("rp-header-title");
-      if (title) title.textContent = activeTabBtn.querySelector(".mi-sidebar-label")?.textContent || "";
+      if (title)
+        title.textContent =
+          activeTabBtn.querySelector(".mi-sidebar-label")?.textContent || "";
     }
-    if (savedTab === "saved" && typeof renderSavedPanel === "function") renderSavedPanel();
+    if (savedTab === "saved" && typeof renderSavedPanel === "function")
+      renderSavedPanel();
     if (savedTab === "categories") buildCategoryList();
   }
 
@@ -6044,7 +6101,7 @@ document.addEventListener("DOMContentLoaded", () => {
           rightPanel.style.right = "auto";
           detachBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="15" y1="3" x2="15" y2="21"></line></svg>`;
           detachBtn.title = "Dock Panel";
-        } catch (e) { }
+        } catch (e) {}
       }
     }
 
@@ -6065,8 +6122,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function updateEditModalSaveState() {
-  if (!state.editorIcon || !window.EditModalManager || !window.EditModalManager.updateSaveState) return;
-  const isSaved = state.folders && state.folders.some(f => f.iconIds.includes(state.editorIcon.id));
+  if (
+    !state.editorIcon ||
+    !window.EditModalManager ||
+    !window.EditModalManager.updateSaveState
+  )
+    return;
+  const isSaved =
+    state.folders &&
+    state.folders.some((f) => f.iconIds.includes(state.editorIcon.id));
   window.EditModalManager.updateSaveState(isSaved);
 }
 
@@ -6146,4 +6210,3 @@ document
       setTimeout(() => input.focus(), 60);
     }
   });
-

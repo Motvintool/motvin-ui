@@ -3,25 +3,25 @@
  * Logo-specific styles should be added here without affecting the Icons page (CSS/motvin-icons.css).
  */
 :root {
-  --mi-accent: #5C4AE4;
-  --mi-accent-2: #7B6BF0;
-  --mi-accent-tint: #EEEAFB;
-  --mi-bg: #FFFFFF;
-  --mi-bg-2: #F7F7F9;
-  --mi-bg-3: #F0F0F4;
-  --mi-ink: #0F1116;
-  --mi-ink-2: #2C2E36;
-  --mi-muted: #6B7280;
-  --mi-muted-2: #9CA3AF;
-  --mi-border: #E5E5EB;
-  --mi-border-2: #D8D8E0;
+  --mi-accent: #5c4ae4;
+  --mi-accent-2: #7b6bf0;
+  --mi-accent-tint: #eeeafb;
+  --mi-bg: #ffffff;
+  --mi-bg-2: #f7f7f9;
+  --mi-bg-3: #f0f0f4;
+  --mi-ink: #0f1116;
+  --mi-ink-2: #2c2e36;
+  --mi-muted: #6b7280;
+  --mi-muted-2: #9ca3af;
+  --mi-border: #e5e5eb;
+  --mi-border-2: #d8d8e0;
   --mi-focus: rgba(92, 74, 228, 0.18);
   --mi-radius: 10px;
   --mi-radius-lg: 14px;
   --mi-shadow-sm: 0 1px 3px rgba(15, 17, 22, 0.06);
   --mi-shadow-md: 0 4px 16px rgba(15, 17, 22, 0.08);
   --mi-shadow-lg: 0 24px 80px rgba(15, 17, 22, 0.14);
-  --mi-ease: cubic-bezier(.2, .7, .3, 1);
+  --mi-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
   --header-h: 0px;
   --left-sidebar-w: 85px;
   --right-panel-w: 350px;
@@ -39,7 +39,13 @@ body {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    system-ui,
+    sans-serif;
   color: var(--mi-ink);
   background: var(--mi-bg);
   -webkit-font-smoothing: antialiased;
@@ -83,7 +89,7 @@ select {
   height: 69px;
   display: flex;
   align-items: center;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .mi-header-inner {
@@ -138,7 +144,12 @@ select {
   padding: 0 10px;
   border-radius: 999px;
   border: 1px solid rgba(123, 76, 255, 0.18);
-  background-image: linear-gradient(157.38deg, rgba(255, 231, 251, 0.55) 0%, rgba(237, 231, 255, 0.55) 52%, rgba(223, 244, 255, 0.55) 100%);
+  background-image: linear-gradient(
+    157.38deg,
+    rgba(255, 231, 251, 0.55) 0%,
+    rgba(237, 231, 255, 0.55) 52%,
+    rgba(223, 244, 255, 0.55) 100%
+  );
   color: #7b4cff;
   font-size: 10px;
   font-weight: 600;
@@ -281,7 +292,9 @@ select {
   border: 1px solid var(--mi-border);
   background: #fff;
   cursor: pointer;
-  transition: background 0.15s var(--mi-ease), border-color 0.15s var(--mi-ease);
+  transition:
+    background 0.15s var(--mi-ease),
+    border-color 0.15s var(--mi-ease);
   white-space: nowrap;
 }
 
@@ -306,21 +319,21 @@ select {
 
 .mi-app-shell,
 .mi-app-shell * {
-  font-family: 'Outfit', sans-serif !important;
+  font-family: "Outfit", sans-serif !important;
 }
 
 /* =========================================================
    LEFT ICON SIDEBAR
    ========================================================= */
 .mi-left-sidebar {
-  background: #FFFFFF;
-  border-right: 1px solid #E5E7EB;
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 20px 8px 24px;
   width: var(--left-sidebar-w);
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   z-index: 20;
 }
 
@@ -344,7 +357,9 @@ select {
   padding-bottom: 4px;
   text-decoration: none;
   cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
 }
 
 .mi-sidebar-logo:hover {
@@ -353,7 +368,6 @@ select {
 }
 
 @keyframes logoLoopWiggle {
-
   0%,
   85% {
     transform: scale(1) rotate(0deg);
@@ -419,7 +433,7 @@ select {
 }
 
 .mi-sidebar-label {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13.5px;
   line-height: 20px;
   letter-spacing: -0.3px;
@@ -451,7 +465,6 @@ select {
 .mi-sidebar-item.is-active .mi-sidebar-active-indicator {
   display: none;
 }
-
 
 /* =========================================================
    MAIN CONTENT AREA
@@ -508,7 +521,7 @@ body.is-panel-floating .mi-main {
   justify-content: center;
   padding: 4px 9px;
   color: #000;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 500;
   font-size: 11px;
   line-height: 10px;
@@ -527,7 +540,7 @@ body.is-panel-floating .mi-main {
   gap: 6px;
   padding: 6px 12px;
   border-radius: 10px;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-weight: 500;
   font-size: 15px;
   color: #2e3238;
@@ -546,7 +559,7 @@ body.is-panel-floating .mi-main {
   border-radius: 4px;
   padding: 0 4px;
   color: #000;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 500;
   font-size: 12px;
   display: flex;
@@ -578,7 +591,7 @@ body.is-panel-floating .mi-main {
   background: white;
   text-decoration: none;
   color: #2e3238;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-weight: 500;
   font-size: 15px;
   letter-spacing: -0.16px;
@@ -623,14 +636,18 @@ body.is-panel-floating .mi-main {
   background: #fefefe;
   border: 1px solid #efebe7;
   border-radius: 16px;
-  box-shadow: 0px 1px 1px rgba(37,37,34,0.02), 0px 18px 24px rgba(37,37,34,0.06);
+  box-shadow:
+    0px 1px 1px rgba(37, 37, 34, 0.02),
+    0px 18px 24px rgba(37, 37, 34, 0.06);
   padding: 4px;
   display: none;
   flex-direction: column;
   z-index: 9999;
   opacity: 0;
   transform: translateY(-6px);
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
   pointer-events: none;
 }
 
@@ -667,7 +684,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-products-dropdown-item:hover {
-  background: #EBEBEB;
+  background: #ebebeb;
 }
 
 .mi-products-dropdown-item-icon-cluster {
@@ -681,7 +698,9 @@ body.is-panel-floating .mi-main {
   height: 30px;
   border-radius: 100px;
   background: #fff;
-  box-shadow: 0px 1px 3px -1px rgba(0,0,0,0.20), 0px 2px 4px 0px rgba(0,0,0,0.10);
+  box-shadow:
+    0px 1px 3px -1px rgba(0, 0, 0, 0.2),
+    0px 2px 4px 0px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -708,7 +727,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-products-dropdown-item-label {
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-size: 15px;
   font-weight: 400;
   color: #252522;
@@ -717,7 +736,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-products-dropdown-item-sub {
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-size: 13px;
   font-weight: 400;
   color: rgba(37, 37, 34, 0.56);
@@ -777,7 +796,9 @@ body.is-panel-floating .mi-main {
 .mi-search-pill {
   background: white;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08), 0px 0px 0.5px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0px 4px 4px rgba(0, 0, 0, 0.08),
+    0px 0px 0.5px rgba(0, 0, 0, 0.2);
   display: flex;
   flex: 1;
   gap: 8px;
@@ -785,6 +806,13 @@ body.is-panel-floating .mi-main {
   align-items: center;
   padding: 4px 24px 4px 4px;
   border-radius: 100px;
+}
+
+.mi-search-pill:focus-within {
+  border-color: #5c4ae4;
+  box-shadow:
+    0px 4px 4px rgba(0, 0, 0, 0.08),
+    0px 0px 0px 3px rgba(92, 74, 228, 0.16);
 }
 
 .mi-cat-dropdown {
@@ -801,13 +829,13 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-cat-dropdown-label {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #324252;
   font-size: 14px;
 }
 
 .mi-cat-dropdown-val {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #0a0a0a;
   font-size: 14px;
   flex: 1;
@@ -830,13 +858,17 @@ body.is-panel-floating .mi-main {
   background: #fefefe;
   border: 1px solid #efebe7;
   border-radius: 16px;
-  box-shadow: 0px 1px 1px rgba(37, 37, 34, 0.02), 0px 18px 24px rgba(37, 37, 34, 0.06);
+  box-shadow:
+    0px 1px 1px rgba(37, 37, 34, 0.02),
+    0px 18px 24px rgba(37, 37, 34, 0.06);
   padding: 6px;
   width: 260px;
   opacity: 0;
   pointer-events: none;
   transform: translateY(-4px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
 }
 
 .mi-category-menu.is-open {
@@ -882,7 +914,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-category-menu-label {
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-weight: 400;
   font-size: 15px;
   color: rgba(0, 0, 0, 0.8);
@@ -895,7 +927,7 @@ body.is-panel-floating .mi-main {
   background: rgba(0, 0, 0, 0.04);
   border-radius: 100px;
   padding: 4px 8px;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-weight: 400;
   font-size: 13px;
   color: rgba(0, 0, 0, 0.7);
@@ -940,8 +972,8 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-coll-modal-item.is-saved {
-  background: var(--mi-brand, #5C4AE4);
-  border-color: var(--mi-brand, #5C4AE4);
+  background: var(--mi-brand, #5c4ae4);
+  border-color: var(--mi-brand, #5c4ae4);
   color: white;
 }
 
@@ -973,7 +1005,7 @@ body.is-panel-floating .mi-main {
   border: none;
   background: transparent;
   padding-left: 12px;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 18px;
   color: #000000;
   font-weight: 500;
@@ -1043,7 +1075,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-ai-label {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   color: #737373;
   white-space: nowrap;
@@ -1085,7 +1117,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-recolor-label {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 14px;
   color: rgba(0, 0, 0, 0.9);
 }
@@ -1109,7 +1141,7 @@ body.is-panel-floating .mi-main {
   /* background: rgba(0,0,0,0.08); */
   border-radius: 50%;
   cursor: pointer;
-  color: rgba(0,0,0,0.55);
+  color: rgba(0, 0, 0, 0.55);
 }
 
 .mi-recolor-reset-inline[hidden] {
@@ -1185,7 +1217,9 @@ body.is-panel-floating .mi-main {
   border: 2px solid transparent;
   cursor: pointer;
   padding: 0;
-  transition: transform 0.12s, border-color 0.12s;
+  transition:
+    transform 0.12s,
+    border-color 0.12s;
 }
 
 .mi-recolor-swatch-btn:hover {
@@ -1230,7 +1264,7 @@ body.is-panel-floating .mi-main {
   border-radius: 100px;
   border: 1px solid rgba(0, 0, 0, 0.12);
   background: white;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   color: #2c2e36;
   cursor: pointer;
@@ -1281,7 +1315,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-compare-inner span {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
   color: #f3f4f6;
   letter-spacing: -0.07px;
@@ -1296,7 +1330,7 @@ body.is-panel-floating .mi-main {
   justify-content: center;
   padding: 2px 6px 3px 6px;
   border-radius: 999px;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
   font-size: 14px;
   color: white;
@@ -1336,7 +1370,9 @@ body.is-panel-floating .mi-main {
 .mi-view-btn.is-active {
   background: white;
   border-radius: 100px;
-  box-shadow: 0px 0px 0.5px rgba(96, 96, 96, 0.31), 0px 1px 0.5px rgba(96, 96, 96, 0.15);
+  box-shadow:
+    0px 0px 0.5px rgba(96, 96, 96, 0.31),
+    0px 1px 0.5px rgba(96, 96, 96, 0.15);
 }
 
 /* Keep the old seg-btn styles for modal use */
@@ -1354,7 +1390,9 @@ body.is-panel-floating .mi-main {
   color: var(--mi-muted);
   display: grid;
   place-items: center;
-  transition: background 0.15s var(--mi-ease), color 0.15s var(--mi-ease);
+  transition:
+    background 0.15s var(--mi-ease),
+    color 0.15s var(--mi-ease);
   font-size: 13px;
   background: none;
   border: none;
@@ -1391,7 +1429,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-count-num {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: bold;
   font-size: 24px;
   color: rgba(0, 0, 0, 0.9);
@@ -1399,7 +1437,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-count-label {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 18px;
   color: rgba(0, 0, 0, 0.55);
 }
@@ -1452,7 +1490,7 @@ body.is-panel-floating .mi-main {
 /* Icon card */
 .mi-card {
   position: relative;
-  background: #F5F5F5;
+  background: #f5f5f5;
   border: none;
   border-radius: 10px;
   padding: 16px 8px 12px;
@@ -1461,13 +1499,16 @@ body.is-panel-floating .mi-main {
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  transition: border-color 0.15s var(--mi-ease), box-shadow 0.15s var(--mi-ease), background 0.15s var(--mi-ease);
+  transition:
+    border-color 0.15s var(--mi-ease),
+    box-shadow 0.15s var(--mi-ease),
+    background 0.15s var(--mi-ease);
 }
 
 .mi-card:hover {
   border-color: var(--mi-border-2);
-  box-shadow: inset 0 0 0 1.8px #5C4AE4;
-  background: #FFFFFF;
+  box-shadow: inset 0 0 0 1.8px #5c4ae4;
+  background: #ffffff;
   z-index: 10;
 }
 
@@ -1527,7 +1568,10 @@ body.is-panel-floating .mi-main {
 
 .mi-card-act {
   opacity: 0;
-  transition: opacity 0.15s var(--mi-ease), background 0.12s var(--mi-ease), color 0.12s var(--mi-ease);
+  transition:
+    opacity 0.15s var(--mi-ease),
+    background 0.12s var(--mi-ease),
+    color 0.12s var(--mi-ease);
   width: 24px;
   height: 24px;
   border-radius: 6px;
@@ -1547,7 +1591,7 @@ body.is-panel-floating .mi-main {
 
 .mi-card-act.is-active {
   opacity: 1;
-  color: var(--mi-brand, #5C4AE4);
+  color: var(--mi-brand, #5c4ae4);
 }
 
 .mi-card-act:hover {
@@ -1573,7 +1617,10 @@ body.is-panel-floating .mi-main {
   display: grid;
   place-items: center;
   opacity: 0;
-  transition: opacity 0.15s var(--mi-ease), background 0.12s var(--mi-ease), border-color 0.12s var(--mi-ease);
+  transition:
+    opacity 0.15s var(--mi-ease),
+    background 0.12s var(--mi-ease),
+    border-color 0.12s var(--mi-ease);
   cursor: pointer;
   z-index: 2;
 }
@@ -1639,7 +1686,9 @@ body.is-panel-floating .mi-main {
   background: none;
   border: none;
   cursor: pointer;
-  transition: background 0.15s var(--mi-ease), color 0.15s var(--mi-ease);
+  transition:
+    background 0.15s var(--mi-ease),
+    color 0.15s var(--mi-ease);
 }
 
 .mi-page-btn:hover {
@@ -1689,7 +1738,7 @@ body.is-panel-floating .mi-main {
   background: #ffffff;
   border: none;
   /* border-radius: 24px 0 0 24px; */
-  border-left: 1px solid #E5E7EB;
+  border-left: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -1721,7 +1770,7 @@ body.is-panel-floating .mi-main {
 
 .mi-rp-resizer:hover,
 body.is-resizing-rp .mi-rp-resizer {
-  background: #BEB5F9;
+  background: #beb5f9;
 }
 
 body.is-resizing-rp * {
@@ -1746,7 +1795,9 @@ body.is-resizing-rp * {
   border-radius: 6px;
   color: var(--mi-muted);
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .mi-rp-detach-btn:hover {
@@ -1801,7 +1852,7 @@ body.is-resizing-rp * {
   width: 22px;
   height: 22px;
   padding: 0 6px;
-  background: #E8E8E8;
+  background: #e8e8e8;
   color: #000 !important;
   border-radius: 100px;
   font-size: 11px;
@@ -1825,7 +1876,9 @@ body.is-panel-floating .mi-right-panel {
   right: 40px;
   z-index: 9999;
   padding: 0;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.08);
   border-radius: 16px;
   min-height: 400px;
   min-width: 330px;
@@ -1947,7 +2000,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 }
 
 .mi-rp-header span {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
   font-size: 14px;
   color: rgba(0, 0, 0, 0.6);
@@ -1982,7 +2035,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 }
 
 .mi-rp-title {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   color: rgba(0, 0, 0, 0.6);
   line-height: 16px;
@@ -2026,7 +2079,9 @@ body.is-panel-floating .mi-rp-edge-resizer {
   transform: translateY(-50%);
   color: rgba(0, 0, 0, 0.4);
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 .mi-source-search-icon.is-hidden {
@@ -2090,7 +2145,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 }
 
 .mi-rp-all-title {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
   font-size: 15px;
   color: black;
@@ -2105,7 +2160,6 @@ body.is-panel-floating .mi-rp-edge-resizer {
   display: none;
   color: black;
 }
-
 
 .mi-rp-source-all.has-filters:hover .mi-rp-avatars,
 .mi-rp-source-all.has-filters:hover .mi-rp-badge-lg {
@@ -2129,7 +2183,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   background: rgba(0, 0, 0, 0.06);
   border-radius: 100px;
   padding: 4px 8px;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-weight: 500;
   font-size: 13px;
   color: black;
@@ -2193,7 +2247,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-item.is-active .mi-rp-check-custom::after,
 .mi-rp-license-active.is-active .mi-rp-check-custom::after {
-  content: '';
+  content: "";
   width: 9px;
   height: 5px;
   border-left: 2px solid white;
@@ -2217,7 +2271,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-item-label span,
 .mi-rp-item-text {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
   color: black;
   flex: 1;
@@ -2227,7 +2281,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   background: rgba(0, 0, 0, 0.04);
   border-radius: 100px;
   padding: 4px 8px;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-size: 13px;
   color: rgba(0, 0, 0, 0.7);
 }
@@ -2241,7 +2295,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 }
 
 .mi-rp-more span {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
   color: black;
   opacity: 0.7;
@@ -2277,7 +2331,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 }
 
 .mi-rp-style-item span {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
   color: black;
   flex: 1;
@@ -2292,7 +2346,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 }
 
 .mi-rp-val {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 13px;
   color: #6b7280;
 }
@@ -2372,7 +2426,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   align-items: center;
   justify-content: center;
   border-radius: 86.957px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 500;
   font-size: 13px;
   color: #6b7280;
@@ -2396,7 +2450,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-license-active span {
   flex: 1;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
   font-size: 15px;
   color: black;
@@ -2417,7 +2471,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 }
 
 .mi-rp-license-active.has-filters:hover::after {
-  content: 'Clear Filters';
+  content: "Clear Filters";
   color: black;
   font-weight: 500;
   font-size: 15px;
@@ -2470,7 +2524,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 }
 
 .mi-rp-cat-label {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 400;
   font-size: 15px;
   color: rgba(0, 0, 0, 0.8);
@@ -2486,7 +2540,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   background: rgba(0, 0, 0, 0.04);
   border-radius: 100px;
   padding: 4px 8px;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-weight: 400;
   font-size: 13px;
   color: rgba(0, 0, 0, 0.7);
@@ -2506,13 +2560,15 @@ body.is-panel-floating .mi-rp-edge-resizer {
   text-align: center;
   cursor: pointer;
   background: #fff;
-  transition: background 0.15s var(--mi-ease), color 0.15s var(--mi-ease);
+  transition:
+    background 0.15s var(--mi-ease),
+    color 0.15s var(--mi-ease);
 }
 
 .mi-clear:hover {
-  color: #DC2626;
-  border-color: #FCA5A5;
-  background: #FEF2F2;
+  color: #dc2626;
+  border-color: #fca5a5;
+  background: #fef2f2;
 }
 
 /* =========================================================
@@ -2530,11 +2586,13 @@ body.is-panel-floating .mi-rp-edge-resizer {
   color: #fff;
   border: none;
   cursor: pointer;
-  transition: background 0.15s var(--mi-ease), opacity 0.15s var(--mi-ease);
+  transition:
+    background 0.15s var(--mi-ease),
+    opacity 0.15s var(--mi-ease);
 }
 
 .mi-btn-primary:hover:not(:disabled) {
-  background: #1B1E28;
+  background: #1b1e28;
 }
 
 .mi-btn-primary:disabled {
@@ -2554,7 +2612,9 @@ body.is-panel-floating .mi-rp-edge-resizer {
   color: var(--mi-ink-2);
   border: 1px solid var(--mi-border);
   cursor: pointer;
-  transition: background 0.15s var(--mi-ease), border-color 0.15s var(--mi-ease);
+  transition:
+    background 0.15s var(--mi-ease),
+    border-color 0.15s var(--mi-ease);
 }
 
 .mi-btn-secondary:hover {
@@ -2648,7 +2708,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 @keyframes pop {
   from {
     opacity: 0;
-    transform: translateY(12px) scale(.98);
+    transform: translateY(12px) scale(0.98);
   }
 
   to {
@@ -2708,7 +2768,9 @@ body.is-panel-floating .mi-rp-edge-resizer {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  transition: background 0.12s var(--mi-ease), color 0.12s var(--mi-ease);
+  transition:
+    background 0.12s var(--mi-ease),
+    color 0.12s var(--mi-ease);
 }
 
 .mi-crumb-link:hover {
@@ -2746,7 +2808,9 @@ body.is-panel-floating .mi-rp-edge-resizer {
   border: 1px solid transparent;
   background: none;
   cursor: pointer;
-  transition: background 0.15s var(--mi-ease), border-color 0.15s var(--mi-ease);
+  transition:
+    background 0.15s var(--mi-ease),
+    border-color 0.15s var(--mi-ease);
 }
 
 .mi-topbar-btn:hover {
@@ -2811,7 +2875,7 @@ body.mi-full .mi-editor {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-color: #FBFBFD;
+  background-color: #fbfbfd;
   background-image:
     linear-gradient(to right, rgba(15, 17, 22, 0.06) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(15, 17, 22, 0.06) 1px, transparent 1px);
@@ -2825,7 +2889,7 @@ body.mi-full .mi-editor {
 }
 
 .mi-canvas.is-grid {
-  background: #FBFBFD !important;
+  background: #fbfbfd !important;
   background-image: none !important;
 }
 
@@ -2848,7 +2912,9 @@ body.mi-full .mi-editor {
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition: background 0.12s var(--mi-ease), color 0.12s var(--mi-ease);
+  transition:
+    background 0.12s var(--mi-ease),
+    color 0.12s var(--mi-ease);
 }
 
 .mi-canvas-tool:hover {
@@ -2891,7 +2957,9 @@ body.mi-full .mi-editor {
   font-weight: 500;
   cursor: pointer;
   border: none;
-  transition: background 0.12s var(--mi-ease), color 0.12s var(--mi-ease);
+  transition:
+    background 0.12s var(--mi-ease),
+    color 0.12s var(--mi-ease);
 }
 
 .mi-tag-chip:hover {
@@ -2939,7 +3007,7 @@ body.mi-full .mi-editor {
 }
 
 .mi-copy-caret:hover {
-  background: #1B1E28;
+  background: #1b1e28;
 }
 
 .mi-copy-caret svg {
@@ -2979,7 +3047,7 @@ body.mi-full .mi-editor {
   margin-bottom: 14px;
 }
 
-.mi-field>span {
+.mi-field > span {
   font-size: 12px;
   font-weight: 500;
   color: var(--mi-ink-2);
@@ -3051,7 +3119,7 @@ body.mi-full .mi-editor {
 }
 
 .mi-help-row kbd {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 11px;
   font-weight: 600;
   padding: 3px 7px;
@@ -3102,7 +3170,7 @@ body.mi-full .mi-editor {
   height: min(82vh, 720px);
 }
 
-.mi-editor>* {
+.mi-editor > * {
   min-width: 0;
   min-height: 0;
 }
@@ -3207,7 +3275,9 @@ input[type="color"] {
   background: #fff;
   font-size: 13px;
   outline: none;
-  transition: border-color 0.15s var(--mi-ease), box-shadow 0.15s var(--mi-ease);
+  transition:
+    border-color 0.15s var(--mi-ease),
+    box-shadow 0.15s var(--mi-ease);
 }
 
 .mi-input:focus {
@@ -3322,7 +3392,10 @@ input[type="color"] {
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.12s var(--mi-ease), border-color 0.12s var(--mi-ease), color 0.12s var(--mi-ease);
+  transition:
+    background 0.12s var(--mi-ease),
+    border-color 0.12s var(--mi-ease),
+    color 0.12s var(--mi-ease);
 }
 
 .mi-presets button:hover {
@@ -3347,12 +3420,14 @@ input[type="color"] {
   border: 1px solid var(--mi-border);
   cursor: pointer;
   background: #fff;
-  transition: color 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .mi-reset:hover {
-  color: #DC2626;
-  border-color: #FCA5A5;
+  color: #dc2626;
+  border-color: #fca5a5;
 }
 
 /* PNG split button + dropdown */
@@ -3429,7 +3504,9 @@ input[type="color"] {
   cursor: pointer;
   border: none;
   background: none;
-  transition: background 0.12s var(--mi-ease), color 0.12s var(--mi-ease);
+  transition:
+    background 0.12s var(--mi-ease),
+    color 0.12s var(--mi-ease);
 }
 
 .mi-dd-item:hover {
@@ -3447,12 +3524,16 @@ input[type="color"] {
   min-height: 240px;
   border-radius: 16px;
   background:
-    linear-gradient(45deg, #F5F5F7 25%, transparent 25%),
-    linear-gradient(-45deg, #F5F5F7 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #F5F5F7 75%),
-    linear-gradient(-45deg, transparent 75%, #F5F5F7 75%);
+    linear-gradient(45deg, #f5f5f7 25%, transparent 25%),
+    linear-gradient(-45deg, #f5f5f7 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f5f5f7 75%),
+    linear-gradient(-45deg, transparent 75%, #f5f5f7 75%);
   background-size: 20px 20px;
-  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+  background-position:
+    0 0,
+    0 10px,
+    10px -10px,
+    -10px 0;
   background-color: #fff;
   border: 1px solid var(--mi-border);
   display: grid;
@@ -3536,7 +3617,7 @@ input[type="color"] {
 
 .mi-similar-match {
   font-size: 11px;
-  color: #6B7280;
+  color: #6b7280;
   font-weight: 800;
 }
 
@@ -3547,7 +3628,7 @@ input[type="color"] {
   margin-bottom: 10px;
 }
 
-.mi-export-row>* {
+.mi-export-row > * {
   flex: 1;
 }
 
@@ -3582,7 +3663,7 @@ input[type="color"] {
   padding: 12px;
   font-size: 11px;
   line-height: 1.55;
-  font-family: 'SF Mono', 'Menlo', 'Monaco', monospace;
+  font-family: "SF Mono", "Menlo", "Monaco", monospace;
   color: var(--mi-ink-2);
   overflow: auto;
   max-height: 140px;
@@ -3690,7 +3771,9 @@ input[type="color"] {
   font-weight: 500;
   box-shadow: var(--mi-shadow-lg);
   opacity: 0;
-  transition: opacity 0.2s var(--mi-ease), transform 0.2s var(--mi-ease);
+  transition:
+    opacity 0.2s var(--mi-ease),
+    transform 0.2s var(--mi-ease);
   z-index: 200;
   pointer-events: none;
   white-space: nowrap;
@@ -3713,7 +3796,7 @@ input[type="color"] {
   left: 0;
   width: 100%;
   padding: 10px 10px 28px 10px;
-  background: rgba(255, 255, 255, 0.60);
+  background: rgba(255, 255, 255, 0.6);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -3727,7 +3810,11 @@ input[type="color"] {
   left: 0;
   width: 100%;
   height: 80px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.60) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.6) 100%
+  );
   pointer-events: none;
 }
 
@@ -3776,7 +3863,7 @@ input[type="color"] {
 }
 
 .mi-page-nav-btn span {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
   font-size: 16px;
   line-height: 24px;
@@ -3790,7 +3877,7 @@ input[type="color"] {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
   font-size: 16px;
   line-height: 24px;
@@ -3806,7 +3893,9 @@ input[type="color"] {
 .mi-page-btn.is-active {
   background: #5c4ae4;
   color: white;
-  box-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 1px 1.5px rgba(0, 0, 0, 0.1),
+    0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 1100px) {
@@ -4415,7 +4504,9 @@ body.mi-full .mi-new-body {
 
 body.mi-full .mi-new-body > .mi-new-left,
 body.mi-full .mi-new-body > .mi-new-center,
-body.mi-full .mi-new-body > .mi-new-right { height: 100%; }
+body.mi-full .mi-new-body > .mi-new-right {
+  height: 100%;
+}
 
 /* LEFT PANEL */
 .mi-new-left {
@@ -4510,7 +4601,6 @@ details[open] .mi-new-section-icon {
 
 .mi-new-quick,
 .mi-new-seg {
-
   display: flex;
   background: transparent;
   border-radius: 100px;
@@ -4656,7 +4746,7 @@ details[open] .mi-new-section-icon {
 .mi-new-divider {
   height: 1px;
   flex: 0 0 1px;
-  background: #EAEAEE;
+  background: #eaeaee;
   width: 100%;
 }
 
@@ -4671,7 +4761,9 @@ details[open] .mi-new-section-icon {
   font-weight: 500;
   cursor: pointer;
   margin: 16px 20px 0 20px;
-  transition: background 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
 }
 
 .mi-new-reset-btn:hover {
@@ -4711,8 +4803,16 @@ details[open] .mi-new-section-icon {
   pointer-events: none;
   background-color: transparent;
   background-image:
-    linear-gradient(to right, var(--canvas-grid-color, rgba(15, 17, 22, 0.08)) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--canvas-grid-color, rgba(15, 17, 22, 0.08)) 1px, transparent 1px);
+    linear-gradient(
+      to right,
+      var(--canvas-grid-color, rgba(15, 17, 22, 0.08)) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      var(--canvas-grid-color, rgba(15, 17, 22, 0.08)) 1px,
+      transparent 1px
+    );
   background-size: 10px 10px;
   background-position: -1px -1px;
   box-shadow:
@@ -4733,8 +4833,6 @@ details[open] .mi-new-section-icon {
   max-width: 100%;
   max-height: 100%;
 }
-
-
 
 .mi-new-center-info {
   display: flex;
@@ -4822,7 +4920,7 @@ details[open] .mi-new-section-icon {
 }
 
 .mi-new-btn-save-collection span {
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-weight: 500;
   font-size: 15px;
   line-height: 20px;
@@ -5037,7 +5135,7 @@ details[open] .mi-new-section-icon {
   align-items: center;
   justify-content: center;
   padding: 14px 12px;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .mi-new-btn-green-icon {
@@ -5094,7 +5192,11 @@ details[open] .mi-new-section-icon {
 .mi-new-export .mi-new-btn-green-icon,
 .mi-new-export .mi-new-btn-gray,
 .mi-new-export .mi-new-btn-white-border {
-  transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
 }
 
 .mi-new-export .mi-new-btn-green:hover,
@@ -5163,7 +5265,7 @@ details[open] .mi-new-section-icon {
   flex-direction: column;
 }
 
-.mi-new-select-box>button {
+.mi-new-select-box > button {
   background: #fff;
   border: 1px solid #eaeaee;
   /* border-radius: 10px; */
@@ -5230,7 +5332,9 @@ details[open] .mi-new-section-icon {
   padding: 16px 20px 20px 20px;
   height: 160px;
   overflow-y: auto;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
   font-size: 14px;
   color: #24292e;
   margin: 0;
@@ -5246,7 +5350,7 @@ details[open] .mi-new-section-icon {
 .mi-new-divider {
   height: 1px;
   flex: 0 0 1px;
-  background: #EAEAEE;
+  background: #eaeaee;
   width: 100%;
 }
 
@@ -5336,12 +5440,11 @@ details[open] .mi-new-section-icon {
   min-width: 0;
   margin: 0;
   color: #080048;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
 }
-
 
 /* BOTTOM PANEL: MORE RELEVANT ICONS */
 .mi-new-bottom {

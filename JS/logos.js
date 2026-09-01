@@ -8,7 +8,6 @@
  * will be handled here when logo data sources are integrated.
  */
 
-
 let SOURCES = [
   {
     id: "logos",
@@ -186,9 +185,9 @@ window.recreateLogos = function () {
     SOURCES = window.SOURCES;
   }
   ICONS = createLogosArray();
-  console.log('[Logos] Recreated ICONS array with', ICONS.length, 'logos');
-  if (typeof renderFilters === 'function') renderFilters();
-  if (typeof buildCategoryList === 'function') buildCategoryList();
+  console.log("[Logos] Recreated ICONS array with", ICONS.length, "logos");
+  if (typeof renderFilters === "function") renderFilters();
+  if (typeof buildCategoryList === "function") buildCategoryList();
 };
 const state = {
   query: localStorage.getItem("ml.query") || "",
@@ -283,16 +282,16 @@ function toast(msg) {
 function saveLS() {
   // Strip non-serializable fields (dirHandle, _itemCache with SVG data) before saving.
   // _itemCache alone can easily exceed the 5MB localStorage limit.
-  const foldersToSave = state.folders.map(f => ({
+  const foldersToSave = state.folders.map((f) => ({
     id: f.id,
     name: f.name,
-    iconIds: f.iconIds
+    iconIds: f.iconIds,
   }));
   try {
     localStorage.setItem("ml.folders", JSON.stringify(foldersToSave));
     localStorage.setItem("ml.collections", JSON.stringify(state.collections));
   } catch (e) {
-    console.error('[saveLS] localStorage quota exceeded or write failed:', e);
+    console.error("[saveLS] localStorage quota exceeded or write failed:", e);
   }
 }
 
@@ -362,7 +361,7 @@ function renderStyled(icon, extra = {}) {
   return renderSvg(icon.svg, {
     size: state.globalSize,
     viewBox: icon.viewBox,
-    ...(icon.style === 'solid' ? { color: state.globalColor } : {}),
+    ...(icon.style === "solid" ? { color: state.globalColor } : {}),
     ...extra,
   });
 }
@@ -372,10 +371,11 @@ function renderSvg(paths, opts = {}) {
   const viewBox = opts.viewBox || "0 0 24 24";
   // Apply color attr only when set so fill="currentColor" paths inherit it (solid logos);
   // color logos get no override and keep their original branding.
-  const colorAttr = opts.color && opts.color !== 'currentColor' ? ` color="${opts.color}"` : '';
-  
+  const colorAttr =
+    opts.color && opts.color !== "currentColor" ? ` color="${opts.color}"` : "";
+
   const innerSvg = `<svg viewBox="${viewBox}" width="24" height="24" x="0" y="0" preserveAspectRatio="xMidYMid meet">${paths}</svg>`;
-  
+
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" class="mi-icon"${colorAttr} aria-hidden="true">${innerSvg}</svg>`;
 }
 
@@ -462,9 +462,10 @@ function sortGridItems(items) {
   if (state.sort === "popular") {
     list.sort((a, b) => b.popularity - a.popularity);
   } else if (state.sort === "trending") {
-    list.sort((a, b) =>
-      b.popularity * Math.sin(b.id.length) -
-      a.popularity * Math.sin(a.id.length),
+    list.sort(
+      (a, b) =>
+        b.popularity * Math.sin(b.id.length) -
+        a.popularity * Math.sin(a.id.length),
     );
   } else if (state.sort === "name-asc") {
     list.sort((a, b) => a.name.localeCompare(b.name));
@@ -508,20 +509,22 @@ async function renderGrid() {
   saveFiltersLS();
 
   // Use API loader if available
-  if (typeof window.populateLogosFromAPI === 'function') {
+  if (typeof window.populateLogosFromAPI === "function") {
     const grid = $("#icon-grid");
 
     // Show skeleton for results count - keep existing mi-skeleton class
     const resultsCountEl = $("#results-count");
     if (resultsCountEl) {
-      resultsCountEl.classList.add('mi-skeleton');
+      resultsCountEl.classList.add("mi-skeleton");
     }
 
     // Show skeleton loader - use mi-card styling with skeleton animation
     grid.className = `mi-grid density-${state.density}`;
-    const skeletonCards = Array.from({ length: 60 }, () =>
-      `<div class="mi-card" style="min-height: 120px; animation: skeleton-pulse 1.5s ease-in-out infinite; pointer-events: none;"></div>`
-    ).join('');
+    const skeletonCards = Array.from(
+      { length: 60 },
+      () =>
+        `<div class="mi-card" style="min-height: 120px; animation: skeleton-pulse 1.5s ease-in-out infinite; pointer-events: none;"></div>`,
+    ).join("");
     grid.innerHTML = skeletonCards;
 
     try {
@@ -530,15 +533,15 @@ async function renderGrid() {
       // Abort if a newer renderGrid call was made while we were fetching
       if (renderId !== currentRenderId) return;
 
-      // The API already filtered by query, category, style, etc. 
+      // The API already filtered by query, category, style, etc.
       // We can just use the returned ICONS directly.
       const list = sortGridItems(ICONS);
       const actualTotal = list.length;
 
-      renderedIconsMap = new Map(list.map(ic => [ic.id, ic]));
+      renderedIconsMap = new Map(list.map((ic) => [ic.id, ic]));
       renderGridContent(list, actualTotal, total);
     } catch (error) {
-      console.error('[renderGrid] Error loading from API:', error);
+      console.error("[renderGrid] Error loading from API:", error);
       grid.innerHTML = `<div class="mi-empty"><h3>Failed to load logos</h3><p>${error.message}</p></div>`;
     }
     return;
@@ -566,21 +569,26 @@ function renderGridContent(list, displayTotal, apiTotal) {
     // Pagination slicing
     const totalPages = Math.ceil((apiTotal || displayTotal) / ITEMS_PER_PAGE);
     if (state.page > totalPages) state.page = totalPages;
-    if (state.page < 1) state.page = 1; localStorage.setItem("ml.page", state.page);
+    if (state.page < 1) state.page = 1;
+    localStorage.setItem("ml.page", state.page);
 
-    const paginatedList = (typeof window.populateLogosFromAPI === 'function')
-      ? list
-      : list.slice((state.page - 1) * ITEMS_PER_PAGE, state.page * ITEMS_PER_PAGE);
+    const paginatedList =
+      typeof window.populateLogosFromAPI === "function"
+        ? list
+        : list.slice(
+            (state.page - 1) * ITEMS_PER_PAGE,
+            state.page * ITEMS_PER_PAGE,
+          );
 
     grid.innerHTML = paginatedList.map(iconCard).join("");
-    renderPagination((apiTotal || displayTotal), totalPages);
+    renderPagination(apiTotal || displayTotal, totalPages);
   }
 
   const resultsCountEl = $("#results-count");
   if (resultsCountEl) {
-    resultsCountEl.classList.remove('mi-skeleton');
-    resultsCountEl.style.opacity = '';
-    resultsCountEl.style.animation = '';
+    resultsCountEl.classList.remove("mi-skeleton");
+    resultsCountEl.style.opacity = "";
+    resultsCountEl.style.animation = "";
     resultsCountEl.textContent = (apiTotal || displayTotal).toLocaleString();
   }
   $("#results-query").textContent = state.query ? `for "${state.query}"` : "";
@@ -611,6 +619,16 @@ function renderPagination(total, totalPages) {
 }
 
 function renderFilters() {
+  const getSourceIcon = (label) => {
+    const normalizedLabel = label.toLowerCase();
+    if (normalizedLabel.includes("hero")) return "Heroicons.svg";
+    if (normalizedLabel.includes("lucide")) return "Lucide.svg";
+    if (normalizedLabel.includes("simple")) return "icons-brand.svg";
+    if (normalizedLabel.includes("phosphor")) return "Phosphor.svg";
+    if (normalizedLabel.includes("tabler")) return "Tabler Icons.svg";
+    return null;
+  };
+
   // Sources (Checkbox style)
   const buildSourceList = (containerId, items, setKey) => {
     const set = state[setKey];
@@ -619,16 +637,7 @@ function renderFilters() {
     el.innerHTML = items
       .map((it) => {
         const active = set.has(it.value);
-        // Determine icon based on label name (fallback to a generic icon if not found)
-        let icon = "icons-basic.svg";
-        if (it.label.toLowerCase().includes("hero")) icon = "Heroicons.svg";
-        else if (it.label.toLowerCase().includes("lucide")) icon = "Lucide.svg";
-        else if (it.label.toLowerCase().includes("simple"))
-          icon = "icons-brand.svg";
-        else if (it.label.toLowerCase().includes("phosphor"))
-          icon = "Phosphor.svg";
-        else if (it.label.toLowerCase().includes("tabler"))
-          icon = "Tabler Icons.svg";
+        const icon = it.icon || "icons-basic.svg";
 
         return `
       <div class="mi-rp-item ${active ? "is-active" : ""}" data-val="${it.value}" style="cursor:pointer">
@@ -658,7 +667,8 @@ function renderFilters() {
         const v = item.dataset.val;
         if (set.has(v)) set.delete(v);
         else set.add(v);
-        state.page = 1; localStorage.setItem("ml.page", state.page);
+        state.page = 1;
+        localStorage.setItem("ml.page", state.page);
         renderGrid();
         renderFilters();
 
@@ -731,13 +741,13 @@ function renderFilters() {
           set.clear();
           set.add(v);
         }
-        state.page = 1; localStorage.setItem("ml.page", state.page);
+        state.page = 1;
+        localStorage.setItem("ml.page", state.page);
         renderGrid();
         renderFilters();
       });
     }
   };
-
 
   // Generic List (e.g. License)
   const buildGenericList = (containerId, items, setKey) => {
@@ -765,7 +775,8 @@ function renderFilters() {
         const v = item.dataset.val;
         if (set.has(v)) set.delete(v);
         else set.add(v);
-        state.page = 1; localStorage.setItem("ml.page", state.page);
+        state.page = 1;
+        localStorage.setItem("ml.page", state.page);
         renderGrid();
         renderFilters();
       });
@@ -776,7 +787,10 @@ function renderFilters() {
     if (window.LOGO_STATS && window.getFilterCounts) {
       return window.getFilterCounts(key);
     }
-    return ICONS.reduce((m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m), {});
+    return ICONS.reduce(
+      (m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m),
+      {},
+    );
   };
   const sc = countBy("source"),
     st = countBy("style"),
@@ -789,14 +803,15 @@ function renderFilters() {
     value: s.id,
     label: s.name,
     count: fmtNum(sc[s.id] || 0),
+    icon: getSourceIcon(s.name),
   }));
   const selectedSourceVals = Array.from(state.sourceFilter).reverse();
   const selectedSources = selectedSourceVals
     .map((val) => allSourcesRaw.find((s) => s.value === val))
     .filter(Boolean);
-  const unselectedSources = allSourcesRaw.filter(
-    (s) => !state.sourceFilter.has(s.value),
-  );
+  const unselectedSources = allSourcesRaw
+    .filter((s) => !state.sourceFilter.has(s.value))
+    .sort((a, b) => Number(Boolean(b.icon)) - Number(Boolean(a.icon)));
   const allSources = [...selectedSources, ...unselectedSources];
 
   const visibleSources = allSources.slice(0, state.sourcesVisibleCount);
@@ -892,7 +907,7 @@ function renderFilters() {
     }
   }
 
-  const activeStylesList = Object.keys(st).filter(s => (st[s] || 0) > 0);
+  const activeStylesList = Object.keys(st).filter((s) => (st[s] || 0) > 0);
 
   buildStyleList(
     "#filter-style",
@@ -936,7 +951,8 @@ function renderFilters() {
       sourceAllContainer.addEventListener("click", () => {
         if (state.sourceFilter.size > 0) {
           state.sourceFilter.clear(); // Clear filters
-          state.page = 1; localStorage.setItem("ml.page", state.page);
+          state.page = 1;
+          localStorage.setItem("ml.page", state.page);
           renderGrid();
           renderFilters();
         }
@@ -952,7 +968,7 @@ function renderFilters() {
         <div class="mi-rp-avatar" style="z-index: 1; margin-left: -6px"><img src="ASSET/Icons/icons-filled.svg" alt=""/></div>
       `;
       sourceAllTitle.textContent = "All Sources";
-      const totalLogos = window.LOGO_STATS 
+      const totalLogos = window.LOGO_STATS
         ? window.LOGO_STATS.collections.reduce((sum, c) => sum + c.total, 0)
         : ICONS.length;
       badgeLg.textContent = totalLogos.toLocaleString();
@@ -1259,19 +1275,29 @@ function openDetail(icon) {
   } else {
     $("#attr-license-link").removeAttribute("href");
   }
-  
+
   let attrText = "Required";
   let commText = "Allowed";
   const l = (icon.license || "").toLowerCase();
   if (l.includes("cc0") || l === "free" || l === "wtfpl") {
     attrText = "Not required";
-  } else if (l.includes("mit") || l.includes("isc") || l.includes("apache") || l.includes("ofl") || l.includes("zlib")) {
+  } else if (
+    l.includes("mit") ||
+    l.includes("isc") ||
+    l.includes("apache") ||
+    l.includes("ofl") ||
+    l.includes("zlib")
+  ) {
     attrText = "Required (in source)";
   }
-  if (l.includes("nc") || l.includes("non-commercial") || l.includes("noncommercial")) {
+  if (
+    l.includes("nc") ||
+    l.includes("non-commercial") ||
+    l.includes("noncommercial")
+  ) {
     commText = "Not allowed";
   }
-  
+
   if ($("#attr-attribution")) $("#attr-attribution").textContent = attrText;
   if ($("#attr-commercial")) $("#attr-commercial").textContent = commText;
   if ($("#attr-author")) $("#attr-author").textContent = icon.author;
@@ -1780,7 +1806,7 @@ function requireLoginToDownload() {
     const user = window.FirebaseAuthService.getCurrentUser();
     if (!user || user.isAnonymous) {
       if (window.AuthModal) {
-        window.AuthModal.open('login');
+        window.AuthModal.open("login");
       }
       return false;
     }
@@ -1936,7 +1962,10 @@ function renderIconOfDay() {
     }
     if (copyId) {
       const ic = ICONS.find((x) => x.id === copyId.dataset.copyId);
-      if (ic) copyText(renderSvg(ic.svg)).then((ok) => toast(ok ? "Copied SVG" : "Copy failed"));
+      if (ic)
+        copyText(renderSvg(ic.svg)).then((ok) =>
+          toast(ok ? "Copied SVG" : "Copy failed"),
+        );
     }
   });
 }
@@ -2008,7 +2037,8 @@ function renderCollections() {
     if (!card) return;
     state.categoryFilter.clear();
     state.categoryFilter.add(card.dataset.coll);
-    state.page = 1; localStorage.setItem("ml.page", state.page);
+    state.page = 1;
+    localStorage.setItem("ml.page", state.page);
     renderFilters();
     renderGrid();
     document
@@ -2157,7 +2187,8 @@ function wire() {
   const debounced = debounce(() => {
     state.query = searchInput.value;
     localStorage.setItem("ml.query", state.query);
-    state.page = 1; localStorage.setItem("ml.page", state.page);
+    state.page = 1;
+    localStorage.setItem("ml.page", state.page);
     renderGrid();
   }, 120);
 
@@ -2206,7 +2237,8 @@ function wire() {
         buildCategoryList();
       }
 
-      state.page = 1; localStorage.setItem("ml.page", state.page);
+      state.page = 1;
+      localStorage.setItem("ml.page", state.page);
       renderGrid();
       searchInput.focus();
     });
@@ -2215,7 +2247,8 @@ function wire() {
   $("#search-form").addEventListener("submit", (e) => {
     e.preventDefault();
     state.query = searchInput.value;
-    state.page = 1; localStorage.setItem("ml.page", state.page);
+    state.page = 1;
+    localStorage.setItem("ml.page", state.page);
     renderGrid();
   });
 
@@ -2224,7 +2257,8 @@ function wire() {
     c.addEventListener("click", () => {
       searchInput.value = c.dataset.q;
       state.query = c.dataset.q;
-      state.page = 1; localStorage.setItem("ml.page", state.page);
+      state.page = 1;
+      localStorage.setItem("ml.page", state.page);
       renderGrid();
       document
         .querySelector(".mi-results-wrap")
@@ -2254,7 +2288,8 @@ function wire() {
         state.styleFilter.add("outline");
         renderFilters();
       }
-      state.page = 1; localStorage.setItem("ml.page", state.page);
+      state.page = 1;
+      localStorage.setItem("ml.page", state.page);
       renderGrid();
       document
         .querySelector(".mi-results-wrap")
@@ -2282,7 +2317,8 @@ function wire() {
     if (!matched) matched = "sparkles";
     searchInput.value = matched;
     state.query = matched;
-    state.page = 1; localStorage.setItem("ml.page", state.page);
+    state.page = 1;
+    localStorage.setItem("ml.page", state.page);
     renderGrid();
     toast(`AI suggests: ${matched}`);
     document
@@ -2401,7 +2437,8 @@ function wire() {
     state.categoryFilter.clear();
     state.query = "";
     searchInput.value = "";
-    state.page = 1; localStorage.setItem("ml.page", state.page);
+    state.page = 1;
+    localStorage.setItem("ml.page", state.page);
     renderFilters();
     renderGrid();
   });
@@ -2410,7 +2447,9 @@ function wire() {
   $("#icon-grid").addEventListener("click", (e) => {
     const card = e.target.closest(".mi-card");
     if (!card) return;
-    const icon = renderedIconsMap.get(card.dataset.id) || ICONS.find((x) => x.id === card.dataset.id);
+    const icon =
+      renderedIconsMap.get(card.dataset.id) ||
+      ICONS.find((x) => x.id === card.dataset.id);
     if (!icon) return;
     if (e.target.closest("[data-cmp]")) {
       if (state.selected.has(icon.id)) state.selected.delete(icon.id);
@@ -2696,7 +2735,8 @@ function wire() {
     closeModals();
     state.categoryFilter.clear();
     state.categoryFilter.add(cat);
-    state.page = 1; localStorage.setItem("ml.page", state.page);
+    state.page = 1;
+    localStorage.setItem("ml.page", state.page);
     renderFilters();
     renderGrid();
     document
@@ -2773,7 +2813,8 @@ function wire() {
     closeModals();
     state.query = chip.dataset.tag;
     $("#search-input").value = state.query;
-    state.page = 1; localStorage.setItem("ml.page", state.page);
+    state.page = 1;
+    localStorage.setItem("ml.page", state.page);
     renderGrid();
     document
       .querySelector(".mi-results-wrap")
@@ -2796,17 +2837,19 @@ function wire() {
       if (!state.editorIcon) return;
       const size = state.pngSize || 512;
       try {
-        cpBtn.style.opacity = '0.5';
+        cpBtn.style.opacity = "0.5";
         const dataUrl = await rasterizePng(size);
         const res = await fetch(dataUrl);
         const blob = await res.blob();
-        await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+        await navigator.clipboard.write([
+          new ClipboardItem({ "image/png": blob }),
+        ]);
         toast("Copied PNG image");
       } catch (e) {
         console.error(e);
         toast("Failed to copy PNG image");
       } finally {
-        cpBtn.style.opacity = '1';
+        cpBtn.style.opacity = "1";
       }
     });
   }
@@ -3134,7 +3177,8 @@ function setupSidebarTabs() {
       }
 
       // Re-render grid to reflect saved vs all icons
-      state.page = 1; localStorage.setItem("ml.page", state.page);
+      state.page = 1;
+      localStorage.setItem("ml.page", state.page);
       renderGrid();
     });
   });
@@ -3203,7 +3247,8 @@ function buildTopCategoryDropdown() {
       buildTopCategoryDropdown();
       buildCategoryList();
 
-      state.page = 1; localStorage.setItem("ml.page", state.page);
+      state.page = 1;
+      localStorage.setItem("ml.page", state.page);
       renderGrid();
     });
   });
@@ -3276,9 +3321,10 @@ function buildCategoryList() {
         searchClear.style.display = searchInput.value ? "flex" : "none";
       if (searchIcon && searchInput)
         searchIcon.style.display = searchInput.value ? "none" : "flex";
-        searchIcon.style.display = searchInput.value ? "none" : "flex";
+      searchIcon.style.display = searchInput.value ? "none" : "flex";
 
-      state.page = 1; localStorage.setItem("ml.page", state.page);
+      state.page = 1;
+      localStorage.setItem("ml.page", state.page);
       renderGrid();
       buildCategoryList();
       buildTopCategoryDropdown();
@@ -3293,17 +3339,19 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
   const PROMO_KEY = "motvin_promo_hidden_until";
   const banner = document.querySelector(".mi-new-banner");
-  
+
   if (banner) {
     const hiddenUntil = localStorage.getItem(PROMO_KEY);
     if (hiddenUntil && Date.now() < parseInt(hiddenUntil, 10)) {
       banner.setAttribute("hidden", "");
     } else {
-      document.querySelector(".mi-new-banner-close")?.addEventListener("click", () => {
-        banner.setAttribute("hidden", "");
-        // 2 days in milliseconds: 2 * 24 * 60 * 60 * 1000 = 172800000
-        localStorage.setItem(PROMO_KEY, (Date.now() + 172800000).toString());
-      });
+      document
+        .querySelector(".mi-new-banner-close")
+        ?.addEventListener("click", () => {
+          banner.setAttribute("hidden", "");
+          // 2 days in milliseconds: 2 * 24 * 60 * 60 * 1000 = 172800000
+          localStorage.setItem(PROMO_KEY, (Date.now() + 172800000).toString());
+        });
     }
   }
 });
@@ -3349,17 +3397,26 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       const innerPanel = document.querySelector(".mi-right-panel-inner");
       if (innerPanel) {
-        Object.keys(panels).forEach((key) => innerPanel.classList.remove(`mi-rp-${key}`));
+        Object.keys(panels).forEach((key) =>
+          innerPanel.classList.remove(`mi-rp-${key}`),
+        );
         innerPanel.classList.add(`mi-rp-${savedTab}`);
       }
-      const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
+      const activeTabBtn = document.querySelector(
+        `.mi-sidebar-item[data-sidebar="${savedTab}"]`,
+      );
       if (activeTabBtn) {
-        document.querySelectorAll(".mi-sidebar-item").forEach((t) => t.classList.remove("is-active"));
+        document
+          .querySelectorAll(".mi-sidebar-item")
+          .forEach((t) => t.classList.remove("is-active"));
         activeTabBtn.classList.add("is-active");
         const title = document.getElementById("rp-header-title");
-        if (title) title.textContent = activeTabBtn.querySelector(".mi-sidebar-label")?.textContent || "";
+        if (title)
+          title.textContent =
+            activeTabBtn.querySelector(".mi-sidebar-label")?.textContent || "";
       }
-      if (savedTab === "saved" && typeof renderSavedPanel === "function") renderSavedPanel();
+      if (savedTab === "saved" && typeof renderSavedPanel === "function")
+        renderSavedPanel();
       if (savedTab === "categories") buildCategoryList();
     }
 
@@ -3711,8 +3768,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function updateEditModalSaveState() {
-  if (!state.editorIcon || !window.EditModalManager || !window.EditModalManager.updateSaveState) return;
-  const isSaved = state.folders && state.folders.some(f => f.iconIds.includes(state.editorIcon.id));
+  if (
+    !state.editorIcon ||
+    !window.EditModalManager ||
+    !window.EditModalManager.updateSaveState
+  )
+    return;
+  const isSaved =
+    state.folders &&
+    state.folders.some((f) => f.iconIds.includes(state.editorIcon.id));
   window.EditModalManager.updateSaveState(isSaved);
 }
 
@@ -3776,7 +3840,8 @@ document
         item.dataset.folder === "all" ? null : item.dataset.folder;
       state.activeFolderId = folderId;
       renderSavedPanel();
-      state.page = 1; localStorage.setItem("ml.page", state.page);
+      state.page = 1;
+      localStorage.setItem("ml.page", state.page);
       renderGrid();
     }
   });
@@ -3789,4 +3854,3 @@ document
   });
 
 // --- Authentication UI Sync ---
-

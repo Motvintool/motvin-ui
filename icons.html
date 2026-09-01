@@ -1,1199 +1,2037 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Motvin Icons: A complete icon toolkit for designers, developers.
+    </title>
+    <meta
+      name="description"
+      content="Search, compare, customize, and use icons from your favorite libraries — all in one place."
+    />
+    <script>
+      (function () {
+        // Disable transitions on load to prevent FOUC when active tab changes
+        document.write('<style id="mi-init-style">');
+        document.write(
+          ".mi-sidebar-icon-container, .mi-sidebar-label { transition: none !important; }",
+        );
+        document.write("</style>");
+      })();
+    </script>
+    <link rel="stylesheet" href="CSS/motvin-icons.css?v=17" />
+    <link rel="stylesheet" href="CSS/skeleton-loader.css" />
+    <link
+      rel="stylesheet"
+      href="COMPONENT/Components CSS/Library Profile Menu.css"
+    />
+    <link
+      rel="stylesheet"
+      href="COMPONENT/Components CSS/Library Profile Badge.css"
+    />
+    <link rel="stylesheet" href="COMPONENT/Components CSS/Auth Modal.css" />
+    <link rel="stylesheet" href="MOTVIN/css/tooltip.css" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Motvin Icons: A complete icon toolkit for designers, developers.</title>
-  <meta name="description"
-    content="Search, compare, customize, and use icons from your favorite libraries — all in one place." />
-  <script>
-    (function() {
-      // Disable transitions on load to prevent FOUC when active tab changes
-      document.write('<style id="mi-init-style">');
-      document.write('.mi-sidebar-icon-container, .mi-sidebar-label { transition: none !important; }');
-      document.write('</style>');
-    })();
-  </script>
-  <link rel="stylesheet" href="CSS/motvin-icons.css?v=17" />
-  <link rel="stylesheet" href="CSS/skeleton-loader.css" />
-  <link rel="stylesheet" href="COMPONENT/Components CSS/Library Profile Menu.css" />
-  <link rel="stylesheet" href="COMPONENT/Components CSS/Library Profile Badge.css" />
-  <link rel="stylesheet" href="COMPONENT/Components CSS/Auth Modal.css" />
-  <link rel="stylesheet" href="MOTVIN/css/tooltip.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="ASSET/Images/motvin%20logo%20(full%20color).svg"
+    />
+  </head>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="ASSET/Images/motvin%20logo%20(full%20color).svg" />
-</head>
-
-<body>
-
-
-  <!-- =====================================================
+  <body>
+    <!-- =====================================================
        APP SHELL — Left sidebar + Main + Right panel
        ===================================================== -->
-  <div class="mi-app-shell">
+    <div class="mi-app-shell">
+      <!-- ── LEFT ICON SIDEBAR ── -->
+      <aside class="mi-left-sidebar" aria-label="Navigation">
+        <div class="mi-sidebar-top">
+          <a href="/" class="mi-sidebar-logo" aria-label="Motvin home">
+            <img
+              src="ASSET/Icons/nav-icon-motvin-logo.svg"
+              alt="Motvin"
+              class="mi-sidebar-logo-img"
+            />
+          </a>
+          <button
+            class="mi-sidebar-item"
+            data-sidebar="filters"
+            title="Filters"
+          >
+            <span class="mi-sidebar-icon-container">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="21" y1="4" x2="14" y2="4" />
+                <line x1="10" y1="4" x2="3" y2="4" />
+                <line x1="21" y1="12" x2="12" y2="12" />
+                <line x1="8" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="20" x2="16" y2="20" />
+                <line x1="12" y1="20" x2="3" y2="20" />
+                <line x1="14" y1="2" x2="14" y2="6" />
+                <line x1="8" y1="10" x2="8" y2="14" />
+                <line x1="16" y1="18" x2="16" y2="22" />
+              </svg>
+            </span>
+            <span class="mi-sidebar-label">Filters</span>
+            <img
+              src="ASSET/Icons/active-tab-highlight.svg"
+              alt=""
+              class="mi-sidebar-active-indicator"
+            />
+          </button>
+          <button
+            class="mi-sidebar-item"
+            data-sidebar="categories"
+            title="Categories"
+          >
+            <span class="mi-sidebar-icon-container">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+              </svg>
+            </span>
+            <span class="mi-sidebar-label">Packs</span>
+            <img
+              src="ASSET/Icons/active-tab-highlight.svg"
+              alt=""
+              class="mi-sidebar-active-indicator"
+            />
+          </button>
+          <button
+            class="mi-sidebar-item"
+            id="btn-favorites"
+            data-sidebar="saved"
+            title="Saved / Favorites"
+            aria-label="Favorites"
+          >
+            <span class="mi-sidebar-icon-container">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+              </svg>
+            </span>
+            <span class="mi-sidebar-label">Saved</span>
+            <img
+              src="ASSET/Icons/active-tab-highlight.svg"
+              alt=""
+              class="mi-sidebar-active-indicator"
+            />
+          </button>
+        </div>
 
-    <!-- ── LEFT ICON SIDEBAR ── -->
-    <aside class="mi-left-sidebar" aria-label="Navigation">
-      <div class="mi-sidebar-top">
-        <a href="/" class="mi-sidebar-logo" aria-label="Motvin home">
-          <img src="ASSET/Icons/nav-icon-motvin-logo.svg" alt="Motvin" class="mi-sidebar-logo-img" />
-        </a>
-        <button class="mi-sidebar-item" data-sidebar="filters" title="Filters">
-          <span class="mi-sidebar-icon-container">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-              stroke-linejoin="round">
-              <line x1="21" y1="4" x2="14" y2="4" />
-              <line x1="10" y1="4" x2="3" y2="4" />
-              <line x1="21" y1="12" x2="12" y2="12" />
-              <line x1="8" y1="12" x2="3" y2="12" />
-              <line x1="21" y1="20" x2="16" y2="20" />
-              <line x1="12" y1="20" x2="3" y2="20" />
-              <line x1="14" y1="2" x2="14" y2="6" />
-              <line x1="8" y1="10" x2="8" y2="14" />
-              <line x1="16" y1="18" x2="16" y2="22" />
-            </svg>
-          </span>
-          <span class="mi-sidebar-label">Filters</span>
-          <img src="ASSET/Icons/active-tab-highlight.svg" alt="" class="mi-sidebar-active-indicator" />
-        </button>
-        <button class="mi-sidebar-item" data-sidebar="categories" title="Categories">
-          <span class="mi-sidebar-icon-container">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-              stroke-linejoin="round">
-              <rect x="3" y="3" width="7" height="7" rx="1" />
-              <rect x="14" y="3" width="7" height="7" rx="1" />
-              <rect x="3" y="14" width="7" height="7" rx="1" />
-              <rect x="14" y="14" width="7" height="7" rx="1" />
-            </svg>
-          </span>
-          <span class="mi-sidebar-label">Packs</span>
-          <img src="ASSET/Icons/active-tab-highlight.svg" alt="" class="mi-sidebar-active-indicator" />
-        </button>
-        <button class="mi-sidebar-item" id="btn-favorites" data-sidebar="saved" title="Saved / Favorites"
-          aria-label="Favorites">
-          <span class="mi-sidebar-icon-container">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-              stroke-linejoin="round">
-              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-            </svg>
-          </span>
-          <span class="mi-sidebar-label">Saved</span>
-          <img src="ASSET/Icons/active-tab-highlight.svg" alt="" class="mi-sidebar-active-indicator" />
-        </button>
-      </div>
+        <div class="mi-sidebar-bottom">
+          <button
+            class="mi-sidebar-item"
+            data-sidebar="plugins"
+            title="Plugins"
+          >
+            <span class="mi-sidebar-icon-container">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
+                <line x1="16" y1="8" x2="2" y2="22" />
+                <line x1="17.5" y1="15" x2="9" y2="15" />
+              </svg>
+            </span>
+            <span class="mi-sidebar-label">Plugins</span>
+            <img
+              src="ASSET/Icons/active-tab-highlight.svg"
+              alt=""
+              class="mi-sidebar-active-indicator"
+            />
+          </button>
+          <button class="mi-sidebar-item" data-sidebar="help" title="Help">
+            <span class="mi-sidebar-icon-container">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            </span>
+            <span class="mi-sidebar-label">Helps</span>
+            <img
+              src="ASSET/Icons/active-tab-highlight.svg"
+              alt=""
+              class="mi-sidebar-active-indicator"
+            />
+          </button>
+        </div>
 
-      <div class="mi-sidebar-bottom">
-        <button class="mi-sidebar-item" data-sidebar="plugins" title="Plugins">
-          <span class="mi-sidebar-icon-container">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-              stroke-linejoin="round">
-              <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
-              <line x1="16" y1="8" x2="2" y2="22" />
-              <line x1="17.5" y1="15" x2="9" y2="15" />
-            </svg>
-          </span>
-          <span class="mi-sidebar-label">Plugins</span>
-          <img src="ASSET/Icons/active-tab-highlight.svg" alt="" class="mi-sidebar-active-indicator" />
+        <!-- Mobile-only hamburger: opens a dropdown holding the relocated nav -->
+        <button
+          class="mi-mobile-menu-toggle"
+          id="mobile-menu-toggle"
+          aria-label="Menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu-panel"
+        >
+          <img
+            src="ASSET/Icons/nav-open.svg"
+            alt=""
+            class="mi-mobile-menu-icon-open"
+          />
+          <img
+            src="ASSET/Icons/nav-close.svg"
+            alt=""
+            class="mi-mobile-menu-icon-close"
+          />
         </button>
-        <button class="mi-sidebar-item" data-sidebar="help" title="Help">
-          <span class="mi-sidebar-icon-container">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-              stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
-            </svg>
-          </span>
-          <span class="mi-sidebar-label">Helps</span>
-          <img src="ASSET/Icons/active-tab-highlight.svg" alt="" class="mi-sidebar-active-indicator" />
-        </button>
-      </div>
-
-      <!-- Mobile-only hamburger: opens a dropdown holding the relocated nav -->
-      <button class="mi-mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Menu" aria-expanded="false"
-        aria-controls="mobile-menu-panel">
-        <img src="ASSET/Icons/nav-open.svg" alt="" class="mi-mobile-menu-icon-open" />
-        <img src="ASSET/Icons/nav-close.svg" alt="" class="mi-mobile-menu-icon-close" />
-      </button>
-    </aside>
-    <script>
-      (function() {
-        var savedTab = localStorage.getItem('mi.sidebarTab') || 'filters';
-        var sidebarItems = document.querySelectorAll('.mi-sidebar-item');
-        for (var i = 0; i < sidebarItems.length; i++) {
-          if (sidebarItems[i].dataset.sidebar === savedTab) {
-            sidebarItems[i].classList.add('is-active');
-          } else {
-            sidebarItems[i].classList.remove('is-active');
+      </aside>
+      <script>
+        (function () {
+          var savedTab = localStorage.getItem("mi.sidebarTab") || "filters";
+          var sidebarItems = document.querySelectorAll(".mi-sidebar-item");
+          for (var i = 0; i < sidebarItems.length; i++) {
+            if (sidebarItems[i].dataset.sidebar === savedTab) {
+              sidebarItems[i].classList.add("is-active");
+            } else {
+              sidebarItems[i].classList.remove("is-active");
+            }
           }
-        }
-      })();
-    </script>
+        })();
+      </script>
 
-    <!-- ── MAIN CONTENT ── -->
-    <main class="mi-main" id="discover">
-
-      <!-- Top Header (Inside Main) -->
-      <header class="mi-top-header">
-        <div class="mi-top-header-left">
-          <div class="mi-top-logo-group">
-            <img src="ASSET/Icons/motvin-logo-text.svg" alt="Motvin" class="mi-top-logo-text" />
-            <div class="mi-top-beta-badge">Beta</div>
+      <!-- ── MAIN CONTENT ── -->
+      <main class="mi-main" id="discover">
+        <!-- Top Header (Inside Main) -->
+        <header class="mi-top-header">
+          <div class="mi-top-header-left">
+            <div class="mi-top-logo-group">
+              <img
+                src="ASSET/Icons/motvin-logo-text.svg"
+                alt="Motvin"
+                class="mi-top-logo-text"
+              />
+              <div class="mi-top-beta-badge">Beta</div>
+            </div>
+            <nav class="mi-top-nav">
+              <a
+                href="https://chat.whatsapp.com/JxLUrQpNpaXJ4ido6muIW6?s=cl&p=i&ilr=4"
+                target="_blank"
+                class="mi-top-nav-link"
+              >
+                Community
+                <span class="mi-top-nav-badge">New</span>
+              </a>
+              <a href="/updates/" target="_blank" class="mi-top-nav-link">
+                Release Notes
+              </a>
+            </nav>
           </div>
-          <nav class="mi-top-nav">
-            <a href="https://chat.whatsapp.com/JxLUrQpNpaXJ4ido6muIW6?s=cl&p=i&ilr=4" target="_blank"
-              class="mi-top-nav-link">
-              Community
-              <span class="mi-top-nav-badge">New</span>
-            </a>
-            <a href="/updates/" target="_blank" class="mi-top-nav-link">
-              Release Notes
-            </a>
-          </nav>
-        </div>
 
-        <div class="mi-top-header-right">
-          <!-- Products dropdown -->
-          <div class="mi-top-products-wrap" id="products-wrap">
-            <button class="mi-top-products-link" id="mi-top-products-link" aria-haspopup="true" aria-expanded="false">
-              <div class="mi-products-dropdown-item-icon-cluster">
-                <div class="mi-cluster-circle">
-                  <img src="ASSET/Icons/Lucide.svg" alt="" class="mi-cluster-img" />
+          <div class="mi-top-header-right">
+            <!-- Products dropdown -->
+            <div class="mi-top-products-wrap" id="products-wrap">
+              <button
+                class="mi-top-products-link"
+                id="mi-top-products-link"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <div class="mi-products-dropdown-item-icon-cluster">
+                  <div class="mi-cluster-circle">
+                    <img
+                      src="ASSET/Icons/Lucide.svg"
+                      alt=""
+                      class="mi-cluster-img"
+                    />
+                  </div>
+                  <div class="mi-cluster-circle">
+                    <img
+                      src="ASSET/Icons/Heroicons.svg"
+                      alt=""
+                      class="mi-cluster-img"
+                    />
+                  </div>
+                  <div class="mi-cluster-circle">
+                    <img
+                      src="ASSET/Icons/Tabler%20Icons.svg"
+                      alt=""
+                      class="mi-cluster-img"
+                    />
+                  </div>
                 </div>
-                <div class="mi-cluster-circle">
-                  <img src="ASSET/Icons/Heroicons.svg" alt="" class="mi-cluster-img" />
-                </div>
-                <div class="mi-cluster-circle">
-                  <img src="ASSET/Icons/Tabler%20Icons.svg" alt="" class="mi-cluster-img" />
-                </div>
-              </div>
-              Icons Library
-              <img src="ASSET/Icons/icon-down-arrow.svg" alt="" class="mi-top-products-caret" />
-            </button>
-            <!-- Products dropdown menu -->
-            <div class="mi-products-dropdown" id="products-dropdown" role="menu">
-              <div class="mi-products-dropdown-inner">
-                <a href="icons.html" class="mi-products-dropdown-item" role="menuitem">
-                  <div class="mi-products-dropdown-item-icon-cluster">
-                    <div class="mi-cluster-circle">
-                      <img src="ASSET/Icons/Lucide.svg" alt="" class="mi-cluster-img" />
-                    </div>
-                    <div class="mi-cluster-circle">
-                      <img src="ASSET/Icons/Heroicons.svg" alt="" class="mi-cluster-img" />
-                    </div>
-                    <div class="mi-cluster-circle">
-                      <img src="ASSET/Icons/Tabler%20Icons.svg" alt="" class="mi-cluster-img" />
-                    </div>
-                  </div>
-                  <div class="mi-products-dropdown-item-text">
-                    <span class="mi-products-dropdown-item-label">Icons Library</span>
-                    <span class="mi-products-dropdown-item-sub">331,500+ icons, ready to explore</span>
-                  </div>
-                </a>
-                <a href="logos.html" class="mi-products-dropdown-item" role="menuitem">
-                  <div class="mi-products-dropdown-item-icon-cluster">
-                    <div class="mi-cluster-circle">
-                      <img src="ASSET/Icons/adobe.svg" alt="" class="mi-cluster-img" />
-                    </div>
-                    <div class="mi-cluster-circle">
-                      <img src="ASSET/Icons/apple.svg" alt="" class="mi-cluster-img" />
-                    </div>
-                    <div class="mi-cluster-circle">
-                      <img src="ASSET/Icons/modvin.svg" alt="" class="mi-cluster-img" />
-                    </div>
-                  </div>
-                  <div class="mi-products-dropdown-item-text">
-                    <span class="mi-products-dropdown-item-label">Logos Library</span>
-                    <span class="mi-products-dropdown-item-sub">13,000+ logos, all in one place</span>
-                  </div>
-                </a>
-                <a href="illustrations.html" class="mi-products-dropdown-item" role="menuitem">
-                  <div class="mi-products-dropdown-item-icon-cluster">
-                    <div class="mi-cluster-circle">
-                      <img src="ASSET/Icons/pixelsmarket.svg" alt="" class="mi-cluster-img" />
-                    </div>
-                    <div class="mi-cluster-circle">
-                      <img src="ASSET/Icons/open-doodles.svg" alt="" class="mi-cluster-img" />
-                    </div>
-                    <div class="mi-cluster-circle">
-                      <img src="ASSET/Icons/undraw.svg" alt="" class="mi-cluster-img" />
-                    </div>
-                  </div>
-                  <div class="mi-products-dropdown-item-text">
-                    <span class="mi-products-dropdown-item-label">Illustration Library</span>
-                    <span class="mi-products-dropdown-item-sub">Illustrations, ready to explore</span>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="mi-profile-menu-container" id="profile-menu-container">
-            <div class="mi-top-avatar-wrap mi-logged-out">
-              <img src="ASSET/Icons/sidebar-avatar-placeholder.svg" alt="" class="mi-top-avatar" />
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <!-- Top toolbar: Category | Search | AI toggle | Recolor -->
-      <div class="mi-toolbar-wrapper">
-        <div class="mi-toolbar">
-          <div class="mi-search-pill" style="position: relative;">
-            <!-- Category dropdown -->
-            <div class="mi-cat-dropdown" id="cat-dropdown" role="button" tabindex="0" aria-haspopup="listbox">
-              <span class="mi-cat-dropdown-label">Category:</span>
-              <span class="mi-cat-dropdown-val" id="cat-dropdown-val">All Icons</span>
-              <img src="ASSET/Icons/icon-down-arrow.svg" class="mi-cat-icon" alt="" />
-            </div>
-
-            <!-- Category Dropdown Menu -->
-            <div class="mi-category-menu" id="cat-menu">
-              <div class="mi-category-menu-inner" id="cat-menu-list">
-                <!-- Populated by JS -->
-              </div>
-            </div>
-
-            <!-- Search -->
-            <form class="mi-search" id="search-form" autocomplete="off" role="search">
-              <span class="mi-search-icon" aria-hidden="true">
-                <img src="ASSET/Icons/icon-search.svg" alt="" />
-              </span>
-              <input id="search-input" class="mi-search-input" type="text" placeholder="Search icons..."
-                aria-label="Search icons" />
-              <button type="button" class="mi-search-clear" id="search-clear" aria-label="Clear search"
-                style="display: none;">
-                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
+                Icons Library
+                <img
+                  src="ASSET/Icons/icon-down-arrow.svg"
+                  alt=""
+                  class="mi-top-products-caret"
+                />
               </button>
-            </form>
-
-            <!-- AI search toggle -->
-            <label class="mi-ai-toggle" for="ai-toggle-switch" title="Coming Soon" style="cursor: not-allowed;">
-              <span class="mi-toggle-switch" id="btn-ai" role="switch" aria-checked="false" tabindex="-1" style="pointer-events: none; opacity: 0.5;">
-                <span class="mi-toggle-knob"></span>
-              </span>
-              <span class="mi-ai-label" style="pointer-events: none;">AI search</span>
-            </label>
-          </div>
-
-          <!-- Recolor button -->
-          <div class="mi-recolor-wrap" id="recolor-wrap">
-            <div class="mi-recolor-btn" id="btn-recolor" role="button" tabindex="0" aria-haspopup="true"
-              aria-label="Recolor">
-              <img src="ASSET/Icons/icon-color-wheel.svg" class="mi-color-wheel" id="recolor-wheel" alt="" />
-              <span class="mi-recolor-label" id="recolor-label">Recolor</span>
-              <button class="mi-recolor-reset-inline" id="btn-recolor-reset-inline" aria-label="Reset color" hidden>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                  <path d="M18 6L6 18M6 6l12 12" />
-                </svg>
-              </button>
-              <img src="ASSET/Icons/icon-down-arrow.svg" class="mi-recolor-arrow" alt="" />
+              <!-- Products dropdown menu -->
+              <div
+                class="mi-products-dropdown"
+                id="products-dropdown"
+                role="menu"
+              >
+                <div class="mi-products-dropdown-inner">
+                  <a
+                    href="icons.html"
+                    class="mi-products-dropdown-item"
+                    role="menuitem"
+                  >
+                    <div class="mi-products-dropdown-item-icon-cluster">
+                      <div class="mi-cluster-circle">
+                        <img
+                          src="ASSET/Icons/Lucide.svg"
+                          alt=""
+                          class="mi-cluster-img"
+                        />
+                      </div>
+                      <div class="mi-cluster-circle">
+                        <img
+                          src="ASSET/Icons/Heroicons.svg"
+                          alt=""
+                          class="mi-cluster-img"
+                        />
+                      </div>
+                      <div class="mi-cluster-circle">
+                        <img
+                          src="ASSET/Icons/Tabler%20Icons.svg"
+                          alt=""
+                          class="mi-cluster-img"
+                        />
+                      </div>
+                    </div>
+                    <div class="mi-products-dropdown-item-text">
+                      <span class="mi-products-dropdown-item-label"
+                        >Icons Library</span
+                      >
+                      <span class="mi-products-dropdown-item-sub"
+                        >331,500+ icons, ready to explore</span
+                      >
+                    </div>
+                  </a>
+                  <a
+                    href="logos.html"
+                    class="mi-products-dropdown-item"
+                    role="menuitem"
+                  >
+                    <div class="mi-products-dropdown-item-icon-cluster">
+                      <div class="mi-cluster-circle">
+                        <img
+                          src="ASSET/Icons/adobe.svg"
+                          alt=""
+                          class="mi-cluster-img"
+                        />
+                      </div>
+                      <div class="mi-cluster-circle">
+                        <img
+                          src="ASSET/Icons/apple.svg"
+                          alt=""
+                          class="mi-cluster-img"
+                        />
+                      </div>
+                      <div class="mi-cluster-circle">
+                        <img
+                          src="ASSET/Icons/modvin.svg"
+                          alt=""
+                          class="mi-cluster-img"
+                        />
+                      </div>
+                    </div>
+                    <div class="mi-products-dropdown-item-text">
+                      <span class="mi-products-dropdown-item-label"
+                        >Logos Library</span
+                      >
+                      <span class="mi-products-dropdown-item-sub"
+                        >13,000+ logos, all in one place</span
+                      >
+                    </div>
+                  </a>
+                  <a
+                    href="illustrations.html"
+                    class="mi-products-dropdown-item"
+                    role="menuitem"
+                  >
+                    <div class="mi-products-dropdown-item-icon-cluster">
+                      <div class="mi-cluster-circle">
+                        <img
+                          src="ASSET/Icons/pixelsmarket.svg"
+                          alt=""
+                          class="mi-cluster-img"
+                        />
+                      </div>
+                      <div class="mi-cluster-circle">
+                        <img
+                          src="ASSET/Icons/open-doodles.svg"
+                          alt=""
+                          class="mi-cluster-img"
+                        />
+                      </div>
+                      <div class="mi-cluster-circle">
+                        <img
+                          src="ASSET/Icons/undraw.svg"
+                          alt=""
+                          class="mi-cluster-img"
+                        />
+                      </div>
+                    </div>
+                    <div class="mi-products-dropdown-item-text">
+                      <span class="mi-products-dropdown-item-label"
+                        >Illustration Library</span
+                      >
+                      <span class="mi-products-dropdown-item-sub"
+                        >Illustrations, ready to explore</span
+                      >
+                    </div>
+                  </a>
+                </div>
+              </div>
             </div>
-
-            <!-- Recolor dropdown -->
-            <div class="mi-recolor-dropdown" id="recolor-dropdown" hidden>
-              <div class="mi-recolor-color-input">
-                <input type="color" id="recolor-color-input" value="#0F1116" />
-                <input type="text" id="recolor-hex-input" class="mi-recolor-hex" maxlength="7" placeholder="#0F1116" />
-              </div>
-              <div class="mi-recolor-swatches" id="recolor-swatches">
-                <button class="mi-recolor-swatch-btn" data-color="#0F1116" title="Near Black"
-                  style="background:#0F1116"></button>
-                <button class="mi-recolor-swatch-btn" data-color="#5C4AE4" title="Accent"
-                  style="background:#5C4AE4"></button>
-                <button class="mi-recolor-swatch-btn" data-color="#2563EB" title="Blue"
-                  style="background:#2563EB"></button>
-                <button class="mi-recolor-swatch-btn" data-color="#16A34A" title="Green"
-                  style="background:#16A34A"></button>
-                <button class="mi-recolor-swatch-btn" data-color="#DC2626" title="Red"
-                  style="background:#DC2626"></button>
-                <button class="mi-recolor-swatch-btn" data-color="#D97706" title="Amber"
-                  style="background:#D97706"></button>
-                <button class="mi-recolor-swatch-btn" data-color="#6B7280" title="Grey"
-                  style="background:#6B7280"></button>
-                <button class="mi-recolor-swatch-btn" data-color="#FFFFFF" title="White"
-                  style="background:#FFFFFF;border:1px solid #e5e5eb"></button>
+            <div class="mi-profile-menu-container" id="profile-menu-container">
+              <div class="mi-top-avatar-wrap mi-logged-out">
+                <img
+                  src="ASSET/Icons/sidebar-avatar-placeholder.svg"
+                  alt=""
+                  class="mi-top-avatar"
+                />
               </div>
             </div>
-          </div><!-- /recolor-wrap -->
-        </div>
-      </div><!-- /toolbar -->
-
-      <div class="mi-main-top-wrapper">
-        <!-- Sort / filter bar -->
-        <div class="mi-sort-bar">
-
-          <select id="sort-select" class="mi-select" aria-label="Sort" style="display:none;">
-            <option value="relevance">Relevance</option>
-            <option value="popular">Popular</option>
-            <option value="new">New</option>
-            <option value="trending">Trending</option>
-            <option value="name-asc">Name A → Z</option>
-            <option value="name-desc">Name Z → A</option>
-          </select>
-
-          <div class="mi-sort-tabs" role="tablist" aria-label="Sort by">
-            <button class="mi-sort-tab mi-skeleton is-active" data-sort="all" role="tab" aria-selected="true">All</button>
-            <button class="mi-sort-tab mi-skeleton" data-sort="relevance" role="tab" aria-selected="false">Relevant</button>
-            <button class="mi-sort-tab mi-skeleton" data-sort="popular" role="tab" aria-selected="false">Popular</button>
-            <button class="mi-sort-tab mi-skeleton" data-sort="trending" role="tab" aria-selected="false">Trending</button>
-            <button class="mi-sort-tab mi-skeleton" data-sort="name-asc" role="tab" aria-selected="false">Name A to Z</button>
-            <button class="mi-sort-tab mi-skeleton" data-sort="name-desc" role="tab" aria-selected="false">Name Z to A</button>
           </div>
+        </header>
 
-          <!-- Right side: Compare + view toggles -->
-          <div class="mi-sort-bar-right">
-            <button id="compare-btn" class="mi-compare-link">
-              <div class="mi-compare-inner">
-                <img src="ASSET/Icons/icon-compare.svg" alt="" />
-                <span>Compare</span>
+        <!-- Top toolbar: Category | Search | AI toggle | Recolor -->
+        <div class="mi-toolbar-wrapper">
+          <div class="mi-toolbar">
+            <div class="mi-search-pill" style="position: relative">
+              <!-- Category dropdown -->
+              <div
+                class="mi-cat-dropdown"
+                id="cat-dropdown"
+                role="button"
+                tabindex="0"
+                aria-haspopup="listbox"
+              >
+                <span class="mi-cat-dropdown-label">Category:</span>
+                <span class="mi-cat-dropdown-val" id="cat-dropdown-val"
+                  >All Icons</span
+                >
+                <img
+                  src="ASSET/Icons/icon-down-arrow.svg"
+                  class="mi-cat-icon"
+                  alt=""
+                />
               </div>
-              <span id="compare-count" class="mi-badge">0</span>
-            </button>
 
-            <div class="mi-view-tabs-container">
-              <div class="mi-view-tabs" role="tablist" aria-label="View density">
-                <button class="mi-view-btn is-active" data-density="detailed" title="Detailed" aria-pressed="true">
-                  <img src="ASSET/Icons/icon-detailed.svg" alt="" />
+              <!-- Category Dropdown Menu -->
+              <div class="mi-category-menu" id="cat-menu">
+                <div class="mi-category-menu-inner" id="cat-menu-list">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <!-- Search -->
+              <form
+                class="mi-search"
+                id="search-form"
+                autocomplete="off"
+                role="search"
+              >
+                <span class="mi-search-icon" aria-hidden="true">
+                  <img src="ASSET/Icons/icon-search.svg" alt="" />
+                </span>
+                <input
+                  id="search-input"
+                  class="mi-search-input"
+                  type="text"
+                  placeholder="Search icons..."
+                  aria-label="Search icons"
+                />
+                <button
+                  type="button"
+                  class="mi-search-clear"
+                  id="search-clear"
+                  aria-label="Clear search"
+                  style="display: none"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
                 </button>
-                <button class="mi-view-btn" data-density="compact" title="Compact" aria-pressed="false">
-                  <img src="ASSET/Icons/icon-compact.svg" alt="" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div><!-- /sort-bar -->
-        <script>
-          // ── Recolor button relocates into the sort bar on mobile ─────────────
-          (function() {
-            var recolorWrapAnchor = (function () {
-              var el = document.getElementById('recolor-wrap');
-              return el ? { el: el, parent: el.parentNode, next: el.nextSibling } : null;
-            })();
-            var sortBarRightEl = document.querySelector('.mi-sort-bar-right');
-            var recolorRelocated = false;
+              </form>
 
-            function relocateRecolorForMobile() {
-              if (recolorRelocated || !recolorWrapAnchor || !sortBarRightEl) return;
-              sortBarRightEl.insertBefore(recolorWrapAnchor.el, sortBarRightEl.firstChild);
-              recolorRelocated = true;
-            }
-
-            function restoreRecolorFromMobile() {
-              if (!recolorRelocated || !recolorWrapAnchor) return;
-              recolorWrapAnchor.parent.insertBefore(recolorWrapAnchor.el, recolorWrapAnchor.next);
-              recolorRelocated = false;
-            }
-
-            window.syncRecolorLayout = function() {
-              if (window.innerWidth <= 860) { relocateRecolorForMobile(); } else { restoreRecolorFromMobile(); }
-            };
-
-            window.syncRecolorLayout();
-          })();
-        </script>
-
-        <!-- Results count -->
-        <div class="mi-count-row">
-          <span class="mi-count-num mi-skeleton" id="results-count">261,657</span>
-          <span class="mi-count-label">icons found</span>
-          <span id="results-query" class="mi-query"></span>
-        </div>
-      </div>
-
-      <!-- Scrollable icon grid -->
-      <div class="mi-grid-scroll" id="grid-scroll">
-        <div id="icon-grid" class="mi-grid density-detailed" role="list">
-          <script>
-            document.write(Array(48).fill('<div class="mi-card" style="pointer-events: none; border: none; height: 112px; animation: skeleton-pulse 1.5s ease-in-out infinite;"></div>').join(''));
-          </script>
-        </div>
-
-      </div><!-- /grid-scroll -->
-
-    </main><!-- /mi-main -->
-
-    <!-- ── RIGHT FILTER PANEL ── -->
-    <aside class="mi-right-panel">
-      <div class="mi-right-panel-inner mi-rp-filters">
-        <div class="mi-rp-resizer" id="rp-resizer"></div>
-        <!-- Header -->
-        <div class="mi-rp-header">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.6; color: var(--mi-ink);">
-              <line x1="4" y1="21" x2="4" y2="14"></line>
-              <line x1="4" y1="10" x2="4" y2="3"></line>
-              <line x1="12" y1="21" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12" y2="3"></line>
-              <line x1="20" y1="21" x2="20" y2="16"></line>
-              <line x1="20" y1="12" x2="20" y2="3"></line>
-              <line x1="1" y1="14" x2="7" y2="14"></line>
-              <line x1="9" y1="8" x2="15" y2="8"></line>
-              <line x1="17" y1="16" x2="23" y2="16"></line>
-            </svg>
-            <span id="rp-header-title">Filters</span>
-            <span class="mi-rp-filter-badge" id="filter-badge" hidden>0</span>
-          </div>
-          <div class="mi-rp-header-actions">
-            <button class="mi-rp-detach-btn" id="rp-detach-btn" title="Detach Panel">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-              </svg>
-            </button>
-            <button class="mi-rp-mobile-close" id="rp-mobile-close" aria-label="Close filters" title="Close filters">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 6l12 12M18 6L6 18" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <div class="mi-rp-content">
-          <div id="rp-tab-filters">
-            <!-- Sources -->
-            <div class="mi-rp-section">
-              <div class="mi-rp-source-all">
-                <div class="mi-rp-avatars">
-                  <div class="mi-rp-avatar" style="z-index: 3"><img src="ASSET/Icons/Lucide.svg" alt="" /></div>
-                  <div class="mi-rp-avatar" style="z-index: 2; margin-left: -6px"><img src="ASSET/Icons/Heroicons.svg"
-                      alt="" /></div>
-                  <div class="mi-rp-avatar" style="z-index: 1; margin-left: -6px"><img src="ASSET/Icons/Phosphor.svg"
-                      alt="" /></div>
-                </div>
-                <span class="mi-rp-all-title">All Sources</span>
-                <span class="mi-rp-badge-lg mi-skeleton">261,657</span>
-              </div>
-
-              <div class="mi-rp-source-search" id="source-search-wrapper" style="position: relative;">
-                <svg id="source-search-icon" class="mi-source-search-icon" width="16" height="16" viewBox="0 0 24 24"
-                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <input type="text" id="source-search-input" class="mi-source-search" placeholder="Search sources..." />
-                <div id="source-search-clear" class="mi-source-search-clear">&times;</div>
-              </div>
-
-              <div class="mi-rp-list" id="filter-source"></div>
-
-              <div class="mi-rp-more" id="source-more-btn" style="cursor:pointer;">
-                <span class="mi-skeleton">+12 more sources</span>
-              </div>
-            </div>
-
-            <div class="mi-rp-divider"></div>
-
-            <!-- Styles -->
-            <div class="mi-rp-section">
-              <span class="mi-rp-title">Styles</span>
-              <div class="mi-rp-list mi-rp-list-gap4" id="filter-style"></div>
-            </div>
-
-            <div class="mi-rp-divider"></div>
-
-            <!-- Size -->
-            <div class="mi-rp-section">
-              <div class="mi-rp-header-row">
-                <span class="mi-rp-title">Size</span>
-                <span class="mi-rp-val" id="size-panel-val">42</span>
-              </div>
-              <div class="mi-rp-slider-wrapper">
-                <input type="range" id="ctrl-size-panel" class="mi-rp-slider-invisible" min="12" max="64" value="42"
-                  step="1" aria-label="Icon size" />
-                <div class="mi-rp-slider-container">
-                  <div class="mi-rp-slider-track">
-                    <div class="mi-rp-slider-fill" id="size-panel-fill" style="width: 57.69%"></div>
-                  </div>
-                  <div class="mi-rp-slider-thumb" id="size-panel-thumb" style="left: 57.69%"></div>
-                </div>
-              </div>
-              <div class="mi-rp-segmented mi-size-quick">
-                <div class="mi-rp-seg-item mi-size-q-btn" data-panel-size="16">16</div>
-                <div class="mi-rp-seg-item mi-size-q-btn is-active" data-panel-size="20">20</div>
-                <div class="mi-rp-seg-item mi-size-q-btn" data-panel-size="24">24</div>
-                <div class="mi-rp-seg-item mi-size-q-btn" data-panel-size="32">32</div>
-              </div>
-            </div>
-
-            <div class="mi-rp-divider"></div>
-
-            <!-- Stroke Width -->
-            <div class="mi-rp-section" id="rp-stroke-section">
-              <div class="mi-rp-header-row">
-                <span class="mi-rp-title">Stroke Width</span>
-                <span class="mi-rp-val" id="stroke-panel-val">1.5</span>
-              </div>
-              <div class="mi-rp-slider-wrapper">
-                <input type="range" id="ctrl-stroke-panel" class="mi-rp-slider-invisible" min="1" max="2" value="1.5"
-                  step="0.25" aria-label="Stroke width" />
-                <div class="mi-rp-slider-container">
-                  <div class="mi-rp-slider-track">
-                    <div class="mi-rp-slider-fill" id="stroke-panel-fill" style="width: 71.43%"></div>
-                  </div>
-                  <div class="mi-rp-slider-thumb" id="stroke-panel-thumb" style="left: 71.43%"></div>
-                </div>
-              </div>
-              <div class="mi-rp-segmented mi-stroke-quick">
-                <div class="mi-rp-seg-item mi-stroke-q-btn" data-panel-stroke="1">1</div>
-                <div class="mi-rp-seg-item mi-stroke-q-btn is-active" data-panel-stroke="1.5">1.5</div>
-                <div class="mi-rp-seg-item mi-stroke-q-btn" data-panel-stroke="1.75">1.75</div>
-                <div class="mi-rp-seg-item mi-stroke-q-btn" data-panel-stroke="2">2</div>
-              </div>
-            </div>
-
-            <div class="mi-rp-divider" id="rp-stroke-divider"></div>
-
-            <!-- License -->
-            <div class="mi-rp-section">
-              <span class="mi-rp-title">License</span>
-              <div class="mi-rp-license-active is-active" id="clear-filters" style="cursor:pointer"
-                title="Clear all filters">
-                <span>All Licenses</span>
-              </div>
-              <div class="mi-rp-list" id="filter-license"></div>
-            </div>
-          </div><!-- /rp-tab-filters -->
-
-          <!-- Categories Tab -->
-          <div id="rp-tab-categories" style="display:none;">
-            <div class="mi-rp-categories-list" id="categories-list-container">
-              <!-- Dynamically populated by JS -->
-              <!-- Skeleton Loaders -->
-              <div class="mi-rp-cat-item is-skeleton">
-                <span class="mi-rp-cat-label mi-skeleton">Category Name</span>
-                <span class="mi-rp-cat-count mi-skeleton">000</span>
-              </div>
-              <div class="mi-rp-cat-item is-skeleton">
-                <span class="mi-rp-cat-label mi-skeleton">Another Category</span>
-                <span class="mi-rp-cat-count mi-skeleton">000</span>
-              </div>
-              <div class="mi-rp-cat-item is-skeleton">
-                <span class="mi-rp-cat-label mi-skeleton">Short</span>
-                <span class="mi-rp-cat-count mi-skeleton">000</span>
-              </div>
-              <div class="mi-rp-cat-item is-skeleton">
-                <span class="mi-rp-cat-label mi-skeleton">Longer Category</span>
-                <span class="mi-rp-cat-count mi-skeleton">000</span>
-              </div>
-              <div class="mi-rp-cat-item is-skeleton">
-                <span class="mi-rp-cat-label mi-skeleton">Misc</span>
-                <span class="mi-rp-cat-count mi-skeleton">000</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Saved Tab -->
-          <div id="rp-tab-saved" style="display:none;">
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-              <!-- Create Collection Button -->
-              <button id="rp-coll-new-btn-figma"
-                style="width: 100%; border: 1px solid #eaeaee; border-radius: 8px; background: transparent; padding: 10px 0; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: background 0.2s;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.9)" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
+              <!-- AI search toggle -->
+              <label
+                class="mi-ai-toggle"
+                for="ai-toggle-switch"
+                title="Coming Soon"
+                style="cursor: not-allowed"
+              >
                 <span
-                  style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 15px; color: rgba(0,0,0,0.9);">Create
-                  collection</span>
+                  class="mi-toggle-switch"
+                  id="btn-ai"
+                  role="switch"
+                  aria-checked="false"
+                  tabindex="-1"
+                  style="pointer-events: none; opacity: 0.5"
+                >
+                  <span class="mi-toggle-knob"></span>
+                </span>
+                <span class="mi-ai-label" style="pointer-events: none"
+                  >AI search</span
+                >
+              </label>
+            </div>
+
+            <!-- Recolor button -->
+            <div class="mi-recolor-wrap" id="recolor-wrap">
+              <div
+                class="mi-recolor-btn"
+                id="btn-recolor"
+                role="button"
+                tabindex="0"
+                aria-haspopup="true"
+                aria-label="Recolor"
+              >
+                <img
+                  src="ASSET/Icons/icon-color-wheel.svg"
+                  class="mi-color-wheel"
+                  id="recolor-wheel"
+                  alt=""
+                />
+                <span class="mi-recolor-label" id="recolor-label">Recolor</span>
+                <button
+                  class="mi-recolor-reset-inline"
+                  id="btn-recolor-reset-inline"
+                  aria-label="Reset color"
+                  hidden
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  >
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+                <img
+                  src="ASSET/Icons/icon-down-arrow.svg"
+                  class="mi-recolor-arrow"
+                  alt=""
+                />
+              </div>
+
+              <!-- Recolor dropdown -->
+              <div class="mi-recolor-dropdown" id="recolor-dropdown" hidden>
+                <div class="mi-recolor-color-input">
+                  <input
+                    type="color"
+                    id="recolor-color-input"
+                    value="#0F1116"
+                  />
+                  <input
+                    type="text"
+                    id="recolor-hex-input"
+                    class="mi-recolor-hex"
+                    maxlength="7"
+                    placeholder="#0F1116"
+                  />
+                </div>
+                <div class="mi-recolor-swatches" id="recolor-swatches">
+                  <button
+                    class="mi-recolor-swatch-btn"
+                    data-color="#0F1116"
+                    title="Near Black"
+                    style="background: #0f1116"
+                  ></button>
+                  <button
+                    class="mi-recolor-swatch-btn"
+                    data-color="#5C4AE4"
+                    title="Accent"
+                    style="background: #5c4ae4"
+                  ></button>
+                  <button
+                    class="mi-recolor-swatch-btn"
+                    data-color="#2563EB"
+                    title="Blue"
+                    style="background: #2563eb"
+                  ></button>
+                  <button
+                    class="mi-recolor-swatch-btn"
+                    data-color="#16A34A"
+                    title="Green"
+                    style="background: #16a34a"
+                  ></button>
+                  <button
+                    class="mi-recolor-swatch-btn"
+                    data-color="#DC2626"
+                    title="Red"
+                    style="background: #dc2626"
+                  ></button>
+                  <button
+                    class="mi-recolor-swatch-btn"
+                    data-color="#D97706"
+                    title="Amber"
+                    style="background: #d97706"
+                  ></button>
+                  <button
+                    class="mi-recolor-swatch-btn"
+                    data-color="#6B7280"
+                    title="Grey"
+                    style="background: #6b7280"
+                  ></button>
+                  <button
+                    class="mi-recolor-swatch-btn"
+                    data-color="#FFFFFF"
+                    title="White"
+                    style="background: #ffffff; border: 1px solid #e5e5eb"
+                  ></button>
+                </div>
+              </div>
+            </div>
+            <!-- /recolor-wrap -->
+          </div>
+        </div>
+        <!-- /toolbar -->
+
+        <div class="mi-main-top-wrapper">
+          <!-- Sort / filter bar -->
+          <div class="mi-sort-bar">
+            <select
+              id="sort-select"
+              class="mi-select"
+              aria-label="Sort"
+              style="display: none"
+            >
+              <option value="relevance">Relevance</option>
+              <option value="popular">Popular</option>
+              <option value="new">New</option>
+              <option value="trending">Trending</option>
+              <option value="name-asc">Name A → Z</option>
+              <option value="name-desc">Name Z → A</option>
+            </select>
+
+            <div class="mi-sort-tabs" role="tablist" aria-label="Sort by">
+              <button
+                class="mi-sort-tab mi-skeleton is-active"
+                data-sort="all"
+                role="tab"
+                aria-selected="true"
+              >
+                All
+              </button>
+              <button
+                class="mi-sort-tab mi-skeleton"
+                data-sort="relevance"
+                role="tab"
+                aria-selected="false"
+              >
+                Relevant
+              </button>
+              <button
+                class="mi-sort-tab mi-skeleton"
+                data-sort="popular"
+                role="tab"
+                aria-selected="false"
+              >
+                Popular
+              </button>
+              <button
+                class="mi-sort-tab mi-skeleton"
+                data-sort="trending"
+                role="tab"
+                aria-selected="false"
+              >
+                Trending
+              </button>
+              <button
+                class="mi-sort-tab mi-skeleton"
+                data-sort="name-asc"
+                role="tab"
+                aria-selected="false"
+              >
+                Name A to Z
+              </button>
+              <button
+                class="mi-sort-tab mi-skeleton"
+                data-sort="name-desc"
+                role="tab"
+                aria-selected="false"
+              >
+                Name Z to A
+              </button>
+            </div>
+
+            <!-- Right side: Compare + view toggles -->
+            <div class="mi-sort-bar-right">
+              <button id="compare-btn" class="mi-compare-link">
+                <div class="mi-compare-inner">
+                  <img src="ASSET/Icons/icon-compare.svg" alt="" />
+                  <span>Compare</span>
+                </div>
+                <span id="compare-count" class="mi-badge">0</span>
               </button>
 
-              <!-- Collections List Container -->
-              <div id="collections-list-container" style="display: flex; flex-direction: column; gap: 16px;">
-                <!-- Dynamically populated -->
-                <!-- Skeleton Loaders -->
-                <div class="mi-rp-cat-item is-skeleton" style="background: white; box-shadow: 0px 4px 4px rgba(96,96,96,0.15), 0px 0px 0.5px rgba(96,96,96,0.31); height: 84px; display: flex; flex-direction: column; justify-content: space-between; padding: 16px 16px 12px 16px; border-radius: 8px; border: 1px solid transparent;">
-                  <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                    <span class="mi-rp-cat-label mi-skeleton" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px;">All Saved</span>
-                    <span class="mi-rp-cat-count mi-skeleton" style="font-family: 'Inter', sans-serif; font-size: 14px;">0</span>
-                  </div>
-                </div>
-                <div class="mi-rp-cat-item is-skeleton" style="background: white; box-shadow: 0px 4px 4px rgba(96,96,96,0.15), 0px 0px 0.5px rgba(96,96,96,0.31); height: 84px; display: flex; flex-direction: column; justify-content: space-between; padding: 16px 16px 12px 16px; border-radius: 8px; border: 1px solid transparent;">
-                  <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                    <span class="mi-rp-cat-label mi-skeleton" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px;">My Collection</span>
-                    <span class="mi-rp-cat-count mi-skeleton" style="font-family: 'Inter', sans-serif; font-size: 14px;">0</span>
-                  </div>
+              <div class="mi-view-tabs-container">
+                <div
+                  class="mi-view-tabs"
+                  role="tablist"
+                  aria-label="View density"
+                >
+                  <button
+                    class="mi-view-btn is-active"
+                    data-density="detailed"
+                    title="Detailed"
+                    aria-pressed="true"
+                  >
+                    <img src="ASSET/Icons/icon-detailed.svg" alt="" />
+                  </button>
+                  <button
+                    class="mi-view-btn"
+                    data-density="compact"
+                    title="Compact"
+                    aria-pressed="false"
+                  >
+                    <img src="ASSET/Icons/icon-compact.svg" alt="" />
+                  </button>
                 </div>
               </div>
             </div>
           </div>
+          <!-- /sort-bar -->
+          <script>
+            // ── Recolor button relocates into the sort bar on mobile ─────────────
+            (function () {
+              var recolorWrapAnchor = (function () {
+                var el = document.getElementById("recolor-wrap");
+                return el
+                  ? { el: el, parent: el.parentNode, next: el.nextSibling }
+                  : null;
+              })();
+              var sortBarRightEl = document.querySelector(".mi-sort-bar-right");
+              var recolorRelocated = false;
 
-          <!-- Plugins Tab -->
-          <div id="rp-tab-plugins" style="display:none;">
-            <div class="mi-rp-section">
-              <span class="mi-rp-title">Plugins</span>
-              <p style="color:rgba(0,0,0,0.5); font-size:13px; margin-top:8px;">Plugins coming soon.</p>
-            </div>
+              function relocateRecolorForMobile() {
+                if (recolorRelocated || !recolorWrapAnchor || !sortBarRightEl)
+                  return;
+                sortBarRightEl.insertBefore(
+                  recolorWrapAnchor.el,
+                  sortBarRightEl.firstChild,
+                );
+                recolorRelocated = true;
+              }
+
+              function restoreRecolorFromMobile() {
+                if (!recolorRelocated || !recolorWrapAnchor) return;
+                recolorWrapAnchor.parent.insertBefore(
+                  recolorWrapAnchor.el,
+                  recolorWrapAnchor.next,
+                );
+                recolorRelocated = false;
+              }
+
+              window.syncRecolorLayout = function () {
+                if (window.innerWidth <= 860) {
+                  relocateRecolorForMobile();
+                } else {
+                  restoreRecolorFromMobile();
+                }
+              };
+
+              window.syncRecolorLayout();
+            })();
+          </script>
+
+          <!-- Results count -->
+          <div class="mi-count-row">
+            <span class="mi-count-num mi-skeleton" id="results-count"
+              >261,657</span
+            >
+            <span class="mi-count-label">icons found</span>
+            <span id="results-query" class="mi-query"></span>
           </div>
-
-          <!-- Help Tab -->
-          <div id="rp-tab-help" style="display:none;">
-            <div class="mi-rp-section">
-              <span class="mi-rp-title">Help</span>
-              <p style="color:rgba(0,0,0,0.5); font-size:13px; margin-top:8px;">Help resources coming soon.</p>
-            </div>
-          </div>
-
         </div>
-      </div>
 
-      <!-- Multi-directional Resizers (only visible when floating) -->
-      <div class="mi-rp-edge-resizer resizer-t" data-resize="t"></div>
-      <div class="mi-rp-edge-resizer resizer-b" data-resize="b"></div>
-      <div class="mi-rp-edge-resizer resizer-l" data-resize="l"></div>
-      <div class="mi-rp-edge-resizer resizer-r" data-resize="r"></div>
-      <div class="mi-rp-edge-resizer resizer-tl" data-resize="tl"></div>
-      <div class="mi-rp-edge-resizer resizer-tr" data-resize="tr"></div>
-      <div class="mi-rp-edge-resizer resizer-bl" data-resize="bl"></div>
-      <div class="mi-rp-edge-resizer resizer-br" data-resize="br"></div>
-    </aside><!-- /right-panel -->
+        <!-- Scrollable icon grid -->
+        <div class="mi-grid-scroll" id="grid-scroll">
+          <div id="icon-grid" class="mi-grid density-detailed" role="list">
+            <script>
+              document.write(
+                Array(48)
+                  .fill(
+                    '<div class="mi-card" style="pointer-events: none; border: none; height: 112px; animation: skeleton-pulse 1.5s ease-in-out infinite;"></div>',
+                  )
+                  .join(""),
+              );
+            </script>
+          </div>
+        </div>
+        <!-- /grid-scroll -->
+      </main>
+      <!-- /mi-main -->
 
-    <!-- Synchronous script to show correct tab and skeleton loaders before JS load -->
-    <script>
-      (function() {
-        var savedTab = localStorage.getItem('mi.sidebarTab') || 'filters';
-        if (savedTab !== 'filters') {
-          var filtersEl = document.getElementById('rp-tab-filters');
-          var activeEl = document.getElementById('rp-tab-' + savedTab);
-          if (filtersEl) filtersEl.style.display = 'none';
-          if (activeEl) activeEl.style.display = 'block';
-          
-          var headerTitle = document.getElementById('rp-header-title');
-          if (headerTitle) {
-            if (savedTab === 'categories') headerTitle.textContent = 'Packs';
-            else if (savedTab === 'saved') headerTitle.textContent = 'Saved';
+      <!-- ── RIGHT FILTER PANEL ── -->
+      <aside class="mi-right-panel">
+        <div class="mi-right-panel-inner mi-rp-filters">
+          <div class="mi-rp-resizer" id="rp-resizer"></div>
+          <!-- Header -->
+          <div class="mi-rp-header">
+            <div style="display: flex; align-items: center; gap: 8px">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="opacity: 0.6; color: var(--mi-ink)"
+              >
+                <line x1="4" y1="21" x2="4" y2="14"></line>
+                <line x1="4" y1="10" x2="4" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12" y2="3"></line>
+                <line x1="20" y1="21" x2="20" y2="16"></line>
+                <line x1="20" y1="12" x2="20" y2="3"></line>
+                <line x1="1" y1="14" x2="7" y2="14"></line>
+                <line x1="9" y1="8" x2="15" y2="8"></line>
+                <line x1="17" y1="16" x2="23" y2="16"></line>
+              </svg>
+              <span id="rp-header-title">Filters</span>
+              <span class="mi-rp-filter-badge" id="filter-badge" hidden>0</span>
+            </div>
+            <div class="mi-rp-header-actions">
+              <button
+                class="mi-rp-detach-btn"
+                id="rp-detach-btn"
+                title="Detach Panel"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                  ></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </button>
+              <button
+                class="mi-rp-mobile-close"
+                id="rp-mobile-close"
+                aria-label="Close filters"
+                title="Close filters"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="mi-rp-content">
+            <div id="rp-tab-filters">
+              <!-- Sources -->
+              <div class="mi-rp-section">
+                <div class="mi-rp-source-all">
+                  <div class="mi-rp-avatars">
+                    <div class="mi-rp-avatar" style="z-index: 3">
+                      <img src="ASSET/Icons/Lucide.svg" alt="" />
+                    </div>
+                    <div
+                      class="mi-rp-avatar"
+                      style="z-index: 2; margin-left: -6px"
+                    >
+                      <img src="ASSET/Icons/Heroicons.svg" alt="" />
+                    </div>
+                    <div
+                      class="mi-rp-avatar"
+                      style="z-index: 1; margin-left: -6px"
+                    >
+                      <img src="ASSET/Icons/Phosphor.svg" alt="" />
+                    </div>
+                  </div>
+                  <span class="mi-rp-all-title">All Sources</span>
+                  <span class="mi-rp-badge-lg mi-skeleton">261,657</span>
+                </div>
+
+                <div
+                  class="mi-rp-source-search"
+                  id="source-search-wrapper"
+                  style="position: relative"
+                >
+                  <svg
+                    id="source-search-icon"
+                    class="mi-source-search-icon"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input
+                    type="text"
+                    id="source-search-input"
+                    class="mi-source-search"
+                    placeholder="Search sources..."
+                  />
+                  <div id="source-search-clear" class="mi-source-search-clear">
+                    &times;
+                  </div>
+                </div>
+
+                <div class="mi-rp-list" id="filter-source"></div>
+
+                <div
+                  class="mi-rp-more"
+                  id="source-more-btn"
+                  style="cursor: pointer"
+                >
+                  <span class="mi-skeleton">+12 more sources</span>
+                </div>
+              </div>
+
+              <div class="mi-rp-divider"></div>
+
+              <!-- Styles -->
+              <div class="mi-rp-section">
+                <span class="mi-rp-title">Styles</span>
+                <div class="mi-rp-list mi-rp-list-gap4" id="filter-style"></div>
+              </div>
+
+              <div class="mi-rp-divider"></div>
+
+              <!-- Size -->
+              <div class="mi-rp-section">
+                <div class="mi-rp-header-row">
+                  <span class="mi-rp-title">Size</span>
+                  <span class="mi-rp-val" id="size-panel-val">42</span>
+                </div>
+                <div class="mi-rp-slider-wrapper">
+                  <input
+                    type="range"
+                    id="ctrl-size-panel"
+                    class="mi-rp-slider-invisible"
+                    min="12"
+                    max="64"
+                    value="42"
+                    step="1"
+                    aria-label="Icon size"
+                  />
+                  <div class="mi-rp-slider-container">
+                    <div class="mi-rp-slider-track">
+                      <div
+                        class="mi-rp-slider-fill"
+                        id="size-panel-fill"
+                        style="width: 57.69%"
+                      ></div>
+                    </div>
+                    <div
+                      class="mi-rp-slider-thumb"
+                      id="size-panel-thumb"
+                      style="left: 57.69%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="mi-rp-segmented mi-size-quick">
+                  <div
+                    class="mi-rp-seg-item mi-size-q-btn"
+                    data-panel-size="16"
+                  >
+                    16
+                  </div>
+                  <div
+                    class="mi-rp-seg-item mi-size-q-btn is-active"
+                    data-panel-size="20"
+                  >
+                    20
+                  </div>
+                  <div
+                    class="mi-rp-seg-item mi-size-q-btn"
+                    data-panel-size="24"
+                  >
+                    24
+                  </div>
+                  <div
+                    class="mi-rp-seg-item mi-size-q-btn"
+                    data-panel-size="32"
+                  >
+                    32
+                  </div>
+                </div>
+              </div>
+
+              <div class="mi-rp-divider"></div>
+
+              <!-- Stroke Width -->
+              <div class="mi-rp-section" id="rp-stroke-section">
+                <div class="mi-rp-header-row">
+                  <span class="mi-rp-title">Stroke Width</span>
+                  <span class="mi-rp-val" id="stroke-panel-val">1.5</span>
+                </div>
+                <div class="mi-rp-slider-wrapper">
+                  <input
+                    type="range"
+                    id="ctrl-stroke-panel"
+                    class="mi-rp-slider-invisible"
+                    min="1"
+                    max="2"
+                    value="1.5"
+                    step="0.25"
+                    aria-label="Stroke width"
+                  />
+                  <div class="mi-rp-slider-container">
+                    <div class="mi-rp-slider-track">
+                      <div
+                        class="mi-rp-slider-fill"
+                        id="stroke-panel-fill"
+                        style="width: 71.43%"
+                      ></div>
+                    </div>
+                    <div
+                      class="mi-rp-slider-thumb"
+                      id="stroke-panel-thumb"
+                      style="left: 71.43%"
+                    ></div>
+                  </div>
+                </div>
+                <div class="mi-rp-segmented mi-stroke-quick">
+                  <div
+                    class="mi-rp-seg-item mi-stroke-q-btn"
+                    data-panel-stroke="1"
+                  >
+                    1
+                  </div>
+                  <div
+                    class="mi-rp-seg-item mi-stroke-q-btn is-active"
+                    data-panel-stroke="1.5"
+                  >
+                    1.5
+                  </div>
+                  <div
+                    class="mi-rp-seg-item mi-stroke-q-btn"
+                    data-panel-stroke="1.75"
+                  >
+                    1.75
+                  </div>
+                  <div
+                    class="mi-rp-seg-item mi-stroke-q-btn"
+                    data-panel-stroke="2"
+                  >
+                    2
+                  </div>
+                </div>
+              </div>
+
+              <div class="mi-rp-divider" id="rp-stroke-divider"></div>
+
+              <!-- License -->
+              <div class="mi-rp-section">
+                <span class="mi-rp-title">License</span>
+                <div
+                  class="mi-rp-license-active is-active"
+                  id="clear-filters"
+                  style="cursor: pointer"
+                  title="Clear all filters"
+                >
+                  <span>All Licenses</span>
+                </div>
+                <div class="mi-rp-list" id="filter-license"></div>
+              </div>
+            </div>
+            <!-- /rp-tab-filters -->
+
+            <!-- Categories Tab -->
+            <div id="rp-tab-categories" style="display: none">
+              <div class="mi-rp-categories-list" id="categories-list-container">
+                <!-- Dynamically populated by JS -->
+                <!-- Skeleton Loaders -->
+                <div class="mi-rp-cat-item is-skeleton">
+                  <span class="mi-rp-cat-label mi-skeleton">Category Name</span>
+                  <span class="mi-rp-cat-count mi-skeleton">000</span>
+                </div>
+                <div class="mi-rp-cat-item is-skeleton">
+                  <span class="mi-rp-cat-label mi-skeleton"
+                    >Another Category</span
+                  >
+                  <span class="mi-rp-cat-count mi-skeleton">000</span>
+                </div>
+                <div class="mi-rp-cat-item is-skeleton">
+                  <span class="mi-rp-cat-label mi-skeleton">Short</span>
+                  <span class="mi-rp-cat-count mi-skeleton">000</span>
+                </div>
+                <div class="mi-rp-cat-item is-skeleton">
+                  <span class="mi-rp-cat-label mi-skeleton"
+                    >Longer Category</span
+                  >
+                  <span class="mi-rp-cat-count mi-skeleton">000</span>
+                </div>
+                <div class="mi-rp-cat-item is-skeleton">
+                  <span class="mi-rp-cat-label mi-skeleton">Misc</span>
+                  <span class="mi-rp-cat-count mi-skeleton">000</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Saved Tab -->
+            <div id="rp-tab-saved" style="display: none">
+              <div style="display: flex; flex-direction: column; gap: 16px">
+                <!-- Create Collection Button -->
+                <button
+                  id="rp-coll-new-btn-figma"
+                  style="
+                    width: 100%;
+                    border: 1px solid #eaeaee;
+                    border-radius: 8px;
+                    background: transparent;
+                    padding: 10px 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 6px;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                  "
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="rgba(0,0,0,0.9)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                  <span
+                    style="
+                      font-family:
+                        &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;
+                      font-size: 15px;
+                      color: rgba(0, 0, 0, 0.9);
+                    "
+                    >Create collection</span
+                  >
+                </button>
+
+                <!-- Collections List Container -->
+                <div
+                  id="collections-list-container"
+                  style="display: flex; flex-direction: column; gap: 16px"
+                >
+                  <!-- Dynamically populated -->
+                  <!-- Skeleton Loaders -->
+                  <div
+                    class="mi-rp-cat-item is-skeleton"
+                    style="
+                      background: white;
+                      box-shadow:
+                        0px 4px 4px rgba(96, 96, 96, 0.15),
+                        0px 0px 0.5px rgba(96, 96, 96, 0.31);
+                      height: 84px;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: space-between;
+                      padding: 16px 16px 12px 16px;
+                      border-radius: 8px;
+                      border: 1px solid transparent;
+                    "
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        width: 100%;
+                        align-items: center;
+                      "
+                    >
+                      <span
+                        class="mi-rp-cat-label mi-skeleton"
+                        style="
+                          font-family:
+                            &quot;Helvetica Neue&quot;, Helvetica, Arial,
+                            sans-serif;
+                          font-weight: 500;
+                          font-size: 15px;
+                        "
+                        >All Saved</span
+                      >
+                      <span
+                        class="mi-rp-cat-count mi-skeleton"
+                        style="
+                          font-family: &quot;Inter&quot;, sans-serif;
+                          font-size: 14px;
+                        "
+                        >0</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="mi-rp-cat-item is-skeleton"
+                    style="
+                      background: white;
+                      box-shadow:
+                        0px 4px 4px rgba(96, 96, 96, 0.15),
+                        0px 0px 0.5px rgba(96, 96, 96, 0.31);
+                      height: 84px;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: space-between;
+                      padding: 16px 16px 12px 16px;
+                      border-radius: 8px;
+                      border: 1px solid transparent;
+                    "
+                  >
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        width: 100%;
+                        align-items: center;
+                      "
+                    >
+                      <span
+                        class="mi-rp-cat-label mi-skeleton"
+                        style="
+                          font-family:
+                            &quot;Helvetica Neue&quot;, Helvetica, Arial,
+                            sans-serif;
+                          font-weight: 500;
+                          font-size: 15px;
+                        "
+                        >My Collection</span
+                      >
+                      <span
+                        class="mi-rp-cat-count mi-skeleton"
+                        style="
+                          font-family: &quot;Inter&quot;, sans-serif;
+                          font-size: 14px;
+                        "
+                        >0</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Plugins Tab -->
+            <div id="rp-tab-plugins" style="display: none">
+              <div class="mi-rp-section">
+                <span class="mi-rp-title">Plugins</span>
+                <p
+                  style="
+                    color: rgba(0, 0, 0, 0.5);
+                    font-size: 13px;
+                    margin-top: 8px;
+                  "
+                >
+                  Plugins coming soon.
+                </p>
+              </div>
+            </div>
+
+            <!-- Help Tab -->
+            <div id="rp-tab-help" style="display: none">
+              <div class="mi-rp-section">
+                <span class="mi-rp-title">Help</span>
+                <p
+                  style="
+                    color: rgba(0, 0, 0, 0.5);
+                    font-size: 13px;
+                    margin-top: 8px;
+                  "
+                >
+                  Help resources coming soon.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Multi-directional Resizers (only visible when floating) -->
+        <div class="mi-rp-edge-resizer resizer-t" data-resize="t"></div>
+        <div class="mi-rp-edge-resizer resizer-b" data-resize="b"></div>
+        <div class="mi-rp-edge-resizer resizer-l" data-resize="l"></div>
+        <div class="mi-rp-edge-resizer resizer-r" data-resize="r"></div>
+        <div class="mi-rp-edge-resizer resizer-tl" data-resize="tl"></div>
+        <div class="mi-rp-edge-resizer resizer-tr" data-resize="tr"></div>
+        <div class="mi-rp-edge-resizer resizer-bl" data-resize="bl"></div>
+        <div class="mi-rp-edge-resizer resizer-br" data-resize="br"></div>
+      </aside>
+      <!-- /right-panel -->
+
+      <!-- Synchronous script to show correct tab and skeleton loaders before JS load -->
+      <script>
+        (function () {
+          var savedTab = localStorage.getItem("mi.sidebarTab") || "filters";
+          if (savedTab !== "filters") {
+            var filtersEl = document.getElementById("rp-tab-filters");
+            var activeEl = document.getElementById("rp-tab-" + savedTab);
+            if (filtersEl) filtersEl.style.display = "none";
+            if (activeEl) activeEl.style.display = "block";
+
+            var headerTitle = document.getElementById("rp-header-title");
+            if (headerTitle) {
+              if (savedTab === "categories") headerTitle.textContent = "Packs";
+              else if (savedTab === "saved") headerTitle.textContent = "Saved";
+            }
+            var innerPanel = document.querySelector(".mi-right-panel-inner");
+            if (innerPanel) {
+              innerPanel.className = "mi-right-panel-inner mi-rp-" + savedTab;
+            }
           }
-          var innerPanel = document.querySelector('.mi-right-panel-inner');
-          if (innerPanel) {
-            innerPanel.className = 'mi-right-panel-inner mi-rp-' + savedTab;
-          }
-        }
-      })();
-    </script>
+        })();
+      </script>
 
-    <!-- Backdrop for the right-panel drawer on mobile -->
-    <div class="mi-rp-mobile-backdrop" id="rp-mobile-backdrop"></div>
+      <!-- Backdrop for the right-panel drawer on mobile -->
+      <div class="mi-rp-mobile-backdrop" id="rp-mobile-backdrop"></div>
+    </div>
+    <!-- /app-shell -->
 
-  </div><!-- /app-shell -->
-
-  <!-- Mobile-only consolidated nav dropdown: Community/Release Notes and
+    <!-- Mobile-only consolidated nav dropdown: Community/Release Notes and
        Filters/Packs/Saved/Plugins/Help relocate here (real DOM nodes, not
        copies) so all existing click behavior keeps working. Kept outside
        .mi-app-shell since that's a 3-column CSS Grid — an extra grid item
        there throws off auto-placement of the sidebar/main/right-panel columns. -->
-  <div class="mi-mobile-menu-panel" id="mobile-menu-panel">
-    <div class="mi-mobile-menu-nav" id="mobile-menu-nav-slot"></div>
-    <div class="mi-mobile-menu-divider"></div>
-    <div class="mi-mobile-menu-sidebar" id="mobile-menu-sidebar-slot"></div>
-  </div>
+    <div class="mi-mobile-menu-panel" id="mobile-menu-panel">
+      <div class="mi-mobile-menu-nav" id="mobile-menu-nav-slot"></div>
+      <div class="mi-mobile-menu-divider"></div>
+      <div class="mi-mobile-menu-sidebar" id="mobile-menu-sidebar-slot"></div>
+    </div>
 
-  <script src="COMPONENT/Edit Modal.js?v=2"></script>
+    <script src="COMPONENT/Edit Modal.js?v=2"></script>
 
-  <!-- =====================================================
+    <!-- =====================================================
        COMPARE MODAL (fully preserved)
        ===================================================== -->
-  <div class="mi-modal" id="compare-modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="mi-modal-backdrop" data-close></div>
-    <div class="mi-modal-card mi-modal-wide">
-      <button class="mi-modal-close" data-close aria-label="Close">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-          stroke-linejoin="round">
-          <path d="M6 6l12 12M18 6L6 18" />
-        </svg>
-      </button>
-      <div class="mi-compare">
-        <div class="mi-compare-head">
-          <h3>Visual comparison</h3>
-          <p class="mi-muted">Which icon fits your interface best?</p>
+    <div
+      class="mi-modal"
+      id="compare-modal"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="mi-modal-backdrop" data-close></div>
+      <div class="mi-modal-card mi-modal-wide">
+        <button class="mi-modal-close" data-close aria-label="Close">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+        <div class="mi-compare">
+          <div class="mi-compare-head">
+            <h3>Visual comparison</h3>
+            <p class="mi-muted">Which icon fits your interface best?</p>
+          </div>
+          <div class="mi-compare-grid" id="compare-grid"></div>
         </div>
-        <div class="mi-compare-grid" id="compare-grid"></div>
       </div>
     </div>
-  </div>
 
-  <!-- Modals are now injected by COMPONENT/Save Collection Modal.js -->
+    <!-- Modals are now injected by COMPONENT/Save Collection Modal.js -->
 
-  <!-- =====================================================
+    <!-- =====================================================
        ICON SYSTEM BUILDER MODAL (fully preserved)
        ===================================================== -->
-  <div class="mi-modal" id="system-modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="mi-modal-backdrop" data-close></div>
-    <div class="mi-modal-card mi-modal-form">
-      <button class="mi-modal-close" data-close aria-label="Close">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-          stroke-linejoin="round">
-          <path d="M6 6l12 12M18 6L6 18" />
-        </svg>
-      </button>
-      <div class="mi-form">
-        <h3>New Icon System</h3>
-        <p class="mi-muted mi-form-sub">Bundle your favorite icons with a shared preset — size, stroke, color and shape
-          stay consistent across the system.</p>
-        <label class="mi-field">
-          <span>Name</span>
-          <input type="text" id="sys-name" class="mi-input" placeholder="e.g. SaaS Product" autocomplete="off" />
-        </label>
-        <label class="mi-field">
-          <span>Description</span>
-          <textarea id="sys-desc" class="mi-input mi-textarea" placeholder="What is this system for?"
-            rows="2"></textarea>
-        </label>
-        <label class="mi-field">
-          <span>Base preset</span>
-          <select id="sys-preset" class="mi-input">
-            <option value="default">Default</option>
-            <option value="flat">Flat</option>
-            <option value="soft">Soft</option>
-            <option value="bold">Bold</option>
-            <option value="glass">Glass</option>
-            <option value="neumorphic">Neumorphic</option>
-          </select>
-        </label>
-        <div class="mi-field-row">
-          <div class="mi-field">
-            <span>Size</span>
-            <input type="number" id="sys-size" class="mi-input" value="24" min="12" max="128" />
+    <div
+      class="mi-modal"
+      id="system-modal"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="mi-modal-backdrop" data-close></div>
+      <div class="mi-modal-card mi-modal-form">
+        <button class="mi-modal-close" data-close aria-label="Close">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+        <div class="mi-form">
+          <h3>New Icon System</h3>
+          <p class="mi-muted mi-form-sub">
+            Bundle your favorite icons with a shared preset — size, stroke,
+            color and shape stay consistent across the system.
+          </p>
+          <label class="mi-field">
+            <span>Name</span>
+            <input
+              type="text"
+              id="sys-name"
+              class="mi-input"
+              placeholder="e.g. SaaS Product"
+              autocomplete="off"
+            />
+          </label>
+          <label class="mi-field">
+            <span>Description</span>
+            <textarea
+              id="sys-desc"
+              class="mi-input mi-textarea"
+              placeholder="What is this system for?"
+              rows="2"
+            ></textarea>
+          </label>
+          <label class="mi-field">
+            <span>Base preset</span>
+            <select id="sys-preset" class="mi-input">
+              <option value="default">Default</option>
+              <option value="flat">Flat</option>
+              <option value="soft">Soft</option>
+              <option value="bold">Bold</option>
+              <option value="glass">Glass</option>
+              <option value="neumorphic">Neumorphic</option>
+            </select>
+          </label>
+          <div class="mi-field-row">
+            <div class="mi-field">
+              <span>Size</span>
+              <input
+                type="number"
+                id="sys-size"
+                class="mi-input"
+                value="24"
+                min="12"
+                max="128"
+              />
+            </div>
+            <div class="mi-field">
+              <span>Stroke</span>
+              <input
+                type="number"
+                id="sys-stroke"
+                class="mi-input"
+                value="1.75"
+                step="0.25"
+                min="0"
+                max="3"
+              />
+            </div>
+            <div class="mi-field">
+              <span>Color</span>
+              <input type="color" id="sys-color" value="#5C4AE4" />
+            </div>
           </div>
-          <div class="mi-field">
-            <span>Stroke</span>
-            <input type="number" id="sys-stroke" class="mi-input" value="1.75" step="0.25" min="0" max="3" />
+          <div class="mi-form-meta">
+            <span id="sys-count">0</span> icons will be added from favorites.
           </div>
-          <div class="mi-field">
-            <span>Color</span>
-            <input type="color" id="sys-color" value="#5C4AE4" />
+          <div class="mi-form-actions">
+            <button type="button" class="mi-btn-secondary" data-close>
+              Cancel
+            </button>
+            <button type="button" class="mi-btn-primary" id="sys-create">
+              Create system
+            </button>
           </div>
-        </div>
-        <div class="mi-form-meta"><span id="sys-count">0</span> icons will be added from favorites.</div>
-        <div class="mi-form-actions">
-          <button type="button" class="mi-btn-secondary" data-close>Cancel</button>
-          <button type="button" class="mi-btn-primary" id="sys-create">Create system</button>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- =====================================================
+    <!-- =====================================================
        KEYBOARD SHORTCUTS MODAL (fully preserved)
        ===================================================== -->
-  <div class="mi-modal" id="help-modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="mi-modal-backdrop" data-close></div>
-    <div class="mi-modal-card mi-modal-help">
-      <button class="mi-modal-close" data-close aria-label="Close">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
-          stroke-linejoin="round">
-          <path d="M6 6l12 12M18 6L6 18" />
-        </svg>
-      </button>
-      <div class="mi-help">
-        <h3>Keyboard shortcuts</h3>
-        <div class="mi-help-grid">
-          <div class="mi-help-row"><kbd>⌘</kbd><kbd>K</kbd><span>Focus search</span></div>
-          <div class="mi-help-row"><kbd>Esc</kbd><span>Close dialog</span></div>
-          <div class="mi-help-row"><kbd>C</kbd><span>Copy in selected format</span></div>
-          <div class="mi-help-row"><kbd>D</kbd><span>Download SVG</span></div>
-          <div class="mi-help-row"><kbd>P</kbd><span>Download PNG</span></div>
-          <div class="mi-help-row"><kbd>S</kbd><span>Save to favorites</span></div>
-          <div class="mi-help-row"><kbd>F</kbd><span>Find similar</span></div>
-          <div class="mi-help-row"><kbd>E</kbd><span>Expand / collapse page</span></div>
-          <div class="mi-help-row"><kbd>G</kbd><span>Toggle canvas grid</span></div>
-          <div class="mi-help-row"><kbd>R</kbd><span>Reset editor</span></div>
-          <div class="mi-help-row"><kbd>?</kbd><span>Show this help</span></div>
+    <div
+      class="mi-modal"
+      id="help-modal"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="mi-modal-backdrop" data-close></div>
+      <div class="mi-modal-card mi-modal-help">
+        <button class="mi-modal-close" data-close aria-label="Close">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+        <div class="mi-help">
+          <h3>Keyboard shortcuts</h3>
+          <div class="mi-help-grid">
+            <div class="mi-help-row">
+              <kbd>⌘</kbd><kbd>K</kbd><span>Focus search</span>
+            </div>
+            <div class="mi-help-row">
+              <kbd>Esc</kbd><span>Close dialog</span>
+            </div>
+            <div class="mi-help-row">
+              <kbd>C</kbd><span>Copy in selected format</span>
+            </div>
+            <div class="mi-help-row"><kbd>D</kbd><span>Download SVG</span></div>
+            <div class="mi-help-row"><kbd>P</kbd><span>Download PNG</span></div>
+            <div class="mi-help-row">
+              <kbd>S</kbd><span>Save to favorites</span>
+            </div>
+            <div class="mi-help-row"><kbd>F</kbd><span>Find similar</span></div>
+            <div class="mi-help-row">
+              <kbd>E</kbd><span>Expand / collapse page</span>
+            </div>
+            <div class="mi-help-row">
+              <kbd>G</kbd><span>Toggle canvas grid</span>
+            </div>
+            <div class="mi-help-row"><kbd>R</kbd><span>Reset editor</span></div>
+            <div class="mi-help-row">
+              <kbd>?</kbd><span>Show this help</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Toast -->
-  <div id="toast" class="mi-toast" aria-live="polite"></div>
+    <!-- Toast -->
+    <div id="toast" class="mi-toast" aria-live="polite"></div>
 
-  <!-- Inline bridge script to connect new UI elements to existing JS -->
-  <script>
-    (function () {
-      'use strict';
+    <!-- Inline bridge script to connect new UI elements to existing JS -->
+    <script>
+      (function () {
+        "use strict";
 
-      // ── Sort tabs → sync with hidden sort-select ──────────────────────────
-      document.addEventListener('DOMContentLoaded', function () {
-        var sortSelect = document.getElementById('sort-select');
-        var sortTabs = document.querySelectorAll('.mi-sort-tab');
-        var savedSort = localStorage.getItem('mi.sort') || 'relevance';
+        // ── Sort tabs → sync with hidden sort-select ──────────────────────────
+        document.addEventListener("DOMContentLoaded", function () {
+          var sortSelect = document.getElementById("sort-select");
+          var sortTabs = document.querySelectorAll(".mi-sort-tab");
+          var savedSort = localStorage.getItem("mi.sort") || "relevance";
 
-        sortTabs.forEach(function (tab) {
-          // Initialize active state from localStorage
-          if (tab.dataset.sort === savedSort) {
-            tab.classList.add('is-active');
-            tab.setAttribute('aria-selected', 'true');
-          } else {
-            tab.classList.remove('is-active');
-            tab.setAttribute('aria-selected', 'false');
+          sortTabs.forEach(function (tab) {
+            // Initialize active state from localStorage
+            if (tab.dataset.sort === savedSort) {
+              tab.classList.add("is-active");
+              tab.setAttribute("aria-selected", "true");
+            } else {
+              tab.classList.remove("is-active");
+              tab.setAttribute("aria-selected", "false");
+            }
+
+            tab.addEventListener("click", function () {
+              // UI
+              sortTabs.forEach(function (t) {
+                t.classList.remove("is-active");
+                t.setAttribute("aria-selected", "false");
+              });
+              tab.classList.add("is-active");
+              tab.setAttribute("aria-selected", "true");
+
+              // sync hidden <select> so main JS picks it up
+              var val = tab.dataset.sort;
+              if (sortSelect) {
+                sortSelect.value = val;
+                sortSelect.dispatchEvent(
+                  new Event("change", { bubbles: true }),
+                );
+              }
+            });
+          });
+
+          // ── AI toggle ───────────────────────────────────────────────────────
+          var aiToggle = document.getElementById("btn-ai");
+          if (aiToggle) {
+            aiToggle.addEventListener("click", function () {
+              var isOn = aiToggle.classList.toggle("is-on");
+              aiToggle.setAttribute("aria-checked", String(isOn));
+            });
+            aiToggle.addEventListener("keydown", function (e) {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                aiToggle.click();
+              }
+            });
           }
 
-          tab.addEventListener('click', function () {
-            // UI
-            sortTabs.forEach(function (t) {
-              t.classList.remove('is-active');
-              t.setAttribute('aria-selected', 'false');
-            });
-            tab.classList.add('is-active');
-            tab.setAttribute('aria-selected', 'true');
+          // ── Panel size slider ───────────────────────────────────────────────
+          var sizeSlider = document.getElementById("ctrl-size-panel");
+          var sizeVal = document.getElementById("size-panel-val");
+          var sizeFill = document.getElementById("size-panel-fill");
+          var sizeThumb = document.getElementById("size-panel-thumb");
+          var sizeQBtns = document.querySelectorAll("[data-panel-size]");
 
-            // sync hidden <select> so main JS picks it up
-            var val = tab.dataset.sort;
-            if (sortSelect) {
-              sortSelect.value = val;
-              sortSelect.dispatchEvent(new Event('change', { bubbles: true }));
+          if (sizeSlider) {
+            sizeSlider.addEventListener("input", function () {
+              var val = parseInt(sizeSlider.value);
+              if (sizeVal) sizeVal.textContent = val;
+              sizeQBtns.forEach(function (b) {
+                b.classList.toggle(
+                  "is-active",
+                  parseInt(b.dataset.panelSize) === val,
+                );
+              });
+              var pct =
+                ((val - parseInt(sizeSlider.min)) /
+                  (parseInt(sizeSlider.max) - parseInt(sizeSlider.min))) *
+                100;
+              if (sizeFill) sizeFill.style.width = pct + "%";
+              if (sizeThumb) sizeThumb.style.left = pct + "%";
+            });
+          }
+          sizeQBtns.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              var v = btn.dataset.panelSize;
+              if (sizeSlider) {
+                sizeSlider.value = v;
+                sizeSlider.dispatchEvent(new Event("input"));
+              }
+            });
+          });
+
+          // ── Panel stroke slider ─────────────────────────────────────────────
+          var strokeSlider = document.getElementById("ctrl-stroke-panel");
+          var strokeVal = document.getElementById("stroke-panel-val");
+          var strokeFill = document.getElementById("stroke-panel-fill");
+          var strokeThumb = document.getElementById("stroke-panel-thumb");
+          var strokeQBtns = document.querySelectorAll("[data-panel-stroke]");
+
+          if (strokeSlider) {
+            strokeSlider.addEventListener("input", function () {
+              var val = parseFloat(strokeSlider.value);
+              if (strokeVal)
+                strokeVal.textContent =
+                  val.toFixed(1) === "1.0"
+                    ? "1"
+                    : val.toFixed(1).replace(".0", "");
+              strokeQBtns.forEach(function (b) {
+                b.classList.toggle(
+                  "is-active",
+                  parseFloat(b.dataset.panelStroke) === val,
+                );
+              });
+              var pct =
+                ((val - parseFloat(strokeSlider.min)) /
+                  (parseFloat(strokeSlider.max) -
+                    parseFloat(strokeSlider.min))) *
+                100;
+              if (strokeFill) strokeFill.style.width = pct + "%";
+              if (strokeThumb) strokeThumb.style.left = pct + "%";
+            });
+          }
+          strokeQBtns.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              var v = btn.dataset.panelStroke;
+              if (strokeSlider) {
+                strokeSlider.value = v;
+                strokeSlider.dispatchEvent(new Event("input"));
+              }
+            });
+          });
+
+          // ── Sidebar items (visual only) ─────────────────────────────────────
+          var sidebarItems = document.querySelectorAll(".mi-sidebar-item");
+          var savedSidebarTab =
+            localStorage.getItem("mi.sidebarTab") || "filters";
+
+          sidebarItems.forEach(function (item) {
+            // Initialize active state from localStorage
+            if (item.dataset.sidebar === savedSidebarTab) {
+              item.classList.add("is-active");
+            } else {
+              item.classList.remove("is-active");
+            }
+
+            item.addEventListener("click", function () {
+              sidebarItems.forEach(function (s) {
+                s.classList.remove("is-active");
+              });
+              item.classList.add("is-active");
+              if (item.dataset.sidebar) {
+                localStorage.setItem("mi.sidebarTab", item.dataset.sidebar);
+              }
+            });
+          });
+
+          // ── Mobile filter/right-panel drawer ─────────────────────────────────
+          // On narrow viewports the right panel (Filters/Categories/Saved/Plugins/
+          // Help) is an off-canvas drawer instead of a permanent column, so it
+          // needs an explicit open/close instead of always being visible.
+          var MOBILE_PANEL_BREAKPOINT = 1300;
+          var rightPanelEl = document.querySelector(".mi-right-panel");
+          var rpMobileBackdrop = document.getElementById("rp-mobile-backdrop");
+          var rpMobileClose = document.getElementById("rp-mobile-close");
+
+          function isMobilePanelLayout() {
+            return window.innerWidth <= MOBILE_PANEL_BREAKPOINT;
+          }
+
+          function openMobileFilterPanel() {
+            if (!rightPanelEl) return;
+            rightPanelEl.classList.add("is-mobile-open");
+            if (rpMobileBackdrop) rpMobileBackdrop.classList.add("is-open");
+            document.body.classList.add("mi-mobile-panel-open");
+          }
+
+          function closeMobileFilterPanel() {
+            if (!rightPanelEl) return;
+            rightPanelEl.classList.remove("is-mobile-open");
+            if (rpMobileBackdrop) rpMobileBackdrop.classList.remove("is-open");
+            document.body.classList.remove("mi-mobile-panel-open");
+          }
+
+          sidebarItems.forEach(function (item) {
+            item.addEventListener("click", function () {
+              if (isMobilePanelLayout()) {
+                openMobileFilterPanel();
+              }
+            });
+          });
+
+          if (rpMobileBackdrop)
+            rpMobileBackdrop.addEventListener("click", closeMobileFilterPanel);
+          if (rpMobileClose)
+            rpMobileClose.addEventListener("click", closeMobileFilterPanel);
+
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+              closeMobileFilterPanel();
             }
           });
-        });
 
-        // ── AI toggle ───────────────────────────────────────────────────────
-        var aiToggle = document.getElementById('btn-ai');
-        if (aiToggle) {
-          aiToggle.addEventListener('click', function () {
-            var isOn = aiToggle.classList.toggle('is-on');
-            aiToggle.setAttribute('aria-checked', String(isOn));
-          });
-          aiToggle.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              aiToggle.click();
-            }
-          });
-        }
+          // ── Mobile consolidated hamburger menu ───────────────────────────────
+          // Community/Release Notes (header nav) and Filters/Packs/Saved/Plugins/
+          // Help (sidebar nav) are real elements with real click behavior bound
+          // to them elsewhere, so on mobile they RELOCATE into the dropdown
+          // (moved, not cloned) instead of being duplicated or hidden outright.
+          var mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+          var mobileMenuPanel = document.getElementById("mobile-menu-panel");
+          var mobileMenuNavSlot = document.getElementById(
+            "mobile-menu-nav-slot",
+          );
+          var mobileMenuSidebarSlot = document.getElementById(
+            "mobile-menu-sidebar-slot",
+          );
+          var mobileMenuRelocated = false;
 
-        // ── Panel size slider ───────────────────────────────────────────────
-        var sizeSlider = document.getElementById('ctrl-size-panel');
-        var sizeVal = document.getElementById('size-panel-val');
-        var sizeFill = document.getElementById('size-panel-fill');
-        var sizeThumb = document.getElementById('size-panel-thumb');
-        var sizeQBtns = document.querySelectorAll('[data-panel-size]');
+          var topNavAnchor = (function () {
+            var el = document.querySelector(".mi-top-nav");
+            return el
+              ? { el: el, parent: el.parentNode, next: el.nextSibling }
+              : null;
+          })();
 
-        if (sizeSlider) {
-          sizeSlider.addEventListener('input', function () {
-            var val = parseInt(sizeSlider.value);
-            if (sizeVal) sizeVal.textContent = val;
-            sizeQBtns.forEach(function (b) {
-              b.classList.toggle('is-active', parseInt(b.dataset.panelSize) === val);
-            });
-            var pct = ((val - parseInt(sizeSlider.min)) / (parseInt(sizeSlider.max) - parseInt(sizeSlider.min))) * 100;
-            if (sizeFill) sizeFill.style.width = pct + '%';
-            if (sizeThumb) sizeThumb.style.left = pct + '%';
-          });
-        }
-        sizeQBtns.forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var v = btn.dataset.panelSize;
-            if (sizeSlider) { sizeSlider.value = v; sizeSlider.dispatchEvent(new Event('input')); }
-          });
-        });
+          var sidebarItemAnchors = Array.prototype.map.call(
+            document.querySelectorAll(".mi-sidebar-item"),
+            function (el) {
+              return { el: el, parent: el.parentNode, next: el.nextSibling };
+            },
+          );
 
-        // ── Panel stroke slider ─────────────────────────────────────────────
-        var strokeSlider = document.getElementById('ctrl-stroke-panel');
-        var strokeVal = document.getElementById('stroke-panel-val');
-        var strokeFill = document.getElementById('stroke-panel-fill');
-        var strokeThumb = document.getElementById('stroke-panel-thumb');
-        var strokeQBtns = document.querySelectorAll('[data-panel-stroke]');
-
-        if (strokeSlider) {
-          strokeSlider.addEventListener('input', function () {
-            var val = parseFloat(strokeSlider.value);
-            if (strokeVal) strokeVal.textContent = val.toFixed(1) === "1.0" ? "1" : val.toFixed(1).replace('.0', '');
-            strokeQBtns.forEach(function (b) {
-              b.classList.toggle('is-active', parseFloat(b.dataset.panelStroke) === val);
-            });
-            var pct = ((val - parseFloat(strokeSlider.min)) / (parseFloat(strokeSlider.max) - parseFloat(strokeSlider.min))) * 100;
-            if (strokeFill) strokeFill.style.width = pct + '%';
-            if (strokeThumb) strokeThumb.style.left = pct + '%';
-          });
-        }
-        strokeQBtns.forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var v = btn.dataset.panelStroke;
-            if (strokeSlider) { strokeSlider.value = v; strokeSlider.dispatchEvent(new Event('input')); }
-          });
-        });
-
-        // ── Sidebar items (visual only) ─────────────────────────────────────
-        var sidebarItems = document.querySelectorAll('.mi-sidebar-item');
-        var savedSidebarTab = localStorage.getItem('mi.sidebarTab') || 'filters';
-        
-        sidebarItems.forEach(function (item) {
-          // Initialize active state from localStorage
-          if (item.dataset.sidebar === savedSidebarTab) {
-            item.classList.add('is-active');
-          } else {
-            item.classList.remove('is-active');
-          }
-
-          item.addEventListener('click', function () {
-            sidebarItems.forEach(function (s) { s.classList.remove('is-active'); });
-            item.classList.add('is-active');
-            if (item.dataset.sidebar) {
-              localStorage.setItem('mi.sidebarTab', item.dataset.sidebar);
-            }
-          });
-        });
-
-        // ── Mobile filter/right-panel drawer ─────────────────────────────────
-        // On narrow viewports the right panel (Filters/Categories/Saved/Plugins/
-        // Help) is an off-canvas drawer instead of a permanent column, so it
-        // needs an explicit open/close instead of always being visible.
-        var MOBILE_PANEL_BREAKPOINT = 1300;
-        var rightPanelEl = document.querySelector('.mi-right-panel');
-        var rpMobileBackdrop = document.getElementById('rp-mobile-backdrop');
-        var rpMobileClose = document.getElementById('rp-mobile-close');
-
-        function isMobilePanelLayout() {
-          return window.innerWidth <= MOBILE_PANEL_BREAKPOINT;
-        }
-
-        function openMobileFilterPanel() {
-          if (!rightPanelEl) return;
-          rightPanelEl.classList.add('is-mobile-open');
-          if (rpMobileBackdrop) rpMobileBackdrop.classList.add('is-open');
-          document.body.classList.add('mi-mobile-panel-open');
-        }
-
-        function closeMobileFilterPanel() {
-          if (!rightPanelEl) return;
-          rightPanelEl.classList.remove('is-mobile-open');
-          if (rpMobileBackdrop) rpMobileBackdrop.classList.remove('is-open');
-          document.body.classList.remove('mi-mobile-panel-open');
-        }
-
-        sidebarItems.forEach(function (item) {
-          item.addEventListener('click', function () {
-            if (isMobilePanelLayout()) { openMobileFilterPanel(); }
-          });
-        });
-
-        if (rpMobileBackdrop) rpMobileBackdrop.addEventListener('click', closeMobileFilterPanel);
-        if (rpMobileClose) rpMobileClose.addEventListener('click', closeMobileFilterPanel);
-
-        document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape') { closeMobileFilterPanel(); }
-        });
-
-        // ── Mobile consolidated hamburger menu ───────────────────────────────
-        // Community/Release Notes (header nav) and Filters/Packs/Saved/Plugins/
-        // Help (sidebar nav) are real elements with real click behavior bound
-        // to them elsewhere, so on mobile they RELOCATE into the dropdown
-        // (moved, not cloned) instead of being duplicated or hidden outright.
-        var mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-        var mobileMenuPanel = document.getElementById('mobile-menu-panel');
-        var mobileMenuNavSlot = document.getElementById('mobile-menu-nav-slot');
-        var mobileMenuSidebarSlot = document.getElementById('mobile-menu-sidebar-slot');
-        var mobileMenuRelocated = false;
-
-        var topNavAnchor = (function () {
-          var el = document.querySelector('.mi-top-nav');
-          return el ? { el: el, parent: el.parentNode, next: el.nextSibling } : null;
-        })();
-
-        var sidebarItemAnchors = Array.prototype.map.call(
-          document.querySelectorAll('.mi-sidebar-item'),
-          function (el) { return { el: el, parent: el.parentNode, next: el.nextSibling }; }
-        );
-
-        function relocateForMobileMenu() {
-          if (mobileMenuRelocated || !mobileMenuNavSlot || !mobileMenuSidebarSlot) return;
-          if (topNavAnchor) mobileMenuNavSlot.appendChild(topNavAnchor.el);
-          sidebarItemAnchors.forEach(function (a) { mobileMenuSidebarSlot.appendChild(a.el); });
-          mobileMenuRelocated = true;
-        }
-
-        function restoreFromMobileMenu() {
-          if (!mobileMenuRelocated) return;
-          if (topNavAnchor) topNavAnchor.parent.insertBefore(topNavAnchor.el, topNavAnchor.next);
-          sidebarItemAnchors.forEach(function (a) { a.parent.insertBefore(a.el, a.next); });
-          mobileMenuRelocated = false;
-        }
-
-        function openMobileMenu() {
-          if (!mobileMenuPanel) return;
-          mobileMenuPanel.classList.add('is-open');
-          if (mobileMenuToggle) {
-            mobileMenuToggle.classList.add('is-open');
-            mobileMenuToggle.setAttribute('aria-expanded', 'true');
-          }
-        }
-
-        function closeMobileMenu() {
-          if (!mobileMenuPanel) return;
-          mobileMenuPanel.classList.remove('is-open');
-          if (mobileMenuToggle) {
-            mobileMenuToggle.classList.remove('is-open');
-            mobileMenuToggle.setAttribute('aria-expanded', 'false');
-          }
-        }
-
-        function syncMobileMenuLayout() {
-          if (isMobilePanelLayout()) {
-            relocateForMobileMenu();
-          } else {
-            restoreFromMobileMenu();
-            closeMobileMenu();
-          }
-        }
-
-        syncMobileMenuLayout();
-        // ── Force full-view for the detail/edit modal on mobile ───────────────
-        // #btn-expand toggles body.mi-full (hides the app shell, makes the
-        // modal 100vw/100vh) — on mobile that's the only sensible way to view
-        // it, so trigger it automatically instead of requiring an extra tap.
-        var detailModalEl = document.getElementById('detail-modal');
-        if (detailModalEl) {
-          var detailModalObserver = new MutationObserver(function () {
+          function relocateForMobileMenu() {
             if (
-              detailModalEl.classList.contains('is-open') &&
-              isMobilePanelLayout() &&
-              !document.body.classList.contains('mi-full')
-            ) {
-              var expandBtn = document.getElementById('btn-expand');
-              if (expandBtn) expandBtn.click();
+              mobileMenuRelocated ||
+              !mobileMenuNavSlot ||
+              !mobileMenuSidebarSlot
+            )
+              return;
+            if (topNavAnchor) mobileMenuNavSlot.appendChild(topNavAnchor.el);
+            sidebarItemAnchors.forEach(function (a) {
+              mobileMenuSidebarSlot.appendChild(a.el);
+            });
+            mobileMenuRelocated = true;
+          }
+
+          function restoreFromMobileMenu() {
+            if (!mobileMenuRelocated) return;
+            if (topNavAnchor)
+              topNavAnchor.parent.insertBefore(
+                topNavAnchor.el,
+                topNavAnchor.next,
+              );
+            sidebarItemAnchors.forEach(function (a) {
+              a.parent.insertBefore(a.el, a.next);
+            });
+            mobileMenuRelocated = false;
+          }
+
+          function openMobileMenu() {
+            if (!mobileMenuPanel) return;
+            mobileMenuPanel.classList.add("is-open");
+            if (mobileMenuToggle) {
+              mobileMenuToggle.classList.add("is-open");
+              mobileMenuToggle.setAttribute("aria-expanded", "true");
+            }
+          }
+
+          function closeMobileMenu() {
+            if (!mobileMenuPanel) return;
+            mobileMenuPanel.classList.remove("is-open");
+            if (mobileMenuToggle) {
+              mobileMenuToggle.classList.remove("is-open");
+              mobileMenuToggle.setAttribute("aria-expanded", "false");
+            }
+          }
+
+          function syncMobileMenuLayout() {
+            if (isMobilePanelLayout()) {
+              relocateForMobileMenu();
+            } else {
+              restoreFromMobileMenu();
+              closeMobileMenu();
+            }
+          }
+
+          syncMobileMenuLayout();
+          // ── Force full-view for the detail/edit modal on mobile ───────────────
+          // #btn-expand toggles body.mi-full (hides the app shell, makes the
+          // modal 100vw/100vh) — on mobile that's the only sensible way to view
+          // it, so trigger it automatically instead of requiring an extra tap.
+          var detailModalEl = document.getElementById("detail-modal");
+          if (detailModalEl) {
+            var detailModalObserver = new MutationObserver(function () {
+              if (
+                detailModalEl.classList.contains("is-open") &&
+                isMobilePanelLayout() &&
+                !document.body.classList.contains("mi-full")
+              ) {
+                var expandBtn = document.getElementById("btn-expand");
+                if (expandBtn) expandBtn.click();
+              }
+            });
+            detailModalObserver.observe(detailModalEl, {
+              attributes: true,
+              attributeFilter: ["class"],
+            });
+          }
+
+          // Single shared resize handler drives the filter drawer, the
+          // hamburger menu, and the recolor relocation — matchMedia's 'change'
+          // event doesn't fire reliably in every environment (e.g. devtools/
+          // automation viewport overrides), but plain window resize events do.
+          window.addEventListener("resize", function () {
+            if (!isMobilePanelLayout()) {
+              closeMobileFilterPanel();
+            }
+            syncMobileMenuLayout();
+            syncRecolorLayout();
+          });
+
+          if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener("click", function (e) {
+              e.stopPropagation();
+              if (mobileMenuPanel.classList.contains("is-open")) {
+                closeMobileMenu();
+              } else {
+                openMobileMenu();
+              }
+            });
+          }
+
+          // Selecting a relocated sidebar item both opens the filter drawer
+          // (existing behavior above) and closes the hamburger dropdown.
+          sidebarItemAnchors.forEach(function (a) {
+            a.el.addEventListener("click", function () {
+              closeMobileMenu();
+            });
+          });
+
+          document.addEventListener("click", function (e) {
+            if (
+              !mobileMenuPanel ||
+              !mobileMenuPanel.classList.contains("is-open")
+            )
+              return;
+            if (mobileMenuPanel.contains(e.target)) return;
+            if (mobileMenuToggle && mobileMenuToggle.contains(e.target)) return;
+            closeMobileMenu();
+          });
+
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+              closeMobileMenu();
             }
           });
-          detailModalObserver.observe(detailModalEl, { attributes: true, attributeFilter: ['class'] });
-        }
 
-        // Single shared resize handler drives the filter drawer, the
-        // hamburger menu, and the recolor relocation — matchMedia's 'change'
-        // event doesn't fire reliably in every environment (e.g. devtools/
-        // automation viewport overrides), but plain window resize events do.
-        window.addEventListener('resize', function () {
-          if (!isMobilePanelLayout()) { closeMobileFilterPanel(); }
-          syncMobileMenuLayout();
-          syncRecolorLayout();
-        });
+          // ── Toolbar scroll padding toggle ───────────────────────────────────
+          var mainContainer = document.getElementById("discover");
+          var toolbarWrap = document.querySelector(".mi-toolbar-wrapper");
+          if (mainContainer && toolbarWrap) {
+            mainContainer.addEventListener(
+              "scroll",
+              function () {
+                toolbarWrap.classList.toggle(
+                  "is-scrolled",
+                  mainContainer.scrollTop > 8,
+                );
+              },
+              { passive: true },
+            );
+          }
 
-        if (mobileMenuToggle) {
-          mobileMenuToggle.addEventListener('click', function (e) {
-            e.stopPropagation();
-            if (mobileMenuPanel.classList.contains('is-open')) { closeMobileMenu(); } else { openMobileMenu(); }
+          // ── Products dropdown ────────────────────────────────────────────────
+          var productsBtn = document.getElementById("mi-top-products-link");
+          var productsDropdown = document.getElementById("products-dropdown");
+
+          function openProductsDropdown() {
+            if (!productsBtn || !productsDropdown) return;
+            productsBtn.classList.add("is-open");
+            productsBtn.setAttribute("aria-expanded", "true");
+            productsDropdown.classList.add("is-open");
+          }
+
+          function closeProductsDropdown() {
+            if (!productsBtn || !productsDropdown) return;
+            productsBtn.classList.remove("is-open");
+            productsBtn.setAttribute("aria-expanded", "false");
+            productsDropdown.classList.remove("is-open");
+          }
+
+          if (productsBtn) {
+            productsBtn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              var isOpen = productsDropdown.classList.contains("is-open");
+              if (isOpen) {
+                closeProductsDropdown();
+              } else {
+                openProductsDropdown();
+              }
+            });
+          }
+
+          // Close on outside click
+          document.addEventListener("click", function (e) {
+            var wrap = document.getElementById("products-wrap");
+            if (wrap && !wrap.contains(e.target)) {
+              closeProductsDropdown();
+            }
           });
-        }
 
-        // Selecting a relocated sidebar item both opens the filter drawer
-        // (existing behavior above) and closes the hamburger dropdown.
-        sidebarItemAnchors.forEach(function (a) {
-          a.el.addEventListener('click', function () { closeMobileMenu(); });
-        });
-
-        document.addEventListener('click', function (e) {
-          if (!mobileMenuPanel || !mobileMenuPanel.classList.contains('is-open')) return;
-          if (mobileMenuPanel.contains(e.target)) return;
-          if (mobileMenuToggle && mobileMenuToggle.contains(e.target)) return;
-          closeMobileMenu();
-        });
-
-        document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape') { closeMobileMenu(); }
-        });
-
-        // ── Toolbar scroll padding toggle ───────────────────────────────────
-        var mainContainer = document.getElementById('discover');
-        var toolbarWrap = document.querySelector('.mi-toolbar-wrapper');
-        if (mainContainer && toolbarWrap) {
-          mainContainer.addEventListener('scroll', function () {
-            toolbarWrap.classList.toggle('is-scrolled', mainContainer.scrollTop > 8);
-          }, { passive: true });
-        }
-
-        // ── Products dropdown ────────────────────────────────────────────────
-        var productsBtn = document.getElementById('mi-top-products-link');
-        var productsDropdown = document.getElementById('products-dropdown');
-
-        function openProductsDropdown() {
-          if (!productsBtn || !productsDropdown) return;
-          productsBtn.classList.add('is-open');
-          productsBtn.setAttribute('aria-expanded', 'true');
-          productsDropdown.classList.add('is-open');
-        }
-
-        function closeProductsDropdown() {
-          if (!productsBtn || !productsDropdown) return;
-          productsBtn.classList.remove('is-open');
-          productsBtn.setAttribute('aria-expanded', 'false');
-          productsDropdown.classList.remove('is-open');
-        }
-
-        if (productsBtn) {
-          productsBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            var isOpen = productsDropdown.classList.contains('is-open');
-            if (isOpen) { closeProductsDropdown(); } else { openProductsDropdown(); }
+          // Close on Escape
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+              closeProductsDropdown();
+            }
           });
-        }
-
-        // Close on outside click
-        document.addEventListener('click', function (e) {
-          var wrap = document.getElementById('products-wrap');
-          if (wrap && !wrap.contains(e.target)) { closeProductsDropdown(); }
         });
+      })();
+    </script>
 
-        // Close on Escape
-        document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape') { closeProductsDropdown(); }
-        });
+    <!-- Legacy elements to preserve JS functionality without visual interference -->
+    <div id="legacy-elements" style="display: none" aria-hidden="true">
+      <div id="stat-icons"></div>
+      <div id="stat-libraries"></div>
+      <div id="stat-styles"></div>
+      <div id="icon-of-day"></div>
+      <div id="collections-grid"></div>
+      <div id="categories-grid"></div>
+      <button id="btn-collections"></button>
+      <button id="btn-make-consistent"></button>
+      <button id="btn-new-system"></button>
 
+      <!-- Filter panel legacy elements -->
+      <div id="filter-category"></div>
+    </div>
+
+    <script src="MOTVIN/componet/Tooltip/tooltip.js"></script>
+    <!-- Environment configuration (generated at runtime in Docker) -->
+    <script src="env-config.js"></script>
+    <!-- API Integration: Load stats before main app -->
+    <script src="JS/api-client.js?v=2"></script>
+    <script src="JS/stats-bridge.js"></script>
+    <script src="JS/api-loader.js?v=2"></script>
+    <!-- <script src="real_icons_data.js?v=39"></script> -->
+    <script src="COMPONENT/Save Collection Modal.js?v=7"></script>
+    <script src="COMPONENT/Pagination.js"></script>
+    <script src="JS/firebase-config.js"></script>
+    <script src="COMPONENT/Library Profile Badge.js"></script>
+    <script src="COMPONENT/Library Profile Menu.js"></script>
+    <script src="JS/firebase-auth.js"></script>
+    <script src="COMPONENT/Auth Modal.js"></script>
+    <script src="COMPONENT/Stack Toast.js"></script>
+    <script src="JS/motvin-icons.js?v=8"></script>
+    <script>
+      window.addEventListener("load", function () {
+        setTimeout(function () {
+          var initStyle = document.getElementById("mi-init-style");
+          if (initStyle) initStyle.remove();
+        }, 50);
       });
-    })();
-  </script>
-
-  <!-- Legacy elements to preserve JS functionality without visual interference -->
-  <div id="legacy-elements" style="display:none;" aria-hidden="true">
-    <div id="stat-icons"></div>
-    <div id="stat-libraries"></div>
-    <div id="stat-styles"></div>
-    <div id="icon-of-day"></div>
-    <div id="collections-grid"></div>
-    <div id="categories-grid"></div>
-    <button id="btn-collections"></button>
-    <button id="btn-make-consistent"></button>
-    <button id="btn-new-system"></button>
-
-    <!-- Filter panel legacy elements -->
-    <div id="filter-category"></div>
-  </div>
-
-  <script src="MOTVIN/componet/Tooltip/tooltip.js"></script>
-  <!-- Environment configuration (generated at runtime in Docker) -->
-  <script src="env-config.js"></script>
-  <!-- API Integration: Load stats before main app -->
-  <script src="JS/api-client.js?v=2"></script>
-  <script src="JS/stats-bridge.js"></script>
-  <script src="JS/api-loader.js?v=2"></script>
-  <!-- <script src="real_icons_data.js?v=39"></script> -->
-  <script src="COMPONENT/Save Collection Modal.js?v=7"></script>
-  <script src="COMPONENT/Pagination.js"></script>
-  <script src="JS/firebase-config.js"></script>
-  <script src="COMPONENT/Library Profile Badge.js"></script>
-  <script src="COMPONENT/Library Profile Menu.js"></script>
-  <script src="JS/firebase-auth.js"></script>
-  <script src="COMPONENT/Auth Modal.js"></script>
-  <script src="COMPONENT/Stack Toast.js"></script>
-  <script src="JS/motvin-icons.js?v=8"></script>
-  <script>
-    window.addEventListener('load', function() {
-      setTimeout(function() {
-        var initStyle = document.getElementById('mi-init-style');
-        if (initStyle) initStyle.remove();
-      }, 50);
-    });
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>
