@@ -31,6 +31,206 @@ function createIllustrationsArray() {
   }));
 }
 
+// Semantic synonyms for search
+const SYNONYMS = {
+  notification: ["bell", "alert", "message", "mail"],
+  alert: ["bell", "alert-circle", "alert-triangle"],
+  ai: ["sparkles", "bot", "brain", "cpu"],
+  assistant: ["bot", "sparkles", "brain"],
+  revenue: ["dollar-sign", "trending-up", "bar-chart", "pie-chart"],
+  analytics: ["bar-chart", "pie-chart", "activity", "trending-up"],
+  dashboard: ["grid", "layers", "bar-chart", "activity"],
+  empty: ["file", "folder", "image"],
+  payment: ["credit-card", "dollar-sign", "shopping-cart"],
+  failed: ["x", "alert-circle", "alert-triangle"],
+  chat: ["message", "mail", "send"],
+  person: ["user", "users"],
+  alarm: ["bell", "clock"],
+  success: ["check", "check-circle"],
+  settings: ["sliders", "tool"],
+  time: ["clock", "watch"],
+  money: ["dollar-sign", "credit-card"],
+  shop: ["shopping-cart", "shopping-bag"],
+  close: ["x", "x-circle"],
+  add: ["plus", "plus-circle"],
+  remove: ["minus", "minus-circle"],
+  edit: ["edit-2", "edit-3", "pen-tool"],
+  delete: ["trash", "trash-2"],
+  like: ["heart", "thumbs-up"],
+  love: ["heart"],
+  save: ["bookmark", "download"],
+  picture: ["image", "camera"],
+  photo: ["image", "camera"],
+  video: ["film", "video"],
+  movie: ["film", "video"],
+  sound: ["volume-1", "volume-2", "music"],
+  audio: ["volume-1", "volume-2", "music"],
+  web: ["globe", "monitor"],
+  internet: ["globe", "wifi"],
+  security: ["shield", "lock"],
+  secure: ["shield", "lock"],
+  help: ["help-circle", "info"],
+  info: ["info", "help-circle"],
+  location: ["map-pin", "map", "navigation"],
+  place: ["map-pin", "map", "navigation"],
+  direction: ["navigation", "compass"],
+  document: ["file", "file-text"],
+  folder: ["folder", "archive"],
+  link: ["link", "link-2"],
+  connect: ["link", "link-2"],
+  upload: ["upload-cloud", "upload"],
+  download: ["download-cloud", "download"],
+  refresh: ["refresh-cw", "refresh-ccw"],
+  sync: ["refresh-cw", "refresh-ccw"],
+  search: ["search", "zoom-in"],
+  zoom: ["zoom-in", "zoom-out"],
+  menu: ["menu", "more-horizontal", "more-vertical"],
+  options: ["more-horizontal", "more-vertical", "sliders"],
+  play: ["play", "play-circle"],
+  pause: ["pause", "pause-circle"],
+  stop: ["square"],
+  record: ["circle"],
+  next: ["skip-forward", "chevron-right"],
+  previous: ["skip-back", "chevron-left"],
+  fastforward: ["fast-forward"],
+  rewind: ["rewind"],
+  share: ["share", "share-2"],
+  send: ["send", "mail"],
+  email: ["mail", "inbox"],
+  phone: ["phone", "phone-call"],
+  call: ["phone", "phone-call"],
+  message: ["message-square", "message-circle"],
+  star: ["star"],
+  favorite: ["star", "heart"],
+  bookmark: ["bookmark"],
+  flag: ["flag"],
+  award: ["award"],
+  gift: ["gift"],
+  briefcase: ["briefcase"],
+  work: ["briefcase"],
+  calendar: ["calendar"],
+  date: ["calendar"],
+  clock: ["clock"],
+  watch: ["watch"],
+  camera: ["camera"],
+  printer: ["printer"],
+  print: ["printer"],
+  tv: ["tv", "monitor"],
+  display: ["monitor", "tv"],
+  laptop: ["monitor", "tv", "computer"],
+  smartphone: ["smartphone"],
+  mobile: ["smartphone"],
+  tablet: ["tablet"],
+  battery: ["battery", "battery-charging"],
+  power: ["power"],
+  wifi: ["wifi"],
+  bluetooth: ["bluetooth"],
+  cast: ["cast"],
+  airplay: ["airplay"],
+  headphones: ["headphones"],
+  mic: ["mic"],
+  microphone: ["mic"],
+  speaker: ["speaker"],
+  volume: ["volume", "volume-1", "volume-2", "volume-x"],
+  light: ["sun"],
+  dark: ["moon"],
+  weather: ["sun", "moon", "cloud", "cloud-drizzle", "cloud-lightning", "cloud-rain", "cloud-snow", "wind"],
+  temperature: ["thermometer"],
+  code: ["code"],
+  terminal: ["terminal"],
+  database: ["database"],
+  server: ["server"],
+  cloud: ["cloud"],
+  git: ["git-branch", "git-commit", "git-merge", "git-pull-request"],
+  layout: ["layout", "grid", "columns", "sidebar"],
+  list: ["list"],
+  type: ["type"],
+  font: ["type"],
+  bold: ["bold"],
+  italic: ["italic"],
+  underline: ["underline"],
+  align: ["align-left", "align-center", "align-right", "align-justify"],
+  color: ["droplet"],
+  paint: ["droplet"],
+  scissors: ["scissors"],
+  cut: ["scissors"],
+  copy: ["copy"],
+  paste: ["clipboard"],
+  clipboard: ["clipboard"],
+  eye: ["eye", "eye-off"],
+  view: ["eye", "eye-off"],
+  hide: ["eye-off"],
+  lock: ["lock"],
+  unlock: ["unlock"],
+  key: ["key"],
+  shield: ["shield"],
+  user: ["user", "users", "user-plus", "user-minus", "user-check", "user-x"],
+  people: ["users"],
+  friend: ["users"],
+  team: ["users"],
+  home: ["home"],
+  house: ["home"],
+  building: ["home"],
+  shopping: ["shopping-bag", "shopping-cart"],
+  cart: ["shopping-cart"],
+  bag: ["shopping-bag"],
+  creditcard: ["credit-card"],
+  dollar: ["dollar-sign"],
+  money: ["dollar-sign"],
+  price: ["tag"],
+  tag: ["tag"],
+  discount: ["percent"],
+  percent: ["percent"],
+  activity: ["activity"],
+  pulse: ["activity"],
+  trending: ["trending-up", "trending-down"],
+  chart: ["bar-chart", "bar-chart-2", "pie-chart"],
+  graph: ["bar-chart", "bar-chart-2", "pie-chart"],
+  map: ["map", "map-pin"],
+  pin: ["map-pin"],
+  navigation: ["navigation", "navigation-2"],
+  compass: ["compass"],
+  crosshair: ["crosshair"],
+  target: ["crosshair"],
+  truck: ["truck"],
+  delivery: ["truck"],
+  package: ["package"],
+  box: ["package"],
+  coffee: ["coffee"],
+  cup: ["coffee"],
+  drink: ["coffee"],
+  anchor: ["anchor"],
+  umbrella: ["umbrella"],
+  sun: ["sun"],
+  moon: ["moon"],
+  star: ["star"],
+  cloud: ["cloud"],
+  wind: ["wind"],
+  water: ["droplet"],
+  fire: ["flame"],
+  zap: ["zap", "zap-off"],
+  lightning: ["zap", "zap-off"],
+  energy: ["zap"],
+  power: ["power"],
+  plug: ["power"],
+  switch: ["toggle-left", "toggle-right"],
+  toggle: ["toggle-left", "toggle-right"],
+  slider: ["sliders"],
+  filter: ["filter"],
+  funnel: ["filter"],
+  sort: ["list"],
+  more: ["more-horizontal", "more-vertical"],
+  menu: ["menu"],
+  hamburger: ["menu"],
+  arrow: ["arrow-up", "arrow-down", "arrow-left", "arrow-right", "arrow-up-left", "arrow-up-right", "arrow-down-left", "arrow-down-right"],
+  chevron: ["chevron-up", "chevron-down", "chevron-left", "chevron-right", "chevrons-up", "chevrons-down", "chevrons-left", "chevrons-right"],
+  triangle: ["triangle"],
+  square: ["square"],
+  circle: ["circle"],
+  hexagon: ["hexagon"],
+  octagon: ["octagon"],
+};
+
 let ICONS = createIllustrationsArray();
 // Tracks only the icons currently on screen; guarded against race conditions (see renderGrid).
 let renderedIconsMap = new Map();
@@ -3154,7 +3354,7 @@ function renderHeroStats() {
 
   const searchInput = $("#search-input");
   if (searchInput) {
-    searchInput.placeholder = `Search ${ICONS.length.toLocaleString()}+ icons...`;
+    searchInput.placeholder = `Search ${getTotalIllustrationCount().toLocaleString()}+ illustrations...`;
   }
 }
 
@@ -3401,66 +3601,74 @@ document.addEventListener("DOMContentLoaded", () => {
     window.tooltipController.init();
   }
 
-  renderHeroStats();
-  renderFilters();
+  const initUI = () => {
+    renderHeroStats();
+    renderFilters();
 
-  // Restore sidebar tab state BEFORE first renderGrid so state.showSaved is correct
-  const savedTab = localStorage.getItem("mill.sidebarTab");
-  if (savedTab && savedTab !== "filters") {
-    state.showSaved = savedTab === "saved";
-  }
+    // Restore sidebar tab state BEFORE first renderGrid so state.showSaved is correct
+    const savedTab = localStorage.getItem("mill.sidebarTab");
+    if (savedTab && savedTab !== "filters") {
+      state.showSaved = savedTab === "saved";
+    }
 
-  renderGrid();
-  renderCompareCount();
-  renderIconOfDay();
-  renderCollections();
-  renderCategoriesSection();
-  setupSidebarTabs();
-  buildCategoryList();
-  wire();
-  initRecolor();
+    renderGrid();
+    renderCompareCount();
+    renderIconOfDay();
+    renderCollections();
+    renderCategoriesSection();
+    setupSidebarTabs();
+    buildCategoryList();
+    wire();
+    initRecolor();
 
-  // Apply saved tab UI after DOM is ready (panels, button highlight, saved panel)
-  if (savedTab && savedTab !== "filters") {
-    const panels = {
-      filters: document.getElementById("rp-tab-filters"),
-      categories: document.getElementById("rp-tab-categories"),
-      saved: document.getElementById("rp-tab-saved"),
-      plugins: document.getElementById("rp-tab-plugins"),
-      help: document.getElementById("rp-tab-help"),
-    };
-    Object.entries(panels).forEach(([key, el]) => {
-      if (el) el.style.display = key === savedTab ? "block" : "none";
-    });
-    const innerPanel = document.querySelector(".mi-right-panel-inner");
-    if (innerPanel) {
-      Object.keys(panels).forEach((key) =>
-        innerPanel.classList.remove(`mi-rp-${key}`),
+    // Apply saved tab UI after DOM is ready (panels, button highlight, saved panel)
+    if (savedTab && savedTab !== "filters") {
+      const panels = {
+        filters: document.getElementById("rp-tab-filters"),
+        categories: document.getElementById("rp-tab-categories"),
+        saved: document.getElementById("rp-tab-saved"),
+        plugins: document.getElementById("rp-tab-plugins"),
+        help: document.getElementById("rp-tab-help"),
+      };
+      Object.entries(panels).forEach(([key, el]) => {
+        if (el) el.style.display = key === savedTab ? "block" : "none";
+      });
+      const innerPanel = document.querySelector(".mi-right-panel-inner");
+      if (innerPanel) {
+        Object.keys(panels).forEach((key) =>
+          innerPanel.classList.remove(`mi-rp-${key}`),
+        );
+        innerPanel.classList.add(`mi-rp-${savedTab}`);
+      }
+      const activeTabBtn = document.querySelector(
+        `.mi-sidebar-item[data-sidebar="${savedTab}"]`,
       );
-      innerPanel.classList.add(`mi-rp-${savedTab}`);
+      if (activeTabBtn) {
+        document
+          .querySelectorAll(".mi-sidebar-item")
+          .forEach((t) => t.classList.remove("is-active"));
+        activeTabBtn.classList.add("is-active");
+        const title = document.getElementById("rp-header-title");
+        if (title)
+          title.textContent =
+            activeTabBtn.querySelector(".mi-sidebar-label")?.textContent || "";
+      }
+      if (savedTab === "saved" && typeof renderSavedPanel === "function")
+        renderSavedPanel();
+      if (savedTab === "categories") buildCategoryList();
     }
-    const activeTabBtn = document.querySelector(
-      `.mi-sidebar-item[data-sidebar="${savedTab}"]`,
-    );
-    if (activeTabBtn) {
-      document
-        .querySelectorAll(".mi-sidebar-item")
-        .forEach((t) => t.classList.remove("is-active"));
-      activeTabBtn.classList.add("is-active");
-      const title = document.getElementById("rp-header-title");
-      if (title)
-        title.textContent =
-          activeTabBtn.querySelector(".mi-sidebar-label")?.textContent || "";
-    }
-    if (savedTab === "saved" && typeof renderSavedPanel === "function")
-      renderSavedPanel();
-    if (savedTab === "categories") buildCategoryList();
+  };
+
+  if (window.ILLUSTRATION_STATS_LOADED) {
+    window.ILLUSTRATION_STATS_LOADED.then(initUI);
+  } else {
+    initUI();
   }
 
   // Dynamically update the overall live icons count in the sidebar
   const badgeLg = document.querySelector(".mi-rp-badge-lg");
   if (badgeLg) {
-    badgeLg.textContent = ICONS.length.toLocaleString();
+    badgeLg.textContent = getTotalIllustrationCount().toLocaleString();
     badgeLg.classList.remove("mi-skeleton");
   }
 

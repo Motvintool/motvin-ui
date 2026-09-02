@@ -109,12 +109,7 @@
       const path = window.location.pathname;
       const isLanding = path === '/' || path === '/index' || path.includes('index.html');
       if (!isLanding) {
-        const scriptTag = document.querySelector('script[src*="firebase-auth.js"]');
-        if (scriptTag) {
-          window.location.href = scriptTag.getAttribute('src').replace(/JS\/firebase-auth\.js.*$/, 'index.html');
-        } else {
-          window.location.href = '/';
-        }
+        window.location.href = `/login?next=${encodeURIComponent(path)}`;
       }
       
       return;
@@ -126,6 +121,17 @@
 
     if (activeUser) {
       emit(activeUser);
+      
+      const p = window.location.pathname.toLowerCase();
+      if (p === '/login' || p === '/login.html') {
+        const params = new URLSearchParams(window.location.search);
+        const next = params.get('next');
+        let target = '/files';
+        if (next && next.startsWith('/') && !next.startsWith('//') && !next.startsWith('/\\')) {
+          target = next;
+        }
+        window.location.href = target;
+      }
     }
   }
 
@@ -212,6 +218,17 @@
         if (user && !user.isAnonymous) {
           emit(user);
           publishSyncEvent('auth-state-changed', user);
+          
+          const p = window.location.pathname.toLowerCase();
+          if (p === '/login' || p === '/login.html') {
+            const params = new URLSearchParams(window.location.search);
+            const next = params.get('next');
+            let target = '/files';
+            if (next && next.startsWith('/') && !next.startsWith('//') && !next.startsWith('/\\')) {
+              target = next;
+            }
+            window.location.href = target;
+          }
         } else if (!user || user.isAnonymous) {
           persistSnapshot(null);
           emit(null);
