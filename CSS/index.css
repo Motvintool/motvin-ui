@@ -705,9 +705,7 @@ body {
   text-decoration: underline;
 }
 
-#products-dropdown-trigger:hover span {
-  text-decoration: none;
-}
+
 
 .nav-extra-links {
   display: flex;
