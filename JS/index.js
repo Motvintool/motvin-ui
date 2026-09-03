@@ -827,12 +827,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Authentication Integration ---
   const signinBtn = document.getElementById('auth-signin-btn');
   const signupBtn = document.getElementById('auth-signup-btn');
+  const exploreSignupBtn = document.getElementById('explore-signup-btn');
   const dashboardBtn = document.getElementById('auth-dashboard-btn');
   const howitworkSignupBtn = document.getElementById('howitwork-signup-btn');
 
   if (window.FirebaseAuthService && signinBtn && signupBtn && dashboardBtn) {
     signinBtn.addEventListener('click', (e) => { e.preventDefault(); window.AuthModal.open('login'); });
     signupBtn.addEventListener('click', (e) => { e.preventDefault(); window.AuthModal.open('register'); });
+    if (exploreSignupBtn) exploreSignupBtn.addEventListener('click', (e) => { e.preventDefault(); window.AuthModal.open('register'); });
     howitworkSignupBtn?.addEventListener('click', (e) => {
       e.preventDefault();
       signupBtn.click();
@@ -842,11 +844,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (user && !user.isAnonymous) {
         signinBtn.style.display = 'none';
         signupBtn.style.display = 'none';
+        if (exploreSignupBtn) exploreSignupBtn.style.display = 'none';
         dashboardBtn.style.display = '';
         if (window.AuthModal) window.AuthModal.close();
       } else {
         signinBtn.style.display = '';
         signupBtn.style.display = '';
+        if (exploreSignupBtn) exploreSignupBtn.style.display = '';
         dashboardBtn.style.display = 'none';
       }
     });

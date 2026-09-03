@@ -1775,9 +1775,18 @@ body {
   text-underline-position: under;
 }
 
+.demo-feature-link:hover span {
+  text-decoration-style: dashed;
+}
+
 .demo-feature-link svg {
   width: 20px;
   height: 20px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.demo-feature-link:hover svg {
+  transform: translateX(4px);
 }
 
 /* How it Works Section */
