@@ -729,6 +729,15 @@ async function renderGrid() {
     ).join("");
 
     try {
+      // Track search event in Google Analytics before API call
+      if (typeof gtag !== 'undefined' && state.query) {
+        gtag('event', 'search', {
+          search_term: state.query,
+          page_location: window.location.pathname,
+          page_title: 'Illustrations Search'
+        });
+      }
+
       const total = await window.populateIllustrationsFromAPI();
       if (total === -1) return; // aborted
       if (renderId !== currentRenderId) return;
@@ -2427,7 +2436,7 @@ function wire() {
     state.page = 1;
     localStorage.setItem("mill.page", state.page);
     renderGrid();
-  }, 250);
+  }, 800); // Increased from 250ms to 800ms to prevent tracking every keystroke
 
   if (state.query) {
     searchInput.value = state.query;

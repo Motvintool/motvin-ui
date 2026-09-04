@@ -1017,6 +1017,15 @@ async function renderGrid() {
     grid.innerHTML = skeletonCards;
 
     try {
+      // Track search event in Google Analytics before API call
+      if (typeof gtag !== 'undefined' && state.query) {
+        gtag('event', 'search', {
+          search_term: state.query,
+          page_location: window.location.pathname,
+          page_title: 'Icons Search'
+        });
+      }
+
       const total = await window.populateIconsFromAPI();
       if (total === -1) return; // aborted
       if (renderId !== currentRenderId) return;
@@ -2730,7 +2739,7 @@ function wire() {
     localStorage.setItem("mi.query", state.query);
     state.page = 1;
     renderGrid();
-  }, 250);
+  }, 800); // Increased from 250ms to 800ms to prevent tracking every keystroke
 
   if (state.query) {
     searchInput.value = state.query;
