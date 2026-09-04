@@ -8,7 +8,7 @@
   window.loadIllustrationsFromAPI = async function () {
     const q = state.query.trim();
     const page = state.page || 1;
-    const limit = 60;
+    const limit = 40;
     const offset = (page - 1) * limit;
 
     try {

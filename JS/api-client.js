@@ -38,7 +38,7 @@ class IconsAPIClient {
   /**
    * Generic fetch with caching and deduplication
    */
-  async fetch(url, cacheKey, cacheTTL = 3600000) {
+  async fetch(url, cacheKey, cacheTTL = 3600000, abortSignal = null) {
     // Add version to cache key
     const versionedKey = `${this.CACHE_VERSION}:${cacheKey}`;
 
@@ -54,7 +54,7 @@ class IconsAPIClient {
     }
 
     // Make new request
-    const promise = fetch(url)
+    const promise = fetch(url, { signal: abortSignal })
       .then(res => {
         if (!res.ok) throw new Error(`API error: ${res.status}`);
         return res.json();
@@ -111,7 +111,7 @@ class IconsAPIClient {
    */
   async getIcons(collectionId, options = {}) {
     const {
-      limit = 60,
+      limit = 40,
       offset = 0,
       style = '',
       category = '',
@@ -139,8 +139,13 @@ class IconsAPIClient {
    * @param {object} options - {limit, offset, collection, style, category}
    */
   async searchIcons(query = '', options = {}) {  // Default empty string
+    if (this.searchController) {
+      this.searchController.abort();
+    }
+    this.searchController = new AbortController();
+
     const {
-      limit = 60,
+      limit = 40,
       offset = 0,
       collection = '',
       style = '',
@@ -164,7 +169,15 @@ class IconsAPIClient {
     const url = `${API_BASE_URL}/search?${params}`;
     const cacheKey = `search:${params.toString()}`;
 
-    return this.fetch(url, cacheKey, 60000); // 1 min cache
+    try {
+      return await this.fetch(url, cacheKey, 60000, this.searchController.signal); // 1 min cache
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        console.log('Search request aborted for newer request');
+        return { icons: [], total: 0 }; // Return empty data on abort to prevent UI crashes
+      }
+      throw err;
+    }
   }
 
   /**

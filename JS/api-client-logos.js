@@ -41,7 +41,7 @@ class LogosAPIClient {
   /**
    * Generic fetch with caching and deduplication
    */
-  async fetch(url, cacheKey, cacheTTL = 3600000) {
+  async fetch(url, cacheKey, cacheTTL = 3600000, abortSignal = null) {
     // Add version to cache key
     const versionedKey = `${this.CACHE_VERSION}:${cacheKey}`;
 
@@ -57,7 +57,7 @@ class LogosAPIClient {
     }
 
     // Make new request
-    const promise = fetch(url)
+    const promise = fetch(url, { signal: abortSignal })
       .then((res) => {
         if (!res.ok) throw new Error(`API error: ${res.status}`);
         return res.json();
@@ -114,7 +114,7 @@ class LogosAPIClient {
    */
   async getLogos(collectionId, options = {}) {
     const {
-      limit = 60,
+      limit = 40,
       offset = 0,
       style = "",
       category = "",
@@ -142,9 +142,14 @@ class LogosAPIClient {
    * @param {object} options - {limit, offset, collection, style, category}
    */
   async searchLogos(query = "", options = {}) {
+    if (this.searchController) {
+      this.searchController.abort();
+    }
+    this.searchController = new AbortController();
+
     // Default empty string
     const {
-      limit = 60,
+      limit = 40,
       offset = 0,
       collection = "",
       style = "",
@@ -168,7 +173,15 @@ class LogosAPIClient {
     const url = `${API_BASE_URL}/search?${params}`;
     const cacheKey = `search:${params.toString()}`;
 
-    return this.fetch(url, cacheKey, 60000); // 1 min cache
+    try {
+      return await this.fetch(url, cacheKey, 60000, this.searchController.signal); // 1 min cache
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        console.log('Search request aborted for newer request');
+        return { icons: [], total: 0 }; // Return empty data on abort
+      }
+      throw err;
+    }
   }
 
   /**

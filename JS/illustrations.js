@@ -2426,7 +2426,7 @@ function wire() {
     state.page = 1;
     localStorage.setItem("mill.page", state.page);
     renderGrid();
-  }, 800);
+  }, 250);
 
   if (state.query) {
     searchInput.value = state.query;

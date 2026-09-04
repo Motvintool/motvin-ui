@@ -22,14 +22,14 @@ class IllustrationsAPIClient {
     this.CACHE_VERSION = 'v1';
   }
 
-  async fetch(url, cacheKey, cacheTTL = 3600000) {
+  async fetch(url, cacheKey, cacheTTL = 3600000, abortSignal = null) {
     const versionedKey = `${this.CACHE_VERSION}:${cacheKey}`;
     const cached = this.cache.get(versionedKey);
     if (cached && Date.now() - cached.timestamp < cacheTTL) return cached.data;
 
     if (this.pendingRequests.has(versionedKey)) return this.pendingRequests.get(versionedKey);
 
-    const promise = fetch(url)
+    const promise = fetch(url, { signal: abortSignal })
       .then(res => {
         if (!res.ok) throw new Error(`API error: ${res.status}`);
         return res.json();
@@ -58,7 +58,12 @@ class IllustrationsAPIClient {
   }
 
   async searchIllustrations(query = '', options = {}) {
-    const { limit = 60, offset = 0, collection = '', style = '', category = '', license = '', ids = '' } = options;
+    if (this.searchController) {
+      this.searchController.abort();
+    }
+    this.searchController = new AbortController();
+
+    const { limit = 40, offset = 0, collection = '', style = '', category = '', license = '', ids = '' } = options;
 
     const params = new URLSearchParams({ q: query, limit: limit.toString(), offset: offset.toString() });
     if (collection) params.append('collection', collection);
@@ -68,7 +73,15 @@ class IllustrationsAPIClient {
     if (ids)        params.append('ids', ids);
 
     const url = `${API_BASE_URL}/search?${params}`;
-    return this.fetch(url, `search:${params.toString()}`, 60000);
+    try {
+      return await this.fetch(url, `search:${params.toString()}`, 60000, this.searchController.signal);
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        console.log('Search request aborted for newer request');
+        return { icons: [], total: 0 };
+      }
+      throw err;
+    }
   }
 
   getIllustrationSVGUrl(collectionId, itemId) {

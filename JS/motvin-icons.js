@@ -2731,7 +2731,7 @@ function wire() {
     localStorage.setItem("mi.query", state.query);
     state.page = 1;
     renderGrid();
-  }, 800);
+  }, 250);
 
   if (state.query) {
     searchInput.value = state.query;
