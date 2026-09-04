@@ -59,6 +59,22 @@
 
       const result = await window.iconsAPI.searchIcons(q, apiOptions);
       if (result && result.aborted) return { aborted: true };
+
+      // If no results and no active filters/query, the index may still be building — retry
+      const hasFilters = activeSourceFilters.length || activeStyleFilters.length ||
+                         activeCategoryFilters.length || activeLicenseFilters.length;
+      if (!q && !hasFilters && result.total === 0 && !apiOptions.ids) {
+        window._iconIndexRetryCount = (window._iconIndexRetryCount || 0) + 1;
+        if (window._iconIndexRetryCount <= 10) {
+          const delay = Math.min(2000 * window._iconIndexRetryCount, 15000);
+          console.log(`[API Loader] Index still building, retrying in ${delay}ms (attempt ${window._iconIndexRetryCount})...`);
+          await new Promise(r => setTimeout(r, delay));
+          return window.loadIconsFromAPI();
+        }
+      } else {
+        window._iconIndexRetryCount = 0; // reset on successful load
+      }
+
       return { icons: result.results || [], total: result.total || 0 };
     } catch (error) {
       console.error("[API Loader] Failed to load icons:", error);

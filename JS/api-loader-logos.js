@@ -59,6 +59,22 @@
 
       const result = await window.logosAPI.searchLogos(q, apiOptions);
       if (result && result.aborted) return { aborted: true };
+
+      // If no results and no active filters/query, the index may still be building — retry
+      const hasFilters = activeSourceFilters.length || activeStyleFilters.length ||
+                         activeCategoryFilters.length || activeLicenseFilters.length;
+      if (!q && !hasFilters && result.total === 0 && !apiOptions.ids) {
+        window._logoIndexRetryCount = (window._logoIndexRetryCount || 0) + 1;
+        if (window._logoIndexRetryCount <= 10) {
+          const delay = Math.min(2000 * window._logoIndexRetryCount, 15000);
+          console.log(`[API Loader] Logo index still building, retrying in ${delay}ms (attempt ${window._logoIndexRetryCount})...`);
+          await new Promise(r => setTimeout(r, delay));
+          return window.loadLogosFromAPI();
+        }
+      } else {
+        window._logoIndexRetryCount = 0;
+      }
+
       return { logos: result.results || [], total: result.total || 0 };
     } catch (error) {
       console.error("[API Loader] Failed to load logos:", error);

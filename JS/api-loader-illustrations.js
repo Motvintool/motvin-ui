@@ -45,6 +45,22 @@
 
       const result = await window.illustrationsAPI.searchIllustrations(q, apiOptions);
       if (result && result.aborted) return { aborted: true };
+
+      // If no results and no active filters/query, the index may still be building — retry
+      const hasFilters = activeSourceFilters.length || activeStyleFilters.length ||
+                         activeCategoryFilters.length || activeLicenseFilters.length;
+      if (!q && !hasFilters && result.total === 0 && !apiOptions.ids) {
+        window._illustrationIndexRetryCount = (window._illustrationIndexRetryCount || 0) + 1;
+        if (window._illustrationIndexRetryCount <= 10) {
+          const delay = Math.min(2000 * window._illustrationIndexRetryCount, 15000);
+          console.log(`[API Loader] Illustration index still building, retrying in ${delay}ms (attempt ${window._illustrationIndexRetryCount})...`);
+          await new Promise(r => setTimeout(r, delay));
+          return window.loadIllustrationsFromAPI();
+        }
+      } else {
+        window._illustrationIndexRetryCount = 0;
+      }
+
       return { illustrations: result.results || [], total: result.total || 0 };
     } catch (error) {
       console.error('[API Loader] Failed to load illustrations:', error);
