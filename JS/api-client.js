@@ -73,6 +73,9 @@ class IconsAPIClient {
       })
       .catch(err => {
         this.pendingRequests.delete(versionedKey);
+        if (err.name === 'AbortError') {
+          return { aborted: true };
+        }
         console.error('API Error:', err);
         throw err;
       });
@@ -138,43 +141,33 @@ class IconsAPIClient {
    * @param {string} query - Search query (can be empty for browsing all)
    * @param {object} options - {limit, offset, collection, style, category}
    */
-  async searchIcons(query = '', options = {}) {  // Default empty string
+  async searchIcons(query = '', options = {}) {
+    const { limit = 40, offset = 0, collection = '', style = '', category = '', license = '', ids = '' } = options;
+
+    const params = new URLSearchParams({ q: query, limit: limit.toString(), offset: offset.toString() });
+    if (collection) params.append('collection', collection);
+    if (style)      params.append('style', style);
+    if (category)   params.append('category', category);
+    if (license)    params.append('license', license);
+    if (ids)        params.append('ids', ids);
+
+    const cacheKey = `search:${params.toString()}`;
+    const versionedKey = `${this.CACHE_VERSION}:${cacheKey}`;
+
     if (this.searchController) {
       this.searchController.abort();
+      this.pendingRequests.delete(versionedKey);
     }
     this.searchController = new AbortController();
 
-    const {
-      limit = 40,
-      offset = 0,
-      collection = '',
-      style = '',
-      category = '',
-      license = '',
-      ids = ''
-    } = options;
-
-    const params = new URLSearchParams({
-      q: query,
-      limit: limit.toString(),
-      offset: offset.toString()
-    });
-
-    if (collection) params.append('collection', collection);
-    if (style) params.append('style', style);
-    if (category) params.append('category', category);
-    if (license) params.append('license', license);
-    if (ids) params.append('ids', ids);
-
     const url = `${API_BASE_URL}/search?${params}`;
-    const cacheKey = `search:${params.toString()}`;
 
     try {
-      return await this.fetch(url, cacheKey, 60000, this.searchController.signal); // 1 min cache
+      const res = await this.fetch(url, cacheKey, 60000, this.searchController.signal);
+      return res;
     } catch (err) {
       if (err.name === 'AbortError') {
-        console.log('Search request aborted for newer request');
-        return { icons: [], total: 0 }; // Return empty data on abort to prevent UI crashes
+        return { aborted: true };
       }
       throw err;
     }

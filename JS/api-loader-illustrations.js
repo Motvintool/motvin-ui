@@ -44,6 +44,7 @@
       }
 
       const result = await window.illustrationsAPI.searchIllustrations(q, apiOptions);
+      if (result && result.aborted) return { aborted: true };
       return { illustrations: result.results || [], total: result.total || 0 };
     } catch (error) {
       console.error('[API Loader] Failed to load illustrations:', error);
@@ -53,6 +54,12 @@
 
   window.populateIllustrationsFromAPI = async function () {
     const result = await window.loadIllustrationsFromAPI();
+
+    if (result && result.aborted) return -1;
+
+    console.log(
+      `[API Loader] Loaded ${result.illustrations.length} illustrations (total: ${result.total})`,
+    );
 
     if (result.total === 0 && result.illustrations.length === 0) {
       // No data yet — rebuild ICONS from whatever is in REAL_ILLUSTRATIONS and return

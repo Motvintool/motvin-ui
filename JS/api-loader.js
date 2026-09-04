@@ -58,11 +58,8 @@
       }
 
       const result = await window.iconsAPI.searchIcons(q, apiOptions);
-
-      return {
-        icons: result.results || [],
-        total: result.total || 0,
-      };
+      if (result && result.aborted) return { aborted: true };
+      return { icons: result.results || [], total: result.total || 0 };
     } catch (error) {
       console.error("[API Loader] Failed to load icons:", error);
       return {
@@ -77,6 +74,8 @@
    */
   window.populateIconsFromAPI = async function () {
     const result = await window.loadIconsFromAPI();
+
+    if (result && result.aborted) return -1;
 
     console.log(
       `[API Loader] Loaded ${result.icons.length} icons (total: ${result.total})`,

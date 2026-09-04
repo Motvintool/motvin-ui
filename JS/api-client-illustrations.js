@@ -42,6 +42,10 @@ class IllustrationsAPIClient {
       })
       .catch(err => {
         this.pendingRequests.delete(versionedKey);
+        if (err.name === 'AbortError') {
+          console.log('Search request aborted for newer request');
+          return { aborted: true };
+        }
         throw err;
       });
 
@@ -58,11 +62,6 @@ class IllustrationsAPIClient {
   }
 
   async searchIllustrations(query = '', options = {}) {
-    if (this.searchController) {
-      this.searchController.abort();
-    }
-    this.searchController = new AbortController();
-
     const { limit = 40, offset = 0, collection = '', style = '', category = '', license = '', ids = '' } = options;
 
     const params = new URLSearchParams({ q: query, limit: limit.toString(), offset: offset.toString() });
@@ -72,13 +71,22 @@ class IllustrationsAPIClient {
     if (license)    params.append('license', license);
     if (ids)        params.append('ids', ids);
 
+    const cacheKey = `search:${params.toString()}`;
+    const versionedKey = `${this.CACHE_VERSION}:${cacheKey}`;
+
+    if (this.searchController) {
+      this.searchController.abort();
+      this.pendingRequests.delete(versionedKey);
+    }
+    this.searchController = new AbortController();
+
     const url = `${API_BASE_URL}/search?${params}`;
     try {
-      return await this.fetch(url, `search:${params.toString()}`, 60000, this.searchController.signal);
+      const res = await this.fetch(url, cacheKey, 60000, this.searchController.signal);
+      return res;
     } catch (err) {
       if (err.name === 'AbortError') {
-        console.log('Search request aborted for newer request');
-        return { icons: [], total: 0 };
+        return { aborted: true };
       }
       throw err;
     }

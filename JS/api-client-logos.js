@@ -142,12 +142,6 @@ class LogosAPIClient {
    * @param {object} options - {limit, offset, collection, style, category}
    */
   async searchLogos(query = "", options = {}) {
-    if (this.searchController) {
-      this.searchController.abort();
-    }
-    this.searchController = new AbortController();
-
-    // Default empty string
     const {
       limit = 40,
       offset = 0,
@@ -170,15 +164,28 @@ class LogosAPIClient {
     if (license) params.append("license", license);
     if (ids) params.append("ids", ids);
 
-    const url = `${API_BASE_URL}/search?${params}`;
     const cacheKey = `search:${params.toString()}`;
+    const versionedKey = `${this.CACHE_VERSION}:${cacheKey}`;
+
+    if (this.searchController) {
+      this.searchController.abort();
+      this.pendingRequests.delete(versionedKey);
+    }
+    this.searchController = new AbortController();
+
+    const url = `${API_BASE_URL}/search?${params}`;
 
     try {
-      return await this.fetch(url, cacheKey, 60000, this.searchController.signal); // 1 min cache
+      const res = await this.fetch(
+        url,
+        cacheKey,
+        60000,
+        this.searchController.signal,
+      );
+      return res;
     } catch (err) {
-      if (err.name === 'AbortError') {
-        console.log('Search request aborted for newer request');
-        return { icons: [], total: 0 }; // Return empty data on abort
+      if (err.name === "AbortError") {
+        return { aborted: true };
       }
       throw err;
     }

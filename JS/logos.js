@@ -489,6 +489,7 @@ async function renderGrid() {
 
     try {
       const total = await window.populateLogosFromAPI();
+      if (total === -1) return; // aborted
 
       // Abort if a newer renderGrid call was made while we were fetching
       if (renderId !== currentRenderId) return;

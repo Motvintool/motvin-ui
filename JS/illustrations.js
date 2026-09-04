@@ -730,6 +730,7 @@ async function renderGrid() {
 
     try {
       const total = await window.populateIllustrationsFromAPI();
+      if (total === -1) return; // aborted
       if (renderId !== currentRenderId) return;
       const list = filterIcons();
       renderedIconsMap = new Map(list.map((ic) => [ic.id, ic]));

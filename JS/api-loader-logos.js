@@ -58,11 +58,8 @@
       }
 
       const result = await window.logosAPI.searchLogos(q, apiOptions);
-
-      return {
-        logos: result.results || [],
-        total: result.total || 0,
-      };
+      if (result && result.aborted) return { aborted: true };
+      return { logos: result.results || [], total: result.total || 0 };
     } catch (error) {
       console.error("[API Loader] Failed to load logos:", error);
       return {
@@ -77,6 +74,8 @@
    */
   window.populateLogosFromAPI = async function () {
     const result = await window.loadLogosFromAPI();
+
+    if (result && result.aborted) return -1;
 
     console.log(
       `[API Loader] Loaded ${result.logos.length} logos (total: ${result.total})`,

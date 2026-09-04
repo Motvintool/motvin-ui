@@ -1018,8 +1018,7 @@ async function renderGrid() {
 
     try {
       const total = await window.populateIconsFromAPI();
-
-      // Abort if a newer renderGrid call was made while we were fetching
+      if (total === -1) return; // aborted
       if (renderId !== currentRenderId) return;
 
       // The API already filtered by query, category, style, etc.
