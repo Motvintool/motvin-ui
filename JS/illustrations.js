@@ -3670,6 +3670,9 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   if (window.ILLUSTRATION_STATS_LOADED) {
+    // Start loading the grid immediately (in parallel with stats) so users see content sooner
+    renderGrid();
+    // Then finish the full UI init (filters, sidebar, etc.) once stats are ready
     window.ILLUSTRATION_STATS_LOADED.then(initUI);
   } else {
     initUI();

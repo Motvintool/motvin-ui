@@ -61,18 +61,18 @@
     // Initialize empty REAL_LOGOS
     window.REAL_LOGOS = [];
 
-    // Recreate ICONS array
+    // Recreate LOGOS array
     if (typeof window.recreateLogos === "function") {
       window.recreateLogos();
     }
 
-    // Trigger render which will load icons from API
-    setTimeout(() => {
-      if (typeof renderGrid === "function") {
-        console.log("[Stats Bridge] Triggering initial renderGrid()");
-        renderGrid();
-      }
-    }, 100);
+    // Only trigger a render if the grid hasn't already loaded logos in parallel
+    const grid = document.querySelector("#icon-grid");
+    const alreadyLoaded = grid && grid.querySelector(".mi-card:not([style*='skeleton'])");
+    if (!alreadyLoaded && typeof renderGrid === "function") {
+      console.log("[Stats Bridge] Triggering fallback renderGrid() after stats");
+      renderGrid();
+    }
   }
 
   /**
@@ -152,9 +152,17 @@
       });
   }
 
-  // Load stats immediately when this script loads
+  // Load stats and initial logos in PARALLEL — don't wait for stats before showing logos
   if (window.logosAPI) {
+    // Fire both at the same time
     loadStats();
+
+    // Kick off the grid render immediately without waiting for stats
+    // The grid only needs logos; stats are only needed for filter sidebar counts
+    if (typeof renderGrid === "function") {
+      console.log("[Stats Bridge] Pre-loading grid in parallel with stats...");
+      renderGrid();
+    }
   } else {
     console.error(
       "[Stats Bridge] logosAPI not available - load api-client.js first",

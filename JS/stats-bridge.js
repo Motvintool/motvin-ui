@@ -66,13 +66,14 @@
       window.recreateIcons();
     }
 
-    // Trigger render which will load icons from API
-    setTimeout(() => {
-      if (typeof renderGrid === "function") {
-        console.log("[Stats Bridge] Triggering initial renderGrid()");
-        renderGrid();
-      }
-    }, 100);
+    // Only trigger a render if the grid hasn't already loaded icons in parallel
+    // (parallel pre-load fires at same time as stats call)
+    const grid = document.querySelector("#icon-grid");
+    const alreadyLoaded = grid && grid.querySelector(".mi-card:not([style*='skeleton'])");
+    if (!alreadyLoaded && typeof renderGrid === "function") {
+      console.log("[Stats Bridge] Triggering fallback renderGrid() after stats");
+      renderGrid();
+    }
   }
 
   /**
@@ -146,9 +147,17 @@
       });
   }
 
-  // Load stats immediately when this script loads
+  // Load stats and initial icons in PARALLEL — don't wait for stats before showing icons
   if (window.iconsAPI) {
+    // Fire both at the same time
     loadStats();
+
+    // Kick off the grid render immediately without waiting for stats
+    // The grid only needs icons; stats are only needed for filter sidebar counts
+    if (typeof renderGrid === "function") {
+      console.log("[Stats Bridge] Pre-loading grid in parallel with stats...");
+      renderGrid();
+    }
   } else {
     console.error(
       "[Stats Bridge] iconsAPI not available - load api-client.js first",

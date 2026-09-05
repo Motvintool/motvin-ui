@@ -3979,6 +3979,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Wait for stats to load before initial render
   if (window.STATS_LOADED) {
+    // Start loading the grid immediately (in parallel with stats) so users see content sooner
+    renderGrid();
+    // Then finish the full UI init (filters, sidebar, etc.) once stats are ready
     window.STATS_LOADED.then(initUI);
   } else {
     initUI();
