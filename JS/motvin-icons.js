@@ -1,1840 +1,22 @@
-/* Motvin Icons — MVP frontend
+/* Motvin Icons â€” MVP frontend
  * Dataset is a curated Lucide-style mock spanning multiple mock sources with
- * accurate license metadata. Third-party icon artwork is NOT included here —
+ * accurate license metadata. Third-party icon artwork is NOT included here â€”
  * we ship representative outline SVGs (from Lucide, ISC license) and label
  * the "source" as one of several libraries only to demonstrate the platform
  * architecture. Do not misrepresent this in production.
  */
 
-
-const SOURCES = [
-  {
-    id: "lucide",
-    name: "Lucide",
-    license: "ISC",
-    licenseUrl: "https://lucide.dev/license",
-    author: "Lucide Contributors",
-    marketSize: 1544,
-  },
-  {
-    id: "heroicons",
-    name: "Heroicons",
-    license: "MIT",
-    licenseUrl: "https://heroicons.com",
-    author: "Tailwind Labs",
-    marketSize: 316,
-  },
-  {
-    id: "phosphor",
-    name: "Phosphor",
-    license: "MIT",
-    licenseUrl: "https://phosphoricons.com",
-    author: "Phosphor Icons",
-    marketSize: 9072,
-  },
-  {
-    id: "tabler",
-    name: "Tabler",
-    license: "MIT",
-    licenseUrl: "https://tabler-icons.io",
-    author: "Tabler",
-    marketSize: 5880,
-  },
-  {
-    id: "material",
-    name: "Material Symbols",
-    license: "Apache 2.0",
-    licenseUrl: "https://fonts.google.com/icons",
-    author: "Google",
-    marketSize: 3454,
-  },
-  {
-    id: "feather",
-    name: "Feather",
-    license: "MIT",
-    licenseUrl: "https://feathericons.com",
-    author: "Cole Bemis",
-    marketSize: 287,
-  },
-  {
-    id: "bootstrap",
-    name: "Bootstrap Icons",
-    license: "MIT",
-    licenseUrl: "https://icons.getbootstrap.com",
-    author: "Bootstrap",
-    marketSize: 2078,
-  },
-  {
-    id: "radix",
-    name: "Radix Icons",
-    license: "MIT",
-    licenseUrl: "https://www.radix-ui.com/icons",
-    author: "WorkOS",
-    marketSize: 318,
-  },
-  {
-    id: "antd",
-    name: "Ant Design",
-    license: "MIT",
-    licenseUrl: "https://ant.design",
-    author: "Ant Design",
-    marketSize: 789,
-  },
-  {
-    id: "fluent",
-    name: "Fluent UI",
-    license: "MIT",
-    licenseUrl: "https://github.com/microsoft/fluentui-system-icons",
-    author: "Microsoft",
-    marketSize: 4632,
-  },
-  {
-    id: "carbon",
-    name: "Carbon",
-    license: "Apache 2.0",
-    licenseUrl: "https://carbondesignsystem.com",
-    author: "IBM",
-    marketSize: 1912,
-  },
-  {
-    id: "iconoir",
-    name: "Iconoir",
-    license: "MIT",
-    licenseUrl: "https://iconoir.com",
-    author: "Iconoir",
-    marketSize: 1543,
-  },
-  {
-    id: "ionicons",
-    name: "Ionicons",
-    license: "MIT",
-    licenseUrl: "https://ionic.io/ionicons",
-    author: "Ionic",
-    marketSize: 1338,
-  },
-  {
-    id: "fontawesome",
-    name: "Font Awesome",
-    license: "CC BY 4.0",
-    licenseUrl: "https://fontawesome.com/license",
-    author: "Fonticons Inc.",
-    marketSize: 2064,
-  },
-  {
-    id: "iconpark",
-    name: "IconPark",
-    license: "Apache 2.0",
-    licenseUrl: "https://iconpark.oceanengine.com",
-    author: "ByteDance",
-    marketSize: 2497,
-  },
-  {
-    id: "remix",
-    name: "Remix Icon",
-    license: "Apache 2.0",
-    licenseUrl: "https://remixicon.com",
-    author: "Remix Design",
-    marketSize: 2860,
-  },
-  {
-    id: "mynaui",
-    name: "Myna UI Icons",
-    license: "MIT",
-    licenseUrl: "https://mynaui.com/icons",
-    author: "Praveen Juge",
-    marketSize: 1400,
-  },
-  {
-    id: "hugeicons",
-    name: "Huge Icons",
-    license: "Free",
-    licenseUrl: "https://hugeicons.com",
-    author: "Hugeicons",
-    marketSize: 5065,
-  },
-  {
-    id: "boxicons",
-    name: "Boxicons",
-    license: "CC BY 4.0",
-    licenseUrl: "https://boxicons.com",
-    author: "Atisa",
-    marketSize: 3768,
-  },
-  {
-    id: "mingcute",
-    name: "MingCute",
-    license: "MIT",
-    licenseUrl: "https://mingcute.com",
-    author: "Richard",
-    marketSize: 3320,
-  },
-  {
-    id: "simpleicons",
-    name: "Simple Icons",
-    license: "CC0",
-    licenseUrl: "https://simpleicons.org",
-    author: "Simple Icons",
-    marketSize: 3453,
-  },
-  {
-    id: "tdesign",
-    name: "TDesign Icons",
-    license: "MIT",
-    licenseUrl: "https://tdesign.tencent.com",
-    author: "Tencent",
-    marketSize: 2354,
-  },
-  {
-    id: "arcticons",
-    name: "Arcticons",
-    license: "GPL",
-    licenseUrl: "https://arcticons.com",
-    author: "Arcticons Team",
-    marketSize: 14913,
-  },
-  {
-    id: "thesvg",
-    name: "theSVG",
-    license: "MIT",
-    licenseUrl: "https://thesvg.com",
-    author: "theSVG",
-    marketSize: 3747,
-  },
-  {
-    id: "griddy",
-    name: "Griddy Icons",
-    license: "MIT",
-    licenseUrl: "https://griddy.com",
-    author: "Griddy",
-    marketSize: 2010,
-  },
-  {
-    id: "glyphs",
-    name: "Glyphs",
-    license: "MIT",
-    licenseUrl: "https://glyphs.com",
-    author: "Glyphs",
-    marketSize: 3452,
-  },
-  {
-    id: "reicon",
-    name: "Reicon",
-    license: "MIT",
-    licenseUrl: "https://reicon.com",
-    author: "Reicon",
-    marketSize: 6586,
-  },
-  {
-    id: "gameicons",
-    name: "Game Icons",
-    license: "CC BY 3.0",
-    licenseUrl: "https://game-icons.net",
-    author: "Game Icons",
-    marketSize: 4133,
-  },
-  {
-    id: "selfhst",
-    name: "selfh.st/icons",
-    license: "MIT",
-    licenseUrl: "https://selfh.st/icons",
-    author: "selfh.st",
-    marketSize: 7085,
-  },
-  {
-    id: "web3",
-    name: "Web3 Icons",
-    license: "MIT",
-    licenseUrl: "https://web3icons.com",
-    author: "Web3 Icons",
-    marketSize: 4067,
-  },
-  {
-    id: "health",
-    name: "Health Icons",
-    license: "MIT",
-    licenseUrl: "https://healthicons.org",
-    author: "Health Icons",
-    marketSize: 2042,
-  },
-  {
-    id: "openmoji",
-    name: "OpenMoji",
-    license: "CC BY-SA 4.0",
-    licenseUrl: "https://openmoji.org",
-    author: "OpenMoji",
-    marketSize: 4544,
-  },
-  {
-    id: "twemoji",
-    name: "Twemoji",
-    license: "MIT",
-    licenseUrl: "https://twemoji.twitter.com",
-    author: "Twitter",
-    marketSize: 3988,
-  },
-  {
-    id: "streamline",
-    name: "Streamline",
-    license: "CC BY 4.0",
-    licenseUrl: "https://streamlinehq.com",
-    author: "Streamline",
-    marketSize: 3000,
-  },
-  {
-    id: "iconamoon",
-    name: "IconaMoon",
-    license: "MIT",
-    licenseUrl: "https://iconamoon.com",
-    author: "IconaMoon",
-    marketSize: 1781,
-  },
-  {
-    id: "la",
-    name: "Line Awesome",
-    license: "MIT",
-    licenseUrl: "https://icons8.com/line-awesome",
-    author: "Icons8",
-    marketSize: 1544,
-  },
-  {
-    id: "letsicons",
-    name: "Lets Icons",
-    license: "MIT",
-    licenseUrl: "https://lets-icons.com",
-    author: "Lets Icons",
-    marketSize: 1528,
-  },
-  {
-    id: "f7",
-    name: "Framework7",
-    license: "MIT",
-    licenseUrl: "https://framework7.io/icons/",
-    author: "Framework7",
-    marketSize: 1253,
-  },
-  {
-    id: "uil",
-    name: "Unicons",
-    license: "Apache 2.0",
-    licenseUrl: "https://iconscout.com/unicons",
-    author: "IconScout",
-    marketSize: 1215,
-  },
-  {
-    id: "clarity",
-    name: "Clarity",
-    license: "MIT",
-    licenseUrl: "https://clarity.design",
-    author: "VMware",
-    marketSize: 1103,
-  },
-  {
-    id: "mage",
-    name: "Mage Icons",
-    license: "MIT",
-    licenseUrl: "https://mageicons.com",
-    author: "Mage",
-    marketSize: 1042,
-  },
-  {
-    id: "logos",
-    name: "SVG Logos",
-    license: "Mixed",
-    licenseUrl: "https://github.com/gilbarbara/logos",
-    author: "Gil Barbara",
-    marketSize: 1861,
-  },
-  {
-    id: "vscode",
-    name: "VSCode Icons",
-    license: "MIT",
-    licenseUrl: "https://github.com/microsoft/vscode-icons",
-    author: "Microsoft",
-    marketSize: 1569,
-  },
-  {
-    id: "devicon",
-    name: "Devicon",
-    license: "MIT",
-    licenseUrl: "https://devicon.dev",
-    author: "Devicon",
-    marketSize: 1036,
-  },
-  {
-    id: "emojione",
-    name: "Emoji One",
-    license: "MIT",
-    licenseUrl: "https://emojione.com",
-    author: "JoyPixels",
-    marketSize: 1834,
-  },
-  {
-    id: "octicon",
-    name: "Octicons",
-    license: "MIT",
-    licenseUrl: "https://github.com/primer/octicons",
-    author: "GitHub",
-    marketSize: 743,
-  },
-  {
-    id: "flowbite",
-    name: "Flowbite Icons",
-    license: "MIT",
-    licenseUrl: "https://flowbite.com/icons/",
-    author: "Flowbite",
-    marketSize: 751,
-  },
-  {
-    id: "gravityui",
-    name: "Gravity UI",
-    license: "MIT",
-    licenseUrl: "https://gravity-ui.com",
-    author: "Gravity UI",
-    marketSize: 799,
-  },
-  {
-    id: "vaadin",
-    name: "Vaadin Icons",
-    license: "Apache 2.0",
-    licenseUrl: "https://vaadin.com",
-    author: "Vaadin",
-    marketSize: 636,
-  },
-  {
-    id: "teenyicons",
-    name: "Teenyicons",
-    license: "MIT",
-    licenseUrl: "https://teenyicons.com",
-    author: "Teenyicons",
-    marketSize: 1200,
-  },
-  {
-    id: "stash",
-    name: "Stash Icons",
-    license: "MIT",
-    licenseUrl: "https://stashicons.com",
-    author: "Stash",
-    marketSize: 982,
-  },
-  {
-    id: "jam",
-    name: "Jam Icons",
-    license: "MIT",
-    licenseUrl: "https://jam-icons.com",
-    author: "Jam",
-    marketSize: 940,
-  },
-  {
-    id: "qlementine",
-    name: "Qlementine Icons",
-    license: "MIT",
-    licenseUrl: "https://qlementine.design",
-    author: "Qlementine",
-    marketSize: 880,
-  },
-  {
-    id: "majesticons",
-    name: "Majesticons",
-    license: "MIT",
-    licenseUrl: "https://majesticons.com",
-    author: "Majesticons",
-    marketSize: 760,
-  },
-  {
-    id: "gg",
-    name: "css.gg",
-    license: "MIT",
-    licenseUrl: "https://css.gg",
-    author: "css.gg",
-    marketSize: 704,
-  },
-  {
-    id: "fileicons",
-    name: "File Icons",
-    license: "MIT",
-    licenseUrl: "https://github.com/file-icons/atom",
-    author: "File Icons",
-    marketSize: 930,
-  },
-  {
-    id: "codicon",
-    name: "Codicons",
-    license: "MIT",
-    licenseUrl: "https://microsoft.github.io/vscode-codicons/",
-    author: "Microsoft",
-    marketSize: 644,
-  },
-  {
-    id: "circleflags",
-    name: "Circle Flags",
-    license: "MIT",
-    licenseUrl: "https://github.com/HatScripts/circle-flags",
-    author: "HatScripts",
-    marketSize: 634,
-  },
-  {
-    id: "pixelart",
-    name: "Pixelarticons",
-    license: "MIT",
-    licenseUrl: "https://pixelarticons.com",
-    author: "Pixelarticons",
-    marketSize: 877,
-  },
-  {
-    id: "lineicons",
-    name: "Lineicons",
-    license: "MIT",
-    licenseUrl: "https://lineicons.com",
-    author: "Lineicons",
-    marketSize: 606,
-  },
-  {
-    id: "icomoon",
-    name: "IcoMoon Free",
-    license: "GPL / CC BY",
-    licenseUrl: "https://icomoon.io",
-    author: "IcoMoon",
-    marketSize: 491,
-  },
-  {
-    id: "eva",
-    name: "Eva Icons",
-    license: "MIT",
-    licenseUrl: "https://akveo.github.io/eva-icons/",
-    author: "Akveo",
-    marketSize: 490,
-  },
-  {
-    id: "coreui",
-    name: "CoreUI Free",
-    license: "CC BY 4.0",
-    licenseUrl: "https://coreui.io/icons/",
-    author: "CoreUI",
-    marketSize: 554,
-  },
-  {
-    id: "systemui",
-    name: "System UIcons",
-    license: "Unlicense",
-    licenseUrl: "https://systemuicons.com",
-    author: "Corey Ginnivan",
-    marketSize: 430,
-  },
-  {
-    id: "fontisto",
-    name: "Fontisto",
-    license: "MIT",
-    licenseUrl: "https://fontisto.com",
-    author: "Kenan Gündoğan",
-    marketSize: 615,
-  },
-  {
-    id: "proicons",
-    name: "ProIcons",
-    license: "MIT",
-    licenseUrl: "https://proicons.com",
-    author: "ProIcons",
-    marketSize: 544,
-  },
-  {
-    id: "basil",
-    name: "Basil",
-    license: "MIT",
-    licenseUrl: "https://craftwork.design",
-    author: "Craftwork",
-    marketSize: 493,
-  },
-  {
-    id: "akar",
-    name: "Akar Icons",
-    license: "MIT",
-    licenseUrl: "https://akaricons.com",
-    author: "Arturo Wibawa",
-    marketSize: 454,
-  },
-  {
-    id: "coolicons",
-    name: "coolicons",
-    license: "CC BY 4.0",
-    licenseUrl: "https://coolicons.cool",
-    author: "Kryston Schwarze",
-    marketSize: 442,
-  },
-  {
-    id: "pixelicon",
-    name: "Pixel Icon",
-    license: "MIT",
-    licenseUrl: "https://pixelarticons.com",
-    author: "Pixel",
-    marketSize: 578,
-  },
-  {
-    id: "marketeq",
-    name: "Marketeq",
-    license: "MIT",
-    licenseUrl: "https://marketeq.com",
-    author: "Marketeq",
-    marketSize: 590,
-  },
-  {
-    id: "meteor",
-    name: "Meteor Icons",
-    license: "MIT",
-    licenseUrl: "https://meteoricons.com",
-    author: "Meteor",
-    marketSize: 400,
-  },
-  {
-    id: "pepicons",
-    name: "Pepicons",
-    license: "MIT",
-    licenseUrl: "https://pepicons.com",
-    author: "CyCraft",
-    marketSize: 430,
-  },
-  {
-    id: "crypto",
-    name: "Crypto Icons",
-    license: "CC0",
-    licenseUrl: "https://cryptocurrencyicons.com",
-    author: "Crypto",
-    marketSize: 483,
-  },
-  {
-    id: "flagicons",
-    name: "Flag Icons",
-    license: "MIT",
-    licenseUrl: "https://flagicons.lipis.dev",
-    author: "Lipis",
-    marketSize: 542,
-  },
-  {
-    id: "skillicons",
-    name: "Skill Icons",
-    license: "MIT",
-    licenseUrl: "https://skillicons.dev",
-    author: "Tandpfun",
-    marketSize: 400,
-  },
-  {
-    id: "oi",
-    name: "Open Iconic",
-    license: "MIT",
-    licenseUrl: "https://useiconic.com/open/",
-    author: "Iconic",
-    marketSize: 223,
-  },
-  {
-    id: "gridicons",
-    name: "Gridicons",
-    license: "GPL v2",
-    licenseUrl: "https://github.com/Automattic/gridicons",
-    author: "Automattic",
-    marketSize: 207,
-  },
-  {
-    id: "simpleline",
-    name: "Simple Line",
-    license: "MIT",
-    licenseUrl: "https://simplelineicons.github.io/",
-    author: "Sabbir",
-    marketSize: 189,
-  },
-  {
-    id: "rivet",
-    name: "Rivet Icons",
-    license: "MIT",
-    licenseUrl: "https://rivet.so",
-    author: "Rivet",
-    marketSize: 210,
-  },
-  {
-    id: "eos",
-    name: "EOS Icons",
-    license: "MIT",
-    licenseUrl: "https://eos-icons.com",
-    author: "SUSE",
-    marketSize: 253,
-  },
-  {
-    id: "uiw",
-    name: "UIW Icons",
-    license: "MIT",
-    licenseUrl: "https://uiwjs.github.io/icons/",
-    author: "uiwjs",
-    marketSize: 214,
-  },
-  {
-    id: "uit",
-    name: "Unicons Thin",
-    license: "Apache 2.0",
-    licenseUrl: "https://iconscout.com/unicons",
-    author: "Iconscout",
-    marketSize: 216,
-  },
-  {
-    id: "sidekick",
-    name: "Sidekick",
-    license: "MIT",
-    licenseUrl: "https://sidekick.com",
-    author: "Sidekick",
-    marketSize: 232,
-  },
-  {
-    id: "mono",
-    name: "Mono Icons",
-    license: "MIT",
-    licenseUrl: "https://icons.mono.company",
-    author: "Mono",
-    marketSize: 180,
-  },
-  {
-    id: "formkit",
-    name: "FormKit",
-    license: "MIT",
-    licenseUrl: "https://formkit.com",
-    author: "FormKit",
-    marketSize: 144,
-  },
-  {
-    id: "weui",
-    name: "WeUI",
-    license: "MIT",
-    licenseUrl: "https://weui.io",
-    author: "WeChat",
-    marketSize: 162,
-  },
-  {
-    id: "gcp",
-    name: "Google Cloud",
-    license: "Apache 2.0",
-    licenseUrl: "https://cloud.google.com/icons",
-    author: "Google",
-    marketSize: 214,
-  },
-  {
-    id: "wi",
-    name: "Weather Icons",
-    license: "SIL OFL 1.1",
-    licenseUrl: "https://erikflowers.github.io/weather-icons/",
-    author: "Erik Flowers",
-    marketSize: 219,
-  },
-  {
-    id: "covid",
-    name: "Covid Icons",
-    license: "MIT",
-    licenseUrl: "https://covid-icons.com",
-    author: "Covid",
-    marketSize: 142,
-  },
-  {
-    id: "medical",
-    name: "Medical Icons",
-    license: "MIT",
-    licenseUrl: "https://github.com/samuelngs/medical-icons",
-    author: "Samuel Ngs",
-    marketSize: 144,
-  },
-  {
-    id: "academicons",
-    name: "Academicons",
-    license: "SIL OFL 1.1",
-    licenseUrl: "https://jpswalsh.github.io/academicons/",
-    author: "James Walsh",
-    marketSize: 158,
-  },
-  {
-    id: "maki",
-    name: "Maki",
-    license: "CC0",
-    licenseUrl: "https://mapbox.com/maki/",
-    author: "Mapbox",
-    marketSize: 215,
-  },
-  {
-    id: "mapicons",
-    name: "Map Icons",
-    license: "SIL OFL 1.1",
-    licenseUrl: "https://map-icons.com",
-    author: "Map Icons",
-    marketSize: 167,
-  },
-  {
-    id: "uis",
-    name: "Unicons Solid",
-    license: "Apache 2.0",
-    licenseUrl: "https://iconscout.com/unicons",
-    author: "Iconscout",
-    marketSize: 190,
-  },
-  {
-    id: "flagpack",
-    name: "Flagpack",
-    license: "MIT",
-    licenseUrl: "https://flagpack.xyz",
-    author: "Flagpack",
-    marketSize: 254,
-  },
-  {
-    id: "cif",
-    name: "CoreUI Flags",
-    license: "CC BY 4.0",
-    licenseUrl: "https://coreui.io/icons/",
-    author: "CoreUI",
-    marketSize: 199,
-  },
-  {
-    id: "solar",
-    name: "Solar Icons",
-    license: "CC BY 4.0",
-    licenseUrl: "https://solariconset.com",
-    author: "480 Design",
-    marketSize: 7401,
-  },
-  {
-    id: "thesvg-color",
-    name: "theSVG Color",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "theSVG",
-    marketSize: 4842,
-  },
-  {
-    id: "fluent-emoji-flat",
-    name: "Fluent Emoji Flat",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Microsoft",
-    marketSize: 3145,
-  },
-  {
-    id: "streamline-color",
-    name: "Streamline Color",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 2000,
-  },
-  {
-    id: "streamline-logos",
-    name: "Streamline Logos",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1362,
-  },
-  {
-    id: "cbi",
-    name: "Custom Brand Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "CBI",
-    marketSize: 1715,
-  },
-  {
-    id: "streamline-ultimate",
-    name: "Streamline Ultimate",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1999,
-  },
-  {
-    id: "fluent-mdl2",
-    name: "Fluent UI MDL2",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Microsoft",
-    marketSize: 1735,
-  },
-  {
-    id: "pinhead",
-    name: "Pinhead Map Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Pinhead",
-    marketSize: 2522,
-  },
-  {
-    id: "emojione-v1",
-    name: "Emoji One (v1)",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Emoji One",
-    marketSize: 1262,
-  },
-  {
-    id: "streamline-plump-color",
-    name: "Plump Color Icons",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1000,
-  },
-  {
-    id: "streamline-freehand-color",
-    name: "Freehand Color Icons",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1000,
-  },
-  {
-    id: "streamline-flex-color",
-    name: "Flex Color Icons",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1000,
-  },
-  {
-    id: "streamline-sharp-color",
-    name: "Sharp Color Icons",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1000,
-  },
-  {
-    id: "streamline-ultimate-color",
-    name: "Ultimate Color Icons",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 998,
-  },
-  {
-    id: "fluent-emoji-hc",
-    name: "Fluent Emoji High Contrast",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Microsoft",
-    marketSize: 1595,
-  },
-  {
-    id: "streamline-sharp",
-    name: "Sharp Free Icons",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1500,
-  },
-  {
-    id: "streamline-flex",
-    name: "Flex Free Icons",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1500,
-  },
-  {
-    id: "streamline-plump",
-    name: "Plump Free Icons",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1499,
-  },
-  {
-    id: "famicons",
-    name: "Famicons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Famicons",
-    marketSize: 1342,
-  },
-  {
-    id: "pepicons-pencil",
-    name: "Pepicons Pencil",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "CyCraft",
-    marketSize: 1275,
-  },
-  {
-    id: "dinkie-icons",
-    name: "Dinkie Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Dinkie",
-    marketSize: 1198,
-  },
-  {
-    id: "streamline-freehand",
-    name: "Freehand Free Icons",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1000,
-  },
-  {
-    id: "garden",
-    name: "Garden SVG Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Garden",
-    marketSize: 932,
-  },
-  {
-    id: "circum",
-    name: "Circum Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Circum Icons",
-    marketSize: 288,
-  },
-  {
-    id: "zondicons",
-    name: "Zondicons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Steve Schoger",
-    marketSize: 297,
-  },
-  {
-    id: "entypo",
-    name: "Entypo+",
-    license: "CC BY-SA 4.0",
-    licenseUrl: "#",
-    author: "Daniel Bruce",
-    marketSize: 321,
-  },
-  {
-    id: "typicons",
-    name: "Typicons",
-    license: "CC BY-SA 3.0",
-    licenseUrl: "#",
-    author: "Stephen Hutchings",
-    marketSize: 336,
-  },
-  {
-    id: "ic",
-    name: "Google Material Icons",
-    license: "Apache 2.0",
-    licenseUrl: "#",
-    author: "Google",
-    marketSize: 1000,
-  },
-  {
-    id: "linemd",
-    name: "Material Line Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Iconify",
-    marketSize: 1000,
-  },
-  {
-    id: "lucidelab",
-    name: "Lucide Lab",
-    license: "ISC",
-    licenseUrl: "#",
-    author: "Lucide",
-    marketSize: 1000,
-  },
-  {
-    id: "prime",
-    name: "Prime Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "PrimeTek",
-    marketSize: 1000,
-  },
-  {
-    id: "bitcoin",
-    name: "Bitcoin Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Bitcoin",
-    marketSize: 1000,
-  },
-  {
-    id: "humble",
-    name: "Humbleicons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Humbleicons",
-    marketSize: 1000,
-  },
-  {
-    id: "wordpress",
-    name: "WordPress Icons",
-    license: "GPL",
-    licenseUrl: "#",
-    author: "WordPress",
-    marketSize: 1000,
-  },
-  {
-    id: "iptwotone",
-    name: "IconPark TwoTone",
-    license: "Apache 2.0",
-    licenseUrl: "#",
-    author: "ByteDance",
-    marketSize: 1000,
-  },
-  {
-    id: "guidance",
-    name: "Guidance",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Guidance",
-    marketSize: 1000,
-  },
-  {
-    id: "cuida",
-    name: "Cuida Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Cuida",
-    marketSize: 1000,
-  },
-  {
-    id: "duoicons",
-    name: "Duoicons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Duoicons",
-    marketSize: 1000,
-  },
-  {
-    id: "uim",
-    name: "Unicons Monochrome",
-    license: "Apache 2.0",
-    licenseUrl: "#",
-    author: "IconScout",
-    marketSize: 1000,
-  },
-  {
-    id: "fa7solid",
-    name: "Font Awesome 7 Solid",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Fonticons Inc.",
-    marketSize: 1000,
-  },
-  {
-    id: "fa7regular",
-    name: "Font Awesome 7 Regular",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Fonticons Inc.",
-    marketSize: 1000,
-  },
-  {
-    id: "fluentcolor",
-    name: "Fluent UI Color",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Microsoft",
-    marketSize: 1000,
-  },
-  {
-    id: "mit",
-    name: "Material Icon Theme",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Philipp Kief",
-    marketSize: 1000,
-  },
-  {
-    id: "pajamas",
-    name: "Gitlab SVGs",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Gitlab",
-    marketSize: 1000,
-  },
-  {
-    id: "ei",
-    name: "Evil Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Alexander Madyankin",
-    marketSize: 1000,
-  },
-  {
-    id: "codex",
-    name: "CodeX Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "CodeX",
-    marketSize: 1000,
-  },
-  {
-    id: "memory",
-    name: "Memory Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Memory",
-    marketSize: 1000,
-  },
-  {
-    id: "ix",
-    name: "Siemens Industrial",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Siemens",
-    marketSize: 1000,
-  },
-  {
-    id: "si",
-    name: "Sargam Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Sargam",
-    marketSize: 1000,
-  },
-  {
-    id: "vadivam",
-    name: "Vadivam",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Vadivam",
-    marketSize: 1000,
-  },
-  {
-    id: "scyber",
-    name: "Streamline Cyber",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1000,
-  },
-  {
-    id: "spixel",
-    name: "Streamline Pixel",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1000,
-  },
-  {
-    id: "sblock",
-    name: "Streamline Block",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1000,
-  },
-  {
-    id: "glyphspoly",
-    name: "Glyphs Poly",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Glyphs",
-    marketSize: 1000,
-  },
-  {
-    id: "ooui",
-    name: "OOUI",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Wikimedia",
-    marketSize: 1000,
-  },
-  {
-    id: "fe",
-    name: "Feather Icon",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Cole Bemis",
-    marketSize: 1000,
-  },
-  {
-    id: "deviconplain",
-    name: "Devicon Plain",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Devicon",
-    marketSize: 1000,
-  },
-  {
-    id: "fa7brands",
-    name: "Font Awesome 7 Brands",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Fonticons Inc.",
-    marketSize: 1000,
-  },
-  {
-    id: "flatcolor",
-    name: "Flat Color Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Icons8",
-    marketSize: 1000,
-  },
-  {
-    id: "icons8",
-    name: "Icons8 Windows 10",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Icons8",
-    marketSize: 1000,
-  },
-  {
-    id: "k8s",
-    name: "Kubernetes Icons",
-    license: "Apache 2.0",
-    licenseUrl: "#",
-    author: "CNCF",
-    marketSize: 1000,
-  },
-  {
-    id: "unjs",
-    name: "UnJS Logos",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "UnJS",
-    marketSize: 1000,
-  },
-  {
-    id: "brandico",
-    name: "Brandico",
-    license: "SIL OFL 1.1",
-    licenseUrl: "#",
-    author: "Fontello",
-    marketSize: 1000,
-  },
-  {
-    id: "geo",
-    name: "GeoGlyphs",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "GeoGlyphs",
-    marketSize: 1000,
-  },
-  {
-    id: "osmic",
-    name: "OSM Icons",
-    license: "CC0 1.0",
-    licenseUrl: "#",
-    author: "OSM",
-    marketSize: 1000,
-  },
-  {
-    id: "grommet",
-    name: "Grommet Icons",
-    license: "Apache 2.0",
-    licenseUrl: "#",
-    author: "Grommet",
-    marketSize: 1000,
-  },
-  {
-    id: "zmdi",
-    name: "Material Design Iconic Font",
-    license: "SIL OFL 1.1",
-    licenseUrl: "#",
-    author: "Zavoloklom",
-    marketSize: 1000,
-  },
-  {
-    id: "semojis",
-    name: "Streamline Emojis",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1000,
-  },
-  {
-    id: "iconparkbase",
-    name: "IconPark Core",
-    license: "Apache 2.0",
-    licenseUrl: "#",
-    author: "ByteDance",
-    marketSize: 1000,
-  },
-  {
-    id: "picon",
-    name: "Pico-icon",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Pico",
-    marketSize: 1000,
-  },
-  {
-    id: "roentgen",
-    name: "Röntgen (roentgen)",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Röntgen",
-    marketSize: 1000,
-  },
-  {
-    id: "temaki",
-    name: "Temaki",
-    license: "CC0 1.0",
-    licenseUrl: "#",
-    author: "Temaki",
-    marketSize: 1000,
-  },
-  {
-    id: "fad",
-    name: "FontAudio",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "FontAudio",
-    marketSize: 1000,
-  },
-  {
-    id: "ginetex",
-    name: "Ginetex Care Symbols",
-    license: "Copyright",
-    licenseUrl: "#",
-    author: "Ginetex",
-    marketSize: 1000,
-  },
-  {
-    id: "raphael",
-    name: "Raphael",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Raphael",
-    marketSize: 1000,
-  },
-  {
-    id: "et",
-    name: "Elegant",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Elegant Themes",
-    marketSize: 1000,
-  },
-  {
-    id: "el",
-    name: "Elusive Icons",
-    license: "SIL OFL 1.1",
-    licenseUrl: "#",
-    author: "Aristeides Stathopoulos",
-    marketSize: 1000,
-  },
-  {
-    id: "kameleon",
-    name: "Kameleon color",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1000,
-  },
-  {
-    id: "fluentemoji",
-    name: "Fluent Emoji",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Microsoft",
-    marketSize: 1000,
-  },
-  {
-    id: "nrk",
-    name: "NRK Core Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "NRK",
-    marketSize: 1000,
-  },
-  {
-    id: "stickies",
-    name: "Stickies color",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1000,
-  },
-  {
-    id: "cybercolor",
-    name: "Streamline Cyber color",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 1000,
-  },
-  {
-    id: "aticons",
-    name: "@icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "At-Icons",
-    marketSize: 1000,
-  },
-  {
-    id: "iwwa",
-    name: "Innowatio Font",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Innowatio",
-    marketSize: 1000,
-  },
-  {
-    id: "gala",
-    name: "Gala Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Gala",
-    marketSize: 1000,
-  },
-  {
-    id: "subway",
-    name: "Subway Icon Set",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Subway",
-    marketSize: 1000,
-  },
-  {
-    id: "whh",
-    name: "WebHostingHub Glyphs",
-    license: "SIL OFL 1.1",
-    licenseUrl: "#",
-    author: "WebHostingHub",
-    marketSize: 1000,
-  },
-  {
-    id: "ls",
-    name: "Ligature Symbols",
-    license: "SIL OFL 1.1",
-    licenseUrl: "#",
-    author: "Kazuyuki Motoyama",
-    marketSize: 1000,
-  },
-  {
-    id: "bpmn",
-    name: "BPMN",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "BPMN",
-    marketSize: 1000,
-  },
-  {
-    id: "fa-solid",
-    name: "Font Awesome 5 Solid",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Fonticons",
-    marketSize: 1001,
-  },
-  {
-    id: "fa-regular",
-    name: "Font Awesome 5 Regular",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Fonticons",
-    marketSize: 151,
-  },
-  {
-    id: "fa-brands",
-    name: "Font Awesome 5 Brands",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Fonticons",
-    marketSize: 457,
-  },
-  {
-    id: "fa",
-    name: "Font Awesome 4",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "Fonticons",
-    marketSize: 678,
-  },
-  {
-    id: "si-glyph",
-    name: "SmartIcons Glyph",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "SmartIcons",
-    marketSize: 799,
-  },
-  {
-    id: "flat-ui",
-    name: "Flat UI Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Flat UI",
-    marketSize: 100,
-  },
-  {
-    id: "vs",
-    name: "Vesper Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Vesper",
-    marketSize: 159,
-  },
-  {
-    id: "il",
-    name: "Icalicons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Icalicons",
-    marketSize: 84,
-  },
-  {
-    id: "websymbol",
-    name: "Web Symbols Liga",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Web Symbols",
-    marketSize: 85,
-  },
-  {
-    id: "fontelico",
-    name: "Fontelico",
-    license: "SIL OFL 1.1",
-    licenseUrl: "#",
-    author: "Fontelico",
-    marketSize: 34,
-  },
-  {
-    id: "pepicons-orig",
-    name: "Pepicons Original",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "CyCraft",
-    marketSize: 428,
-  },
-  {
-    id: "ix2",
-    name: "Siemens Industrial Experience",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Siemens",
-    marketSize: 1479,
-  },
-  {
-    id: "la",
-    name: "Line Awesome",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Icons8",
-    marketSize: 1500,
-  },
-  {
-    id: "cib",
-    name: "CoreUI Brands",
-    license: "CC BY 4.0",
-    licenseUrl: "#",
-    author: "CoreUI",
-    marketSize: 830,
-  },
-  {
-    id: "charm",
-    name: "Charm Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Jay Wick",
-    marketSize: 208,
-  },
-  {
-    id: "ep",
-    name: "Element Plus",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Element Plus",
-    marketSize: 288,
-  },
-  {
-    id: "nimbus",
-    name: "Nimbus Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Nimbus",
-    marketSize: 121,
-  },
-  {
-    id: "quill",
-    name: "Quill Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Quill",
-    marketSize: 288,
-  },
-  {
-    id: "bytesize",
-    name: "Bytesize",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Bytesize",
-    marketSize: 84,
-  },
-  {
-    id: "nonicons",
-    name: "Nonicons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Nonicons",
-    marketSize: 106,
-  },
-  {
-    id: "oui",
-    name: "OpenSearch UI",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "OpenSearch",
-    marketSize: 686,
-  },
-  {
-    id: "wpf",
-    name: "WPF UI Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "WPF",
-    marketSize: 300,
-  },
-  {
-    id: "primeicons",
-    name: "PrimeIcons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "PrimeFaces",
-    marketSize: 200,
-  },
-  {
-    id: "topcoat",
-    name: "Topcoat",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Topcoat",
-    marketSize: 100,
-  },
-  {
-    id: "gis",
-    name: "GIS Map Icons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "GIS",
-    marketSize: 200,
-  },
-  {
-    id: "dashicons",
-    name: "Dashicons",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "WordPress",
-    marketSize: 342,
-  },
-  {
-    id: "entyposoc",
-    name: "Entypo Social",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Daniel Bruce",
-    marketSize: 76,
-  },
-  {
-    id: "foundation",
-    name: "Foundation",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "ZURB",
-    marketSize: 283,
-  },
-  {
-    id: "fabrand",
-    name: "FA6 Brands",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Fonticons",
-    marketSize: 495,
-  },
-  {
-    id: "cryptoclr",
-    name: "Crypto Color",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Crypto",
-    marketSize: 483,
-  },
-  {
-    id: "bxlogos",
-    name: "Boxicons Logos",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Boxicons",
-    marketSize: 295,
-  },
-  {
-    id: "noto",
-    name: "Noto Emoji",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Google",
-    marketSize: 3710,
-  },
-  {
-    id: "fxemoji",
-    name: "FxEmoji",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Mozilla",
-    marketSize: 1034,
-  },
-  {
-    id: "notov1",
-    name: "Noto v1",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Google",
-    marketSize: 2162,
-  },
-  {
-    id: "catppuccin",
-    name: "Catppuccin",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Catppuccin",
-    marketSize: 656,
-  },
-  {
-    id: "spinners",
-    name: "SVG Spinners",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Spinners",
-    marketSize: 46,
-  },
-  {
-    id: "emojimono",
-    name: "Emoji One Mono",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "EmojiOne",
-    marketSize: 1403,
-  },
-  {
-    id: "scyber",
-    name: "Streamline Cyber",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 500,
-  },
-  {
-    id: "roentgen",
-    name: "Röntgen",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Roentgen",
-    marketSize: 574,
-  },
-  {
-    id: "cybercolor",
-    name: "Streamline Cyber color",
-    license: "MIT",
-    licenseUrl: "#",
-    author: "Streamline",
-    marketSize: 500,
-  },
-];
+// Sources are populated exclusively from the backend stats API.
+let SOURCES = window.SOURCES || [];
 
 const STYLES = ["outline", "solid", "rounded", "duotone", "thin", "bold"];
-
 
 const SOURCE_STYLE_BIAS = {
   lucide: ["outline"],
   heroicons: ["outline", "solid"],
   phosphor: ["thin", "outline", "bold", "duotone", "solid"],
   tabler: ["outline", "solid"],
-  material: ["outline", "solid", "rounded"],
+  "material-symbols": ["outline", "solid", "rounded"],
   feather: ["outline"],
   bootstrap: ["outline", "solid"],
   radix: ["outline", "solid"],
@@ -2256,37 +438,56 @@ for (const [categoryName, keywords] of Object.entries(CATEGORY_MAP)) {
   );
 }
 
-const ICONS =
-  typeof REAL_ICONS !== "undefined"
-    ? REAL_ICONS.map((ic, i) => {
-        const src = SOURCES.find((s) => s.id === ic.source) || SOURCES[0];
+// Function to create/recreate ICONS array from REAL_ICONS
+function createIconsArray() {
+  if (
+    typeof REAL_ICONS === "undefined" ||
+    !REAL_ICONS ||
+    REAL_ICONS.length === 0
+  ) {
+    return [];
+  }
 
-        let cat = "Others";
-        const searchStr =
-          `${ic.name} ${(ic.tags || []).join(" ")}`.toLowerCase();
-        for (const [categoryName, regex] of Object.entries(
-          CATEGORY_REGEX_MAP,
-        )) {
-          if (regex.test(searchStr)) {
-            cat = categoryName;
-            break;
-          }
-        }
+  return REAL_ICONS.map((ic, i) => {
+    const src = SOURCES.find((s) => s.id === ic.source) || SOURCES[0];
 
-        return {
-          ...ic,
-          category: cat,
-          id: ic.id || "ic_" + i,
-          sourceIconId: `${src.id}:${ic.name}`,
-          license: src.license,
-          licenseUrl: src.licenseUrl,
-          author: src.author,
-          popularity: Math.round(1000 - i + Math.sin(i) * 200),
-          createdAt: Date.now() - i * 1e5,
-          updatedAt: Date.now(),
-        };
-      })
-    : [];
+    let cat = "Others";
+    const searchStr = `${ic.name} ${(ic.tags || []).join(" ")}`.toLowerCase();
+    for (const [categoryName, regex] of Object.entries(CATEGORY_REGEX_MAP)) {
+      if (regex.test(searchStr)) {
+        cat = categoryName;
+        break;
+      }
+    }
+
+    return {
+      ...ic,
+      category: cat,
+      id: ic.id || `${src.id}_${ic.style || "default"}_${ic.name || i}`,
+      sourceIconId: `${src.id}:${ic.style || "default"}:${ic.name}`,
+      license: src.license,
+      licenseUrl: src.licenseUrl,
+      author: src.author,
+      popularity: Math.round(1000 - i + Math.sin(i) * 200),
+      createdAt: Date.now() - i * 1e5,
+      updatedAt: Date.now(),
+    };
+  });
+}
+
+// Initialize ICONS array (will be empty initially)
+let ICONS = createIconsArray();
+
+// Expose function to recreate ICONS when REAL_ICONS changes
+window.recreateIcons = function () {
+  if (window.SOURCES && window.SOURCES.length > 0) {
+    SOURCES = window.SOURCES;
+  }
+  ICONS = createIconsArray();
+  console.log("[Icons] Recreated ICONS array with", ICONS.length, "icons");
+  if (typeof renderFilters === "function") renderFilters();
+  if (typeof buildCategoryList === "function") buildCategoryList();
+};
 const state = {
   query: localStorage.getItem("mi.query") || "",
   sourceFilter: new Set(
@@ -2302,7 +503,7 @@ const state = {
   categoryFilter: new Set(
     JSON.parse(localStorage.getItem("mi.categoryFilter") || "[]"),
   ),
-  sort: localStorage.getItem("mi.sort") || "relevance",
+  sort: localStorage.getItem("mi.sort") || "all",
   density: localStorage.getItem("mi.density") || "detailed",
   page: 1,
   perPage: 48,
@@ -2340,6 +541,11 @@ const state = {
   activeFolderId: null,
 };
 
+// Helper to get total icon count from stats API or fallback to ICONS.length
+const getTotalIconCount = () => {
+  return (window.ICON_STATS && window.ICON_STATS.total) || ICONS.length || 0;
+};
+
 if (!state.folders) {
   state.folders = [];
   const oldFavs = JSON.parse(localStorage.getItem("mi.favorites") || "[]");
@@ -2364,7 +570,7 @@ function toast(msg) {
     const labels = {
       "Copied SVG": "SVG copied",
       "Copied PNG image": "PNG copied",
-      "SVG copied — paste in Figma with ⌘V": "SVG copied",
+      "SVG copied â€” paste in Figma with âŒ˜V": "SVG copied",
       "Share link copied": "Link copied",
     };
     window.StackToast?.show(labels[msg] || msg);
@@ -2378,8 +584,19 @@ function toast(msg) {
 }
 
 function saveLS() {
-  localStorage.setItem("mi.folders", JSON.stringify(state.folders));
-  localStorage.setItem("mi.collections", JSON.stringify(state.collections));
+  // Strip non-serializable fields (dirHandle, _itemCache with SVG data) before saving.
+  // _itemCache alone can easily exceed the 5MB localStorage limit.
+  const foldersToSave = state.folders.map((f) => ({
+    id: f.id,
+    name: f.name,
+    iconIds: f.iconIds,
+  }));
+  try {
+    localStorage.setItem("mi.folders", JSON.stringify(foldersToSave));
+    localStorage.setItem("mi.collections", JSON.stringify(state.collections));
+  } catch (e) {
+    console.error("[saveLS] localStorage quota exceeded or write failed:", e);
+  }
 }
 
 function getIconFolders(iconId) {
@@ -2421,12 +638,12 @@ function saveFiltersLS() {
   localStorage.setItem("mi.density", state.density);
 }
 
-// Map a style keyword → render options so a filtered "solid" or "duotone"
+// Map a style keyword â†’ render options so a filtered "solid" or "duotone"
 // actually looks solid or duotone, not just labeled that way.
 function styleOpts(style) {
   switch (style) {
     // Solid keeps a stroke so line-based icons (menu, minus, activity, etc.)
-    // remain visible — the fill covers closed shapes for a solid look.
+    // remain visible â€” the fill covers closed shapes for a solid look.
     case "solid":
       return { cap: "round", join: "round" };
     case "duotone":
@@ -2442,9 +659,25 @@ function styleOpts(style) {
   }
 }
 
-// Render an icon with its native style applied — used by the grid, similar
+// Render an icon with its native style applied â€” used by the grid, similar
 // row, compare modal, etc. The editor overrides via editorRenderOpts.
 function renderStyled(icon, extra = {}) {
+  // If no SVG content, use CDN URL (API integration)
+  if (!icon.svg && icon.source && icon.name) {
+    const svgUrl = window.iconsAPI
+      ? window.iconsAPI.getIconSVGUrl(icon.source, icon.name)
+      : "";
+    const size = extra.size || state.globalSize || 24;
+    const color = state.globalColor || "currentColor";
+
+    return `<img src="${svgUrl}"
+                 alt="${icon.name}"
+                 width="${size}"
+                 height="${size}"
+                 style="display:block;width:${size}px;height:${size}px;object-fit:contain;${color !== "currentColor" ? `filter: brightness(0) saturate(100%) invert(${color === "#ffffff" ? "100%" : "0%"})` : ""}"
+                 onerror="this.style.display='none';console.error('Failed to load:', '${svgUrl}')" />`;
+  }
+
   const gc =
     state.globalColor !== "currentColor" ? state.globalColor : undefined;
   return renderSvg(icon.svg, {
@@ -2460,8 +693,14 @@ function renderStyled(icon, extra = {}) {
 }
 
 function renderSvg(paths, opts = {}) {
+  // We skip aggressive replacement for complex SVGs (masks/defs) to preserve their shapes and colors.
+  const hasComplexDefs = paths.includes("<mask") || paths.includes("<defs");
+
+  let cleanPaths = paths;
   // Strip hardcoded stroke-width from inner paths so the wrapper stroke takes priority
-  let cleanPaths = paths.replace(/stroke-width="[^"]*"/g, "");
+  if (opts.iconStyle !== "color" && !hasComplexDefs) {
+    cleanPaths = paths.replace(/stroke-width="[^"]*"/g, "");
+  }
 
   const size = opts.size ?? 24;
   const viewBox = opts.viewBox || "0 0 24 24";
@@ -2476,13 +715,23 @@ function renderSvg(paths, opts = {}) {
 
   // Prevent CSS stroke from bloating purely fill-based icons (like Gravity UI, FA, etc.).
   let isFillBased = !paths.includes("stroke");
-  if (opts.iconStyle !== "solid" && opts.iconStyle !== "brands" && opts.iconStyle !== "color") {
-    const fillBasedSources = ["fontawesome", "material", "zondicons", "entypo", "typicons"];
+  if (
+    opts.iconStyle !== "solid" &&
+    opts.iconStyle !== "brands" &&
+    opts.iconStyle !== "color"
+  ) {
+    const fillBasedSources = [
+      "fontawesome",
+      "material-symbols",
+      "zondicons",
+      "entypo",
+      "typicons",
+    ];
     if (!fillBasedSources.includes(opts.sourceId)) {
       isFillBased = false;
     }
   }
-  
+
   if (stroke > 0 && isFillBased) {
     stroke = 0;
   }
@@ -2500,7 +749,7 @@ function renderSvg(paths, opts = {}) {
   const shapeRadius = opts.shapeRadius ?? 4;
   const shapeColor = opts.shapeColor ?? "#EEEAFB";
 
-  // Background shape fills the viewBox — explicit stroke="none" so it doesn't
+  // Background shape fills the viewBox â€” explicit stroke="none" so it doesn't
   // inherit the icon's stroke.
   let bg = "";
   if (shape === "circle")
@@ -2544,9 +793,9 @@ function renderSvg(paths, opts = {}) {
       ? `stroke="none"`
       : `stroke="${color}" stroke-width="${adjustedStroke}" stroke-linecap="${cap}" stroke-linejoin="${join}"`;
 
-  // Strip hardcoded presentation attributes from inner paths so we can cleanly override them.
   // We skip this for 'color' icons (like emojis) so they retain their native multi-color styles!
-  if (opts.iconStyle !== "color") {
+  // We also skip it for complex SVGs (masks/defs) because naive regex replacement destroys mask shapes.
+  if (opts.iconStyle !== "color" && !hasComplexDefs) {
     cleanPaths = cleanPaths
       .replace(/stroke-width="[^"]*"/g, "")
       .replace(/stroke-linecap="[^"]*"/g, "")
@@ -2697,6 +946,24 @@ function filterIcons() {
   return list;
 }
 
+function sortGridItems(items) {
+  const list = [...items];
+  if (state.sort === "popular") {
+    list.sort((a, b) => b.popularity - a.popularity);
+  } else if (state.sort === "trending") {
+    list.sort(
+      (a, b) =>
+        b.popularity * Math.sin(b.id.length) -
+        a.popularity * Math.sin(a.id.length),
+    );
+  } else if (state.sort === "name-asc") {
+    list.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (state.sort === "name-desc") {
+    list.sort((a, b) => b.name.localeCompare(a.name));
+  }
+  return list;
+}
+
 // --------------------------------------------------------------------
 // Rendering
 // --------------------------------------------------------------------
@@ -2720,43 +987,118 @@ function iconCard(icon) {
   `;
 }
 
-const ITEMS_PER_PAGE = 60;
+const ITEMS_PER_PAGE = 64;
+let currentRenderId = 0;
+// Tracks only the icons currently on screen; guarded against race conditions (see renderGrid).
+let renderedIconsMap = new Map();
 
-function renderGrid() {
+async function renderGrid() {
+  const renderId = ++currentRenderId;
   saveFiltersLS();
+
+  // Use API loader if available
+  if (typeof window.populateIconsFromAPI === "function") {
+    const grid = $("#icon-grid");
+
+    // Show skeleton for results count - keep existing mi-skeleton class
+    const resultsCountEl = $("#results-count");
+    if (resultsCountEl) {
+      // mi-skeleton class is already in HTML, just ensure it's there
+      resultsCountEl.classList.add("mi-skeleton");
+    }
+
+    // Show skeleton loader - use mi-card styling with skeleton animation
+    grid.className = `mi-grid density-${state.density}`;
+    const skeletonCards = Array.from(
+      { length: ITEMS_PER_PAGE },
+      () =>
+        `<div class="mi-card" style="min-height: 120px; animation: skeleton-pulse 1.5s ease-in-out infinite; pointer-events: none;"></div>`,
+    ).join("");
+    grid.innerHTML = skeletonCards;
+
+    try {
+      // Track search event in Google Analytics before API call
+      if (typeof gtag !== 'undefined' && state.query) {
+        gtag('event', 'search', {
+          search_term: state.query,
+          page_location: window.location.pathname,
+          page_title: 'Icons Search'
+        });
+      }
+
+      const total = await window.populateIconsFromAPI();
+      if (total === -1) return; // aborted
+      if (renderId !== currentRenderId) return;
+
+      // The API already filtered by query, category, style, etc.
+      // We can just use the returned ICONS directly.
+      const list = sortGridItems(ICONS);
+      const actualTotal = list.length;
+
+      renderedIconsMap = new Map(list.map((ic) => [ic.id, ic]));
+      renderGridContent(list, actualTotal, total);
+    } catch (error) {
+      console.error("[renderGrid] Error loading from API:", error);
+      grid.innerHTML = `<div class="mi-empty"><h3>Failed to load icons</h3><p>${error.message}</p></div>`;
+    }
+    return;
+  }
+
+  // Fallback to client-side filtering if API not available
   const list = filterIcons();
   const total = list.length;
+  renderGridContent(list, total, total);
+}
+
+function renderGridContent(list, displayTotal, apiTotal) {
   const grid = $("#icon-grid");
   grid.className = `mi-grid density-${state.density}`;
 
-  if (!total) {
-    grid.innerHTML = `<div class="mi-empty"><h3>No icons match your filters</h3><p>Try clearing filters or a different search.</p></div>`;
-    $("#pagination-wrapper").style.display = "none";
+  if (!displayTotal) {
+    if (state.showSaved) {
+      grid.innerHTML = `<div class="mi-empty"><h3>No icons are saved</h3><p>Create a collection to see the icons.</p></div>`;
+    } else {
+      grid.innerHTML = `<div class="mi-empty"><h3>No icons match your filters</h3><p>Try clearing filters or a different search.</p></div>`;
+    }
+    const pw = $("#pagination-wrapper");
+    if (pw) pw.style.display = "none";
   } else {
-    // Pagination slicing
-    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+    // Pagination - for API mode, list is already paginated
+    const totalPages = Math.ceil((apiTotal || displayTotal) / ITEMS_PER_PAGE);
     if (state.page > totalPages) state.page = totalPages;
     if (state.page < 1) state.page = 1;
 
-    const startIdx = (state.page - 1) * ITEMS_PER_PAGE;
-    const paginatedList = list.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+    // If using API, list is already the right page, otherwise slice it
+    const paginatedList =
+      typeof window.populateIconsFromAPI === "function"
+        ? list
+        : list.slice(
+            (state.page - 1) * ITEMS_PER_PAGE,
+            state.page * ITEMS_PER_PAGE,
+          );
 
     grid.innerHTML = paginatedList.map(iconCard).join("");
-    renderPagination(total, totalPages);
+    renderPagination(apiTotal || displayTotal, totalPages);
   }
 
   const resultsCountEl = $("#results-count");
   if (resultsCountEl) {
-    resultsCountEl.textContent = total.toLocaleString();
     resultsCountEl.classList.remove("mi-skeleton");
+    resultsCountEl.style.opacity = "";
+    resultsCountEl.style.animation = "";
+    resultsCountEl.textContent = (apiTotal || displayTotal).toLocaleString();
   }
   $("#results-query").textContent = state.query ? `for "${state.query}"` : "";
+
   // Only show the stroke adjustment slider if there is at least one 'true stroke' icon in the current grid list
   const strokeSection = $("#rp-stroke-section");
   const strokeDivider = $("#rp-stroke-divider");
   if (strokeSection) {
     const showStroke = list.some(
       (ic) =>
+        ic &&
+        ic.style &&
+        ic.svg &&
         (ic.style === "outline" || ic.style === "thin") &&
         ic.svg.includes("stroke="),
     );
@@ -2778,6 +1120,16 @@ function renderPagination(total, totalPages) {
 }
 
 function renderFilters() {
+  const getSourceIcon = (label) => {
+    const normalizedLabel = label.toLowerCase();
+    if (normalizedLabel.includes("hero")) return "Heroicons.svg";
+    if (normalizedLabel.includes("lucide")) return "Lucide.svg";
+    if (normalizedLabel.includes("simple")) return "icons-brand.svg";
+    if (normalizedLabel.includes("phosphor")) return "Phosphor.svg";
+    if (normalizedLabel.includes("tabler")) return "Tabler Icons.svg";
+    return null;
+  };
+
   // Sources (Checkbox style)
   const buildSourceList = (containerId, items, setKey) => {
     const set = state[setKey];
@@ -2786,16 +1138,7 @@ function renderFilters() {
     el.innerHTML = items
       .map((it) => {
         const active = set.has(it.value);
-        // Determine icon based on label name (fallback to a generic icon if not found)
-        let icon = "icons-basic.svg";
-        if (it.label.toLowerCase().includes("hero")) icon = "Heroicons.svg";
-        else if (it.label.toLowerCase().includes("lucide")) icon = "Lucide.svg";
-        else if (it.label.toLowerCase().includes("simple"))
-          icon = "icons-brand.svg";
-        else if (it.label.toLowerCase().includes("phosphor"))
-          icon = "Phosphor.svg";
-        else if (it.label.toLowerCase().includes("tabler"))
-          icon = "Tabler Icons.svg";
+        const icon = it.icon || "icons-basic.svg";
 
         return `
       <div class="mi-rp-item ${active ? "is-active" : ""}" data-val="${it.value}" style="cursor:pointer">
@@ -2825,6 +1168,21 @@ function renderFilters() {
         const v = item.dataset.val;
         if (set.has(v)) set.delete(v);
         else set.add(v);
+        if (setKey === "sourceFilter" && state.styleFilter.size > 0) {
+          const supportedStyles = new Set(
+            [...state.sourceFilter]
+              .flatMap((sourceId) => {
+                const source = SOURCES.find((entry) => entry.id === sourceId);
+                return source?.styles || SOURCE_STYLE_BIAS[sourceId] || [];
+              })
+              .map((style) => style.toLowerCase()),
+          );
+          if (supportedStyles.size > 0) {
+            state.styleFilter.forEach((style) => {
+              if (!supportedStyles.has(style)) state.styleFilter.delete(style);
+            });
+          }
+        }
         state.page = 1;
         renderGrid();
         renderFilters();
@@ -2937,8 +1295,18 @@ function renderFilters() {
     }
   };
 
-  const countBy = (key) =>
-    ICONS.reduce((m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m), {});
+  const countBy = (key) => {
+    // Use stats API data instead of reducing over ICONS array
+    if (window.ICON_STATS && window.getFilterCounts) {
+      const counts = window.getFilterCounts(key);
+      return counts;
+    }
+    // Fallback to old method if stats not loaded
+    return ICONS.reduce(
+      (m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m),
+      {},
+    );
+  };
   const sc = countBy("source"),
     st = countBy("style"),
     lc = countBy("license"),
@@ -2950,14 +1318,15 @@ function renderFilters() {
     value: s.id,
     label: s.name,
     count: fmtNum(sc[s.id] || 0),
+    icon: getSourceIcon(s.name),
   }));
   const selectedSourceVals = Array.from(state.sourceFilter).reverse();
   const selectedSources = selectedSourceVals
     .map((val) => allSourcesRaw.find((s) => s.value === val))
     .filter(Boolean);
-  const unselectedSources = allSourcesRaw.filter(
-    (s) => !state.sourceFilter.has(s.value),
-  );
+  const unselectedSources = allSourcesRaw
+    .filter((s) => !state.sourceFilter.has(s.value))
+    .sort((a, b) => Number(Boolean(b.icon)) - Number(Boolean(a.icon)));
   const allSources = [...selectedSources, ...unselectedSources];
 
   const visibleSources = allSources.slice(0, state.sourcesVisibleCount);
@@ -3057,12 +1426,11 @@ function renderFilters() {
   if (state.sourceFilter.size > 0) {
     const activeStylesSet = new Set();
     state.sourceFilter.forEach((src) => {
-      const srcStyles = SOURCE_STYLE_BIAS[src] || [];
+      const source = SOURCES.find((item) => item.id === src);
+      const srcStyles = source?.styles || SOURCE_STYLE_BIAS[src] || [];
       srcStyles.forEach((s) => activeStylesSet.add(s.toLowerCase()));
     });
-    if (activeStylesSet.size > 0) {
-      activeStylesList = STYLES.filter((s) => activeStylesSet.has(s));
-    }
+    activeStylesList = STYLES.filter((s) => activeStylesSet.has(s));
   }
 
   buildStyleList(
@@ -3123,7 +1491,7 @@ function renderFilters() {
         <div class="mi-rp-avatar" style="z-index: 1; margin-left: -6px"><img src="ASSET/Icons/Phosphor.svg" alt=""/></div>
       `;
       sourceAllTitle.textContent = "All Sources";
-      badgeLg.textContent = (ICONS.length || 0).toLocaleString();
+      badgeLg.textContent = getTotalIconCount().toLocaleString();
     } else {
       sourceAllContainer.classList.add("has-filters");
       sourceAllContainer.title = "Click to clear filters";
@@ -3201,7 +1569,7 @@ function updateFilterBadge() {
     }
 
     // Set tooltip attributes - use bullet points for better readability
-    const tooltipText = filterLines.map((part) => "• " + part).join(" ");
+    const tooltipText = filterLines.map((part) => "â€¢ " + part).join(" ");
     badge.setAttribute("data-tooltip", tooltipText);
     badge.setAttribute("data-tooltip-position", "bottom");
     badge.setAttribute("data-tooltip-color", "black");
@@ -3398,10 +1766,10 @@ function openDetail(icon) {
   state.editorIcon = icon;
   updateBreadcrumbs(icon);
   renderTagsRow(icon);
-  
+
   // Re-enable CSS transitions (which were disabled in head to prevent FOUC)
   setTimeout(() => {
-    const initStyle = document.getElementById('mi-init-style');
+    const initStyle = document.getElementById("mi-init-style");
     if (initStyle) initStyle.remove();
   }, 50);
 
@@ -3422,30 +1790,45 @@ function openDetail(icon) {
   renderCanvas();
   renderSimilar();
   renderMatchingIcons();
+  const sourceObj =
+    window.ICON_STATS?.collections?.find(
+      (source) => source.id === icon.source,
+    ) || SOURCES.find((source) => source.id === icon.source);
+  const sourceName = sourceObj?.name || icon.sourceName || icon.source;
+  const license = sourceObj?.license || icon.license || "Unknown";
   $("#detail-name").textContent = icon.name;
-  $("#detail-source").textContent = icon.sourceName;
-  $("#detail-license").textContent = icon.license;
-  $("#attr-source").textContent = icon.sourceName;
-  $("#attr-license").textContent = icon.license;
-  const sourceObj = SOURCES.find((s) => s.id === icon.source);
+  $("#detail-source").textContent = sourceName;
+  $("#detail-license").textContent = license;
+  $("#attr-source").textContent = sourceName;
+  $("#attr-license").textContent = license;
   if (sourceObj && sourceObj.licenseUrl) {
     $("#attr-license-link").href = sourceObj.licenseUrl;
   } else {
     $("#attr-license-link").removeAttribute("href");
   }
-  
+
   let attrText = "Required";
   let commText = "Allowed";
-  const l = (icon.license || "").toLowerCase();
+  const l = license.toLowerCase();
   if (l.includes("cc0") || l === "free" || l === "wtfpl") {
     attrText = "Not required";
-  } else if (l.includes("mit") || l.includes("isc") || l.includes("apache") || l.includes("ofl") || l.includes("zlib")) {
+  } else if (
+    l.includes("mit") ||
+    l.includes("isc") ||
+    l.includes("apache") ||
+    l.includes("ofl") ||
+    l.includes("zlib")
+  ) {
     attrText = "Required (in source)";
   }
-  if (l.includes("nc") || l.includes("non-commercial") || l.includes("noncommercial")) {
+  if (
+    l.includes("nc") ||
+    l.includes("non-commercial") ||
+    l.includes("noncommercial")
+  ) {
     commText = "Not allowed";
   }
-  
+
   if ($("#attr-attribution")) $("#attr-attribution").textContent = attrText;
   if ($("#attr-commercial")) $("#attr-commercial").textContent = commText;
   const detailModal = $("#detail-modal");
@@ -3498,7 +1881,9 @@ function syncEditorControls() {
   );
 
   // Hide Fill, Stroke, and STROKE advanced section if the icon is fill-based
-  const isFillBased = state.editorIcon ? !state.editorIcon.svg.includes("stroke") : false;
+  const isFillBased = state.editorIcon
+    ? !state.editorIcon.svg.includes("stroke")
+    : false;
   const displayVal = isFillBased ? "none" : "";
 
   const strokeGroup = $("#ctrl-stroke")?.closest(".mi-ctrl-group");
@@ -3516,7 +1901,7 @@ function syncEditorControls() {
   $("#ctrl-color").value = e.color;
   $("#ctrl-color-hex").value = e.color;
   $("#ctrl-rot").value = e.rotation;
-  $("#rot-val").textContent = e.rotation + "°";
+  $("#rot-val").textContent = e.rotation + "Â°";
   syncSliderVisual("ctrl-rot");
   $("#ctrl-pad").value = e.padding;
   $("#pad-val").textContent = e.padding;
@@ -3600,8 +1985,25 @@ function editorRenderOpts(sizeOverride) {
   };
 }
 
-function renderCanvas() {
+async function renderCanvas() {
   if (!state.editorIcon) return;
+
+  // Fetch SVG if not loaded yet
+  if (!state.editorIcon.svg || state.editorIcon.svg === "") {
+    try {
+      const svgUrl = window.iconsAPI.getIconSVGUrl(
+        state.editorIcon.source,
+        state.editorIcon.name,
+      );
+      const response = await fetch(svgUrl);
+      const svgContent = await response.text();
+      state.editorIcon.svg = svgContent;
+    } catch (error) {
+      console.error("[renderCanvas] Failed to fetch SVG:", error);
+      return;
+    }
+  }
+
   updateResetButton();
   const e = state.editor;
   // Scale visual preview more aggressively than export size so the icon fills the canvas nicely.
@@ -3676,7 +2078,7 @@ function renderSimilar() {
   $("#similar-row").innerHTML = scored
     .map(({ x, s }) => {
       const pct = Math.min(99, 70 + Math.round(s / 3));
-      return `<div class="mi-similar-item" data-id="${x.id}" title="${x.name} — ${x.sourceName}">
+      return `<div class="mi-similar-item" data-id="${x.id}" title="${x.name} â€” ${x.sourceName}">
       ${renderStyled(x, { size: 24, color: "#0F1116" })}
       <span class="mi-similar-match">${pct}%</span>
     </div>`;
@@ -3812,7 +2214,7 @@ async function updateCodePreview() {
     return '<span style="color:' + color + '">' + text + "</span>";
   }
 
-  // Single-pass XML/SVG tokenizer — matches one token at a time so
+  // Single-pass XML/SVG tokenizer â€” matches one token at a time so
   // injected <span> tags are never re-processed by subsequent passes.
   function highlightXml(raw, kwList) {
     const escaped = esc(raw);
@@ -3832,7 +2234,7 @@ async function updateCodePreview() {
   function highlightXmlKw(raw, kwList) {
     let out = highlightXml(raw);
     // keyword pass runs on the already-highlighted string but only matches
-    // plain text (not inside existing span tags) — word-boundary is safe here
+    // plain text (not inside existing span tags) â€” word-boundary is safe here
     kwList.forEach((kw) => {
       // Replace the keyword only when it appears as a whole word outside a span
       out = out.replace(
@@ -3843,7 +2245,7 @@ async function updateCodePreview() {
     return out;
   }
 
-  // CSS: single-pass — selector, property, value
+  // CSS: single-pass â€” selector, property, value
   function highlightCss(raw) {
     const e = raw.replace(/&/g, "&amp;");
     return e.replace(
@@ -3955,7 +2357,7 @@ function requireLoginToDownload() {
     const user = window.FirebaseAuthService.getCurrentUser();
     if (!user || user.isAnonymous) {
       if (window.AuthModal) {
-        window.AuthModal.open('login');
+        window.AuthModal.open("login");
       }
       return false;
     }
@@ -4046,7 +2448,7 @@ function iconStats(icon) {
   return {
     shapes: elems.length,
     length: Math.round(totalLen),
-    bbox: `${Math.round(bbox.width)} × ${Math.round(bbox.height)}`,
+    bbox: `${Math.round(bbox.width)} Ã— ${Math.round(bbox.height)}`,
   };
 }
 
@@ -4089,7 +2491,7 @@ function renderIconOfDay() {
     <div class="mi-iotd-preview">${renderStyled(ic, { size: 96, color: "#5C4AE4" })}</div>
     <div class="mi-iotd-body">
       <h3>${ic.name}</h3>
-      <p>Today's pick — a versatile ${ic.category} icon from ${ic.sourceName}. Customize size, stroke and color to fit your interface.</p>
+      <p>Today's pick â€” a versatile ${ic.category} icon from ${ic.sourceName}. Customize size, stroke and color to fit your interface.</p>
       <div class="mi-iotd-tags">
         <span class="mi-iotd-tag">${ic.sourceName}</span>
         <span class="mi-iotd-tag">${ic.style}</span>
@@ -4111,7 +2513,10 @@ function renderIconOfDay() {
     }
     if (copyId) {
       const ic = ICONS.find((x) => x.id === copyId.dataset.copyId);
-      if (ic) copyText(renderSvg(ic.svg)).then((ok) => toast(ok ? "Copied SVG" : "Copy failed"));
+      if (ic)
+        copyText(renderSvg(ic.svg)).then((ok) =>
+          toast(ok ? "Copied SVG" : "Copy failed"),
+        );
     }
   });
 }
@@ -4181,8 +2586,8 @@ function renderCollections() {
   $("#collections-grid").addEventListener("click", (e) => {
     const card = e.target.closest(".mi-coll-card");
     if (!card) return;
-    state.categoryFilter.clear();
-    state.categoryFilter.add(card.dataset.coll);
+    state.sourceFilter.clear();
+    state.sourceFilter.add(card.dataset.coll);
     state.page = 1;
     renderFilters();
     renderGrid();
@@ -4334,7 +2739,7 @@ function wire() {
     localStorage.setItem("mi.query", state.query);
     state.page = 1;
     renderGrid();
-  }, 120);
+  }, 800); // Increased from 250ms to 800ms to prevent tracking every keystroke
 
   if (state.query) {
     searchInput.value = state.query;
@@ -4600,7 +3005,9 @@ function wire() {
   $("#icon-grid").addEventListener("click", (e) => {
     const card = e.target.closest(".mi-card");
     if (!card) return;
-    const icon = ICONS.find((x) => x.id === card.dataset.id);
+    const icon =
+      renderedIconsMap.get(card.dataset.id) ||
+      ICONS.find((x) => x.id === card.dataset.id);
     if (!icon) return;
     if (e.target.closest("[data-cmp]")) {
       if (state.selected.has(icon.id)) state.selected.delete(icon.id);
@@ -4621,7 +3028,7 @@ function wire() {
           toast(ok ? `Copied "${icon.name}"` : "Copy failed"),
         );
       } else if (act.dataset.act === "save") {
-        window.CollectionManager.openModal(icon.id);
+        window.CollectionManager.openModal(icon.id, icon);
       }
       return;
     }
@@ -4738,7 +3145,7 @@ function wire() {
   });
   $("#ctrl-rot").addEventListener("input", (e) => {
     editor.rotation = +e.target.value;
-    $("#rot-val").textContent = editor.rotation + "°";
+    $("#rot-val").textContent = editor.rotation + "Â°";
     syncSliderVisual("ctrl-rot");
     renderCanvas();
   });
@@ -4956,7 +3363,7 @@ function wire() {
     }
   });
 
-  // Tags row → search
+  // Tags row â†’ search
   $("#tags-row")?.addEventListener("click", (e) => {
     const chip = e.target.closest(".mi-tag-chip");
     if (!chip) return;
@@ -4986,21 +3393,22 @@ function wire() {
       if (!state.editorIcon) return;
       const size = state.pngSize || 512;
       try {
-        cpBtn.style.opacity = '0.5';
+        cpBtn.style.opacity = "0.5";
         const dataUrl = await rasterizePng(size);
         const res = await fetch(dataUrl);
         const blob = await res.blob();
-        await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+        await navigator.clipboard.write([
+          new ClipboardItem({ "image/png": blob }),
+        ]);
         toast("Copied PNG image");
       } catch (e) {
         console.error(e);
         toast("Failed to copy PNG image");
       } finally {
-        cpBtn.style.opacity = '1';
+        cpBtn.style.opacity = "1";
       }
     });
   }
-
 
   // SVG-format dropdown
   const svgFmtBtn = $("#btn-svg-format");
@@ -5055,7 +3463,7 @@ function wire() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Motvin Icons — ${state.editorIcon.name}`,
+          title: `Motvin Icons â€” ${state.editorIcon.name}`,
           url: link,
         });
         return;
@@ -5149,12 +3557,12 @@ function wire() {
   if (figmaButton) {
     figmaButton.addEventListener("click", async () => {
       const ok = await copyText(currentSvgString());
-      toast(ok ? "SVG copied — paste in Figma with ⌘V" : "Copy failed");
+      toast(ok ? "SVG copied â€” paste in Figma with âŒ˜V" : "Copy failed");
     });
   }
   $("#btn-save-collection").addEventListener("click", () => {
     if (!state.editorIcon) return;
-    window.CollectionManager.openModal(state.editorIcon.id);
+    window.CollectionManager.openModal(state.editorIcon.id, state.editorIcon);
   });
   $("#btn-find-similar").addEventListener("click", () => {
     if (!state.editorIcon) return;
@@ -5184,7 +3592,7 @@ function wire() {
           toast(ok ? "Copied SVG" : "Copy failed"),
         );
       } else if (action.dataset.act === "save") {
-        window.CollectionManager.openModal(icon.id);
+        window.CollectionManager.openModal(icon.id, icon);
       }
       return;
     }
@@ -5266,7 +3674,7 @@ function renderHeroStats() {
 
   const searchInput = $("#search-input");
   if (searchInput) {
-    searchInput.placeholder = `Search ${ICONS.length.toLocaleString()}+ icons...`;
+    searchInput.placeholder = `Search ${getTotalIconCount().toLocaleString()}+ icons...`;
   }
 }
 
@@ -5315,6 +3723,7 @@ function setupSidebarTabs() {
 
       // Update global state and filter grid
       state.showSaved = target === "saved";
+      localStorage.setItem("mi.sidebarTab", target);
 
       // If categories tab is opened, make sure list is rendered
       if (target === "categories") {
@@ -5336,10 +3745,7 @@ function buildCategoryList() {
   const container = document.getElementById("categories-list-container");
   if (!container) return;
 
-  const catCounts = {};
-  ICONS.forEach((ic) => {
-    catCounts[ic.category] = (catCounts[ic.category] || 0) + 1;
-  });
+  const catCounts = (window.ICON_STATS && window.ICON_STATS.byCategory) || {};
 
   const cats = Object.keys(catCounts).sort((a, b) => {
     if (a === "Others") return 1;
@@ -5351,7 +3757,7 @@ function buildCategoryList() {
   let html = `
     <div class="mi-rp-cat-item ${isAllActive ? "is-active" : ""}" data-cat="all">
       <span class="mi-rp-cat-label">All</span>
-      <span class="mi-rp-cat-count">${ICONS.length.toLocaleString()}</span>
+      <span class="mi-rp-cat-count">${getTotalIconCount().toLocaleString()}</span>
     </div>
   `;
 
@@ -5407,10 +3813,8 @@ function buildTopCategoryDropdown() {
   const valDisplay = document.getElementById("cat-dropdown-val");
   if (!container || !catMenu || !valDisplay) return;
 
-  const catCounts = {};
-  ICONS.forEach((ic) => {
-    catCounts[ic.category] = (catCounts[ic.category] || 0) + 1;
-  });
+  // Use stats API for accurate counts instead of filtered ICONS array
+  const catCounts = (window.ICON_STATS && window.ICON_STATS.byCategory) || {};
 
   const cats = Object.keys(catCounts).sort((a, b) => {
     if (a === "Others") return 1;
@@ -5422,7 +3826,7 @@ function buildTopCategoryDropdown() {
   let html = `
     <div class="mi-category-menu-item ${isAllActive ? "is-active" : ""}" data-cat="all">
       <span class="mi-category-menu-label">All Icons</span>
-      <span class="mi-category-menu-badge">${ICONS.length.toLocaleString()}</span>
+      <span class="mi-category-menu-badge">${getTotalIconCount().toLocaleString()}</span>
     </div>
   `;
 
@@ -5486,17 +3890,19 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
   const PROMO_KEY = "motvin_promo_hidden_until";
   const banner = document.querySelector(".mi-new-banner");
-  
+
   if (banner) {
     const hiddenUntil = localStorage.getItem(PROMO_KEY);
     if (hiddenUntil && Date.now() < parseInt(hiddenUntil, 10)) {
       banner.setAttribute("hidden", "");
     } else {
-      document.querySelector(".mi-new-banner-close")?.addEventListener("click", () => {
-        banner.setAttribute("hidden", "");
-        // 2 days in milliseconds: 2 * 24 * 60 * 60 * 1000 = 172800000
-        localStorage.setItem(PROMO_KEY, (Date.now() + 172800000).toString());
-      });
+      document
+        .querySelector(".mi-new-banner-close")
+        ?.addEventListener("click", () => {
+          banner.setAttribute("hidden", "");
+          // 2 days in milliseconds: 2 * 24 * 60 * 60 * 1000 = 172800000
+          localStorage.setItem(PROMO_KEY, (Date.now() + 172800000).toString());
+        });
     }
   }
 });
@@ -5508,29 +3914,109 @@ document.addEventListener("DOMContentLoaded", () => {
     window.tooltipController.init();
   }
 
-  renderHeroStats();
-  renderFilters();
-  renderGrid();
-  renderCompareCount();
-  renderIconOfDay();
-  renderCollections();
-  renderCategoriesSection();
-  setupSidebarTabs();
-  buildCategoryList();
-  buildTopCategoryDropdown();
-  wire();
-  initRecolor();
+  function restoreSidebarTabUI(savedTab, panels) {
+    Object.entries(panels).forEach(([key, el]) => {
+      if (el) el.style.display = key === savedTab ? "block" : "none";
+    });
+    const innerPanel = document.querySelector(".mi-right-panel-inner");
+    if (innerPanel) {
+      Object.keys(panels).forEach((key) =>
+        innerPanel.classList.remove(`mi-rp-${key}`),
+      );
+      innerPanel.classList.add(`mi-rp-${savedTab}`);
+    }
+    const activeTabBtn = document.querySelector(
+      `.mi-sidebar-item[data-sidebar="${savedTab}"]`,
+    );
+    if (activeTabBtn) {
+      document
+        .querySelectorAll(".mi-sidebar-item")
+        .forEach((t) => t.classList.remove("is-active"));
+      activeTabBtn.classList.add("is-active");
+      const title = document.getElementById("rp-header-title");
+      if (title)
+        title.textContent =
+          activeTabBtn.querySelector(".mi-sidebar-label")?.textContent || "";
+    }
+    if (savedTab === "saved" && typeof renderSavedPanel === "function")
+      renderSavedPanel();
+    if (savedTab === "categories") buildCategoryList();
+  }
+
+  const initUI = () => {
+    renderHeroStats();
+    renderFilters();
+
+    // Set state before first renderGrid so showSaved is correct on initial load
+    const savedTab = localStorage.getItem("mi.sidebarTab");
+    if (savedTab && savedTab !== "filters") {
+      state.showSaved = savedTab === "saved";
+    }
+
+    renderGrid();
+    renderCompareCount();
+    renderIconOfDay();
+    renderCollections();
+    renderCategoriesSection();
+    setupSidebarTabs();
+    buildCategoryList();
+    buildTopCategoryDropdown();
+    wire();
+    initRecolor();
+
+    // Apply saved tab UI without triggering another renderGrid
+    if (savedTab && savedTab !== "filters") {
+      const panels = {
+        filters: document.getElementById("rp-tab-filters"),
+        categories: document.getElementById("rp-tab-categories"),
+        saved: document.getElementById("rp-tab-saved"),
+        plugins: document.getElementById("rp-tab-plugins"),
+        help: document.getElementById("rp-tab-help"),
+      };
+      restoreSidebarTabUI(savedTab, panels);
+    }
+  };
+
+  // Wait for stats to load before initial render
+  if (window.STATS_LOADED) {
+    // Start loading the grid immediately (in parallel with stats) so users see content sooner
+    renderGrid();
+    // Then finish the full UI init (filters, sidebar, etc.) once stats are ready
+    window.STATS_LOADED.then(initUI);
+  } else {
+    initUI();
+  }
 
   // Dynamically update the overall live icons count in the sidebar
   const badgeLg = document.querySelector(".mi-rp-badge-lg");
   if (badgeLg) {
-    badgeLg.textContent = ICONS.length.toLocaleString();
+    badgeLg.textContent = getTotalIconCount().toLocaleString();
     badgeLg.classList.remove("mi-skeleton");
   }
 
   // Remove skeleton loaders from sort tabs
   document.querySelectorAll(".mi-sort-tab.mi-skeleton").forEach((tab) => {
     tab.classList.remove("mi-skeleton");
+  });
+
+  document.querySelectorAll(".mi-sort-tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      state.sort = tab.dataset.sort;
+      state.page = 1;
+      document.querySelectorAll(".mi-sort-tab").forEach((item) => {
+        const isActive = item === tab;
+        item.classList.toggle("is-active", isActive);
+        item.setAttribute("aria-selected", String(isActive));
+      });
+      const select = $("#sort-select");
+      if (select) select.value = state.sort;
+      renderGrid();
+    });
+  });
+  document.querySelectorAll(".mi-sort-tab").forEach((tab) => {
+    const isActive = tab.dataset.sort === state.sort;
+    tab.classList.toggle("is-active", isActive);
+    tab.setAttribute("aria-selected", String(isActive));
   });
 
   // Deep-link: open the icon requested via ?icon=<id> as a full-page view
@@ -5542,13 +4028,6 @@ document.addEventListener("DOMContentLoaded", () => {
       openDetail(ic);
       setFullPage(true, ic.id);
     }
-  }
-
-  // Restore active sidebar tab seamlessly
-  const savedTab = localStorage.getItem("mi.sidebarTab");
-  if (savedTab && savedTab !== "filters") {
-    const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
-    if (activeTabBtn) activeTabBtn.click();
   }
 
   // Sidebar Resizer Logic
@@ -5837,6 +4316,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.CollectionManager.init({
     appType: "icons",
     getItems: () => ICONS,
+    saveLS: saveLS,
     onUpdate: () => {
       saveLS();
       if (typeof renderSavedPanel === "function") renderSavedPanel();
@@ -5847,8 +4327,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function updateEditModalSaveState() {
-  if (!state.editorIcon || !window.EditModalManager || !window.EditModalManager.updateSaveState) return;
-  const isSaved = state.folders && state.folders.some(f => f.iconIds.includes(state.editorIcon.id));
+  if (
+    !state.editorIcon ||
+    !window.EditModalManager ||
+    !window.EditModalManager.updateSaveState
+  )
+    return;
+  const isSaved =
+    state.folders &&
+    state.folders.some((f) => f.iconIds.includes(state.editorIcon.id));
   window.EditModalManager.updateSaveState(isSaved);
 }
 
@@ -5897,6 +4384,7 @@ document
       const folderId = delBtn.dataset.del;
       if (confirm("Are you sure you want to delete this collection?")) {
         state.folders = state.folders.filter((f) => f.id !== folderId);
+        window.CollectionManager?.forgetDirectoryHandle(folderId);
         if (state.activeFolderId === folderId) state.activeFolderId = null;
         saveLS();
         renderSavedPanel();
@@ -5927,4 +4415,3 @@ document
       setTimeout(() => input.focus(), 60);
     }
   });
-

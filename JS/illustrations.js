@@ -1,43 +1,35 @@
 /* Motvin Illustrations — Illustration Library frontend. */
 
+// Populated from API stats (stats-bridge-illustrations.js)
+let SOURCES = window.SOURCES || [];
 
-const SOURCES = [
-  { id: "ira", name: "IRA Design", license: "MIT" },
-  { id: "flowbite", name: "Flowbite Illustrations", license: "MIT" },
-  { id: "opendoodles", name: "Open Doodles", license: "MIT" },
-  { id: "fluentemoji", name: "Fluent Emoji", license: "MIT" },
-  { id: "bioicons", name: "Bioicons", license: "MIT" },
-];
+const getTotalIllustrationCount = () =>
+  (window.ILLUSTRATION_STATS && window.ILLUSTRATION_STATS.total) ||
+  ICONS.length ||
+  0;
 
-const STYLES = ["color", "solid"];
-
-const SOURCE_STYLE_BIAS = {
-  ira: ["color"],
-  fluentemoji: ["color"],
-  opendoodles: ["solid"],
-  flowbite: ["color"],
-  bioicons: ["color", "solid"],
-};
-
-function illustrationStyle(icon) {
-  if (icon.source === "flowbite") return "color";
-  if (icon.source === "opendoodles") return "solid";
-  if (icon.source !== "bioicons") return icon.style || "color";
-
-  const svg = icon.svg || "";
-  if (/<(?:linearGradient|radialGradient|pattern)\b|<style\b/i.test(svg)) {
-    return "color";
+function createIllustrationsArray() {
+  if (
+    typeof REAL_ILLUSTRATIONS === "undefined" ||
+    !REAL_ILLUSTRATIONS ||
+    REAL_ILLUSTRATIONS.length === 0
+  ) {
+    return [];
   }
-  const colors = new Set(
-    [...svg.matchAll(/(?:fill|stroke)(?:=|:)\s*["']?(#[0-9a-f]{3,8})/gi)].map(
-      (match) => match[1].toLowerCase(),
-    ),
-  );
-  return colors.size <= 1 ? "solid" : "color";
+  return REAL_ILLUSTRATIONS.map((ic, i) => ({
+    ...ic,
+    category: ic.category || "Others",
+    style: ic.style || "flat",
+    id: ic.id || "ic_" + i,
+    sourceIconId: `${ic.source || "illustrations"}:${ic.name}`,
+    license: ic.license || "Unknown",
+    licenseUrl: ic.licenseUrl || "",
+    author: ic.author || "",
+    popularity: Math.round(1000 - i + Math.sin(i) * 200),
+    createdAt: Date.now() - i * 1e5,
+    updatedAt: Date.now(),
+  }));
 }
-
-
-
 
 // Semantic synonyms for search
 const SYNONYMS = {
@@ -54,477 +46,204 @@ const SYNONYMS = {
   chat: ["message", "mail", "send"],
   person: ["user", "users"],
   alarm: ["bell", "clock"],
+  success: ["check", "check-circle"],
+  settings: ["sliders", "tool"],
+  time: ["clock", "watch"],
+  money: ["dollar-sign", "credit-card"],
+  shop: ["shopping-cart", "shopping-bag"],
+  close: ["x", "x-circle"],
+  add: ["plus", "plus-circle"],
+  remove: ["minus", "minus-circle"],
+  edit: ["edit-2", "edit-3", "pen-tool"],
+  delete: ["trash", "trash-2"],
+  like: ["heart", "thumbs-up"],
+  love: ["heart"],
+  save: ["bookmark", "download"],
+  picture: ["image", "camera"],
+  photo: ["image", "camera"],
+  video: ["film", "video"],
+  movie: ["film", "video"],
+  sound: ["volume-1", "volume-2", "music"],
+  audio: ["volume-1", "volume-2", "music"],
+  web: ["globe", "monitor"],
+  internet: ["globe", "wifi"],
+  security: ["shield", "lock"],
+  secure: ["shield", "lock"],
+  help: ["help-circle", "info"],
+  info: ["info", "help-circle"],
+  location: ["map-pin", "map", "navigation"],
+  place: ["map-pin", "map", "navigation"],
+  direction: ["navigation", "compass"],
+  document: ["file", "file-text"],
+  folder: ["folder", "archive"],
+  link: ["link", "link-2"],
+  connect: ["link", "link-2"],
+  upload: ["upload-cloud", "upload"],
+  download: ["download-cloud", "download"],
+  refresh: ["refresh-cw", "refresh-ccw"],
+  sync: ["refresh-cw", "refresh-ccw"],
+  search: ["search", "zoom-in"],
+  zoom: ["zoom-in", "zoom-out"],
+  menu: ["menu", "more-horizontal", "more-vertical"],
+  options: ["more-horizontal", "more-vertical", "sliders"],
+  play: ["play", "play-circle"],
+  pause: ["pause", "pause-circle"],
+  stop: ["square"],
+  record: ["circle"],
+  next: ["skip-forward", "chevron-right"],
+  previous: ["skip-back", "chevron-left"],
+  fastforward: ["fast-forward"],
+  rewind: ["rewind"],
+  share: ["share", "share-2"],
+  send: ["send", "mail"],
+  email: ["mail", "inbox"],
+  phone: ["phone", "phone-call"],
+  call: ["phone", "phone-call"],
+  message: ["message-square", "message-circle"],
+  star: ["star"],
+  favorite: ["star", "heart"],
+  bookmark: ["bookmark"],
+  flag: ["flag"],
+  award: ["award"],
+  gift: ["gift"],
+  briefcase: ["briefcase"],
+  work: ["briefcase"],
+  calendar: ["calendar"],
+  date: ["calendar"],
+  clock: ["clock"],
+  watch: ["watch"],
+  camera: ["camera"],
+  printer: ["printer"],
+  print: ["printer"],
+  tv: ["tv", "monitor"],
+  display: ["monitor", "tv"],
+  laptop: ["monitor", "tv", "computer"],
+  smartphone: ["smartphone"],
+  mobile: ["smartphone"],
+  tablet: ["tablet"],
+  battery: ["battery", "battery-charging"],
+  power: ["power"],
+  wifi: ["wifi"],
+  bluetooth: ["bluetooth"],
+  cast: ["cast"],
+  airplay: ["airplay"],
+  headphones: ["headphones"],
+  mic: ["mic"],
+  microphone: ["mic"],
+  speaker: ["speaker"],
+  volume: ["volume", "volume-1", "volume-2", "volume-x"],
+  light: ["sun"],
+  dark: ["moon"],
+  weather: ["sun", "moon", "cloud", "cloud-drizzle", "cloud-lightning", "cloud-rain", "cloud-snow", "wind"],
+  temperature: ["thermometer"],
+  code: ["code"],
+  terminal: ["terminal"],
+  database: ["database"],
+  server: ["server"],
+  cloud: ["cloud"],
+  git: ["git-branch", "git-commit", "git-merge", "git-pull-request"],
+  layout: ["layout", "grid", "columns", "sidebar"],
+  list: ["list"],
+  type: ["type"],
+  font: ["type"],
+  bold: ["bold"],
+  italic: ["italic"],
+  underline: ["underline"],
+  align: ["align-left", "align-center", "align-right", "align-justify"],
+  color: ["droplet"],
+  paint: ["droplet"],
+  scissors: ["scissors"],
+  cut: ["scissors"],
+  copy: ["copy"],
+  paste: ["clipboard"],
+  clipboard: ["clipboard"],
+  eye: ["eye", "eye-off"],
+  view: ["eye", "eye-off"],
+  hide: ["eye-off"],
+  lock: ["lock"],
+  unlock: ["unlock"],
+  key: ["key"],
+  shield: ["shield"],
+  user: ["user", "users", "user-plus", "user-minus", "user-check", "user-x"],
+  people: ["users"],
+  friend: ["users"],
+  team: ["users"],
+  home: ["home"],
+  house: ["home"],
+  building: ["home"],
+  shopping: ["shopping-bag", "shopping-cart"],
+  cart: ["shopping-cart"],
+  bag: ["shopping-bag"],
+  creditcard: ["credit-card"],
+  dollar: ["dollar-sign"],
+  money: ["dollar-sign"],
+  price: ["tag"],
+  tag: ["tag"],
+  discount: ["percent"],
+  percent: ["percent"],
+  activity: ["activity"],
+  pulse: ["activity"],
+  trending: ["trending-up", "trending-down"],
+  chart: ["bar-chart", "bar-chart-2", "pie-chart"],
+  graph: ["bar-chart", "bar-chart-2", "pie-chart"],
+  map: ["map", "map-pin"],
+  pin: ["map-pin"],
+  navigation: ["navigation", "navigation-2"],
+  compass: ["compass"],
+  crosshair: ["crosshair"],
+  target: ["crosshair"],
+  truck: ["truck"],
+  delivery: ["truck"],
+  package: ["package"],
+  box: ["package"],
+  coffee: ["coffee"],
+  cup: ["coffee"],
+  drink: ["coffee"],
+  anchor: ["anchor"],
+  umbrella: ["umbrella"],
+  sun: ["sun"],
+  moon: ["moon"],
+  star: ["star"],
+  cloud: ["cloud"],
+  wind: ["wind"],
+  water: ["droplet"],
+  fire: ["flame"],
+  zap: ["zap", "zap-off"],
+  lightning: ["zap", "zap-off"],
+  energy: ["zap"],
+  power: ["power"],
+  plug: ["power"],
+  switch: ["toggle-left", "toggle-right"],
+  toggle: ["toggle-left", "toggle-right"],
+  slider: ["sliders"],
+  filter: ["filter"],
+  funnel: ["filter"],
+  sort: ["list"],
+  more: ["more-horizontal", "more-vertical"],
+  menu: ["menu"],
+  hamburger: ["menu"],
+  arrow: ["arrow-up", "arrow-down", "arrow-left", "arrow-right", "arrow-up-left", "arrow-up-right", "arrow-down-left", "arrow-down-right"],
+  chevron: ["chevron-up", "chevron-down", "chevron-left", "chevron-right", "chevrons-up", "chevrons-down", "chevrons-left", "chevrons-right"],
+  triangle: ["triangle"],
+  square: ["square"],
+  circle: ["circle"],
+  hexagon: ["hexagon"],
+  octagon: ["octagon"],
 };
 
-// --------------------------------------------------------------------
-// State
-// --------------------------------------------------------------------
-const CATEGORY_MAP = {
-  Arrows: [
-    "arrow",
-    "chevron",
-    "caret",
-    "direction",
-    "point",
-    "up",
-    "down",
-    "left",
-    "right",
-    "forward",
-    "back",
-    "next",
-    "prev",
-  ],
-  Communication: [
-    "phone",
-    "mail",
-    "chat",
-    "message",
-    "envelope",
-    "call",
-    "speech",
-    "comment",
-    "send",
-    "wifi",
-    "signal",
-    "network",
-    "bluetooth",
-  ],
-  Media: [
-    "play",
-    "pause",
-    "stop",
-    "video",
-    "music",
-    "audio",
-    "sound",
-    "volume",
-    "speaker",
-    "mic",
-    "cast",
-  ],
-  People: [
-    "user",
-    "person",
-    "people",
-    "avatar",
-    "profile",
-    "face",
-    "group",
-    "man",
-    "woman",
-    "boy",
-    "girl",
-  ],
-  Business: [
-    "briefcase",
-    "office",
-    "chart",
-    "graph",
-    "money",
-    "dollar",
-    "euro",
-    "coin",
-    "wallet",
-    "trend",
-    "bag",
-  ],
-  Weather: [
-    "sun",
-    "moon",
-    "cloud",
-    "rain",
-    "snow",
-    "wind",
-    "lightning",
-    "weather",
-    "storm",
-    "temp",
-  ],
-  Device: [
-    "laptop",
-    "mobile",
-    "phone",
-    "tablet",
-    "screen",
-    "monitor",
-    "keyboard",
-    "mouse",
-    "battery",
-    "cpu",
-    "device",
-    "desktop",
-    "computer",
-  ],
-  Navigation: [
-    "map",
-    "location",
-    "pin",
-    "gps",
-    "compass",
-    "globe",
-    "route",
-    "marker",
-    "local",
-  ],
-  File: [
-    "file",
-    "folder",
-    "document",
-    "archive",
-    "paper",
-    "copy",
-    "paste",
-    "clipboard",
-  ],
-  Security: [
-    "lock",
-    "key",
-    "shield",
-    "guard",
-    "protect",
-    "secure",
-    "password",
-    "unlock",
-  ],
-  Time: [
-    "clock",
-    "time",
-    "watch",
-    "hour",
-    "minute",
-    "calendar",
-    "date",
-    "schedule",
-  ],
-  Status: [
-    "check",
-    "cross",
-    "x",
-    "close",
-    "tick",
-    "success",
-    "warning",
-    "error",
-    "alert",
-    "info",
-    "bell",
-    "plus",
-    "minus",
-    "add",
-    "remove",
-    "delete",
-    "clear",
-    "cancel",
-    "badge",
-  ],
-  AI: ["ai", "robot", "bot", "sparkle", "magic", "brain", "smart", "machine"],
-  Editing: [
-    "edit",
-    "pencil",
-    "pen",
-    "write",
-    "draw",
-    "brush",
-    "crop",
-    "cut",
-    "paint",
-    "filter",
-    "view",
-    "eye",
-    "zoom",
-    "search",
-    "format",
-    "layout",
-    "list",
-    "table",
-    "sort",
-    "select",
-    "line",
-    "fill",
-    "border",
-  ],
-  Characters: [
-    "font",
-    "text",
-    "letter",
-    "character",
-    "type",
-    "bold",
-    "italic",
-    "heading",
-    "language",
-  ],
-  Hands: ["hand", "finger", "thumb", "point", "touch", "grab", "hold"],
-  Home: ["home", "house", "building", "roof", "door", "nest"],
-  Album: ["album", "photo", "picture", "image", "gallery"],
-  Camera: ["camera", "lens", "shutter", "focus"],
-  Nature: [
-    "leaf",
-    "tree",
-    "plant",
-    "flower",
-    "forest",
-    "wood",
-    "bug",
-    "animal",
-    "water",
-    "fire",
-    "drop",
-  ],
-  Finance: [
-    "bank",
-    "money",
-    "coin",
-    "card",
-    "credit",
-    "dollar",
-    "euro",
-    "wallet",
-    "pay",
-    "currency",
-  ],
-  Education: [
-    "book",
-    "school",
-    "learn",
-    "student",
-    "graduate",
-    "degree",
-    "hat",
-    "read",
-    "class",
-  ],
-  Transport: [
-    "car",
-    "bus",
-    "train",
-    "plane",
-    "truck",
-    "bike",
-    "ship",
-    "boat",
-    "vehicle",
-    "auto",
-  ],
-  Design: [
-    "layer",
-    "vector",
-    "palette",
-    "color",
-    "paint",
-    "canvas",
-    "grid",
-    "align",
-    "distribute",
-    "path",
-  ],
-  Commerce: [
-    "shop",
-    "cart",
-    "bag",
-    "store",
-    "buy",
-    "sell",
-    "price",
-    "tag",
-    "basket",
-  ],
-  Health: [
-    "health",
-    "medical",
-    "hospital",
-    "pill",
-    "heart",
-    "pulse",
-    "doctor",
-    "nurse",
-    "cross",
-  ],
-  Food: [
-    "food",
-    "drink",
-    "cup",
-    "coffee",
-    "meal",
-    "fork",
-    "knife",
-    "spoon",
-    "pizza",
-    "burger",
-    "apple",
-    "dining",
-  ],
-  Social: [
-    "share",
-    "like",
-    "thumb",
-    "heart",
-    "star",
-    "network",
-    "connect",
-    "link",
-  ],
-  Brands: [
-    "logo",
-    "brand",
-    "facebook",
-    "twitter",
-    "google",
-    "apple",
-    "microsoft",
-    "github",
-    "amazon",
-  ],
-  Sports: ["ball", "game", "sport", "play", "run", "jump", "swim", "fitness"],
-  Gaming: [
-    "game",
-    "play",
-    "console",
-    "controller",
-    "joystick",
-    "pixel",
-    "vr",
-    "dice",
-    "chess",
-  ],
-  Development: [
-    "code",
-    "bracket",
-    "terminal",
-    "bug",
-    "debug",
-    "program",
-    "api",
-    "server",
-    "database",
-    "web",
-  ],
-  System: [
-    "setting",
-    "gear",
-    "cog",
-    "option",
-    "config",
-    "power",
-    "off",
-    "on",
-    "switch",
-    "menu",
-    "tool",
-  ],
-  Shapes: [
-    "circle",
-    "square",
-    "triangle",
-    "rectangle",
-    "star",
-    "polygon",
-    "cube",
-    "shape",
-  ],
-  Music: ["music", "note", "clef", "melody", "song", "tune"],
-  Travel: ["travel", "bag", "luggage", "suitcase", "ticket", "flight", "trip"],
+let ICONS = createIllustrationsArray();
+// Tracks only the icons currently on screen; guarded against race conditions (see renderGrid).
+let renderedIconsMap = new Map();
+
+window.recreateIllustrations = function () {
+  if (window.SOURCES && window.SOURCES.length > 0) {
+    SOURCES = window.SOURCES;
+  }
+  ICONS = createIllustrationsArray();
+  if (typeof renderFilters === "function") renderFilters();
+  if (typeof buildCategoryList === "function") buildCategoryList();
 };
 
-const LOGO_CATEGORIES = [
-  "Design",
-  "Technology",
-  "Development",
-  "Marketing",
-  "Social Media",
-  "Entertainment",
-  "Others",
-];
-function assignLogoCategory(ic, index) {
-  const name = (ic.name || "").toLowerCase();
-  const tags = (ic.tags || []).map((t) => t.toLowerCase());
-  const match = (kw) => name.includes(kw) || tags.some((t) => t.includes(kw));
-
-  if (
-    match("adobe") ||
-    match("figma") ||
-    match("sketch") ||
-    match("design") ||
-    match("invision") ||
-    match("canva")
-  )
-    return "Design";
-  if (
-    match("react") ||
-    match("vue") ||
-    match("angular") ||
-    match("node") ||
-    match("javascript") ||
-    match("python") ||
-    match("github") ||
-    match("api") ||
-    match("dev")
-  )
-    return "Development";
-  if (
-    match("apple") ||
-    match("google") ||
-    match("microsoft") ||
-    match("samsung") ||
-    match("intel") ||
-    match("tech")
-  )
-    return "Technology";
-  if (
-    match("facebook") ||
-    match("twitter") ||
-    match("instagram") ||
-    match("tiktok") ||
-    match("snapchat") ||
-    match("linkedin") ||
-    match("social")
-  )
-    return "Social Media";
-  if (
-    match("netflix") ||
-    match("spotify") ||
-    match("youtube") ||
-    match("twitch") ||
-    match("hulu") ||
-    match("entertainment") ||
-    match("music")
-  )
-    return "Entertainment";
-  if (
-    match("ad") ||
-    match("marketing") ||
-    match("seo") ||
-    match("analytics") ||
-    match("sales")
-  )
-    return "Marketing";
-
-  // Fallback to random but consistent category based on hash
-  const hash = (ic.id || ic.name || String(index))
-    .split("")
-    .reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  return LOGO_CATEGORIES[hash % LOGO_CATEGORIES.length];
-}
-
-const ICONS =
-  typeof REAL_ILLUSTRATIONS !== "undefined"
-    ? REAL_ILLUSTRATIONS.map((ic, i) => {
-        return {
-          ...ic,
-          category: ic.category || assignLogoCategory(ic, i),
-          style: illustrationStyle(ic),
-          id: ic.id || "ic_" + i,
-          sourceIconId: `${ic.source || "illustrations"}:${ic.name}`,
-          license: ic.license || "ISC",
-          licenseUrl: ic.licenseUrl || "",
-          author: ic.author || "Unknown",
-          popularity: Math.round(1000 - i + Math.sin(i) * 200),
-          createdAt: Date.now() - i * 1e5,
-          updatedAt: Date.now(),
-        };
-      })
-    : [];
 const state = {
   query: localStorage.getItem("mill.query") || "",
   sourceFilter: new Set(
@@ -540,7 +259,7 @@ const state = {
   categoryFilter: new Set(
     JSON.parse(localStorage.getItem("mill.categoryFilter") || "[]"),
   ),
-  sort: localStorage.getItem("mill.sort") || "relevance",
+  sort: localStorage.getItem("mill.sort") || "all",
   density: localStorage.getItem("mill.density") || "detailed",
   page: 1,
   perPage: 48,
@@ -620,7 +339,12 @@ function copyStackToast(message) {
 }
 
 function saveLS() {
-  localStorage.setItem("mill.folders", JSON.stringify(state.folders));
+  const foldersToSave = state.folders.map((f) => ({
+    id: f.id,
+    name: f.name,
+    iconIds: f.iconIds,
+  }));
+  localStorage.setItem("mill.folders", JSON.stringify(foldersToSave));
   localStorage.setItem("mill.collections", JSON.stringify(state.collections));
 }
 
@@ -692,9 +416,13 @@ function nativeSvgDataUrl(icon) {
 }
 
 function renderStyled(icon, extra = {}) {
-  if (icon.imageUrl || icon.source === "bioicons") {
+  if (icon.imageUrl) {
     const size = extra.size || state.globalSize;
-    const label = String(icon.name).replace(/[&"<>]/g, (character) => ({ "&": "&amp;", '"': "&quot;", "<": "&lt;", ">": "&gt;" })[character]);
+    const label = String(icon.name).replace(
+      /[&"<>]/g,
+      (character) =>
+        ({ "&": "&amp;", '"': "&quot;", "<": "&lt;", ">": "&gt;" })[character],
+    );
     const src = icon.imageUrl || nativeSvgDataUrl(icon);
     return `<img src="${src}" alt="${label}" width="${size}" height="${size}" style="display:block;max-width:100%;object-fit:contain">`;
   }
@@ -728,8 +456,18 @@ function renderSvg(paths, opts = {}) {
   const adjustedStroke = stroke / scale;
 
   let isFillBased = !paths.includes("stroke");
-  if (opts.iconStyle !== "solid" && opts.iconStyle !== "brands" && opts.iconStyle !== "color") {
-    const fillBasedSources = ["fontawesome", "material", "zondicons", "entypo", "typicons"];
+  if (
+    opts.iconStyle !== "solid" &&
+    opts.iconStyle !== "brands" &&
+    opts.iconStyle !== "color"
+  ) {
+    const fillBasedSources = [
+      "fontawesome",
+      "material",
+      "zondicons",
+      "entypo",
+      "typicons",
+    ];
     if (!fillBasedSources.includes(opts.sourceId)) {
       isFillBased = false;
     }
@@ -914,8 +652,6 @@ function filterIcons() {
     }
     if (state.sourceFilter.size && !state.sourceFilter.has(ic.source))
       return false;
-    if (state.styleFilter.has("solid") && ic.source !== "opendoodles")
-      return false;
     if (state.styleFilter.size && !state.styleFilter.has(ic.style))
       return false;
     if (state.licenseFilter.size && !state.licenseFilter.has(ic.license))
@@ -975,44 +711,98 @@ function iconCard(icon) {
 }
 
 const ITEMS_PER_PAGE = 60;
+let currentRenderId = 0;
 
-function renderGrid() {
+async function renderGrid() {
+  const renderId = ++currentRenderId;
   saveFiltersLS();
+
+  if (typeof window.populateIllustrationsFromAPI === "function") {
+    const grid = $("#icon-grid");
+    grid.className = `mi-grid density-${state.density}`;
+    const resultsCountEl = $("#results-count");
+    if (resultsCountEl) resultsCountEl.classList.add("mi-skeleton");
+    grid.innerHTML = Array.from(
+      { length: 48 },
+      () =>
+        `<div class="mi-card" style="min-height:120px;animation:skeleton-pulse 1.5s ease-in-out infinite;pointer-events:none;"></div>`,
+    ).join("");
+
+    try {
+      // Track search event in Google Analytics before API call
+      if (typeof gtag !== 'undefined' && state.query) {
+        gtag('event', 'search', {
+          search_term: state.query,
+          page_location: window.location.pathname,
+          page_title: 'Illustrations Search'
+        });
+      }
+
+      const total = await window.populateIllustrationsFromAPI();
+      if (total === -1) return; // aborted
+      if (renderId !== currentRenderId) return;
+      const list = filterIcons();
+      renderedIconsMap = new Map(list.map((ic) => [ic.id, ic]));
+      renderGridContent(list, list.length, total);
+    } catch (error) {
+      console.error(
+        "[renderGrid] Error loading illustrations from API:",
+        error,
+      );
+      grid.innerHTML = `<div class="mi-empty"><h3>Failed to load illustrations</h3><p>${error.message}</p></div>`;
+    }
+    return;
+  }
+
+  // Fallback: filter local ICONS array
   const list = filterIcons();
-  const total = list.length;
+  renderGridContent(list, list.length, list.length);
+}
+
+function renderGridContent(list, displayTotal, apiTotal) {
+  const total = displayTotal;
   const grid = $("#icon-grid");
   grid.className = `mi-grid density-${state.density}`;
 
   if (!total) {
-    grid.innerHTML = `<div class="mi-empty"><h3>No illustrations yet</h3><p>Illustrations will appear here soon.</p></div>`;
-    $("#pagination-wrapper").style.display = "none";
+    grid.innerHTML = state.showSaved
+      ? `<div class="mi-empty"><h3>No illustrations are saved</h3><p>Create a collection to see saved illustrations.</p></div>`
+      : `<div class="mi-empty"><h3>No illustrations found</h3><p>Try clearing filters or a different search.</p></div>`;
+    const pw = $("#pagination-wrapper");
+    if (pw) pw.style.display = "none";
   } else {
-    // Pagination slicing
-    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(apiTotal / ITEMS_PER_PAGE);
     if (state.page > totalPages) state.page = totalPages;
-    if (state.page < 1) state.page = 1; localStorage.setItem("mill.page", state.page);
+    if (state.page < 1) state.page = 1;
+    localStorage.setItem("mill.page", state.page);
 
-    const startIdx = (state.page - 1) * ITEMS_PER_PAGE;
-    const paginatedList = list.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+    // When using API loader the list is already paginated; fallback slices locally
+    const paginatedList =
+      typeof window.populateIllustrationsFromAPI === "function"
+        ? list
+        : list.slice(
+            (state.page - 1) * ITEMS_PER_PAGE,
+            state.page * ITEMS_PER_PAGE,
+          );
 
     grid.innerHTML = paginatedList.map(iconCard).join("");
-    renderPagination(total, totalPages);
+    renderPagination(apiTotal, totalPages);
   }
 
   const resultsCountEl = $("#results-count");
   if (resultsCountEl) {
-    resultsCountEl.textContent = total.toLocaleString();
+    resultsCountEl.textContent = (apiTotal || total).toLocaleString();
     resultsCountEl.classList.remove("mi-skeleton");
   }
   $("#results-query").textContent = state.query ? `for "${state.query}"` : "";
-  // Only show the stroke adjustment slider if there is at least one 'true stroke' icon in the current grid list
+
   const strokeSection = $("#rp-stroke-section");
   const strokeDivider = $("#rp-stroke-divider");
   if (strokeSection) {
     const showStroke = list.some(
       (ic) =>
         (ic.style === "outline" || ic.style === "thin") &&
-        ic.svg.includes("stroke="),
+        ic.svg?.includes("stroke="),
     );
     strokeSection.style.display = showStroke ? "" : "none";
     if (strokeDivider) strokeDivider.style.display = showStroke ? "" : "none";
@@ -1032,6 +822,16 @@ function renderPagination(total, totalPages) {
 }
 
 function renderFilters() {
+  const getSourceIcon = (label) => {
+    const normalizedLabel = label.toLowerCase();
+    if (normalizedLabel.includes("hero")) return "Heroicons.svg";
+    if (normalizedLabel.includes("lucide")) return "Lucide.svg";
+    if (normalizedLabel.includes("simple")) return "icons-brand.svg";
+    if (normalizedLabel.includes("phosphor")) return "Phosphor.svg";
+    if (normalizedLabel.includes("tabler")) return "Tabler Icons.svg";
+    return null;
+  };
+
   // Sources (Checkbox style)
   const buildSourceList = (containerId, items, setKey) => {
     const set = state[setKey];
@@ -1040,16 +840,7 @@ function renderFilters() {
     el.innerHTML = items
       .map((it) => {
         const active = set.has(it.value);
-        // Determine icon based on label name (fallback to a generic icon if not found)
-        let icon = "icons-basic.svg";
-        if (it.label.toLowerCase().includes("hero")) icon = "Heroicons.svg";
-        else if (it.label.toLowerCase().includes("lucide")) icon = "Lucide.svg";
-        else if (it.label.toLowerCase().includes("simple"))
-          icon = "icons-brand.svg";
-        else if (it.label.toLowerCase().includes("phosphor"))
-          icon = "Phosphor.svg";
-        else if (it.label.toLowerCase().includes("tabler"))
-          icon = "Tabler Icons.svg";
+        const icon = it.icon || "icons-basic.svg";
 
         return `
       <div class="mi-rp-item ${active ? "is-active" : ""}" data-val="${it.value}" style="cursor:pointer">
@@ -1079,7 +870,23 @@ function renderFilters() {
         const v = item.dataset.val;
         if (set.has(v)) set.delete(v);
         else set.add(v);
-        state.page = 1; localStorage.setItem("mill.page", state.page);
+        if (setKey === "sourceFilter" && state.styleFilter.size > 0) {
+          const supportedStyles = new Set(
+            [...state.sourceFilter]
+              .flatMap((sourceId) => {
+                const source = SOURCES.find((entry) => entry.id === sourceId);
+                return source?.styles || [];
+              })
+              .map((style) => style.toLowerCase()),
+          );
+          if (supportedStyles.size > 0) {
+            state.styleFilter.forEach((style) => {
+              if (!supportedStyles.has(style)) state.styleFilter.delete(style);
+            });
+          }
+        }
+        state.page = 1;
+        localStorage.setItem("mill.page", state.page);
         renderGrid();
         renderFilters();
 
@@ -1152,7 +959,8 @@ function renderFilters() {
           set.clear();
           set.add(v);
         }
-        state.page = 1; localStorage.setItem("mill.page", state.page);
+        state.page = 1;
+        localStorage.setItem("mill.page", state.page);
         renderGrid();
         renderFilters();
       });
@@ -1185,15 +993,23 @@ function renderFilters() {
         const v = item.dataset.val;
         if (set.has(v)) set.delete(v);
         else set.add(v);
-        state.page = 1; localStorage.setItem("mill.page", state.page);
+        state.page = 1;
+        localStorage.setItem("mill.page", state.page);
         renderGrid();
         renderFilters();
       });
     }
   };
 
-  const countBy = (key) =>
-    ICONS.reduce((m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m), {});
+  const countBy = (key) => {
+    if (window.ILLUSTRATION_STATS && window.getIllustrationFilterCounts) {
+      return window.getIllustrationFilterCounts(key);
+    }
+    return ICONS.reduce(
+      (m, ic) => ((m[ic[key]] = (m[ic[key]] || 0) + 1), m),
+      {},
+    );
+  };
   const sc = countBy("source"),
     st = countBy("style"),
     lc = countBy("license"),
@@ -1205,14 +1021,15 @@ function renderFilters() {
     value: s.id,
     label: s.name,
     count: fmtNum(sc[s.id] || 0),
+    icon: getSourceIcon(s.name),
   }));
   const selectedSourceVals = Array.from(state.sourceFilter).reverse();
   const selectedSources = selectedSourceVals
     .map((val) => allSourcesRaw.find((s) => s.value === val))
     .filter(Boolean);
-  const unselectedSources = allSourcesRaw.filter(
-    (s) => !state.sourceFilter.has(s.value),
-  );
+  const unselectedSources = allSourcesRaw
+    .filter((s) => !state.sourceFilter.has(s.value))
+    .sort((a, b) => Number(Boolean(b.icon)) - Number(Boolean(a.icon)));
   const allSources = [...selectedSources, ...unselectedSources];
 
   const visibleSources = allSources.slice(0, state.sourcesVisibleCount);
@@ -1308,23 +1125,24 @@ function renderFilters() {
     }
   }
 
-  let activeStylesList = STYLES;
+  const allStyles = Object.keys(st).filter((style) => st[style] > 0);
+  let activeStylesList = allStyles;
   if (state.sourceFilter.size > 0) {
-    const activeStylesSet = new Set();
-    state.sourceFilter.forEach((src) => {
-      const srcStyles = SOURCE_STYLE_BIAS[src] || [];
-      srcStyles.forEach((s) => activeStylesSet.add(s.toLowerCase()));
+    const supportedStyles = new Set();
+    state.sourceFilter.forEach((sourceId) => {
+      const source = SOURCES.find((entry) => entry.id === sourceId);
+      source?.styles?.forEach((style) =>
+        supportedStyles.add(style.toLowerCase()),
+      );
     });
-    if (activeStylesSet.size > 0) {
-      activeStylesList = STYLES.filter((s) => activeStylesSet.has(s));
-    }
+    activeStylesList = allStyles.filter((style) => supportedStyles.has(style));
   }
 
   buildStyleList(
     "#filter-style",
     activeStylesList.map((s) => ({
       value: s,
-      label: s === "color" ? "Default" : s[0].toUpperCase() + s.slice(1),
+      label: s[0].toUpperCase() + s.slice(1),
       count: st[s] || 0,
     })),
     "styleFilter",
@@ -1362,7 +1180,8 @@ function renderFilters() {
       sourceAllContainer.addEventListener("click", () => {
         if (state.sourceFilter.size > 0) {
           state.sourceFilter.clear(); // Clear filters
-          state.page = 1; localStorage.setItem("mill.page", state.page);
+          state.page = 1;
+          localStorage.setItem("mill.page", state.page);
           renderGrid();
           renderFilters();
         }
@@ -1378,7 +1197,13 @@ function renderFilters() {
         <div class="mi-rp-avatar" style="z-index: 1; margin-left: -6px"><img src="ASSET/Icons/icons-filled.svg" alt=""/></div>
       `;
       sourceAllTitle.textContent = "All Sources";
-      badgeLg.textContent = (ICONS.length || 0).toLocaleString();
+      const totalIllustrations = window.ILLUSTRATION_STATS
+        ? window.ILLUSTRATION_STATS.collections.reduce(
+            (sum, c) => sum + c.total,
+            0,
+          )
+        : ICONS.length;
+      badgeLg.textContent = totalIllustrations.toLocaleString();
     } else {
       sourceAllContainer.classList.add("has-filters");
       sourceAllContainer.title = "Click to clear filters";
@@ -1671,30 +1496,45 @@ function openDetail(icon) {
   renderCanvas();
   renderSimilar();
   renderMatchingIcons();
+  const sourceObj =
+    window.ILLUSTRATION_STATS?.collections?.find(
+      (source) => source.id === icon.source,
+    ) || SOURCES.find((source) => source.id === icon.source);
+  const sourceName = sourceObj?.name || icon.sourceName || icon.source;
+  const license = sourceObj?.license || icon.license || "Unknown";
   $("#detail-name").textContent = icon.name;
-  $("#detail-source").textContent = icon.sourceName;
-  $("#detail-license").textContent = icon.license;
-  $("#attr-source").textContent = icon.sourceName;
-  $("#attr-license").textContent = icon.license;
-  const sourceObj = SOURCES.find((s) => s.id === icon.source);
+  $("#detail-source").textContent = sourceName;
+  $("#detail-license").textContent = license;
+  $("#attr-source").textContent = sourceName;
+  $("#attr-license").textContent = license;
   if (sourceObj && sourceObj.licenseUrl) {
     $("#attr-license-link").href = sourceObj.licenseUrl;
   } else {
     $("#attr-license-link").removeAttribute("href");
   }
-  
+
   let attrText = "Required";
   let commText = "Allowed";
-  const l = (icon.license || "").toLowerCase();
+  const l = license.toLowerCase();
   if (l.includes("cc0") || l === "free" || l === "wtfpl") {
     attrText = "Not required";
-  } else if (l.includes("mit") || l.includes("isc") || l.includes("apache") || l.includes("ofl") || l.includes("zlib")) {
+  } else if (
+    l.includes("mit") ||
+    l.includes("isc") ||
+    l.includes("apache") ||
+    l.includes("ofl") ||
+    l.includes("zlib")
+  ) {
     attrText = "Required (in source)";
   }
-  if (l.includes("nc") || l.includes("non-commercial") || l.includes("noncommercial")) {
+  if (
+    l.includes("nc") ||
+    l.includes("non-commercial") ||
+    l.includes("noncommercial")
+  ) {
     commText = "Not allowed";
   }
-  
+
   if ($("#attr-attribution")) $("#attr-attribution").textContent = attrText;
   if ($("#attr-commercial")) $("#attr-commercial").textContent = commText;
   if ($("#attr-author")) $("#attr-author").textContent = icon.author;
@@ -1757,7 +1597,8 @@ function syncEditorControls() {
 
   // Solid illustrations use a single editable color; source-color artwork retains its original palette.
   const colorGrp = $("#grp-color-mode");
-  if (colorGrp) colorGrp.style.display = state.editorIcon?.source === "opendoodles" ? "" : "none";
+  if (colorGrp)
+    colorGrp.style.display = state.editorIcon?.style === "solid" ? "" : "none";
 
   $("#ctrl-color").value = e.color;
   $("#ctrl-color-hex").value = e.color;
@@ -1788,7 +1629,9 @@ function syncEditorControls() {
   );
   const fillGrp = $("#grp-fill-mode");
   if (fillGrp) fillGrp.style.display = "none";
-  $("#grp-fill-color").style.display = e.fillMode === "solid" ? "flex" : "none";
+  const fillColorGrp = $("#grp-fill-color");
+  if (fillColorGrp)
+    fillColorGrp.style.display = e.fillMode === "solid" ? "flex" : "none";
   $$("[data-cap]").forEach((b) =>
     b.classList.toggle("is-active", b.dataset.cap === e.cap),
   );
@@ -1819,9 +1662,12 @@ function updateShapeControlsVisibility() {
   const e = state.editor;
   const hasShape = e.shape !== "none";
   const isRounded = e.shape === "rounded";
-  $("#grp-icon-inset").style.display = hasShape ? "" : "none";
-  $("#grp-shape-color").style.display = hasShape ? "" : "none";
-  $("#grp-shape-radius").style.display = isRounded ? "" : "none";
+  const iconInsetGrp = $("#grp-icon-inset");
+  if (iconInsetGrp) iconInsetGrp.style.display = hasShape ? "" : "none";
+  const shapeColorGrp = $("#grp-shape-color");
+  if (shapeColorGrp) shapeColorGrp.style.display = hasShape ? "" : "none";
+  const shapeRadiusGrp = $("#grp-shape-radius");
+  if (shapeRadiusGrp) shapeRadiusGrp.style.display = isRounded ? "" : "none";
 }
 
 function editorRenderOpts(sizeOverride) {
@@ -1855,7 +1701,7 @@ function renderCanvas() {
   // Scale visual preview more aggressively than export size so the icon fills the canvas nicely.
   const visualSize = Math.max(96, Math.min(e.size * 8, 280));
   const inner = $("#canvas-inner");
-  if (state.editorIcon.imageUrl || state.editorIcon.source === "bioicons") {
+  if (state.editorIcon.imageUrl) {
     const src = state.editorIcon.imageUrl || nativeSvgDataUrl(state.editorIcon);
     inner.innerHTML = `<img src="${src}" alt="${String(state.editorIcon.name).replace(/[&"<>]/g, (character) => ({ "&": "&amp;", '"': "&quot;", "<": "&lt;", ">": "&gt;" })[character])}" style="display:block;width:${visualSize}px;height:${visualSize}px;max-width:100%;object-fit:contain">`;
   } else {
@@ -2206,7 +2052,7 @@ function requireLoginToDownload() {
     const user = window.FirebaseAuthService.getCurrentUser();
     if (!user || user.isAnonymous) {
       if (window.AuthModal) {
-        window.AuthModal.open('login');
+        window.AuthModal.open("login");
       }
       return false;
     }
@@ -2362,7 +2208,10 @@ function renderIconOfDay() {
     }
     if (copyId) {
       const ic = ICONS.find((x) => x.id === copyId.dataset.copyId);
-      if (ic) copyText(renderSvg(ic.svg)).then((ok) => toast(ok ? "Copied SVG" : "Copy failed"));
+      if (ic)
+        copyText(renderSvg(ic.svg)).then((ok) =>
+          toast(ok ? "Copied SVG" : "Copy failed"),
+        );
     }
   });
 }
@@ -2434,7 +2283,8 @@ function renderCollections() {
     if (!card) return;
     state.categoryFilter.clear();
     state.categoryFilter.add(card.dataset.coll);
-    state.page = 1; localStorage.setItem("mill.page", state.page);
+    state.page = 1;
+    localStorage.setItem("mill.page", state.page);
     renderFilters();
     renderGrid();
     document
@@ -2583,9 +2433,10 @@ function wire() {
   const debounced = debounce(() => {
     state.query = searchInput.value;
     localStorage.setItem("mill.query", state.query);
-    state.page = 1; localStorage.setItem("mill.page", state.page);
+    state.page = 1;
+    localStorage.setItem("mill.page", state.page);
     renderGrid();
-  }, 120);
+  }, 800); // Increased from 250ms to 800ms to prevent tracking every keystroke
 
   if (state.query) {
     searchInput.value = state.query;
@@ -2632,7 +2483,8 @@ function wire() {
         buildCategoryList();
       }
 
-      state.page = 1; localStorage.setItem("mill.page", state.page);
+      state.page = 1;
+      localStorage.setItem("mill.page", state.page);
       renderGrid();
       searchInput.focus();
     });
@@ -2641,7 +2493,8 @@ function wire() {
   $("#search-form").addEventListener("submit", (e) => {
     e.preventDefault();
     state.query = searchInput.value;
-    state.page = 1; localStorage.setItem("mill.page", state.page);
+    state.page = 1;
+    localStorage.setItem("mill.page", state.page);
     renderGrid();
   });
 
@@ -2650,7 +2503,8 @@ function wire() {
     c.addEventListener("click", () => {
       searchInput.value = c.dataset.q;
       state.query = c.dataset.q;
-      state.page = 1; localStorage.setItem("mill.page", state.page);
+      state.page = 1;
+      localStorage.setItem("mill.page", state.page);
       renderGrid();
       document
         .querySelector(".mi-results-wrap")
@@ -2680,7 +2534,8 @@ function wire() {
         state.styleFilter.add("outline");
         renderFilters();
       }
-      state.page = 1; localStorage.setItem("mill.page", state.page);
+      state.page = 1;
+      localStorage.setItem("mill.page", state.page);
       renderGrid();
       document
         .querySelector(".mi-results-wrap")
@@ -2708,7 +2563,8 @@ function wire() {
     if (!matched) matched = "sparkles";
     searchInput.value = matched;
     state.query = matched;
-    state.page = 1; localStorage.setItem("mill.page", state.page);
+    state.page = 1;
+    localStorage.setItem("mill.page", state.page);
     renderGrid();
     toast(`AI suggests: ${matched}`);
     document
@@ -2827,7 +2683,8 @@ function wire() {
     state.categoryFilter.clear();
     state.query = "";
     searchInput.value = "";
-    state.page = 1; localStorage.setItem("mill.page", state.page);
+    state.page = 1;
+    localStorage.setItem("mill.page", state.page);
     renderFilters();
     renderGrid();
   });
@@ -2836,7 +2693,9 @@ function wire() {
   $("#icon-grid").addEventListener("click", (e) => {
     const card = e.target.closest(".mi-card");
     if (!card) return;
-    const icon = ICONS.find((x) => x.id === card.dataset.id);
+    const icon =
+      renderedIconsMap.get(card.dataset.id) ||
+      ICONS.find((x) => x.id === card.dataset.id);
     if (!icon) return;
     if (e.target.closest("[data-cmp]")) {
       if (state.selected.has(icon.id)) state.selected.delete(icon.id);
@@ -2857,7 +2716,7 @@ function wire() {
           toast(ok ? `Copied "${icon.name}"` : "Copy failed"),
         );
       } else if (act.dataset.act === "save") {
-        window.CollectionManager.openModal(icon.id);
+        window.CollectionManager.openModal(icon.id, icon);
       }
       return;
     }
@@ -3122,7 +2981,8 @@ function wire() {
     closeModals();
     state.categoryFilter.clear();
     state.categoryFilter.add(cat);
-    state.page = 1; localStorage.setItem("mill.page", state.page);
+    state.page = 1;
+    localStorage.setItem("mill.page", state.page);
     renderFilters();
     renderGrid();
     document
@@ -3199,7 +3059,8 @@ function wire() {
     closeModals();
     state.query = chip.dataset.tag;
     $("#search-input").value = state.query;
-    state.page = 1; localStorage.setItem("mill.page", state.page);
+    state.page = 1;
+    localStorage.setItem("mill.page", state.page);
     renderGrid();
     document
       .querySelector(".mi-results-wrap")
@@ -3222,17 +3083,19 @@ function wire() {
       if (!state.editorIcon) return;
       const size = state.pngSize || 512;
       try {
-        cpBtn.style.opacity = '0.5';
+        cpBtn.style.opacity = "0.5";
         const dataUrl = await rasterizePng(size);
         const res = await fetch(dataUrl);
         const blob = await res.blob();
-        await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+        await navigator.clipboard.write([
+          new ClipboardItem({ "image/png": blob }),
+        ]);
         toast("Copied PNG image");
       } catch (e) {
         console.error(e);
         toast("Failed to copy PNG image");
       } finally {
-        cpBtn.style.opacity = '1';
+        cpBtn.style.opacity = "1";
       }
     });
   }
@@ -3390,7 +3253,7 @@ function wire() {
   }
   $("#btn-save-collection").addEventListener("click", () => {
     if (!state.editorIcon) return;
-    window.CollectionManager.openModal(state.editorIcon.id);
+    window.CollectionManager.openModal(state.editorIcon.id, state.editorIcon);
   });
   $("#btn-find-similar").addEventListener("click", () => {
     if (!state.editorIcon) return;
@@ -3420,7 +3283,7 @@ function wire() {
           toast(ok ? "Copied SVG" : "Copy failed"),
         );
       } else if (action.dataset.act === "save") {
-        window.CollectionManager.openModal(icon.id);
+        window.CollectionManager.openModal(icon.id, icon);
       }
       return;
     }
@@ -3487,9 +3350,8 @@ function debounce(fn, ms) {
 // --------------------------------------------------------------------
 function renderHeroStats() {
   const totalMarket = 319252; // Hardcoded per user request
-  const totalStyles = new Set(
-    SOURCES.flatMap((s) => SOURCE_STYLE_BIAS[s.id] || []),
-  ).size;
+  const totalStyles =
+    Object.keys(window.ILLUSTRATION_STATS?.byStyle || {}).length || 2;
   const fmt = (n) =>
     n >= 1e6
       ? (n / 1e6).toFixed(n >= 1e7 ? 0 : 1).replace(/\.0$/, "") + "M"
@@ -3502,7 +3364,7 @@ function renderHeroStats() {
 
   const searchInput = $("#search-input");
   if (searchInput) {
-    searchInput.placeholder = `Search ${ICONS.length.toLocaleString()}+ icons...`;
+    searchInput.placeholder = `Search ${getTotalIllustrationCount().toLocaleString()}+ illustrations...`;
   }
 }
 
@@ -3551,6 +3413,7 @@ function setupSidebarTabs() {
 
       // Update global state and filter grid
       state.showSaved = target === "saved";
+      localStorage.setItem("mill.sidebarTab", target);
 
       // If categories tab is opened, make sure list is rendered
       if (target === "categories") {
@@ -3562,7 +3425,8 @@ function setupSidebarTabs() {
       }
 
       // Re-render grid to reflect saved vs all icons
-      state.page = 1; localStorage.setItem("mill.page", state.page);
+      state.page = 1;
+      localStorage.setItem("mill.page", state.page);
       renderGrid();
     });
   });
@@ -3575,10 +3439,8 @@ function buildTopCategoryDropdown() {
 
   if (!menuList || !catDropdown || !catMenu) return;
 
-  const catCounts = {};
-  ICONS.forEach((ic) => {
-    catCounts[ic.category] = (catCounts[ic.category] || 0) + 1;
-  });
+  const catCounts =
+    (window.ILLUSTRATION_STATS && window.ILLUSTRATION_STATS.byCategory) || {};
 
   const cats = Object.keys(catCounts).sort((a, b) => {
     if (a === "Others") return 1;
@@ -3590,7 +3452,7 @@ function buildTopCategoryDropdown() {
   let html = `
     <div class="mi-category-menu-item ${isAllActive ? "is-active" : ""}" data-cat="all">
       <span class="mi-category-menu-label">All Illustrations</span>
-      <span class="mi-category-menu-badge">${ICONS.length.toLocaleString()}</span>
+      <span class="mi-category-menu-badge">${getTotalIllustrationCount().toLocaleString()}</span>
     </div>
   `;
 
@@ -3634,7 +3496,8 @@ function buildTopCategoryDropdown() {
       buildTopCategoryDropdown();
       buildCategoryList();
 
-      state.page = 1; localStorage.setItem("mill.page", state.page);
+      state.page = 1;
+      localStorage.setItem("mill.page", state.page);
       renderGrid();
     });
   });
@@ -3658,10 +3521,8 @@ function buildCategoryList() {
   const container = document.getElementById("categories-list-container");
   if (!container) return;
 
-  const catCounts = {};
-  ICONS.forEach((ic) => {
-    catCounts[ic.category] = (catCounts[ic.category] || 0) + 1;
-  });
+  const catCounts =
+    (window.ILLUSTRATION_STATS && window.ILLUSTRATION_STATS.byCategory) || {};
 
   const cats = Object.keys(catCounts).sort((a, b) => {
     if (a === "Others") return 1;
@@ -3673,7 +3534,7 @@ function buildCategoryList() {
   let html = `
     <div class="mi-rp-cat-item ${isAllActive ? "is-active" : ""}" data-cat="all">
       <span class="mi-rp-cat-label">All</span>
-      <span class="mi-rp-cat-count">${ICONS.length.toLocaleString()}</span>
+      <span class="mi-rp-cat-count">${getTotalIllustrationCount().toLocaleString()}</span>
     </div>
   `;
 
@@ -3711,7 +3572,8 @@ function buildCategoryList() {
       if (searchIcon && searchInput)
         searchIcon.style.display = searchInput.value ? "none" : "flex";
 
-      state.page = 1; localStorage.setItem("mill.page", state.page);
+      state.page = 1;
+      localStorage.setItem("mill.page", state.page);
       renderGrid();
       buildCategoryList(); // re-render to update active styling
     });
@@ -3725,17 +3587,19 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
   const PROMO_KEY = "motvin_promo_hidden_until";
   const banner = document.querySelector(".mi-new-banner");
-  
+
   if (banner) {
     const hiddenUntil = localStorage.getItem(PROMO_KEY);
     if (hiddenUntil && Date.now() < parseInt(hiddenUntil, 10)) {
       banner.setAttribute("hidden", "");
     } else {
-      document.querySelector(".mi-new-banner-close")?.addEventListener("click", () => {
-        banner.setAttribute("hidden", "");
-        // 2 days in milliseconds: 2 * 24 * 60 * 60 * 1000 = 172800000
-        localStorage.setItem(PROMO_KEY, (Date.now() + 172800000).toString());
-      });
+      document
+        .querySelector(".mi-new-banner-close")
+        ?.addEventListener("click", () => {
+          banner.setAttribute("hidden", "");
+          // 2 days in milliseconds: 2 * 24 * 60 * 60 * 1000 = 172800000
+          localStorage.setItem(PROMO_KEY, (Date.now() + 172800000).toString());
+        });
     }
   }
 });
@@ -3747,28 +3611,103 @@ document.addEventListener("DOMContentLoaded", () => {
     window.tooltipController.init();
   }
 
-  renderHeroStats();
-  renderFilters();
-  renderGrid();
-  renderCompareCount();
-  renderIconOfDay();
-  renderCollections();
-  renderCategoriesSection();
-  setupSidebarTabs();
-  buildCategoryList();
-  wire();
-  initRecolor();
+  const initUI = () => {
+    renderHeroStats();
+    renderFilters();
+
+    // Restore sidebar tab state BEFORE first renderGrid so state.showSaved is correct
+    const savedTab = localStorage.getItem("mill.sidebarTab");
+    if (savedTab && savedTab !== "filters") {
+      state.showSaved = savedTab === "saved";
+    }
+
+    renderGrid();
+    renderCompareCount();
+    renderIconOfDay();
+    renderCollections();
+    renderCategoriesSection();
+    setupSidebarTabs();
+    buildCategoryList();
+    wire();
+    initRecolor();
+
+    // Apply saved tab UI after DOM is ready (panels, button highlight, saved panel)
+    if (savedTab && savedTab !== "filters") {
+      const panels = {
+        filters: document.getElementById("rp-tab-filters"),
+        categories: document.getElementById("rp-tab-categories"),
+        saved: document.getElementById("rp-tab-saved"),
+        plugins: document.getElementById("rp-tab-plugins"),
+        help: document.getElementById("rp-tab-help"),
+      };
+      Object.entries(panels).forEach(([key, el]) => {
+        if (el) el.style.display = key === savedTab ? "block" : "none";
+      });
+      const innerPanel = document.querySelector(".mi-right-panel-inner");
+      if (innerPanel) {
+        Object.keys(panels).forEach((key) =>
+          innerPanel.classList.remove(`mi-rp-${key}`),
+        );
+        innerPanel.classList.add(`mi-rp-${savedTab}`);
+      }
+      const activeTabBtn = document.querySelector(
+        `.mi-sidebar-item[data-sidebar="${savedTab}"]`,
+      );
+      if (activeTabBtn) {
+        document
+          .querySelectorAll(".mi-sidebar-item")
+          .forEach((t) => t.classList.remove("is-active"));
+        activeTabBtn.classList.add("is-active");
+        const title = document.getElementById("rp-header-title");
+        if (title)
+          title.textContent =
+            activeTabBtn.querySelector(".mi-sidebar-label")?.textContent || "";
+      }
+      if (savedTab === "saved" && typeof renderSavedPanel === "function")
+        renderSavedPanel();
+      if (savedTab === "categories") buildCategoryList();
+    }
+  };
+
+  if (window.ILLUSTRATION_STATS_LOADED) {
+    // Start loading the grid immediately (in parallel with stats) so users see content sooner
+    renderGrid();
+    // Then finish the full UI init (filters, sidebar, etc.) once stats are ready
+    window.ILLUSTRATION_STATS_LOADED.then(initUI);
+  } else {
+    initUI();
+  }
 
   // Dynamically update the overall live icons count in the sidebar
   const badgeLg = document.querySelector(".mi-rp-badge-lg");
   if (badgeLg) {
-    badgeLg.textContent = ICONS.length.toLocaleString();
+    badgeLg.textContent = getTotalIllustrationCount().toLocaleString();
     badgeLg.classList.remove("mi-skeleton");
   }
 
   // Remove skeleton loaders from sort tabs
   document.querySelectorAll(".mi-sort-tab.mi-skeleton").forEach((tab) => {
     tab.classList.remove("mi-skeleton");
+  });
+
+  document.querySelectorAll(".mi-sort-tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      state.sort = tab.dataset.sort;
+      state.page = 1;
+      document.querySelectorAll(".mi-sort-tab").forEach((item) => {
+        const isActive = item === tab;
+        item.classList.toggle("is-active", isActive);
+        item.setAttribute("aria-selected", String(isActive));
+      });
+      const select = $("#sort-select");
+      if (select) select.value = state.sort;
+      renderGrid();
+    });
+  });
+  document.querySelectorAll(".mi-sort-tab").forEach((tab) => {
+    const isActive = tab.dataset.sort === state.sort;
+    tab.classList.toggle("is-active", isActive);
+    tab.setAttribute("aria-selected", String(isActive));
   });
 
   // Deep-link: open the icon requested via ?icon=<id> as a full-page view
@@ -3780,13 +3719,6 @@ document.addEventListener("DOMContentLoaded", () => {
       openDetail(ic);
       setFullPage(true, ic.id);
     }
-  }
-
-  // Restore active sidebar tab seamlessly
-  const savedTab = localStorage.getItem("mill.sidebarTab");
-  if (savedTab && savedTab !== "filters") {
-    const activeTabBtn = document.querySelector(`.mi-sidebar-item[data-sidebar="${savedTab}"]`);
-    if (activeTabBtn) activeTabBtn.click();
   }
 
   // Sidebar Resizer Logic
@@ -4075,6 +4007,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.CollectionManager.init({
     appType: "illustrations",
     getItems: () => ICONS,
+    saveLS: saveLS,
     onUpdate: () => {
       saveLS();
       if (typeof renderSavedPanel === "function") renderSavedPanel();
@@ -4085,8 +4018,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function updateEditModalSaveState() {
-  if (!state.editorIcon || !window.EditModalManager || !window.EditModalManager.updateSaveState) return;
-  const isSaved = state.folders && state.folders.some(f => f.iconIds.includes(state.editorIcon.id));
+  if (
+    !state.editorIcon ||
+    !window.EditModalManager ||
+    !window.EditModalManager.updateSaveState
+  )
+    return;
+  const isSaved =
+    state.folders &&
+    state.folders.some((f) => f.iconIds.includes(state.editorIcon.id));
   window.EditModalManager.updateSaveState(isSaved);
 }
 
@@ -4135,6 +4075,7 @@ document
       const folderId = delBtn.dataset.del;
       if (confirm("Are you sure you want to delete this collection?")) {
         state.folders = state.folders.filter((f) => f.id !== folderId);
+        window.CollectionManager?.forgetDirectoryHandle(folderId);
         if (state.activeFolderId === folderId) state.activeFolderId = null;
         saveLS();
         renderSavedPanel();
@@ -4149,7 +4090,8 @@ document
         item.dataset.folder === "all" ? null : item.dataset.folder;
       state.activeFolderId = folderId;
       renderSavedPanel();
-      state.page = 1; localStorage.setItem("mill.page", state.page);
+      state.page = 1;
+      localStorage.setItem("mill.page", state.page);
       renderGrid();
     }
   });
@@ -4162,4 +4104,3 @@ document
   });
 
 // --- Authentication UI Sync ---
-
