@@ -489,11 +489,11 @@ async function renderGrid() {
 
     try {
       // Track search event in Google Analytics before API call
-      if (typeof gtag !== 'undefined' && state.query) {
-        gtag('event', 'search', {
+      if (typeof gtag !== "undefined" && state.query) {
+        gtag("event", "search", {
           search_term: state.query,
           page_location: window.location.pathname,
-          page_title: 'Logos Search'
+          page_title: "Logos Search",
         });
       }
 
@@ -1071,6 +1071,64 @@ function renderCompareCount() {
   const badge = $("#compare-count");
   badge.textContent = state.selected.size;
   btn.disabled = state.selected.size < 2;
+  renderBulkActions();
+}
+
+function renderBulkActions() {
+  const renderedIcons = [...renderedIconsMap.values()];
+  const selectedIcons = [...state.selected]
+    .map(
+      (id) => renderedIconsMap.get(id) || ICONS.find((icon) => icon.id === id),
+    )
+    .filter(Boolean);
+  window.MultiActionsStrip?.render({
+    items: selectedIcons,
+    resultCount: $("#results-count")?.textContent || ICONS.length,
+    query: state.query,
+    allSelected:
+      renderedIcons.length > 0 &&
+      renderedIcons.every((icon) => state.selected.has(icon.id)),
+    onToggleAll: () => {
+      const allSelected = renderedIcons.every((icon) =>
+        state.selected.has(icon.id),
+      );
+      if (allSelected) state.selected.clear();
+      else renderedIcons.forEach((icon) => state.selected.add(icon.id));
+      document
+        .querySelectorAll(".mi-card")
+        .forEach((card) =>
+          card.classList.toggle(
+            "is-selected",
+            state.selected.has(card.dataset.id),
+          ),
+        );
+      renderCompareCount();
+    },
+    onCopy: () => {
+      if (!requireLoginToDownload()) return;
+      copyText(
+        selectedIcons.map((icon) => renderStyled(icon)).join("\n\n"),
+      ).then((ok) => toast(ok ? "Copied selected SVGs" : "Copy failed"));
+    },
+    onDownload: () => {
+      if (!requireLoginToDownload()) return;
+      selectedIcons.forEach((icon) =>
+        download(
+          `${icon.name}.svg`,
+          "data:image/svg+xml;charset=utf-8," +
+            encodeURIComponent(renderStyled(icon)),
+        ),
+      );
+      toast("Selected SVGs downloaded");
+    },
+    onClear: () => {
+      state.selected.clear();
+      document
+        .querySelectorAll(".mi-card.is-selected")
+        .forEach((card) => card.classList.remove("is-selected"));
+      renderCompareCount();
+    },
+  });
 }
 
 // --------------------------------------------------------------------
