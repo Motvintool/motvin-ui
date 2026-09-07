@@ -1323,10 +1323,10 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-sort-tab.is-active {
-  background: white;
-  border-color: rgba(92, 74, 228, 0.35);
+  background: #ededed;
+  border-color: #ededed;
   font-family: "Outfit", sans-serif;
-  color: #5c4ae4;
+  color: #1d1d1d;
   font-weight: 500;
 }
 
@@ -1552,7 +1552,7 @@ body.is-panel-floating .mi-main {
 
 .mi-card:hover {
   border-color: var(--mi-border-2);
-  box-shadow: inset 0 0 0 1.8px #5c4ae4;
+  box-shadow: inset 0 0 0 1.8px #1d1d1d;
   background: #ffffff;
   z-index: 10;
 }
@@ -1564,7 +1564,7 @@ body.is-panel-floating .mi-main {
 
 .mi-card.is-selected:hover {
   border-color: var(--mi-border-2);
-  box-shadow: inset 0 0 0 1.8px #5c4ae4;
+  box-shadow: inset 0 0 0 1.8px #1d1d1d;
   background: #ffffff;
   z-index: 10;
 }
@@ -1650,13 +1650,13 @@ body.is-panel-floating .mi-main {
 
 .mi-card-act.is-active {
   opacity: 1;
-  color: var(--mi-brand, #5c4ae4);
+  color: #1d1d1d;
 }
 
 .mi-card-act:hover {
-  background: var(--mi-accent);
+  background: #1d1d1d;
   color: #fff;
-  border-color: var(--mi-accent);
+  border-color: #1d1d1d;
 }
 
 .mi-card-act svg {
@@ -2292,8 +2292,8 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-item.is-active .mi-rp-check-custom,
 .mi-rp-license-active.is-active .mi-rp-check-custom {
-  background: #5c4ae4;
-  border-color: #5c4ae4;
+  background: #1d1d1d;
+  border-color: #1d1d1d;
 }
 
 .mi-rp-item.is-active .mi-rp-check-custom::after,
@@ -2442,7 +2442,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-slider-fill {
   height: 100%;
-  background: #5c4ae4;
+  background: #1d1d1d;
   border-radius: 100px;
 }
 

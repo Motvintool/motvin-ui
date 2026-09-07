@@ -1104,14 +1104,74 @@ function renderBulkActions() {
         );
       renderCompareCount();
     },
-    onCopy: () => {
+    onCopy: (format) => {
       if (!requireLoginToDownload()) return;
-      copyText(
-        selectedIcons.map((icon) => renderStyled(icon)).join("\n\n"),
-      ).then((ok) => toast(ok ? "Copied selected SVGs" : "Copy failed"));
+      const payload = selectedIcons
+        .map((icon) => {
+          const svg = renderStyled(icon);
+          switch (format) {
+            case "jsx":
+              return toJsx(svg);
+            case "vue":
+              return toVue(svg);
+            case "html":
+              return `<img src="${toDataUrl(svg)}" alt="${icon.name}" />`;
+            case "css":
+              return `.icon-${icon.name} { mask: url("${toDataUrl(svg)}") no-repeat center / contain; background: currentColor; }`;
+            case "dataurl":
+              return toDataUrl(svg);
+            case "base64":
+              return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
+            default:
+              return svg;
+          }
+        })
+        .join("\n\n");
+      copyText(payload).then((ok) =>
+        toast(ok ? "Copied selected items" : "Copy failed"),
+      );
     },
-    onDownload: () => {
+    onDownload: async (format) => {
       if (!requireLoginToDownload()) return;
+      if (format === "png") {
+        const size = 512;
+        try {
+          const pngFiles = await Promise.all(
+            selectedIcons.map(
+              (icon) =>
+                new Promise((resolve, reject) => {
+                  const image = new Image();
+                  const objectUrl = URL.createObjectURL(
+                    new Blob([renderStyled(icon)], { type: "image/svg+xml" }),
+                  );
+                  image.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = size;
+                    canvas.height = size;
+                    canvas.getContext("2d").drawImage(image, 0, 0, size, size);
+                    URL.revokeObjectURL(objectUrl);
+                    resolve({
+                      name: icon.name,
+                      dataUrl: canvas.toDataURL("image/png"),
+                    });
+                  };
+                  image.onerror = () => {
+                    URL.revokeObjectURL(objectUrl);
+                    reject(new Error("png"));
+                  };
+                  image.src = objectUrl;
+                }),
+            ),
+          );
+          pngFiles.forEach((file) =>
+            download(`${file.name}-${size}.png`, file.dataUrl),
+          );
+          toast("Selected PNGs downloaded");
+        } catch {
+          toast("PNG export failed");
+        }
+        return;
+      }
       selectedIcons.forEach((icon) =>
         download(
           `${icon.name}.svg`,
