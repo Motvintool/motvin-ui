@@ -5,7 +5,7 @@ window.MotvinBanner = (function () {
     const styles = document.createElement("style");
     styles.id = "mi-banner-styles";
     styles.textContent = `
-      .mi-product-banner { position: fixed; top: 0; left: 0; z-index: 100; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 44px; padding: 8px 24px; background: linear-gradient(90deg, #874fff 0%, #000 11.538%, #000 87.981%, #874fff 100%); color: #fff; font-family: "Outfit", sans-serif; font-size: 16px; line-height: normal; text-align: center; }
+      .mi-product-banner { position: fixed; top: 0; left: 0; z-index: 100; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 44px; padding: 8px 24px; background: linear-gradient(90deg, #874fff 0%, #000 11.538%, #000 87.981%, #874fff 100%); color: #fff; font-family: "Outfit", sans-serif; font-size: 16px; font-weight: 200; line-height: normal; text-align: center; }
       .mi-product-banner p { margin: 0; white-space: nowrap; }
       .mi-product-banner a { color: inherit; font-weight: 600; text-decoration: underline; text-underline-position: from-font; }
       .mi-product-banner.is-hidden { display: none; }

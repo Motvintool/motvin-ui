@@ -23,7 +23,7 @@
   --mi-shadow-lg: 0 24px 80px rgba(15, 17, 22, 0.14);
   --mi-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
   --header-h: 0px;
-  --left-sidebar-w: 85px;
+  --left-sidebar-w: 75px;
   --right-panel-w: 350px;
 }
 
@@ -331,7 +331,7 @@ select {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px 8px 24px;
+  padding: 20px 0 24px;
   width: var(--left-sidebar-w);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   z-index: 20;
