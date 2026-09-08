@@ -980,9 +980,9 @@ function iconCard(icon) {
           <svg viewBox="0 0 24 24" fill="${isIconSaved(icon.id) ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
       </div>
-      <div class="mi-card-preview">${renderStyled(icon)}</div>
+      <div class="mi-card-preview">${renderStyled(icon, { size: 42 })}</div>
       <div class="mi-card-name" title="${icon.name}">${icon.name}</div>
-      <div class="mi-card-source">${icon.sourceName}</div>
+      <div class="mi-card-source"><span>${icon.sourceName}</span></div>
     </div>
   `;
 }
@@ -999,13 +999,6 @@ async function renderGrid() {
   // Use API loader if available
   if (typeof window.populateIconsFromAPI === "function") {
     const grid = $("#icon-grid");
-
-    // Show skeleton for results count - keep existing mi-skeleton class
-    const resultsCountEl = $("#results-count");
-    if (resultsCountEl) {
-      // mi-skeleton class is already in HTML, just ensure it's there
-      resultsCountEl.classList.add("mi-skeleton");
-    }
 
     // Show skeleton loader - use mi-card styling with skeleton animation
     grid.className = `mi-grid density-${state.density}`;
@@ -1081,14 +1074,9 @@ function renderGridContent(list, displayTotal, apiTotal) {
     renderPagination(apiTotal || displayTotal, totalPages);
   }
 
-  const resultsCountEl = $("#results-count");
-  if (resultsCountEl) {
-    resultsCountEl.classList.remove("mi-skeleton");
-    resultsCountEl.style.opacity = "";
-    resultsCountEl.style.animation = "";
-    resultsCountEl.textContent = (apiTotal || displayTotal).toLocaleString();
-  }
-  $("#results-query").textContent = state.query ? `for "${state.query}"` : "";
+  const sortTabCount = document.querySelector(".mi-sort-tab-count");
+  if (sortTabCount)
+    sortTabCount.textContent = (apiTotal || displayTotal).toLocaleString();
 
   // Only show the stroke adjustment slider if there is at least one 'true stroke' icon in the current grid list
   const strokeSection = $("#rp-stroke-section");
@@ -1602,7 +1590,7 @@ function renderBulkActions() {
     .filter(Boolean);
   window.MultiActionsStrip?.render({
     items: selectedIcons,
-    resultCount: $("#results-count")?.textContent || ICONS.length,
+    resultCount: $(".mi-sort-tab-count")?.textContent || ICONS.length,
     query: state.query,
     allSelected:
       renderedIcons.length > 0 &&
@@ -2250,7 +2238,7 @@ function renderMatchingIcons() {
       </span>
       <div class="mi-card-preview">${renderStyled(candidate, { size: 42 })}</div>
       <div class="mi-card-name">${candidate.name}</div>
-      <div class="mi-card-source">${candidate.sourceName}</div>
+      <div class="mi-card-source"><span>${candidate.sourceName}</span></div>
     </button>
   `,
     )
@@ -2974,34 +2962,6 @@ function wire() {
         .scrollIntoView({ behavior: "smooth" });
     }),
   );
-
-  // AI button
-  $("#btn-ai").addEventListener("click", () => {
-    const q =
-      searchInput.value.trim() ||
-      "an icon for an AI assistant sending a notification";
-    const words = q.toLowerCase().replace(/[.,]/g, "").split(/\s+/);
-    let matched = null;
-    for (const w of words) {
-      if (SYNONYMS[w]) {
-        matched = SYNONYMS[w][0];
-        break;
-      }
-      if (false) {
-        matched = w;
-        break;
-      }
-    }
-    if (!matched) matched = "sparkles";
-    searchInput.value = matched;
-    state.query = matched;
-    state.page = 1;
-    renderGrid();
-    toast(`AI suggests: ${matched}`);
-    document
-      .querySelector(".mi-results-wrap")
-      .scrollIntoView({ behavior: "smooth" });
-  });
 
   // Density
   $$(".mi-view-tabs [data-density]").forEach((b) => {

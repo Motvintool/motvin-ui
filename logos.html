@@ -495,27 +495,10 @@
                 </button>
               </form>
 
-              <!-- AI search toggle -->
-              <label
-                class="mi-ai-toggle"
-                for="ai-toggle-switch"
-                title="Coming Soon"
-                style="cursor: not-allowed"
-              >
-                <span
-                  class="mi-toggle-switch"
-                  id="btn-ai"
-                  role="switch"
-                  aria-checked="false"
-                  tabindex="-1"
-                  style="pointer-events: none; opacity: 0.5"
-                >
-                  <span class="mi-toggle-knob"></span>
-                </span>
-                <span class="mi-ai-label" style="pointer-events: none"
-                  >AI search</span
-                >
-              </label>
+              <div class="mi-search-shortcut" aria-hidden="true">
+                <kbd>⌘</kbd>
+                <kbd>K</kbd>
+              </div>
             </div>
 
             <!-- Recolor button -->
@@ -655,7 +638,7 @@
                 role="tab"
                 aria-selected="true"
               >
-                All
+                All <span class="mi-sort-tab-count" aria-hidden="true">0</span>
               </button>
               <button
                 class="mi-sort-tab mi-skeleton"
@@ -778,13 +761,6 @@
               window.syncRecolorLayout();
             })();
           </script>
-
-          <!-- Results count -->
-          <div class="mi-count-row">
-            <span class="mi-count-num mi-skeleton" id="results-count">0</span>
-            <span class="mi-count-label">logos found</span>
-            <span id="results-query" class="mi-query"></span>
-          </div>
         </div>
 
         <!-- Scrollable icon grid -->
@@ -1603,21 +1579,6 @@
               }
             });
           });
-
-          // ── AI toggle ───────────────────────────────────────────────────────
-          var aiToggle = document.getElementById("btn-ai");
-          if (aiToggle) {
-            aiToggle.addEventListener("click", function () {
-              var isOn = aiToggle.classList.toggle("is-on");
-              aiToggle.setAttribute("aria-checked", String(isOn));
-            });
-            aiToggle.addEventListener("keydown", function (e) {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                aiToggle.click();
-              }
-            });
-          }
 
           // ── Panel size slider ───────────────────────────────────────────────
           var sizeSlider = document.getElementById("ctrl-size-panel");

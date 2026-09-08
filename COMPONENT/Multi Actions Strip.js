@@ -43,7 +43,7 @@ window.MultiActionsStrip = (function () {
     const styles = document.createElement("style");
     styles.id = "mi-multi-actions-strip-styles";
     styles.textContent = `
-      .mi-count-row[hidden], .mi-bulk-actions-container[hidden] { display: none; }
+      .mi-bulk-actions-container[hidden] { display: none; }
       .mi-sidebar-collapse-toggle { position: fixed; z-index: 30; top: 50%; left: calc(var(--left-sidebar-w) + 4px); display: grid; place-items: center; width: 16px; height: 40px; padding: 0; background: transparent; border: 0; cursor: pointer; transform: translateY(-50%); transition: left 160ms ease; }
       .mi-sidebar-collapse-toggle:hover img { filter: brightness(0.682); }
       .mi-sidebar-collapse-toggle img { display: block; width: 7px; height: 24px; transition: filter 160ms ease; }
@@ -57,7 +57,6 @@ window.MultiActionsStrip = (function () {
       .mi-rp-navigation button.is-active .mi-rp-navigation-count { display: flex; }
       body.mi-sidebar-collapsed .mi-rp-heading { display: none !important; }
       body.mi-sidebar-collapsed .mi-rp-navigation { display: flex; }
-      .mi-main-top-wrapper { min-height: 146px; }
       .mi-main-top-wrapper.mi-has-bulk-actions { gap: 16px; }
       .mi-bulk-actions-container { display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; width: 100%; gap: 16px; padding: 12px 0 4px; flex-shrink: 0; }
       .mi-bulk-actions-container:not([hidden]) { animation: mi-bulk-actions-enter 180ms ease-out both; will-change: opacity, transform; }
@@ -244,9 +243,8 @@ window.MultiActionsStrip = (function () {
     onClear,
   }) {
     ensureStyles();
-    const countRow = document.querySelector(".mi-count-row");
-    const gridScroll = document.getElementById("grid-scroll");
-    if (!countRow || !gridScroll) return;
+    const topWrapper = document.querySelector(".mi-main-top-wrapper");
+    if (!topWrapper) return;
 
     let container = document.getElementById("bulk-actions-container");
     if (!container) {
@@ -254,11 +252,10 @@ window.MultiActionsStrip = (function () {
       container.id = "bulk-actions-container";
       container.className = "mi-bulk-actions-container";
       container.hidden = true;
-      countRow.insertAdjacentElement("beforebegin", container);
+      topWrapper.appendChild(container);
     }
 
     const hasSelection = items.length > 0;
-    const topWrapper = countRow.closest(".mi-main-top-wrapper");
     if (!hasSelection) {
       if (container.hidden || container.classList.contains("is-leaving"))
         return;
@@ -268,7 +265,6 @@ window.MultiActionsStrip = (function () {
       hideTimer = window.setTimeout(() => {
         container.hidden = true;
         container.classList.remove("is-leaving");
-        countRow.hidden = false;
         topWrapper?.classList.remove("mi-has-bulk-actions");
       }, 160);
       return;
@@ -276,7 +272,6 @@ window.MultiActionsStrip = (function () {
 
     clearTimeout(hideTimer);
     container.classList.remove("is-leaving");
-    countRow.hidden = true;
     container.hidden = false;
     topWrapper?.classList.add("mi-has-bulk-actions");
     closeActivePortaledMenus();
