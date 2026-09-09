@@ -24,7 +24,7 @@
   --mi-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
   --header-h: 0px;
   --left-sidebar-w: 75px;
-  --right-panel-w: 310px;
+  --right-panel-w: 360px;
 }
 
 * {
@@ -50,7 +50,7 @@ body {
   background: var(--mi-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.5;
   overflow: hidden;
 }
@@ -167,7 +167,7 @@ select {
   border-radius: 4px;
   background: transparent;
   color: rgba(0, 0, 0, 0.9);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   border: none;
   cursor: pointer;
@@ -533,7 +533,7 @@ body.is-panel-floating .mi-main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 0 12px 32px;
+  padding: 0px 0 0px 42px;
   width: 100%;
   height: 82px;
   flex-shrink: 0;
@@ -827,7 +827,7 @@ body.is-panel-floating .mi-main {
 }
 /* --- Top Toolbar --- */
 .mi-toolbar-wrapper {
-  padding: 0 0 4px 32px;
+  padding: 0 0 4px 42px;
   width: 100%;
   position: sticky;
   top: 0;
@@ -839,7 +839,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-toolbar-wrapper.is-scrolled {
-  padding-top: 14px;
+  padding: 12px 0 12px 42px;
 }
 
 .mi-toolbar {
@@ -853,12 +853,12 @@ body.is-panel-floating .mi-main {
   background: white;
   border: 0;
   box-shadow:
-    0px 5px 7.5px rgba(0, 0, 0, 0.1),
-    0px 4px 3px rgba(0, 0, 0, 0.1);
+    0 5px 15px -3px rgba(0, 0, 0, 0.15),
+    0 4px 6px -4px rgba(0, 0, 0, 0.06);
   display: flex;
   flex: 1;
   gap: 0;
-  height: 56px;
+  height: 64px;
   align-items: center;
   padding: 4px 16px 4px 4px;
   border-radius: 100px;
@@ -867,7 +867,7 @@ body.is-panel-floating .mi-main {
 .mi-search-pill:focus-within,
 .mi-search-pill.is-active {
   box-shadow:
-    inset 0 0 0 1.5px #1d1d1d,
+    inset 0 0 0 2px #1d1d1d,
     0px 5px 7.5px rgba(0, 0, 0, 0.025),
     0px 4px 3px rgba(0, 0, 0, 0.025);
 }
@@ -888,13 +888,13 @@ body.is-panel-floating .mi-main {
 .mi-cat-dropdown-label {
   font-family: "Outfit", sans-serif;
   color: #324252;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .mi-cat-dropdown-val {
   font-family: "Outfit", sans-serif;
   color: #0a0a0a;
-  font-size: 14px;
+  font-size: 16px;
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1003,6 +1003,7 @@ body.is-panel-floating .mi-main {
   padding-left: 16px;
   display: flex;
   align-items: center;
+  color: #808080;
 }
 
 .mi-search-shortcut {
@@ -1025,7 +1026,7 @@ body.is-panel-floating .mi-main {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   color: #000;
   font-family: "SF Pro Text", "Outfit", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 20px;
 }
@@ -1065,7 +1066,7 @@ body.is-panel-floating .mi-main {
 
 .mi-coll-modal-name {
   font-weight: 500;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .mi-coll-modal-count {
@@ -1080,6 +1081,7 @@ body.is-panel-floating .mi-main {
 .mi-search-icon img {
   width: 20px;
   height: 21px;
+  filter: brightness(0) invert(0.5);
 }
 
 .mi-search-input {
@@ -1088,17 +1090,17 @@ body.is-panel-floating .mi-main {
   background: transparent;
   padding-left: 12px;
   font-family: "Outfit", sans-serif;
-  font-size: 14px;
+  font-size: 17px;
   color: #000000;
-  font-weight: 400;
+  font-weight: 500;
   opacity: 1;
   outline: none;
 }
 
 .mi-search-input::placeholder {
-  color: #737373;
-  font-weight: 400;
-  font-size: 14px;
+  color: #808080;
+  font-weight: 500;
+  font-size: 16px;
 }
 
 .mi-search-clear {
@@ -1158,7 +1160,7 @@ body.is-panel-floating .mi-main {
 
 .mi-ai-label {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   color: #737373;
   white-space: nowrap;
 }
@@ -1170,7 +1172,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-recolor-btn {
-  background: white;
+  background: transparent;
   border: 1px solid transparent;
   height: 51px;
   border-radius: 200px;
@@ -1200,7 +1202,7 @@ body.is-panel-floating .mi-main {
 
 .mi-recolor-label {
   font-family: "Inter", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   color: rgba(0, 0, 0, 0.9);
 }
 
@@ -1319,7 +1321,7 @@ body.is-panel-floating .mi-main {
   gap: 32px;
   align-items: flex-start;
   justify-content: center;
-  padding: 16px 0 16px 32px;
+  padding: 16px 0 16px 42px;
   width: 100%;
   flex-shrink: 0;
 }
@@ -1372,7 +1374,7 @@ body.is-panel-floating .mi-main {
   color: #fff;
   background: #000;
   border-radius: 50px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 12px;
 }
@@ -1444,7 +1446,7 @@ body.is-panel-floating .mi-main {
   border-radius: 999px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 16px;
   color: white;
   min-width: 22px;
 }
@@ -1540,7 +1542,7 @@ body.is-panel-floating .mi-main {
 .mi-grid-scroll {
   flex: 1;
   overflow: visible;
-  padding: 0 0 16px 32px;
+  padding: 0 0 16px 42px;
 }
 
 /* Grid */
@@ -1786,7 +1788,7 @@ body.is-panel-floating .mi-main {
   height: 36px;
   padding: 0 10px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--mi-ink-2);
   background: none;
@@ -1821,7 +1823,7 @@ body.is-panel-floating .mi-main {
 .mi-page-dots {
   color: var(--mi-muted);
   padding: 0 4px;
-  font-size: 14px;
+  font-size: 16px;
   display: flex;
   align-items: center;
 }
@@ -1834,7 +1836,7 @@ body.is-panel-floating .mi-main {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  padding: 0px 0 0px 20px;
+  padding: 0px 0 0px 42px;
   box-sizing: border-box;
   height: 100%;
   min-height: 0;
@@ -2108,7 +2110,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-header span {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 16px;
   color: rgba(0, 0, 0, 0.6);
   line-height: 16px;
 }
@@ -2202,7 +2204,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   background: transparent;
   border: none;
   padding: 0 8px 0 32px;
-  font-size: 14px;
+  font-size: 16px;
   color: black;
   outline: none;
   font-family: inherit;
@@ -3873,7 +3875,7 @@ input[type="color"] {
   color: #fff;
   padding: 12px 18px;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   box-shadow: var(--mi-shadow-lg);
   opacity: 0;
@@ -4991,7 +4993,7 @@ details[open] .mi-new-section-icon {
   color: #2c2e36;
   padding: 8px 14px;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
@@ -5416,7 +5418,7 @@ details[open] .mi-new-section-icon {
   align-items: center;
   padding: 16px 20px;
   border-bottom: 1px solid #eaeaee;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: #6b7280;
 }
@@ -5425,7 +5427,7 @@ details[open] .mi-new-section-icon {
   background: transparent;
   border: none;
   color: #000;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -5441,7 +5443,7 @@ details[open] .mi-new-section-icon {
   font-family:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     monospace;
-  font-size: 14px;
+  font-size: 16px;
   color: #24292e;
   margin: 0;
   line-height: 23.8px;
@@ -5547,7 +5549,7 @@ details[open] .mi-new-section-icon {
   margin: 0;
   color: #080048;
   font-family: "Outfit", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 20px;
 }
