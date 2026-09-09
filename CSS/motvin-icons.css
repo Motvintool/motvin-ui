@@ -1551,7 +1551,7 @@ body.is-panel-floating .mi-main {
 /* Grid */
 .mi-grid {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-columns: repeat(10, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -1639,14 +1639,14 @@ body.is-panel-floating .mi-main {
   font-size: 12px;
   font-family: "Outfit", sans-serif;
   line-height: 18px;
-  color: #2c2e36;
+  color: #999999;
   text-align: center;
   width: 80px;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .mi-card-source {
@@ -1658,13 +1658,13 @@ body.is-panel-floating .mi-main {
   padding: 3px 8px;
   background: rgba(0, 0, 0, 0.06);
   border-radius: 100px;
-  color: #313131;
+  color: #555555;
   font-family: "Outfit", sans-serif;
   font-size: 11px;
   line-height: 12px;
   text-transform: capitalize;
   letter-spacing: 0.06em;
-  font-weight: 500;
+  font-weight: 400;
   text-align: center;
 }
 

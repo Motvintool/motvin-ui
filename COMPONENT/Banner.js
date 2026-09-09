@@ -28,7 +28,7 @@ window.MotvinBanner = (function () {
     banner.className = "mi-product-banner";
     banner.setAttribute("aria-label", "Motvin beta announcement");
     const returnUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    banner.innerHTML = `<p>Motvin Beta is here, explore 345K+ icons, 10.5K logos and 1K+ illustrations in one powerful library.</p><a href="/login?next=${encodeURIComponent(returnUrl)}">Login &rarr;</a>`;
+    banner.innerHTML = `<p>Motvin v1 beta is here, explore 345K+ icons, 10.5K logos and 1K+ illustrations in one powerful library.</p><a href="/login?next=${encodeURIComponent(returnUrl)}">Login &rarr;</a>`;
     appShell.insertAdjacentElement("beforebegin", banner);
     document.body.classList.add("mi-has-product-banner");
 

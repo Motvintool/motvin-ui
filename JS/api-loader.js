@@ -12,7 +12,7 @@
   window.loadIconsFromAPI = async function () {
     const q = state.query.trim();
     const page = state.page || 1;
-    const limit = 40;
+    const limit = 100;
     const offset = (page - 1) * limit;
 
     try {
