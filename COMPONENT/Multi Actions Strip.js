@@ -44,12 +44,12 @@ window.MultiActionsStrip = (function () {
     styles.id = "mi-multi-actions-strip-styles";
     styles.textContent = `
       .mi-bulk-actions-container[hidden] { display: none; }
-      .mi-sidebar-collapse-toggle { position: fixed; z-index: 30; top: 50%; left: calc(var(--left-sidebar-w) + 4px); display: grid; place-items: center; width: 16px; height: 40px; padding: 0; background: transparent; border: 0; cursor: pointer; transform: translateY(-50%); transition: left 160ms ease; }
+      .mi-sidebar-collapse-toggle { position: fixed; z-index: 30; top: 50%; left: calc(var(--left-sidebar-w) + 9px); display: grid; place-items: center; width: 16px; height: 40px; padding: 0; background: transparent; border: 0; cursor: pointer; transform: translateY(-50%); transition: left 160ms ease; }
       .mi-sidebar-collapse-toggle:hover img { filter: brightness(0.682); }
       .mi-sidebar-collapse-toggle img { display: block; width: 7px; height: 24px; transition: filter 160ms ease; }
       body.mi-sidebar-collapsed .mi-app-shell { grid-template-columns: minmax(0, 1fr) var(--right-panel-w); }
       body.mi-sidebar-collapsed .mi-left-sidebar { display: none; }
-      body.mi-sidebar-collapsed .mi-sidebar-collapse-toggle { left: 4px; transform: translateY(-50%) scaleX(-1); }
+      body.mi-sidebar-collapsed .mi-sidebar-collapse-toggle { left: 9px; transform: translateY(-50%) scaleX(-1); }
       .mi-rp-navigation { display: none; align-items: center; gap: 0; padding: 4px; background: rgba(64, 64, 64, 0.08); border-radius: 999px; }
       .mi-rp-navigation button { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 7.5px 12px; color: #878787; background: transparent; border: 0; border-radius: 999px; font: 400 15px/20px "Outfit", sans-serif; letter-spacing: 0.2px; cursor: pointer; }
       .mi-rp-navigation button.is-active { padding: 6px 6px 6px 12px; color: #141414; background: #fff; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04); font-weight: 500; }

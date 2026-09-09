@@ -2840,6 +2840,35 @@ function wire() {
   const searchInput = $("#search-input");
   const searchClear = $("#search-clear");
   const searchIcon = $(".mi-search-icon");
+  const searchPill = $(".mi-search-pill");
+  const revealSearchToolbar = () => {
+    const mainContainer = $(".mi-main");
+    const toolbarWrap = $(".mi-toolbar-wrapper");
+    if (!mainContainer || !toolbarWrap) return;
+    mainContainer.scrollTo({ top: toolbarWrap.offsetTop, behavior: "smooth" });
+  };
+
+  if (searchPill) {
+    searchPill.addEventListener(
+      "click",
+      (event) => {
+        if (event.target.closest("#search-clear")) return;
+        searchPill.classList.add("is-active");
+        revealSearchToolbar();
+      },
+      true,
+    );
+    document.addEventListener("pointerdown", (event) => {
+      if (!searchPill.contains(event.target))
+        searchPill.classList.remove("is-active");
+    });
+  }
+  searchInput.addEventListener("focus", revealSearchToolbar);
+  searchInput.addEventListener("blur", () => {
+    if (searchInput.value) return;
+    const mainContainer = $(".mi-main");
+    if (mainContainer) mainContainer.scrollTo({ top: 0, behavior: "smooth" });
+  });
   const debounced = debounce(() => {
     state.query = searchInput.value;
     localStorage.setItem("mi.query", state.query);
@@ -2869,6 +2898,7 @@ function wire() {
   }
 
   searchInput.addEventListener("input", (e) => {
+    revealSearchToolbar();
     if (searchClear)
       searchClear.style.display = searchInput.value ? "flex" : "none";
     if (searchIcon)
@@ -2893,6 +2923,9 @@ function wire() {
   if (searchClear) {
     searchClear.addEventListener("click", () => {
       searchInput.value = "";
+      if (searchPill) searchPill.classList.remove("is-active");
+      const mainContainer = $(".mi-main");
+      if (mainContainer) mainContainer.scrollTo({ top: 0, behavior: "smooth" });
       searchClear.style.display = "none";
       if (searchIcon) searchIcon.style.display = "flex";
       state.query = "";
@@ -2909,7 +2942,6 @@ function wire() {
 
       state.page = 1;
       renderGrid();
-      searchInput.focus();
     });
   }
 

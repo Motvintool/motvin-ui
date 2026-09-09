@@ -24,7 +24,7 @@
   --mi-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
   --header-h: 0px;
   --left-sidebar-w: 75px;
-  --right-panel-w: 350px;
+  --right-panel-w: 310px;
 }
 
 * {
@@ -542,7 +542,7 @@ body.is-panel-floating .mi-main {
 .mi-top-header-left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
 }
 
 .mi-top-logo-group {
@@ -552,8 +552,8 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-top-logo-text {
-  width: 110.96px;
-  height: auto;
+  width: 72.3861px;
+  height: 17.2567px;
 }
 
 .mi-top-beta-badge {
@@ -565,7 +565,7 @@ body.is-panel-floating .mi-main {
   justify-content: center;
   padding: 4px 9px;
   color: #000;
-  font-family: "Inter", sans-serif;
+  font-family: "Outfit", sans-serif;
   font-weight: 500;
   font-size: 11px;
   line-height: 10px;
@@ -576,6 +576,18 @@ body.is-panel-floating .mi-main {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.mi-top-nav-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mi-top-header-divider {
+  width: 2px;
+  height: 14px;
+  flex-shrink: 0;
 }
 
 .mi-top-nav-link {
@@ -603,7 +615,7 @@ body.is-panel-floating .mi-main {
   border-radius: 4px;
   padding: 0 4px;
   color: #000;
-  font-family: "Inter", sans-serif;
+  font-family: "Outfit", sans-serif;
   font-weight: 500;
   font-size: 12px;
   display: flex;
@@ -852,18 +864,19 @@ body.is-panel-floating .mi-main {
   border-radius: 100px;
 }
 
-.mi-search-pill:focus-within {
-  border-color: #5c4ae4;
+.mi-search-pill:focus-within,
+.mi-search-pill.is-active {
   box-shadow:
-    0px 4px 4px rgba(0, 0, 0, 0.08),
-    0px 0px 0px 3px rgba(92, 74, 228, 0.16);
+    inset 0 0 0 1.5px #1d1d1d,
+    0px 5px 7.5px rgba(0, 0, 0, 0.025),
+    0px 4px 3px rgba(0, 0, 0, 0.025);
 }
 
 .mi-cat-dropdown {
   background: #f5f5f5;
   display: flex;
   gap: 8px;
-  height: 46px;
+  height: 100%;
   align-items: center;
   padding: 4px 12px 4px 16px;
   border-radius: 100px;
@@ -1008,7 +1021,7 @@ body.is-panel-floating .mi-main {
   height: 24px;
   padding: 0 4px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
+  border-radius: 50%;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   color: #000;
   font-family: "SF Pro Text", "Outfit", sans-serif;
@@ -2321,7 +2334,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-check-custom {
   width: 20px;
   height: 20px;
-  border-radius: 6px;
+  border-radius: 50%;
   border: 1px solid #dbdbdb;
   box-sizing: border-box;
   display: flex;
