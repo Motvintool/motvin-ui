@@ -433,6 +433,10 @@
                 />
               </div>
             </div>
+            <!-- Theme Toggle Button -->
+            <button class="mi-theme-toggle-btn" id="theme-toggle-btn" aria-label="Switch theme" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 50%; color: var(--text-color-text);" onclick="window.ThemeManager && window.ThemeManager.setTheme(window.ThemeManager.getCurrentTheme() === 'light' ? 'dark' : 'light')">
+              <img src="ASSET/Icons/theme-toggle.svg" alt="" style="width: 24px; height: 24px;" />
+            </button>
           </div>
         </header>
 

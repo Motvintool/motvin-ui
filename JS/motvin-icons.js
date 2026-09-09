@@ -947,7 +947,7 @@ function filterIcons() {
 }
 
 function sortGridItems(items) {
-  const list = [...items];
+  const list = Array.isArray(items) ? items.filter(Boolean) : [];
   if (state.sort === "popular") {
     list.sort((a, b) => b.popularity - a.popularity);
   } else if (state.sort === "trending") {
