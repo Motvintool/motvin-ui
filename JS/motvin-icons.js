@@ -9,15 +9,10 @@
 // Sources are populated exclusively from the backend stats API.
 let SOURCES = window.SOURCES || [];
 
-const STYLES = [
-  "outline",
-  "solid",
-  "rounded",
-  "duotone",
-  "thin",
-  "bold",
-  "3d",
-];
+// Outline is stroked artwork, whose width the Stroke Width control adjusts;
+// Solid is everything painted with a fill. There are no Rounded or Bold chips -
+// both were fill artwork, so they sit in Solid.
+const STYLES = ["outline", "solid", "duotone", "thin", "3d"];
 
 // Chip labels. Only styles whose display name is not just the capitalized value
 // need an entry here.
@@ -28,10 +23,8 @@ const styleLabel = (s) => STYLE_LABELS[s] || s[0].toUpperCase() + s.slice(1);
 const STYLE_SWATCHES = {
   outline: "icons-basic.svg",
   solid: "icons-filled.svg",
-  rounded: "icons-basic.svg",
   duotone: "icons-duotone.svg",
   thin: "icons-basic.svg",
-  bold: "icons-brand.svg",
   "3d": "icons-3d.svg",
 };
 
@@ -48,9 +41,9 @@ const isColorStyle = (s) => COLOR_STYLES.has(String(s || "").toLowerCase());
 const SOURCE_STYLE_BIAS = {
   lucide: ["outline"],
   heroicons: ["outline", "solid"],
-  phosphor: ["thin", "outline", "bold", "duotone", "solid"],
+  phosphor: ["thin", "outline", "duotone", "solid"],
   tabler: ["outline", "solid"],
-  "material-symbols": ["outline", "solid", "rounded"],
+  "material-symbols": ["outline", "solid"],
   feather: ["outline"],
   bootstrap: ["outline", "solid"],
   radix: ["outline", "solid"],
@@ -63,13 +56,13 @@ const SOURCE_STYLE_BIAS = {
   iconpark: ["outline", "solid", "duotone"],
   remix: ["outline", "solid", "duotone"],
   mynaui: ["outline", "solid"],
-  solar: ["outline", "solid", "bold", "duotone"],
-  iconify: ["outline", "solid", "duotone", "thin", "bold"],
-  streamline: ["outline", "solid", "duotone", "bold"],
+  solar: ["outline", "solid", "duotone"],
+  iconify: ["outline", "solid", "duotone", "thin"],
+  streamline: ["outline", "solid", "duotone"],
   svgrepo: ["outline", "solid", "duotone"],
-  icons8: ["outline", "solid", "rounded"],
+  icons8: ["outline", "solid"],
   nounproject: ["outline", "solid"],
-  flaticon: ["outline", "solid", "duotone", "rounded", "bold", "thin"],
+  flaticon: ["outline", "solid", "duotone", "thin"],
   mingcute: ["outline", "solid"],
   circum: ["outline"],
   zondicons: ["solid"],
@@ -682,11 +675,7 @@ function styleOpts(style) {
       return { cap: "round", join: "round" };
     case "duotone":
       return { cap: "round", join: "round" };
-    case "bold":
-      return { cap: "round", join: "round" };
     case "thin":
-      return { cap: "round", join: "round" };
-    case "rounded":
       return { cap: "round", join: "round" };
     // Colored artwork is passed through untouched; renderSvg keeps its palette.
     case "3d":
@@ -758,7 +747,11 @@ function renderSvg(paths, opts = {}) {
   const adjustedStroke = stroke / scale;
 
   // Prevent CSS stroke from bloating purely fill-based icons (like Gravity UI, FA, etc.).
-  let isFillBased = !paths.includes("stroke");
+  // Test for a real stroke attribute rather than the substring "stroke": a stray
+  // stroke-width on otherwise fill-only artwork (Iconoir's *-solid icons carry
+  // one) has no stroke to act on, and matching it here would wrongly give those
+  // icons an adjustable stroke.
+  let isFillBased = !/stroke\s*=\s*"(?!\s*none)/i.test(paths);
   if (
     opts.iconStyle !== "solid" &&
     opts.iconStyle !== "brands" &&
@@ -1146,14 +1139,10 @@ function renderGridContent(list, displayTotal, apiTotal) {
   const strokeSection = $("#rp-stroke-section");
   const strokeDivider = $("#rp-stroke-divider");
   if (strokeSection) {
-    // Outline is now defined as "has an adjustable stroke", so the flag the API
-    // reports is the answer. Fall back to inspecting the artwork for payloads
-    // cached before the styles were reclassified.
-    const showStroke = list.some((ic) => {
-      if (!ic || isColorStyle(ic.style)) return false;
-      if (typeof ic.isEditableStroke === "boolean") return ic.isEditableStroke;
-      return Boolean(ic.svg) && /stroke="(?!none)/.test(ic.svg);
-    });
+    // Outline is the only style with a stroke to adjust: Solid and Bold are
+    // fill artwork, 3D keeps its own colors, and Duotone/Thin are fixed
+    // upstream weights.
+    const showStroke = list.some((ic) => ic && ic.style === "outline");
     strokeSection.style.display = showStroke ? "" : "none";
     if (strokeDivider) strokeDivider.style.display = showStroke ? "" : "none";
   }
@@ -2046,17 +2035,10 @@ function syncEditorControls() {
     b.classList.toggle("is-active", +b.dataset.stroke === e.stroke),
   );
 
-  // Hide Fill, Stroke, and the STROKE advanced section when there is no stroke
-  // to adjust - fill-based artwork, and colored ("3D Icons") artwork, which
-  // renderSvg deliberately leaves untouched.
+  // Hide Fill, Stroke, and the STROKE advanced section unless this is an
+  // Outline icon - that is the only style with a stroke to adjust.
   const ic = state.editorIcon;
-  let strokeEditable = false;
-  if (ic && !isColorStyle(ic.style)) {
-    strokeEditable =
-      typeof ic.isEditableStroke === "boolean"
-        ? ic.isEditableStroke
-        : Boolean(ic.svg) && /stroke="(?!none)/.test(ic.svg);
-  }
+  const strokeEditable = Boolean(ic) && ic.style === "outline";
   const displayVal = strokeEditable ? "" : "none";
 
   const strokeGroup = $("#ctrl-stroke")?.closest(".mi-ctrl-group");
