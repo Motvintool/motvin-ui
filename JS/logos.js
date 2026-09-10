@@ -457,7 +457,9 @@ function iconCard(icon) {
   `;
 }
 
-const ITEMS_PER_PAGE = 64;
+// Must match the page size api-loader-logos.js fetches with, or the pager's
+// page count disagrees with the data. 64 is only the client-side fallback.
+const ITEMS_PER_PAGE = window.LOGOS_PAGE_SIZE || 60;
 
 let currentRenderId = 0;
 // Tracks only the icons currently on screen; guarded against race conditions (see renderGrid).
@@ -495,6 +497,14 @@ async function renderGrid() {
 
       // Abort if a newer renderGrid call was made while we were fetching
       if (renderId !== currentRenderId) return;
+
+      // Land back inside the result set if the page is past the end, so a stale
+      // page after a filter change cannot leave an empty grid with no pager.
+      const lastPage = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+      if (total > 0 && state.page > lastPage) {
+        state.page = lastPage;
+        return renderGrid();
+      }
 
       // The API already filtered by query, category, style, etc.
       // We can just use the returned ICONS directly.

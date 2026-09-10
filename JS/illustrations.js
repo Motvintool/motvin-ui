@@ -733,7 +733,9 @@ function iconCard(icon) {
   `;
 }
 
-const ITEMS_PER_PAGE = 60;
+// Must match the page size api-loader-illustrations.js fetches with, or the
+// pager's page count disagrees with the data. 60 is the client-side fallback.
+const ITEMS_PER_PAGE = window.ILLUSTRATIONS_PAGE_SIZE || 60;
 let currentRenderId = 0;
 
 async function renderGrid() {
@@ -762,6 +764,15 @@ async function renderGrid() {
       const total = await window.populateIllustrationsFromAPI();
       if (total === -1) return; // aborted
       if (renderId !== currentRenderId) return;
+
+      // Land back inside the result set if the page is past the end, so a stale
+      // page after a filter change cannot leave an empty grid with no pager.
+      const lastPage = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+      if (total > 0 && state.page > lastPage) {
+        state.page = lastPage;
+        return renderGrid();
+      }
+
       const list = filterIcons();
       renderedIconsMap = new Map(list.map((ic) => [ic.id, ic]));
       renderGridContent(list, list.length, total);

@@ -9,8 +9,42 @@
 // Sources are populated exclusively from the backend stats API.
 let SOURCES = window.SOURCES || [];
 
-const STYLES = ["outline", "solid", "rounded", "duotone", "thin", "bold"];
+const STYLES = [
+  "outline",
+  "solid",
+  "rounded",
+  "duotone",
+  "thin",
+  "bold",
+  "3d",
+];
 
+// Chip labels. Only styles whose display name is not just the capitalized value
+// need an entry here.
+const STYLE_LABELS = { "3d": "3D Icons" };
+const styleLabel = (s) => STYLE_LABELS[s] || s[0].toUpperCase() + s.slice(1);
+
+// Swatch shown on each style chip.
+const STYLE_SWATCHES = {
+  outline: "icons-basic.svg",
+  solid: "icons-filled.svg",
+  rounded: "icons-basic.svg",
+  duotone: "icons-duotone.svg",
+  thin: "icons-basic.svg",
+  bold: "icons-brand.svg",
+  "3d": "icons-3d.svg",
+};
+
+// Styles rendered with their native colors instead of the global icon color.
+// "3d" is the colored-artwork bucket; "color" is the pre-reclassification name
+// and is kept so cached payloads still render correctly.
+const COLOR_STYLES = new Set(["3d", "color", "multi-color"]);
+const isColorStyle = (s) => COLOR_STYLES.has(String(s || "").toLowerCase());
+
+// Fallback only: the styles a source ships come from the stats API
+// (SOURCES[].styles, derived from each collection's real per-style counts).
+// This map covers the handful of sources that predate that API and is not kept
+// in sync with the full collection list.
 const SOURCE_STYLE_BIAS = {
   lucide: ["outline"],
   heroicons: ["outline", "solid"],
@@ -654,6 +688,9 @@ function styleOpts(style) {
       return { cap: "round", join: "round" };
     case "rounded":
       return { cap: "round", join: "round" };
+    // Colored artwork is passed through untouched; renderSvg keeps its palette.
+    case "3d":
+      return {};
     default:
       return {};
   }
@@ -669,12 +706,15 @@ function renderStyled(icon, extra = {}) {
       : "";
     const size = extra.size || state.globalSize || 24;
     const color = state.globalColor || "currentColor";
+    // The brightness/saturate filter flattens artwork to one tone, so colored
+    // icons ("3D Icons") are exempt - they keep their own palette.
+    const recolor = color !== "currentColor" && !isColorStyle(icon.style);
 
     return `<img src="${svgUrl}"
                  alt="${icon.name}"
                  width="${size}"
                  height="${size}"
-                 style="display:block;width:${size}px;height:${size}px;object-fit:contain;${color !== "currentColor" ? `filter: brightness(0) saturate(100%) invert(${color === "#ffffff" ? "100%" : "0%"})` : ""}"
+                 style="display:block;width:${size}px;height:${size}px;object-fit:contain;${recolor ? `filter: brightness(0) saturate(100%) invert(${color === "#ffffff" ? "100%" : "0%"})` : ""}"
                  onerror="this.style.display='none';console.error('Failed to load:', '${svgUrl}')" />`;
   }
 
@@ -696,9 +736,13 @@ function renderSvg(paths, opts = {}) {
   // We skip aggressive replacement for complex SVGs (masks/defs) to preserve their shapes and colors.
   const hasComplexDefs = paths.includes("<mask") || paths.includes("<defs");
 
+  // Colored artwork ("3D Icons") keeps its native palette - recoloring it would
+  // flatten the whole point of the style.
+  const keepNativeColors = isColorStyle(opts.iconStyle);
+
   let cleanPaths = paths;
   // Strip hardcoded stroke-width from inner paths so the wrapper stroke takes priority
-  if (opts.iconStyle !== "color" && !hasComplexDefs) {
+  if (!keepNativeColors && !hasComplexDefs) {
     cleanPaths = paths.replace(/stroke-width="[^"]*"/g, "");
   }
 
@@ -718,7 +762,7 @@ function renderSvg(paths, opts = {}) {
   if (
     opts.iconStyle !== "solid" &&
     opts.iconStyle !== "brands" &&
-    opts.iconStyle !== "color"
+    !keepNativeColors
   ) {
     const fillBasedSources = [
       "fontawesome",
@@ -781,7 +825,7 @@ function renderSvg(paths, opts = {}) {
 
   let rootFill = opts.fillMode === "solid" ? opts.fillColor || color : "none";
   // If the icon is fill-based, it MUST have a fill to be visible, even if the UI mode isn't solid.
-  if (isFillBased && opts.iconStyle !== "color") {
+  if (isFillBased && !keepNativeColors) {
     rootFill = color;
   }
   const fillOpaAttr =
@@ -793,9 +837,9 @@ function renderSvg(paths, opts = {}) {
       ? `stroke="none"`
       : `stroke="${color}" stroke-width="${adjustedStroke}" stroke-linecap="${cap}" stroke-linejoin="${join}"`;
 
-  // We skip this for 'color' icons (like emojis) so they retain their native multi-color styles!
+  // We skip this for colored icons (3D Icons, emojis) so they retain their native multi-color styles!
   // We also skip it for complex SVGs (masks/defs) because naive regex replacement destroys mask shapes.
-  if (opts.iconStyle !== "color" && !hasComplexDefs) {
+  if (!keepNativeColors && !hasComplexDefs) {
     cleanPaths = cleanPaths
       .replace(/stroke-width="[^"]*"/g, "")
       .replace(/stroke-linecap="[^"]*"/g, "")
@@ -987,7 +1031,10 @@ function iconCard(icon) {
   `;
 }
 
-const ITEMS_PER_PAGE = 64;
+// Must match the page size api-loader.js fetches with, or the pager offers
+// pages the API has no data for. api-loader.js owns the value; 64 is only the
+// fallback for the client-side path where nothing is fetched.
+const ITEMS_PER_PAGE = window.ICONS_PAGE_SIZE || 60;
 let currentRenderId = 0;
 // Tracks only the icons currently on screen; guarded against race conditions (see renderGrid).
 let renderedIconsMap = new Map();
@@ -1023,6 +1070,16 @@ async function renderGrid() {
       if (total === -1) return; // aborted
       if (renderId !== currentRenderId) return;
 
+      // Land back inside the result set if the page is past the end - either a
+      // stale page after a filter narrowed the results, or a deep link. Without
+      // this the grid renders empty, the pager hides itself, and there is no
+      // Prev button left to escape with.
+      const lastPage = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+      if (total > 0 && state.page > lastPage) {
+        state.page = lastPage;
+        return renderGrid();
+      }
+
       // The API already filtered by query, category, style, etc.
       // We can just use the returned ICONS directly.
       const list = sortGridItems(ICONS);
@@ -1050,11 +1107,18 @@ function renderGridContent(list, displayTotal, apiTotal) {
   if (!displayTotal) {
     if (state.showSaved) {
       grid.innerHTML = `<div class="mi-empty"><h3>No icons are saved</h3><p>Create a collection to see the icons.</p></div>`;
+    } else if (apiTotal > 0) {
+      // The filters do match icons, this page just has none. Keep the pager on
+      // screen so Prev is still reachable.
+      grid.innerHTML = `<div class="mi-empty"><h3>Nothing on this page</h3><p>Go back to an earlier page to see the ${apiTotal.toLocaleString()} matching icons.</p></div>`;
+      renderPagination(apiTotal, Math.max(1, Math.ceil(apiTotal / ITEMS_PER_PAGE)));
     } else {
       grid.innerHTML = `<div class="mi-empty"><h3>No icons match your filters</h3><p>Try clearing filters or a different search.</p></div>`;
     }
-    const pw = $("#pagination-wrapper");
-    if (pw) pw.style.display = "none";
+    if (!(apiTotal > 0) || state.showSaved) {
+      const pw = $("#pagination-wrapper");
+      if (pw) pw.style.display = "none";
+    }
   } else {
     // Pagination - for API mode, list is already paginated
     const totalPages = Math.ceil((apiTotal || displayTotal) / ITEMS_PER_PAGE);
@@ -1082,14 +1146,14 @@ function renderGridContent(list, displayTotal, apiTotal) {
   const strokeSection = $("#rp-stroke-section");
   const strokeDivider = $("#rp-stroke-divider");
   if (strokeSection) {
-    const showStroke = list.some(
-      (ic) =>
-        ic &&
-        ic.style &&
-        ic.svg &&
-        (ic.style === "outline" || ic.style === "thin") &&
-        ic.svg.includes("stroke="),
-    );
+    // Outline is now defined as "has an adjustable stroke", so the flag the API
+    // reports is the answer. Fall back to inspecting the artwork for payloads
+    // cached before the styles were reclassified.
+    const showStroke = list.some((ic) => {
+      if (!ic || isColorStyle(ic.style)) return false;
+      if (typeof ic.isEditableStroke === "boolean") return ic.isEditableStroke;
+      return Boolean(ic.svg) && /stroke="(?!none)/.test(ic.svg);
+    });
     strokeSection.style.display = showStroke ? "" : "none";
     if (strokeDivider) strokeDivider.style.display = showStroke ? "" : "none";
   }
@@ -1206,21 +1270,19 @@ function renderFilters() {
     el.innerHTML = visibleItems
       .map((it) => {
         const active = set.has(it.value);
-        let icon = "icons-basic.svg";
-        if (it.label.toLowerCase().includes("duotone solid"))
-          icon = "icons-duotone-solid.svg";
-        else if (it.label.toLowerCase().includes("duotone"))
-          icon = "icons-duotone.svg";
-        else if (
-          it.label.toLowerCase().includes("filled") ||
-          it.label.toLowerCase().includes("solid")
-        )
-          icon = "icons-filled.svg";
-        else if (
-          it.label.toLowerCase().includes("brands") ||
-          it.label.toLowerCase().includes("bold")
-        )
-          icon = "icons-brand.svg";
+        // Keyed on the style value, not the label, so a display name like
+        // "3D Icons" cannot fall through to the wrong swatch.
+        let icon = STYLE_SWATCHES[it.value];
+        if (!icon) {
+          const label = it.label.toLowerCase();
+          if (label.includes("duotone solid")) icon = "icons-duotone-solid.svg";
+          else if (label.includes("duotone")) icon = "icons-duotone.svg";
+          else if (label.includes("filled") || label.includes("solid"))
+            icon = "icons-filled.svg";
+          else if (label.includes("brands") || label.includes("bold"))
+            icon = "icons-brand.svg";
+          else icon = "icons-basic.svg";
+        }
 
         return `
       <div class="mi-rp-style-item ${active ? "is-active" : ""}" data-val="${it.value}" style="cursor:pointer">
@@ -1425,7 +1487,7 @@ function renderFilters() {
     "#filter-style",
     activeStylesList.map((s) => ({
       value: s,
-      label: s[0].toUpperCase() + s.slice(1),
+      label: styleLabel(s),
       count: st[s] || 0,
     })),
     "styleFilter",
@@ -1544,9 +1606,7 @@ function updateFilterBadge() {
 
     // Add style filter names
     if (state.styleFilter.size > 0) {
-      const styleNames = [...state.styleFilter].map(
-        (s) => s[0].toUpperCase() + s.slice(1),
-      );
+      const styleNames = [...state.styleFilter].map(styleLabel);
       filterLines.push("Styles: " + styleNames.join(", "));
     }
 
@@ -1986,11 +2046,18 @@ function syncEditorControls() {
     b.classList.toggle("is-active", +b.dataset.stroke === e.stroke),
   );
 
-  // Hide Fill, Stroke, and STROKE advanced section if the icon is fill-based
-  const isFillBased = state.editorIcon
-    ? !state.editorIcon.svg.includes("stroke")
-    : false;
-  const displayVal = isFillBased ? "none" : "";
+  // Hide Fill, Stroke, and the STROKE advanced section when there is no stroke
+  // to adjust - fill-based artwork, and colored ("3D Icons") artwork, which
+  // renderSvg deliberately leaves untouched.
+  const ic = state.editorIcon;
+  let strokeEditable = false;
+  if (ic && !isColorStyle(ic.style)) {
+    strokeEditable =
+      typeof ic.isEditableStroke === "boolean"
+        ? ic.isEditableStroke
+        : Boolean(ic.svg) && /stroke="(?!none)/.test(ic.svg);
+  }
+  const displayVal = strokeEditable ? "" : "none";
 
   const strokeGroup = $("#ctrl-stroke")?.closest(".mi-ctrl-group");
   if (strokeGroup) strokeGroup.style.display = displayVal;
@@ -3769,8 +3836,12 @@ function debounce(fn, ms) {
 // --------------------------------------------------------------------
 function renderHeroStats() {
   const totalMarket = 319252; // Hardcoded per user request
+  // Count the styles the catalogue actually ships, not the legacy bias map,
+  // which only covers a couple of dozen of the sources.
   const totalStyles = new Set(
-    SOURCES.flatMap((s) => SOURCE_STYLE_BIAS[s.id] || []),
+    SOURCES.flatMap((s) => s.styles || SOURCE_STYLE_BIAS[s.id] || []).map((s) =>
+      String(s).toLowerCase(),
+    ),
   ).size;
   const fmt = (n) =>
     n >= 1e6

@@ -5,6 +5,13 @@
 (function () {
   "use strict";
 
+  // Single source of truth for page size. The grid renders exactly what this
+  // fetch returns, so the page-count maths must use the same number - when they
+  // disagreed (fetch 100, UI 64) the pager advertised 5,395 pages for 3,453
+  // pages of data and clicking Next ran into empty grids.
+  // Kept at 60 to match the Logos and Illustrations pages.
+  window.ICONS_PAGE_SIZE = 60;
+
   /**
    * Load icons from API based on current state (filters, search, pagination)
    * @returns {Promise<{icons: Array, total: number}>}
@@ -12,7 +19,7 @@
   window.loadIconsFromAPI = async function () {
     const q = state.query.trim();
     const page = state.page || 1;
-    const limit = 100;
+    const limit = window.ICONS_PAGE_SIZE;
     const offset = (page - 1) * limit;
 
     try {
@@ -131,7 +138,9 @@
         id: icon.id || `${sourceId}_${icon.name}`,
         name: icon.name,
         tags: icon.tags || [],
-        style: icon.style || "outline",
+        // Outline means "adjustable stroke", so it is the wrong default for an
+        // icon whose style is missing - it would land in Outline without one.
+        style: icon.style || "solid",
         viewBox: icon.viewBox || "0 0 24 24",
         category: icon.category || "UI",
       };

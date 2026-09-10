@@ -5,6 +5,12 @@
 (function () {
   "use strict";
 
+  // Single source of truth for page size. The grid renders exactly what this
+  // fetch returns, so the page-count maths must use the same number - when they
+  // disagreed (fetch 40, UI 64) the pager stopped 98 pages short of the data.
+  // Kept at 60 to match the Icons and Illustrations pages.
+  window.LOGOS_PAGE_SIZE = 60;
+
   /**
    * Load logos from API based on current state (filters, search, pagination)
    * @returns {Promise<{logos: Array, total: number}>}
@@ -12,7 +18,7 @@
   window.loadLogosFromAPI = async function () {
     const q = state.query.trim();
     const page = state.page || 1;
-    const limit = 40;
+    const limit = window.LOGOS_PAGE_SIZE;
     const offset = (page - 1) * limit;
 
     try {
