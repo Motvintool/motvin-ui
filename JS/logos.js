@@ -13,6 +13,10 @@ let SOURCES = window.SOURCES || [];
 // SOURCE_STYLE_BIAS is empty; styles are derived dynamically from API stats in renderFilters.
 const SOURCE_STYLE_BIAS = {};
 
+// The two styles the Logos page ships. "color" is stored, and rendered as
+// "Default" in the chip list below.
+const STYLES = ["color", "solid"];
+
 // Helper to get total logo count from stats API or fallback to ICONS.length
 const getTotalLogoCount = () => {
   return (window.LOGO_STATS && window.LOGO_STATS.total) || ICONS.length || 0;
@@ -154,8 +158,13 @@ const state = {
     JSON.parse(localStorage.getItem("ml.sourceFilter") || "[]"),
   ),
   sourcesVisibleCount: 5,
+  // Drop persisted styles this page does not have. A saved filter for a style
+  // that no longer exists renders no chip, so it would sit there invisibly
+  // matching nothing while the grid reports "no results".
   styleFilter: new Set(
-    JSON.parse(localStorage.getItem("ml.styleFilter") || "[]"),
+    JSON.parse(localStorage.getItem("ml.styleFilter") || "[]").filter((s) =>
+      STYLES.includes(String(s).toLowerCase()),
+    ),
   ),
   licenseFilter: new Set(
     JSON.parse(localStorage.getItem("ml.licenseFilter") || "[]"),
@@ -317,23 +326,160 @@ function styleOpts(style) {
 // Render an icon with its native style applied â€” used by the grid, similar
 // row, compare modal, etc. The editor overrides via editorRenderOpts.
 function renderStyled(icon, extra = {}) {
+  // Solid marks are always painted in the current ink, even when no colour has
+  // been picked. Left alone, a white-inked mark (Devicon's *-wordmark, some
+  // VectorLogoZone tiles) renders white-on-white and looks like a blank card.
+  // currentColor is the neutral default and follows the light/dark theme.
+  const isSolid = icon.style === "solid";
+  const ink = isSolid ? state.globalColor || "currentColor" : null;
   return renderSvg(icon.svg, {
     size: state.globalSize,
     viewBox: icon.viewBox,
-    ...(icon.style === "solid" ? { color: state.globalColor } : {}),
+    ...(ink ? { color: ink } : {}),
     ...extra,
+    // Whether the artwork may be repainted is a property of the logo, not of
+    // the colour a caller happens to pass. Callers such as the compare modal
+    // pass color: "#0F1116" for their own surface; that must not flatten a
+    // colour logo's branding, so this deliberately overrides `extra`.
+    repaint: isSolid,
   });
+}
+
+const SHAPE_TAGS = "path|circle|rect|polygon|polyline|line|ellipse|g|use";
+
+/**
+ * Paint monochrome artwork in the chosen colour.
+ *
+ * A wrapper color="" attribute only reaches paths that say fill="currentColor".
+ * Simple Icons do, but most other solid marks either hard-code a fill or omit
+ * it entirely and fall back to black - 1,133 of them - so recolouring appeared
+ * to do nothing. Rewrite the fills directly instead.
+ *
+ * fill="none" is left alone (it is a hole, not a colour), and url(#...) values
+ * are left alone so gradient and mask references keep resolving.
+ */
+const WHITE_PAINTS = new Set(["#fff", "#ffffff", "#ffff", "#ffffffff", "white"]);
+
+/**
+ * Is white the artwork's ink, or a hole punched through it?
+ *
+ * If white is the only paint present, it IS the mark - repainting it is what
+ * makes Devicon's white wordmarks visible instead of white-on-white. If any
+ * other paint is present, white is a knockout and must survive recolouring.
+ *
+ * "Any other paint" includes the paint nobody wrote down: a shape with no fill
+ * declared renders black. Devicon's oauth mark is two white paths plus one
+ * undeclared (so black) path, and missing that implicit black flattened the
+ * whole logo into a silhouette.
+ */
+function whiteIsTheInk(paths) {
+  const paints = [];
+  for (const m of paths.matchAll(/\b(?:fill|stroke)\s*=\s*"([^"]*)"/gi)) {
+    paints.push(m[1]);
+  }
+  for (const m of paths.matchAll(/\b(?:fill|stroke)\s*:\s*([^;}"\s!]+)/gi)) {
+    paints.push(m[1]);
+  }
+
+  // A shape only falls back to black when nothing upstream sets a fill for it,
+  // so ignore anything wrapped in a <g fill="..."> - it inherits that instead.
+  // Checking merely whether such a group exists anywhere is not enough: Ubuntu
+  // Tile is an undeclared (black) <rect> followed by a filled group, and
+  // treating the group as covering the rect flattened the whole tile.
+  const outsideGroups = paths.replace(
+    /<g\b[^>]*\bfill\s*=[^>]*>[\s\S]*?<\/g>/gi,
+    "",
+  );
+  const shapes = /<(path|circle|rect|polygon|polyline|ellipse)\b([^>]*)>/gi;
+  for (const m of outsideGroups.matchAll(shapes)) {
+    const attrs = m[2];
+    if (!/\bfill\s*=/.test(attrs) && !/\bclass\s*=/.test(attrs)) {
+      return false; // implicit black is present, so white is a knockout
+    }
+  }
+  let sawWhite = false;
+  for (const raw of paints) {
+    const v = raw.trim().toLowerCase();
+    if (!v || v === "none" || v.startsWith("url(")) continue;
+    if (WHITE_PAINTS.has(v)) sawWhite = true;
+    else return false; // something else is painted, so white is a knockout
+  }
+  return sawWhite;
+}
+
+function recolorMonochrome(paths, color, { repaintWhite = false } = {}) {
+  const keep = (v) => {
+    const s = v.trim().toLowerCase();
+    if (s === "none" || s.startsWith("url(")) return true;
+    // White is a knockout unless it is the only paint in the artwork.
+    return !repaintWhite && WHITE_PAINTS.has(s);
+  };
+
+  let out = paths.replace(
+    new RegExp(`<(${SHAPE_TAGS})\\b([^>]*)>`, "gi"),
+    (match, tag, attrs) => {
+      if (/\bfill\s*=/.test(attrs)) {
+        attrs = attrs.replace(
+          /\bfill\s*=\s*"([^"]*)"/gi,
+          (m, v) => (keep(v) ? m : `fill="${color}"`),
+        );
+      } else if (tag.toLowerCase() !== "g" && !/\bclass\s*=/.test(attrs)) {
+        // No fill declared means it paints black by default. Elements carrying
+        // a class are painted by the <style> block instead, which is rewritten
+        // below - adding an attribute here would be dead weight, and CSS would
+        // outrank it anyway.
+        const selfClosing = attrs.trimEnd().endsWith("/");
+        const body = selfClosing ? attrs.trimEnd().slice(0, -1) : attrs;
+        attrs = `${body} fill="${color}"${selfClosing ? " /" : ""}`;
+      }
+
+      attrs = attrs.replace(
+        /\bstroke\s*=\s*"([^"]*)"/gi,
+        (m, v) => (keep(v) ? m : `stroke="${color}"`),
+      );
+
+      return `<${tag}${attrs}>`;
+    },
+  );
+
+  // Some marks set their colour through inline CSS rather than attributes.
+  out = out.replace(/\bstyle\s*=\s*"([^"]*)"/gi, (m, decls) => {
+    const next = decls.replace(
+      /(^|;)(\s*)(fill|stroke)\s*:\s*([^;]+)/gi,
+      (d, sep, ws, prop, v) =>
+        keep(v) ? d : `${sep}${ws}${prop}:${color}`,
+    );
+    return `style="${next}"`;
+  });
+
+  // ...and some through a <style> block of class rules. Those must be rewritten
+  // too: a CSS rule outranks the fill attribute added above, so leaving the
+  // block alone would quietly undo the repaint.
+  out = out.replace(/(<style[^>]*>)([\s\S]*?)(<\/style>)/gi, (m, open, css, close) => {
+    const next = css.replace(
+      /(fill|stroke)(\s*:\s*)([^;}\s!]+)/gi,
+      (d, prop, sep, v) => (keep(v) ? d : `${prop}${sep}${color}`),
+    );
+    return `${open}${next}${close}`;
+  });
+
+  return out;
 }
 
 function renderSvg(paths, opts = {}) {
   const size = opts.size ?? 24;
   const viewBox = opts.viewBox || "0 0 24 24";
-  // Apply color attr only when set so fill="currentColor" paths inherit it (solid logos);
-  // color logos get no override and keep their original branding.
-  const colorAttr =
-    opts.color && opts.color !== "currentColor" ? ` color="${opts.color}"` : "";
+  // Colour logos keep their original branding: only artwork flagged repaint
+  // (i.e. solid marks) is rewritten. currentColor counts as an ink, because a
+  // white-inked mark has to be rewritten to it to be visible at all.
+  const ink = opts.color;
+  const colorAttr = ink && ink !== "currentColor" ? ` color="${ink}"` : "";
+  const body =
+    ink && opts.repaint
+      ? recolorMonochrome(paths, ink, { repaintWhite: whiteIsTheInk(paths) })
+      : paths;
 
-  const innerSvg = `<svg viewBox="${viewBox}" width="24" height="24" x="0" y="0" preserveAspectRatio="xMidYMid meet">${paths}</svg>`;
+  const innerSvg = `<svg viewBox="${viewBox}" width="24" height="24" x="0" y="0" preserveAspectRatio="xMidYMid meet">${body}</svg>`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" class="mi-icon"${colorAttr} aria-hidden="true">${innerSvg}</svg>`;
 }
@@ -1554,6 +1700,9 @@ function editorRenderOpts(sizeOverride) {
   return {
     viewBox: state.editorIcon?.viewBox,
     iconStyle: state.editorIcon?.style,
+    // Same rule as renderStyled: only solid marks may be repainted, and the
+    // editor has to say so explicitly or its colour picker does nothing.
+    repaint: state.editorIcon?.style === "solid",
     size: sizeOverride ?? e.size,
     stroke: e.stroke,
     color: e.color,
@@ -2438,8 +2587,9 @@ function wire() {
           .scrollIntoView({ behavior: "smooth" });
         return;
       } else if (mode === "styles") {
+        // "outline" is an icons-page style; Logos only has Default and Solid.
         state.styleFilter.clear();
-        state.styleFilter.add("outline");
+        state.styleFilter.add("color");
         renderFilters();
       }
       state.page = 1;

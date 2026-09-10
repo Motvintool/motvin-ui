@@ -521,8 +521,14 @@ const state = {
     JSON.parse(localStorage.getItem("mi.sourceFilter") || "[]"),
   ),
   sourcesVisibleCount: 5,
+  // Drop persisted styles that no longer exist. A saved filter for a retired
+  // style (this build removed "rounded" and "bold") renders no chip, so it
+  // would sit there invisibly matching nothing while the grid reports
+  // "No icons match your filters".
   styleFilter: new Set(
-    JSON.parse(localStorage.getItem("mi.styleFilter") || "[]"),
+    JSON.parse(localStorage.getItem("mi.styleFilter") || "[]").filter((s) =>
+      STYLES.includes(String(s).toLowerCase()),
+    ),
   ),
   licenseFilter: new Set(
     JSON.parse(localStorage.getItem("mi.licenseFilter") || "[]"),
@@ -857,12 +863,9 @@ function renderSvg(paths, opts = {}) {
               /stroke="[^"]+"/,
               'stroke="#ffffff"',
             );
-          } else if (val === "#000" || val === "#000000" || val === "black") {
-            pathStroke = strokeInl.replace(
-              /stroke="[^"]+"/,
-              'stroke="#000000"',
-            );
           }
+          // A black stroke is ink too, so strokeInl (already the chosen
+          // colour) is left in place for it.
         } else if (!strokeMatch && isFillBased === false) {
           if (fillMatch && fillMatch[1].toLowerCase() !== "none") {
             pathStroke = `stroke="none"`;
@@ -878,10 +881,12 @@ function renderSvg(paths, opts = {}) {
         } else if (fillMatch) {
           const val = fillMatch[1].toLowerCase();
           if (val === "none") pathFill = "none";
+          // White is a knockout - a hole punched through the artwork - so it
+          // stays white. Black is the ink of a monochrome piece, so it takes
+          // the chosen colour; pinning it meant recolouring silently did
+          // nothing to artwork that hard-codes black.
           else if (val === "#fff" || val === "#ffffff" || val === "white")
             pathFill = "#ffffff";
-          else if (val === "#000" || val === "#000000" || val === "black")
-            pathFill = "#000000";
           else pathFill = color;
         }
 
