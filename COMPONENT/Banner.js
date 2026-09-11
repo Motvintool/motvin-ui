@@ -1,35 +1,47 @@
 window.MotvinBanner = (function () {
-  function ensureStyles() {
-    if (document.getElementById("mi-banner-styles")) return;
+  const BANNER_COPY =
+    "Motvin v1 beta is here, explore 345K+ icons, 10.5K logos and 1K+ illustrations in one powerful library.";
 
-    const styles = document.createElement("style");
-    styles.id = "mi-banner-styles";
-    styles.textContent = `
-      .mi-product-banner { position: fixed; top: 0; left: 0; z-index: 100; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 44px; padding: 8px 24px; background: linear-gradient(90deg, #874fff 0%, #000 11.538%, #000 87.981%, #874fff 100%); color: #fff; font-family: "Outfit", sans-serif; font-size: 16px; font-weight: 500; line-height: normal; text-align: center; }
-      .mi-product-banner p { margin: 0; white-space: nowrap; font-weight: 500; }
-      .mi-product-banner a { color: inherit; font-weight: 600; text-decoration: underline; text-underline-position: from-font; }
-      .mi-product-banner.is-hidden { display: none; }
-      body.mi-has-product-banner .mi-app-shell { top: var(--mi-product-banner-height, 44px); height: calc(100vh - var(--mi-product-banner-height, 44px)); }
-      body.mi-has-product-banner.mi-product-banner-hidden .mi-app-shell { top: 0; height: 100vh; }
-      @media (max-width: 720px) { .mi-product-banner { align-items: center; flex-wrap: wrap; gap: 2px 8px; padding: 8px 16px; font-size: 13px; } .mi-product-banner p { white-space: normal; } }
-    `;
-    document.head.appendChild(styles);
-  }
-
-  function mount() {
-    if (document.getElementById("mi-product-banner")) return;
-
-    const main = document.querySelector(".mi-main");
-    const appShell = document.querySelector(".mi-app-shell");
-    if (!main || !appShell) return;
-
+  // The banner ships in each page's markup so it paints with the first frame,
+  // and its styles live in the page stylesheet for the same reason. This only
+  // builds a banner for a page that doesn't already provide one.
+  function createBanner(appShell) {
     const banner = document.createElement("section");
     banner.id = "mi-product-banner";
     banner.className = "mi-product-banner";
     banner.setAttribute("aria-label", "Motvin beta announcement");
-    const returnUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    banner.innerHTML = `<p>Motvin v1 beta is here, explore 345K+ icons, 10.5K logos and 1K+ illustrations in one powerful library.</p><a href="/login?next=${encodeURIComponent(returnUrl)}">Login &rarr;</a>`;
+    banner.innerHTML = `<p>${BANNER_COPY}</p><a href="/login">Login &rarr;</a>`;
     appShell.insertAdjacentElement("beforebegin", banner);
+    return banner;
+  }
+
+  // Each page's head script decides before first paint whether to reserve the
+  // banner's space, and records that in .mi-banner-reserved on <html>. Honour
+  // that decision rather than re-reading the auth snapshot: firebase-auth.js
+  // can rewrite the snapshot between the head script and this mount, and any
+  // disagreement between the two is exactly the shell jump we're avoiding.
+  function isBannerSpaceReserved() {
+    return document.documentElement.classList.contains("mi-banner-reserved");
+  }
+
+  function mount() {
+    const main = document.querySelector(".mi-main");
+    const appShell = document.querySelector(".mi-app-shell");
+    if (!main || !appShell) return;
+
+    // Adopt the banner the page already rendered, falling back to building one.
+    const banner =
+      document.getElementById("mi-product-banner") || createBanner(appShell);
+    if (banner.dataset.miBannerWired) return;
+    banner.dataset.miBannerWired = "1";
+
+    // The return URL can only be filled in at runtime, so the markup ships a
+    // bare /login and it gets completed here.
+    const loginLink = banner.querySelector("a");
+    if (loginLink) {
+      const returnUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      loginLink.href = `/login?next=${encodeURIComponent(returnUrl)}`;
+    }
     document.body.classList.add("mi-has-product-banner");
 
     const updateBannerHeight = () =>
@@ -43,12 +55,28 @@ window.MotvinBanner = (function () {
     let previousScrollTop = main.scrollTop;
     let framePending = false;
     let isHiddenByScroll = false;
-    let isAuthenticated = false;
+    let isAuthenticated = !isBannerSpaceReserved();
+
+    // Refreshing a scrolled page makes the browser restore the scroll position
+    // after mount, which arrives as a scroll event with no user behind it.
+    // Reading that as a downward scroll would hide the banner on load, so only
+    // let scrolling hide it once there has been real input.
+    let hasUserScrolled = false;
+    ["wheel", "touchmove", "keydown", "pointerdown"].forEach((type) =>
+      main.addEventListener(
+        type,
+        () => {
+          hasUserScrolled = true;
+        },
+        { passive: true },
+      ),
+    );
     const syncVisibility = () => {
       const isHidden = isAuthenticated || isHiddenByScroll;
       banner.classList.toggle("is-hidden", isHidden);
       document.body.classList.toggle("mi-product-banner-hidden", isHidden);
     };
+    syncVisibility();
 
     if (window.FirebaseAuthService?.onChange) {
       window.FirebaseAuthService.onChange((user) => {
@@ -65,6 +93,12 @@ window.MotvinBanner = (function () {
         framePending = true;
         window.requestAnimationFrame(() => {
           const scrollTop = main.scrollTop;
+          if (!hasUserScrolled) {
+            // Scroll restoration: take it as the new baseline, nothing more.
+            previousScrollTop = scrollTop;
+            framePending = false;
+            return;
+          }
           const scrollingDown = scrollTop > previousScrollTop;
           const scrollingUp = scrollTop < previousScrollTop;
           if (!isHiddenByScroll && scrollingDown && scrollTop > 8) {
@@ -83,7 +117,6 @@ window.MotvinBanner = (function () {
   }
 
   function init() {
-    ensureStyles();
     mount();
   }
 

@@ -1372,45 +1372,68 @@ function renderBulkActions() {
         );
       renderCompareCount();
     },
-    onCopy: (format) => {
+    onCopy: async (format) => {
       if (!requireLoginToDownload()) return;
-      const payload = selectedIcons
-        .map((icon) => {
-          const svg = renderStyled(icon);
-          switch (format) {
-            case "jsx":
-              return toJsx(svg);
-            case "vue":
-              return toVue(svg);
-            case "html":
-              return `<img src="${toDataUrl(svg)}" alt="${icon.name}" />`;
-            case "css":
-              return `.icon-${icon.name} { mask: url("${toDataUrl(svg)}") no-repeat center / contain; background: currentColor; }`;
-            case "dataurl":
-              return toDataUrl(svg);
-            case "base64":
-              return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
-            default:
-              return svg;
-          }
-        })
-        .join("\n\n");
+      const count = selectedIcons.length;
+      const rendered = await Promise.all(
+        selectedIcons.map(async (icon) => ({
+          name: icon.name,
+          svg: await exportSvgFor(icon),
+        })),
+      );
+      // Concatenated <svg> roots are not an SVG document, so anything that
+      // reads the clipboard as artwork (Figma, Illustrator, a saved .svg) keeps
+      // the first illustration and drops the rest - merge them into one.
+      const payload =
+        format === "svg"
+          ? window.BulkExport.combineSvgs(rendered)
+          : rendered
+              .map(({ name, svg }) => {
+                switch (format) {
+                  case "jsx":
+                    return toJsx(svg);
+                  case "vue":
+                    return toVue(svg);
+                  case "html":
+                    return `<img src="${toDataUrl(svg)}" alt="${name}" />`;
+                  case "css":
+                    return `.icon-${name} { mask: url("${toDataUrl(svg)}") no-repeat center / contain; background: currentColor; }`;
+                  case "dataurl":
+                    return toDataUrl(svg);
+                  case "base64":
+                    return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
+                  default:
+                    return svg;
+                }
+              })
+              .join("\n\n");
       copyText(payload).then((ok) =>
-        toast(ok ? "Copied selected items" : "Copy failed"),
+        toast(
+          ok
+            ? `Copied ${count} ${count === 1 ? "illustration" : "illustrations"}`
+            : "Copy failed",
+        ),
       );
     },
     onDownload: async (format) => {
       if (!requireLoginToDownload()) return;
+      const count = selectedIcons.length;
       if (format === "png") {
         const size = 512;
         try {
+          const rendered = await Promise.all(
+            selectedIcons.map(async (icon) => ({
+              name: icon.name,
+              svg: await exportSvgFor(icon),
+            })),
+          );
           const pngFiles = await Promise.all(
-            selectedIcons.map(
-              (icon) =>
+            rendered.map(
+              (item) =>
                 new Promise((resolve, reject) => {
                   const image = new Image();
                   const objectUrl = URL.createObjectURL(
-                    new Blob([renderStyled(icon)], { type: "image/svg+xml" }),
+                    new Blob([item.svg], { type: "image/svg+xml" }),
                   );
                   image.onload = () => {
                     const canvas = document.createElement("canvas");
@@ -1419,7 +1442,7 @@ function renderBulkActions() {
                     canvas.getContext("2d").drawImage(image, 0, 0, size, size);
                     URL.revokeObjectURL(objectUrl);
                     resolve({
-                      name: icon.name,
+                      name: item.name,
                       dataUrl: canvas.toDataURL("image/png"),
                     });
                   };
@@ -1431,23 +1454,39 @@ function renderBulkActions() {
                 }),
             ),
           );
-          pngFiles.forEach((file) =>
-            download(`${file.name}-${size}.png`, file.dataUrl),
+          window.BulkExport.downloadFiles(
+            pngFiles.map((file) => ({
+              name: `${file.name}-${size}.png`,
+              data: window.BulkExport.dataUrlToBytes(file.dataUrl),
+              type: "image/png",
+            })),
+            `motvin-illustrations-${count}-png.zip`,
           );
-          toast("Selected PNGs downloaded");
+          window.StackToast?.show(
+            count === 1
+              ? "PNG downloaded"
+              : `Downloaded ${count} PNGs as a ZIP`,
+          );
         } catch {
           toast("PNG export failed");
         }
         return;
       }
-      selectedIcons.forEach((icon) =>
-        download(
-          `${icon.name}.svg`,
-          "data:image/svg+xml;charset=utf-8," +
-            encodeURIComponent(renderStyled(icon)),
+      // One <a download> click per item only ever produced the first file -
+      // Chrome gates repeated programmatic downloads - so ship a single ZIP.
+      window.BulkExport.downloadFiles(
+        await Promise.all(
+          selectedIcons.map(async (icon) => ({
+            name: `${icon.name}.svg`,
+            data: window.BulkExport.flattenSvg(await exportSvgFor(icon)),
+            type: "image/svg+xml",
+          })),
         ),
+        `motvin-illustrations-${count}-svg.zip`,
       );
-      toast("Selected SVGs downloaded");
+      window.StackToast?.show(
+        count === 1 ? "SVG downloaded" : `Downloaded ${count} SVGs as a ZIP`,
+      );
     },
     onClear: () => {
       state.selected.clear();
@@ -1991,9 +2030,35 @@ function renderMatchingIcons() {
 // --------------------------------------------------------------------
 // Export
 // --------------------------------------------------------------------
+/**
+ * Export markup for one item. Items the API served without SVG content render
+ * as an `<img>` to the source file, which cannot be embedded in a combined SVG
+ * or written to a .svg - so fetch the file first and render it for real.
+ */
+async function exportSvgFor(icon) {
+  if (!icon.svg && icon.imageUrl) {
+    try {
+      const markup = window.BulkExport.normalizeSvgFile(
+        await (await fetch(icon.imageUrl)).text(),
+      );
+      if (markup) icon.svg = markup;
+    } catch {}
+  }
+  // renderStyled prefers imageUrl whenever it is set, so hide it once the real
+  // file is in hand.
+  return icon.svg
+    ? renderStyled({ ...icon, imageUrl: undefined })
+    : renderStyled(icon);
+}
+
 function currentSvgString() {
   if (!state.editorIcon) return "";
-  return renderSvg(state.editorIcon.svg, editorRenderOpts());
+  // Flattened here so every editor export - Copy SVG and its other formats,
+  // the code preview, Download SVG - hands out one `<svg>` instead of the
+  // renderer's wrapper chain, which a design tool imports as nested frames.
+  return window.BulkExport.flattenSvg(
+    renderSvg(state.editorIcon.svg, editorRenderOpts()),
+  );
 }
 function toJsx(svg) {
   return svg
@@ -2867,9 +2932,9 @@ function wire() {
     if (act) {
       if (act.dataset.act === "copy") {
         if (!requireLoginToDownload()) return;
-        copyText(renderStyled(icon)).then((ok) =>
-          toast(ok ? "Copied SVG" : "Copy failed"),
-        );
+        exportSvgFor(icon)
+          .then((markup) => copyText(window.BulkExport.flattenSvg(markup)))
+          .then((ok) => toast(ok ? "Copied SVG" : "Copy failed"));
       } else if (act.dataset.act === "copy-name") {
         copyText(icon.name).then((ok) =>
           toast(ok ? `Copied "${icon.name}"` : "Copy failed"),
@@ -3438,9 +3503,9 @@ function wire() {
     if (action) {
       if (action.dataset.act === "copy") {
         if (!requireLoginToDownload()) return;
-        copyText(renderStyled(icon)).then((ok) =>
-          toast(ok ? "Copied SVG" : "Copy failed"),
-        );
+        exportSvgFor(icon)
+          .then((markup) => copyText(window.BulkExport.flattenSvg(markup)))
+          .then((ok) => toast(ok ? "Copied SVG" : "Copy failed"));
       } else if (action.dataset.act === "save") {
         window.CollectionManager.openModal(icon.id, icon);
       }
@@ -3740,10 +3805,6 @@ function buildCategoryList() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelector(".mi-rp-badge-lg")?.classList.remove("mi-skeleton");
-});
-
-document.addEventListener("DOMContentLoaded", () => {
   const PROMO_KEY = "motvin_promo_hidden_until";
   const banner = document.querySelector(".mi-new-banner");
 
@@ -3826,6 +3887,19 @@ document.addEventListener("DOMContentLoaded", () => {
         renderSavedPanel();
       if (savedTab === "categories") buildCategoryList();
     }
+
+    // These read stats, so they belong here rather than at DOMContentLoaded:
+    // clearing the skeletons before ILLUSTRATION_STATS_LOADED resolves paints a
+    // count of 0 and drops the loading state the markup ships with.
+    const badgeLg = document.querySelector(".mi-rp-badge-lg");
+    if (badgeLg) {
+      badgeLg.textContent = getTotalIllustrationCount().toLocaleString();
+      badgeLg.classList.remove("mi-skeleton");
+    }
+
+    document.querySelectorAll(".mi-sort-tab.mi-skeleton").forEach((tab) => {
+      tab.classList.remove("mi-skeleton");
+    });
   };
 
   if (window.ILLUSTRATION_STATS_LOADED) {
@@ -3836,18 +3910,6 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     initUI();
   }
-
-  // Dynamically update the overall live icons count in the sidebar
-  const badgeLg = document.querySelector(".mi-rp-badge-lg");
-  if (badgeLg) {
-    badgeLg.textContent = getTotalIllustrationCount().toLocaleString();
-    badgeLg.classList.remove("mi-skeleton");
-  }
-
-  // Remove skeleton loaders from sort tabs
-  document.querySelectorAll(".mi-sort-tab.mi-skeleton").forEach((tab) => {
-    tab.classList.remove("mi-skeleton");
-  });
 
   document.querySelectorAll(".mi-sort-tab").forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -4201,8 +4263,8 @@ function renderSavedPanel() {
   let html = `
     <div class="mi-rp-cat-item ${!state.activeFolderId ? "is-active" : ""}" data-folder="all" style="background: white; box-shadow: 0px 4px 4px rgba(96,96,96,0.15), 0px 0px 0.5px rgba(96,96,96,0.31)${!state.activeFolderId ? ", 0 0 0 3px var(--mi-focus)" : ""}; height: 84px; display: flex; flex-direction: column; justify-content: space-between; padding: 16px 16px 12px 16px; border-radius: 8px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: ${!state.activeFolderId ? "1px solid var(--mi-accent)" : "1px solid transparent"};">
       <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-        <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">All Saved</span>
-        <span style="font-family: 'Inter', sans-serif; font-size: 14px; color: rgba(0,0,0,0.4);">${allCount}</span>
+        <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 16px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">All Saved</span>
+        <span style="font-family: 'Inter', sans-serif; font-size: 16px; color: rgba(0,0,0,0.4);">${allCount}</span>
       </div>
     </div>
   `;
@@ -4212,8 +4274,8 @@ function renderSavedPanel() {
     html += `
       <div class="mi-rp-cat-item ${isActive ? "is-active" : ""}" data-folder="${f.id}" style="background: white; box-shadow: 0px 4px 4px rgba(96,96,96,0.15), 0px 0px 0.5px rgba(96,96,96,0.31)${isActive ? ", 0 0 0 3px var(--mi-focus)" : ""}; height: 84px; display: flex; flex-direction: column; justify-content: space-between; padding: 16px 16px 12px 16px; border-radius: 8px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: ${isActive ? "1px solid var(--mi-accent)" : "1px solid transparent"}; position: relative;">
         <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-          <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${f.name}</span>
-          <span style="font-family: 'Inter', sans-serif; font-size: 14px; color: rgba(0,0,0,0.4);">${f.iconIds.length}</span>
+          <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 16px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${f.name}</span>
+          <span style="font-family: 'Inter', sans-serif; font-size: 16px; color: rgba(0,0,0,0.4);">${f.iconIds.length}</span>
         </div>
         <button class="mi-folder-del" data-del="${f.id}" title="Delete Collection" style="position: absolute; bottom: 12px; right: 16px; background: none; border: none; cursor: pointer; padding: 0; color: #E53935; display: flex; opacity: 0; transition: opacity 0.2s;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path></svg>

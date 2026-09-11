@@ -68,15 +68,15 @@ window.MultiActionsStrip = (function () {
       .mi-bulk-check:active { background: rgba(29, 29, 29, 0.2); transform: scale(0.97); }
       .mi-bulk-check img { width: 20px; height: 20px; }
       .mi-bulk-partial { width: 12px; height: 2px; background: #1d1d1d; border-radius: 2px; }
-      .mi-bulk-summary-content { box-sizing: border-box; height: 48px; gap: 32px; padding: 14px 20px 14px 14px; background: white; border: 2px solid rgba(29, 29, 29, 0.08); border-left: 0; border-radius: 0 100px 100px 0; font-family: "Outfit", sans-serif; font-size: 14px; line-height: 18px; white-space: nowrap; }
+      .mi-bulk-summary-content { box-sizing: border-box; height: 48px; gap: 32px; padding: 14px 20px 14px 14px; background: white; border: 2px solid rgba(29, 29, 29, 0.08); border-left: 0; border-radius: 0 100px 100px 0; font-family: "Outfit", sans-serif; font-size: 16px; line-height: 18px; white-space: nowrap; }
       .mi-bulk-summary-content strong { font-weight: 600; color: #000; }
       .mi-bulk-summary-content img { width: 1px; height: 16px; }
       .mi-bulk-summary-content span { display: flex; gap: 4px; color: #2c2e36; }
-      .mi-bulk-summary-content b { color: rgba(0, 0, 0, 0.9); font-size: 15px; }
+      .mi-bulk-summary-content b { color: rgba(0, 0, 0, 0.9); font-size: 16px; }
       .mi-bulk-summary-content em { color: #1d1d1d; font-style: normal; font-weight: 500; }
       .mi-bulk-controls { gap: 8px; }
       .mi-bulk-copy-group { position: relative; z-index: 1000; }
-      .mi-bulk-split-button { height: 48px; padding: 0; border: 0; border-radius: 100px; overflow: hidden; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; }
+      .mi-bulk-split-button { height: 48px; padding: 0; border: 0; border-radius: 100px; overflow: hidden; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; }
       .mi-bulk-split-button span, .mi-bulk-split-button img { box-sizing: border-box; height: 48px; }
       .mi-bulk-split-button span { display: flex; align-items: center; padding: 0 22px 0 26px; }
       .mi-bulk-split-button img { width: 42px; padding: 16px 14px 16px 12px; border-left: 1px solid rgba(255, 255, 255, 0.3); }

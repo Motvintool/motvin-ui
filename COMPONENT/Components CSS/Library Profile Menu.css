@@ -63,7 +63,7 @@
 
 .mi-profile-email {
   font-family: 'Outfit', sans-serif;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.6);
   margin: 0;
@@ -96,7 +96,7 @@
   text-decoration: none;
   color: #252522;
   font-family: 'Outfit', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   transition: background 0.15s ease;
   cursor: pointer;
@@ -107,8 +107,8 @@
 }
 
 .mi-profile-item img {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   flex-shrink: 0;
 }
 

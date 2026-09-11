@@ -24,7 +24,7 @@
   --mi-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
   --header-h: 0px;
   --left-sidebar-w: 75px;
-  --right-panel-w: 360px;
+  --right-panel-w: 370px;
 }
 
 * {
@@ -210,7 +210,7 @@ select {
   padding: 6px 12px;
   border-radius: 10px;
   color: #2e3238;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   letter-spacing: -0.16px;
   text-decoration: none;
@@ -286,7 +286,7 @@ select {
   gap: 6px;
   padding: 7px 14px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--mi-ink-2);
   border: 1px solid var(--mi-border);
@@ -317,6 +317,83 @@ select {
   overflow: hidden;
 }
 
+/* ── Beta banner ─────────────────────────────────────────────────────────
+   The banner is in the page markup rather than injected by Banner.js, so it
+   paints with the first frame and stays put through the loading state. Its
+   styles live here for the same reason - injected styles arrive too late.
+   A head script adds .mi-banner-reserved to <html> before first paint when
+   the banner should show; without it the banner is hidden and the shell
+   stays at the top, so neither ever jumps. */
+.mi-product-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 24px;
+  background: linear-gradient(
+    90deg,
+    #874fff 0%,
+    #000 11.538%,
+    #000 87.981%,
+    #874fff 100%
+  );
+  color: #fff;
+  font-family: "Outfit", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  text-align: center;
+}
+
+.mi-product-banner p {
+  margin: 0;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.mi-product-banner a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-position: from-font;
+}
+
+.mi-product-banner.is-hidden,
+html:not(.mi-banner-reserved) body:not(.mi-has-product-banner) .mi-product-banner {
+  display: none;
+}
+
+html.mi-banner-reserved .mi-app-shell,
+body.mi-has-product-banner .mi-app-shell {
+  top: var(--mi-product-banner-height, 44px);
+  height: calc(100vh - var(--mi-product-banner-height, 44px));
+}
+
+body.mi-has-product-banner.mi-product-banner-hidden .mi-app-shell {
+  top: 0;
+  height: 100vh;
+}
+
+@media (max-width: 720px) {
+  .mi-product-banner {
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .mi-product-banner p {
+    white-space: normal;
+  }
+}
+
 .mi-app-shell,
 .mi-app-shell * {
   font-family: "Outfit", sans-serif !important;
@@ -331,7 +408,7 @@ select {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px 0 24px;
+  padding: 20px 8px 24px;
   width: var(--left-sidebar-w);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   z-index: 20;
@@ -598,7 +675,7 @@ body.is-panel-floating .mi-main {
   border-radius: 10px;
   font-family: "Outfit", sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   color: #2e3238;
   letter-spacing: -0.16px;
   text-decoration: none;
@@ -649,7 +726,7 @@ body.is-panel-floating .mi-main {
   color: #2e3238;
   font-family: "Outfit", sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   letter-spacing: -0.16px;
   transition: background 0.15s ease;
   cursor: pointer;
@@ -709,6 +786,7 @@ body.is-panel-floating .mi-main {
 
 .mi-products-dropdown.is-open {
   display: flex;
+  width: 360px;
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
@@ -732,7 +810,7 @@ body.is-panel-floating .mi-main {
   border-radius: 7px;
   text-decoration: none;
   background: #f7f7f7;
-  width: 312px;
+  width: 100%;
   height: 65.898px;
   box-sizing: border-box;
   transition: background 0.12s ease;
@@ -784,7 +862,7 @@ body.is-panel-floating .mi-main {
 
 .mi-products-dropdown-item-label {
   font-family: "Outfit", sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   color: #252522;
   letter-spacing: -0.2344px;
@@ -793,7 +871,7 @@ body.is-panel-floating .mi-main {
 
 .mi-products-dropdown-item-sub {
   font-family: "Outfit", sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   color: rgba(37, 37, 34, 0.56);
   letter-spacing: -0.0762px;
@@ -973,7 +1051,7 @@ body.is-panel-floating .mi-main {
 .mi-category-menu-label {
   font-family: "Outfit", sans-serif;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 16px;
   color: rgba(0, 0, 0, 0.8);
   white-space: nowrap;
   overflow: hidden;
@@ -986,7 +1064,7 @@ body.is-panel-floating .mi-main {
   padding: 4px 8px;
   font-family: "Outfit", sans-serif;
   font-weight: 400;
-  font-size: 13px;
+  font-size: 15px;
   color: rgba(0, 0, 0, 0.7);
   white-space: nowrap;
 }
@@ -1070,7 +1148,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-coll-modal-count {
-  font-size: 13px;
+  font-size: 15px;
   color: rgba(0, 0, 0, 0.5);
 }
 
@@ -1285,7 +1363,7 @@ body.is-panel-floating .mi-main {
   outline: none;
   background: transparent;
   color: #0f1116;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .mi-recolor-swatches {
@@ -1337,6 +1415,10 @@ body.is-panel-floating .mi-main {
   display: flex;
   gap: 28px;
   align-items: center;
+}
+
+.mi-sort-tabs:has(.mi-sort-tab.mi-skeleton) {
+  gap: 20px;
 }
 
 .mi-sort-tab {
@@ -1399,6 +1481,17 @@ body.is-panel-floating .mi-main {
   display: flex;
 }
 
+/* The count and the active underline are both stat-derived, so keep them
+   hidden until the tab leaves its loading state - otherwise the active tab
+   shows a filled pill reading 0 above a black underline. */
+.mi-sort-tab.mi-skeleton .mi-sort-tab-count {
+  display: none;
+}
+
+.mi-sort-tab.mi-skeleton::after {
+  background: transparent;
+}
+
 .mi-sort-bar-right {
   display: flex;
   gap: 12px;
@@ -1430,7 +1523,7 @@ body.is-panel-floating .mi-main {
 
 .mi-compare-inner span {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: #f3f4f6;
   letter-spacing: -0.07px;
   white-space: nowrap;
@@ -1507,7 +1600,7 @@ body.is-panel-floating .mi-main {
   transition:
     background 0.15s var(--mi-ease),
     color 0.15s var(--mi-ease);
-  font-size: 13px;
+  font-size: 15px;
   background: none;
   border: none;
   cursor: pointer;
@@ -1633,7 +1726,7 @@ body.is-panel-floating .mi-main {
 
 .mi-card-name {
   height: 18px;
-  font-size: 12px;
+  font-size: 13px;
   font-family: "Outfit", sans-serif;
   line-height: 18px;
   color: #999999;
@@ -1657,7 +1750,7 @@ body.is-panel-floating .mi-main {
   border-radius: 100px;
   color: #555555;
   font-family: "Outfit", sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 12px;
   text-transform: capitalize;
   letter-spacing: 0.06em;
@@ -1963,7 +2056,7 @@ body.is-resizing-rp * {
   background: #e8e8e8;
   color: #000 !important;
   border-radius: 100px;
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 800;
   line-height: 1;
   cursor: pointer;
@@ -2255,7 +2348,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-all-title {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   color: black;
   flex: 1;
   white-space: nowrap;
@@ -2293,14 +2386,14 @@ body.is-panel-floating .mi-rp-edge-resizer {
   padding: 4px 8px;
   font-family: "Outfit", sans-serif;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 15px;
   color: black;
 }
 
 .mi-rp-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   padding-left: 6px;
 }
 
@@ -2380,7 +2473,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-item-label span,
 .mi-rp-item-text {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: black;
   flex: 1;
 }
@@ -2390,7 +2483,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   border-radius: 100px;
   padding: 4px 8px;
   font-family: "Outfit", sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   color: rgba(0, 0, 0, 0.7);
 }
 
@@ -2404,7 +2497,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-more span {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: black;
   opacity: 0.7;
   text-decoration: underline;
@@ -2440,7 +2533,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-style-item span {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: black;
   flex: 1;
 }
@@ -2455,7 +2548,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-val {
   font-family: "Inter", sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   color: #6b7280;
 }
 
@@ -2536,7 +2629,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   border-radius: 86.957px;
   font-family: "Inter", sans-serif;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 15px;
   color: #6b7280;
 }
 
@@ -2560,7 +2653,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   flex: 1;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   color: black;
   transition: color 0.2s;
 }
@@ -2582,7 +2675,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   content: "Clear Filters";
   color: black;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .mi-rp-chevron {
@@ -2630,7 +2723,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-cat-label {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 16px;
   color: rgba(0, 0, 0, 0.8);
   white-space: nowrap;
 }
@@ -2646,7 +2739,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   padding: 4px 8px;
   font-family: "Outfit", sans-serif;
   font-weight: 400;
-  font-size: 13px;
+  font-size: 15px;
   color: rgba(0, 0, 0, 0.7);
 }
 
@@ -2657,7 +2750,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   margin: 12px 20px 0;
   padding: 9px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--mi-muted);
   border: 1px solid var(--mi-border);
@@ -2685,7 +2778,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   padding: 9px 16px;
   border-radius: 10px;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 15px;
   background: var(--mi-ink);
   color: #fff;
   border: none;
@@ -2711,7 +2804,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   padding: 9px 16px;
   border-radius: 10px;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 15px;
   background: #fff;
   color: var(--mi-ink-2);
   border: 1px solid var(--mi-border);
@@ -2730,7 +2823,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   border: 1px solid var(--mi-border);
   border-radius: 10px;
   padding: 8px 12px;
-  font-size: 13px;
+  font-size: 15px;
   background: #fff;
   color: var(--mi-ink-2);
   cursor: pointer;
@@ -2839,7 +2932,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 15px;
   overflow: hidden;
   min-width: 0;
 }
@@ -3140,7 +3233,7 @@ body.mi-full .mi-editor {
 
 .mi-form-sub {
   margin: 0 0 20px;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.5;
 }
 
@@ -3218,7 +3311,7 @@ body.mi-full .mi-editor {
   align-items: center;
   gap: 8px;
   padding: 8px 0;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--mi-ink-2);
 }
 
@@ -3318,7 +3411,7 @@ body.mi-full .mi-editor {
 .mi-ctrl-label {
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
+  font-size: 15px;
   margin-bottom: 8px;
   color: var(--mi-ink-2);
   font-weight: 500;
@@ -3377,7 +3470,7 @@ input[type="color"] {
   border-radius: 8px;
   border: 1px solid var(--mi-border);
   background: #fff;
-  font-size: 13px;
+  font-size: 15px;
   outline: none;
   transition:
     border-color 0.15s var(--mi-ease),
@@ -3441,7 +3534,7 @@ input[type="color"] {
   cursor: pointer;
   padding: 10px 0;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--mi-ink-2);
   border-top: 1px solid var(--mi-border);
   list-style: none;
@@ -3602,7 +3695,7 @@ input[type="color"] {
   padding: 8px 12px;
   border-radius: 8px;
   text-align: left;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--mi-ink-2);
   font-weight: 500;
   cursor: pointer;
@@ -3668,7 +3761,7 @@ input[type="color"] {
   gap: 10px;
   align-items: center;
   margin-top: 4px;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .mi-source-tag {
@@ -3794,7 +3887,7 @@ input[type="color"] {
   display: flex;
   justify-content: space-between;
   padding: 4px 0;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .mi-attrib-note {
@@ -4453,6 +4546,7 @@ input[type="color"] {
   user-select: none;
 }
 
+
 /* --- NEW DETAIL MODAL STYLES --- */
 
 /* Overriding mi-modal-card for the new layout */
@@ -4498,7 +4592,7 @@ body.mi-full .mi-new-scroll-area {
 
 .mi-new-crumb {
   color: #6b7280;
-  font-size: 15px;
+  font-size: 16px;
   text-decoration: none;
   padding: 4px 8px;
   border-radius: 6px;
@@ -4690,7 +4784,7 @@ details[open] .mi-new-section-icon {
   padding-bottom: 12px;
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
+  font-size: 15px;
   color: rgba(0, 0, 0, 0.6);
 }
 
@@ -4719,7 +4813,7 @@ details[open] .mi-new-section-icon {
   flex: 1;
   background: transparent;
   border: none;
-  font-size: 13px;
+  font-size: 15px;
   color: #6b7280;
   padding: 6px 0;
   border-radius: 100px;
@@ -4766,7 +4860,7 @@ details[open] .mi-new-section-icon {
 .mi-new-hex {
   border: none;
   background: transparent;
-  font-size: 13px;
+  font-size: 15px;
   color: #0f1116;
   width: 100%;
   outline: none;
@@ -4861,7 +4955,7 @@ details[open] .mi-new-section-icon {
   border-radius: 8px;
   padding: 8px;
   color: #111827;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   margin: 16px 20px 0 20px;
@@ -5026,7 +5120,7 @@ details[open] .mi-new-section-icon {
 .mi-new-btn-save-collection span {
   font-family: "Outfit", sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 20px;
   color: #ffffff;
   letter-spacing: -0.07px;
@@ -5077,7 +5171,7 @@ details[open] .mi-new-section-icon {
   border-radius: 16px;
   overflow: hidden;
   padding: 16px;
-  display: flex;
+  display: none;
   align-items: center;
   gap: 16px;
 }
@@ -5117,7 +5211,7 @@ details[open] .mi-new-section-icon {
 
 .mi-new-banner-text h4 {
   margin: 0;
-  font-size: 13px;
+  font-size: 15px;
   font-family: Outfit, sans-serif;
   font-weight: 700;
   line-height: 20.8px;
@@ -5144,7 +5238,7 @@ details[open] .mi-new-section-icon {
 }
 
 .mi-new-banner-text p {
-  font-size: 13px;
+  font-size: 15px;
   margin: 0;
   line-height: 18px;
   font-family: Outfit, sans-serif;
@@ -5157,7 +5251,7 @@ details[open] .mi-new-section-icon {
   border: none;
   border-radius: 6px;
   height: 34px;
-  font-size: 13px;
+  font-size: 15px;
   font-family: Outfit, sans-serif;
   font-weight: 500;
   cursor: pointer;
@@ -5232,7 +5326,7 @@ details[open] .mi-new-section-icon {
   border-radius: 10px 0 0 10px;
   height: 48px;
   flex: 1;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -5268,7 +5362,7 @@ details[open] .mi-new-section-icon {
   border-radius: 10px;
   height: 48px;
   flex: 1;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -5284,7 +5378,7 @@ details[open] .mi-new-section-icon {
   border-radius: 10px 0 0 10px;
   height: 48px;
   flex: 1;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -5341,7 +5435,7 @@ details[open] .mi-new-section-icon {
   border: 1.2px solid #eaeaee;
   border-radius: 0 10px 10px 0;
   height: 48px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   cursor: pointer;
   display: flex;
@@ -5375,7 +5469,7 @@ details[open] .mi-new-section-icon {
   /* border-radius: 10px; */
   height: 48px;
   padding: 0 16px;
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -5478,7 +5572,7 @@ details[open] .mi-new-section-icon {
 .mi-new-attrib-content {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   width: 100%;
 }
 
@@ -5486,7 +5580,7 @@ details[open] .mi-new-section-icon {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  font-size: 15px;
+  font-size: 16px;
   line-height: normal;
   width: 100%;
 }
@@ -5571,7 +5665,7 @@ details[open] .mi-new-section-icon {
 }
 
 .mi-new-bottom-header p {
-  font-size: 15px;
+  font-size: 16px;
   color: #808080;
   margin: 0;
 }
@@ -5611,7 +5705,7 @@ details[open] .mi-new-section-icon {
 }
 
 .mi-new-more-tag {
-  font-size: 13px;
+  font-size: 15px;
   color: #000;
   margin-bottom: 4px;
 }

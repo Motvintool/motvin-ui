@@ -34,6 +34,27 @@
         document.write("</style>");
       })();
     </script>
+    <script>
+      (function () {
+        // Banner.js mounts the beta banner on DOMContentLoaded, which shifts
+        // the app shell down by the banner height. Decide here — before first
+        // paint — whether that space is needed, so the header renders in its
+        // final position instead of jumping once the banner appears.
+        try {
+          var snapshot = JSON.parse(
+            localStorage.getItem("motvin-auth-snapshot-v1"),
+          );
+          var signedIn = Boolean(
+            snapshot && snapshot.uid && !snapshot.isAnonymous,
+          );
+          if (!signedIn) {
+            document.documentElement.classList.add("mi-banner-reserved");
+          }
+        } catch (e) {
+          document.documentElement.classList.add("mi-banner-reserved");
+        }
+      })();
+    </script>
     <link rel="stylesheet" href="CSS/illustrations.css?v=36" />
     <link
       rel="stylesheet"
@@ -62,6 +83,21 @@
     <!-- =====================================================
        APP SHELL — Left sidebar + Main + Right panel
        ===================================================== -->
+    <!-- Beta banner: in the markup (not injected) so it paints with the first
+         frame and holds its place through loading. Banner.js adopts this node,
+         sets the return URL on the login link, and owns show/hide from here. -->
+    <section
+      id="mi-product-banner"
+      class="mi-product-banner"
+      aria-label="Motvin beta announcement"
+    >
+      <p>
+        Motvin v1 beta is here, explore 345K+ icons, 10.5K logos and 1K+
+        illustrations in one powerful library.
+      </p>
+      <a href="/login">Login &rarr;</a>
+    </section>
+
     <div class="mi-app-shell">
       <!-- ── LEFT ICON SIDEBAR ── -->
       <aside class="mi-left-sidebar" aria-label="Navigation">
@@ -1158,7 +1194,7 @@
                     style="
                       font-family:
                         &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;
-                      font-size: 15px;
+                      font-size: 16px;
                       color: rgba(0, 0, 0, 0.9);
                     "
                     >Create collection</span
@@ -1203,7 +1239,7 @@
                             &quot;Helvetica Neue&quot;, Helvetica, Arial,
                             sans-serif;
                           font-weight: 500;
-                          font-size: 15px;
+                          font-size: 16px;
                         "
                         >All Saved</span
                       >
@@ -1211,7 +1247,7 @@
                         class="mi-rp-cat-count mi-skeleton"
                         style="
                           font-family: &quot;Inter&quot;, sans-serif;
-                          font-size: 14px;
+                          font-size: 15px;
                         "
                         >0</span
                       >
@@ -1248,7 +1284,7 @@
                             &quot;Helvetica Neue&quot;, Helvetica, Arial,
                             sans-serif;
                           font-weight: 500;
-                          font-size: 15px;
+                          font-size: 16px;
                         "
                         >My Collection</span
                       >
@@ -1256,7 +1292,7 @@
                         class="mi-rp-cat-count mi-skeleton"
                         style="
                           font-family: &quot;Inter&quot;, sans-serif;
-                          font-size: 14px;
+                          font-size: 15px;
                         "
                         >0</span
                       >
@@ -1978,13 +2014,14 @@
     <script src="COMPONENT/Pagination.js"></script>
     <script src="COMPONENT/Banner.js"></script>
     <script src="COMPONENT/Multi Actions Strip.js"></script>
+    <script src="JS/bulk-export.js?v=4"></script>
     <script src="JS/firebase-config.js"></script>
     <script src="COMPONENT/Library Profile Badge.js"></script>
     <script src="COMPONENT/Library Profile Menu.js"></script>
     <script src="JS/firebase-auth.js"></script>
     <script src="COMPONENT/Auth Modal.js"></script>
     <script src="COMPONENT/Stack Toast.js"></script>
-    <script src="JS/illustrations.js?v=29"></script>
+    <script src="JS/illustrations.js?v=34"></script>
     <script>
       window.addEventListener("load", function () {
         setTimeout(function () {
