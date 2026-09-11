@@ -2097,6 +2097,13 @@ function syncEditorControls() {
   const strokeDivider = $("#grp-stroke-divider");
   if (strokeDivider) strokeDivider.style.display = displayVal;
 
+  // 3D Icons keep their own palette - renderSvg deliberately leaves coloured
+  // artwork untouched - so a Color picker here would do nothing. Every other
+  // style is recolourable, so it stays.
+  const colorGrp = $("#grp-color-mode");
+  if (colorGrp)
+    colorGrp.style.display = isColorStyle(ic?.style) ? "none" : "";
+
   $("#ctrl-color").value = e.color;
   $("#ctrl-color-hex").value = e.color;
   $("#ctrl-rot").value = e.rotation;
