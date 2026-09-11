@@ -775,6 +775,8 @@ function renderSvg(paths, opts = {}) {
       // stand for these.
       "carbon-pictograms",
       "linea",
+      // Font glyphs — outlines with no stroke of their own, same as the two above.
+      "atlas-icons",
     ];
     if (!fillBasedSources.includes(opts.sourceId)) {
       isFillBased = false;
@@ -2178,6 +2180,10 @@ function editorRenderOpts(sizeOverride) {
   return {
     viewBox: state.editorIcon?.viewBox,
     iconStyle: state.editorIcon?.style,
+    // Without this the editor and every export it feeds - Copy SVG, Download
+    // SVG, the code preview - miss the fill-based source check in renderSvg and
+    // stroke artwork that has no stroke, doubling every line.
+    sourceId: state.editorIcon?.source,
     size: sizeOverride ?? e.size,
     stroke: e.stroke,
     color: e.color,
