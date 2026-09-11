@@ -769,6 +769,12 @@ function renderSvg(paths, opts = {}) {
       "zondicons",
       "entypo",
       "typicons",
+      // Thin line art drawn as filled paths: the fill traces both edges of each
+      // line rather than filling a silhouette. Stroking it outlines the trace
+      // and every line renders doubled, so the real fill detection above has to
+      // stand for these.
+      "carbon-pictograms",
+      "linea",
     ];
     if (!fillBasedSources.includes(opts.sourceId)) {
       isFillBased = false;
