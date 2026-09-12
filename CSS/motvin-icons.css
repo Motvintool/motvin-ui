@@ -1166,6 +1166,9 @@ body.is-panel-floating .mi-main {
 
 .mi-search-input {
   flex: 1;
+  /* Without this the input keeps its intrinsic (size=20) width on narrow
+     screens and pushes .mi-search-clear outside the pill. */
+  min-width: 0;
   border: none;
   background: transparent;
   padding-left: 12px;
@@ -2251,14 +2254,15 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-source-all {
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 100px;
-  padding: 8px;
+  padding: 6px 6px 6px 10px;
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 15px;
   cursor: pointer;
   transition: all 0.2s ease;
-  height: 42px;
+  /* Hug the content: the fixed 42px clipped the 31px count badge. */
+  height: auto;
   box-sizing: border-box;
 }
 
@@ -4440,6 +4444,12 @@ input[type="color"] {
     padding: 0 12px 8px 12px;
   }
 
+  /* .is-scrolled is more specific than the rule above, so it has to restate
+     the mobile gutters or it falls back to the 42px desktop inset. */
+  .mi-toolbar-wrapper.is-scrolled {
+    padding: 12px;
+  }
+
   .mi-toolbar {
     height: auto;
     flex-wrap: wrap;
@@ -4452,6 +4462,12 @@ input[type="color"] {
     height: 48px;
     padding: 4px 12px 4px 4px;
     width: 100%;
+  }
+
+  /* The pill's own 12px padding is the right-hand gutter; the extra margin
+     would push the clear button to an uneven 20px inset. */
+  .mi-search-clear {
+    margin-right: 0;
   }
 
   /* Small/compact category pill instead of a full desktop-width dropdown */
@@ -4518,6 +4534,7 @@ input[type="color"] {
     flex-wrap: nowrap;
     width: 100%;
     padding-bottom: 2px;
+    gap: 24px;
   }
 
   /* Compare is hidden on mobile, so Recolor + the density toggle comfortably
@@ -4553,12 +4570,41 @@ input[type="color"] {
 }
 
 @media (max-width: 520px) {
-  .mi-sort-tabs {
-    gap: 4px;
-  }
-
   .mi-grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  /* The bar has to fit two nav buttons plus up to seven page chips inside
+     ~370px, so drop the Prev/Next words and let wide page numbers (e.g.
+     6509) widen their chip instead of spilling out of a 36px circle. */
+  .mi-pagination-bar {
+    max-width: 100%;
+    gap: 2px;
+    overflow-x: visible;
+  }
+
+  .mi-page-nav-btn,
+  .mi-page-nav-btn.is-next {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .mi-page-nav-btn span {
+    display: none;
+  }
+
+  .mi-page-btn {
+    width: auto;
+    min-width: 30px;
+    height: 30px;
+    padding: 0 5px;
+    border-radius: 100px;
+    font-size: 13px;
+    flex-shrink: 0;
   }
 }
 

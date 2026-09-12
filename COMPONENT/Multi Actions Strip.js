@@ -50,6 +50,9 @@ window.MultiActionsStrip = (function () {
       body.mi-sidebar-collapsed .mi-app-shell { grid-template-columns: minmax(0, 1fr) var(--right-panel-w); }
       body.mi-sidebar-collapsed .mi-left-sidebar { display: none; }
       body.mi-sidebar-collapsed .mi-sidebar-collapse-toggle { left: 9px; transform: translateY(-50%) scaleX(-1); }
+      /* Below 1300px the left sidebar becomes a horizontal bar, so the collapse
+         handle has nothing to collapse and just floats over the grid. */
+      @media (max-width: 1300px) { .mi-sidebar-collapse-toggle { display: none; } }
       .mi-rp-navigation { display: none; align-items: center; gap: 0; padding: 4px; background: rgba(64, 64, 64, 0.08); border-radius: 999px; }
       .mi-rp-navigation button { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 7.5px 12px; color: #878787; background: transparent; border: 0; border-radius: 999px; font: 400 15px/20px "Outfit", sans-serif; letter-spacing: 0.2px; cursor: pointer; }
       .mi-rp-navigation button.is-active { padding: 6px 6px 6px 12px; color: #141414; background: #fff; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04); font-weight: 500; }

@@ -3455,7 +3455,20 @@ function renderHeroStats() {
 
   const searchInput = $("#search-input");
   if (searchInput && searchInput.placeholder) {
-    searchInput.placeholder = `Search ${getTotalLogoCount().toLocaleString()}+ logos...`;
+    // The pill leaves the input ~190px wide on a phone, which truncates the
+    // full count placeholder, so use a short label there and keep it in sync
+    // when the viewport changes.
+    const compact = window.matchMedia("(max-width: 560px)");
+    const applyPlaceholder = () => {
+      searchInput.placeholder = compact.matches
+        ? "Search logos..."
+        : `Search ${getTotalLogoCount().toLocaleString()}+ logos...`;
+    };
+    applyPlaceholder();
+    if (!searchInput.dataset.placeholderBound) {
+      searchInput.dataset.placeholderBound = "1";
+      compact.addEventListener("change", applyPlaceholder);
+    }
   }
 }
 
