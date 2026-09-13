@@ -9,14 +9,41 @@
 // Sources are populated exclusively from the backend stats API.
 let SOURCES = window.SOURCES || [];
 
-const STYLES = ["outline", "solid", "rounded", "duotone", "thin", "bold"];
+// Outline is stroked artwork, whose width the Stroke Width control adjusts;
+// Solid is everything painted with a fill. There are no Rounded or Bold chips -
+// both were fill artwork, so they sit in Solid.
+const STYLES = ["outline", "solid", "duotone", "thin", "3d"];
 
+// Chip labels. Only styles whose display name is not just the capitalized value
+// need an entry here.
+const STYLE_LABELS = { "3d": "3D Icons" };
+const styleLabel = (s) => STYLE_LABELS[s] || s[0].toUpperCase() + s.slice(1);
+
+// Swatch shown on each style chip.
+const STYLE_SWATCHES = {
+  outline: "icons-basic.svg",
+  solid: "icons-filled.svg",
+  duotone: "icons-duotone.svg",
+  thin: "icons-basic.svg",
+  "3d": "icons-3d.svg",
+};
+
+// Styles rendered with their native colors instead of the global icon color.
+// "3d" is the colored-artwork bucket; "color" is the pre-reclassification name
+// and is kept so cached payloads still render correctly.
+const COLOR_STYLES = new Set(["3d", "color", "multi-color"]);
+const isColorStyle = (s) => COLOR_STYLES.has(String(s || "").toLowerCase());
+
+// Fallback only: the styles a source ships come from the stats API
+// (SOURCES[].styles, derived from each collection's real per-style counts).
+// This map covers the handful of sources that predate that API and is not kept
+// in sync with the full collection list.
 const SOURCE_STYLE_BIAS = {
   lucide: ["outline"],
   heroicons: ["outline", "solid"],
-  phosphor: ["thin", "outline", "bold", "duotone", "solid"],
+  phosphor: ["thin", "outline", "duotone", "solid"],
   tabler: ["outline", "solid"],
-  "material-symbols": ["outline", "solid", "rounded"],
+  "material-symbols": ["outline", "solid"],
   feather: ["outline"],
   bootstrap: ["outline", "solid"],
   radix: ["outline", "solid"],
@@ -29,13 +56,13 @@ const SOURCE_STYLE_BIAS = {
   iconpark: ["outline", "solid", "duotone"],
   remix: ["outline", "solid", "duotone"],
   mynaui: ["outline", "solid"],
-  solar: ["outline", "solid", "bold", "duotone"],
-  iconify: ["outline", "solid", "duotone", "thin", "bold"],
-  streamline: ["outline", "solid", "duotone", "bold"],
+  solar: ["outline", "solid", "duotone"],
+  iconify: ["outline", "solid", "duotone", "thin"],
+  streamline: ["outline", "solid", "duotone"],
   svgrepo: ["outline", "solid", "duotone"],
-  icons8: ["outline", "solid", "rounded"],
+  icons8: ["outline", "solid"],
   nounproject: ["outline", "solid"],
-  flaticon: ["outline", "solid", "duotone", "rounded", "bold", "thin"],
+  flaticon: ["outline", "solid", "duotone", "thin"],
   mingcute: ["outline", "solid"],
   circum: ["outline"],
   zondicons: ["solid"],
@@ -494,8 +521,14 @@ const state = {
     JSON.parse(localStorage.getItem("mi.sourceFilter") || "[]"),
   ),
   sourcesVisibleCount: 5,
+  // Drop persisted styles that no longer exist. A saved filter for a retired
+  // style (this build removed "rounded" and "bold") renders no chip, so it
+  // would sit there invisibly matching nothing while the grid reports
+  // "No icons match your filters".
   styleFilter: new Set(
-    JSON.parse(localStorage.getItem("mi.styleFilter") || "[]"),
+    JSON.parse(localStorage.getItem("mi.styleFilter") || "[]").filter((s) =>
+      STYLES.includes(String(s).toLowerCase()),
+    ),
   ),
   licenseFilter: new Set(
     JSON.parse(localStorage.getItem("mi.licenseFilter") || "[]"),
@@ -534,7 +567,7 @@ const state = {
   copyFmt: "svg",
   gridOn: false,
   globalStroke: parseFloat(localStorage.getItem("mi.globalStroke")) || 1.5,
-  globalSize: parseInt(localStorage.getItem("mi.globalSize"), 10) || 42,
+  globalSize: parseInt(localStorage.getItem("mi.globalSize"), 10) || 36,
   globalColor: localStorage.getItem("mi.globalColor") || "currentColor",
   collections: JSON.parse(localStorage.getItem("mi.collections") || "[]"),
   folders: JSON.parse(localStorage.getItem("mi.folders") || "null"),
@@ -648,12 +681,11 @@ function styleOpts(style) {
       return { cap: "round", join: "round" };
     case "duotone":
       return { cap: "round", join: "round" };
-    case "bold":
-      return { cap: "round", join: "round" };
     case "thin":
       return { cap: "round", join: "round" };
-    case "rounded":
-      return { cap: "round", join: "round" };
+    // Colored artwork is passed through untouched; renderSvg keeps its palette.
+    case "3d":
+      return {};
     default:
       return {};
   }
@@ -669,12 +701,15 @@ function renderStyled(icon, extra = {}) {
       : "";
     const size = extra.size || state.globalSize || 24;
     const color = state.globalColor || "currentColor";
+    // The brightness/saturate filter flattens artwork to one tone, so colored
+    // icons ("3D Icons") are exempt - they keep their own palette.
+    const recolor = color !== "currentColor" && !isColorStyle(icon.style);
 
     return `<img src="${svgUrl}"
                  alt="${icon.name}"
                  width="${size}"
                  height="${size}"
-                 style="display:block;width:${size}px;height:${size}px;object-fit:contain;${color !== "currentColor" ? `filter: brightness(0) saturate(100%) invert(${color === "#ffffff" ? "100%" : "0%"})` : ""}"
+                 style="display:block;width:${size}px;height:${size}px;object-fit:contain;${recolor ? `filter: brightness(0) saturate(100%) invert(${color === "#ffffff" ? "100%" : "0%"})` : ""}"
                  onerror="this.style.display='none';console.error('Failed to load:', '${svgUrl}')" />`;
   }
 
@@ -696,9 +731,13 @@ function renderSvg(paths, opts = {}) {
   // We skip aggressive replacement for complex SVGs (masks/defs) to preserve their shapes and colors.
   const hasComplexDefs = paths.includes("<mask") || paths.includes("<defs");
 
+  // Colored artwork ("3D Icons") keeps its native palette - recoloring it would
+  // flatten the whole point of the style.
+  const keepNativeColors = isColorStyle(opts.iconStyle);
+
   let cleanPaths = paths;
   // Strip hardcoded stroke-width from inner paths so the wrapper stroke takes priority
-  if (opts.iconStyle !== "color" && !hasComplexDefs) {
+  if (!keepNativeColors && !hasComplexDefs) {
     cleanPaths = paths.replace(/stroke-width="[^"]*"/g, "");
   }
 
@@ -714,11 +753,15 @@ function renderSvg(paths, opts = {}) {
   const adjustedStroke = stroke / scale;
 
   // Prevent CSS stroke from bloating purely fill-based icons (like Gravity UI, FA, etc.).
-  let isFillBased = !paths.includes("stroke");
+  // Test for a real stroke attribute rather than the substring "stroke": a stray
+  // stroke-width on otherwise fill-only artwork (Iconoir's *-solid icons carry
+  // one) has no stroke to act on, and matching it here would wrongly give those
+  // icons an adjustable stroke.
+  let isFillBased = !/stroke\s*=\s*"(?!\s*none)/i.test(paths);
   if (
     opts.iconStyle !== "solid" &&
     opts.iconStyle !== "brands" &&
-    opts.iconStyle !== "color"
+    !keepNativeColors
   ) {
     const fillBasedSources = [
       "fontawesome",
@@ -726,6 +769,14 @@ function renderSvg(paths, opts = {}) {
       "zondicons",
       "entypo",
       "typicons",
+      // Thin line art drawn as filled paths: the fill traces both edges of each
+      // line rather than filling a silhouette. Stroking it outlines the trace
+      // and every line renders doubled, so the real fill detection above has to
+      // stand for these.
+      "carbon-pictograms",
+      "linea",
+      // Font glyphs — outlines with no stroke of their own, same as the two above.
+      "atlas-icons",
     ];
     if (!fillBasedSources.includes(opts.sourceId)) {
       isFillBased = false;
@@ -781,7 +832,7 @@ function renderSvg(paths, opts = {}) {
 
   let rootFill = opts.fillMode === "solid" ? opts.fillColor || color : "none";
   // If the icon is fill-based, it MUST have a fill to be visible, even if the UI mode isn't solid.
-  if (isFillBased && opts.iconStyle !== "color") {
+  if (isFillBased && !keepNativeColors) {
     rootFill = color;
   }
   const fillOpaAttr =
@@ -793,9 +844,9 @@ function renderSvg(paths, opts = {}) {
       ? `stroke="none"`
       : `stroke="${color}" stroke-width="${adjustedStroke}" stroke-linecap="${cap}" stroke-linejoin="${join}"`;
 
-  // We skip this for 'color' icons (like emojis) so they retain their native multi-color styles!
+  // We skip this for colored icons (3D Icons, emojis) so they retain their native multi-color styles!
   // We also skip it for complex SVGs (masks/defs) because naive regex replacement destroys mask shapes.
-  if (opts.iconStyle !== "color" && !hasComplexDefs) {
+  if (!keepNativeColors && !hasComplexDefs) {
     cleanPaths = cleanPaths
       .replace(/stroke-width="[^"]*"/g, "")
       .replace(/stroke-linecap="[^"]*"/g, "")
@@ -820,12 +871,9 @@ function renderSvg(paths, opts = {}) {
               /stroke="[^"]+"/,
               'stroke="#ffffff"',
             );
-          } else if (val === "#000" || val === "#000000" || val === "black") {
-            pathStroke = strokeInl.replace(
-              /stroke="[^"]+"/,
-              'stroke="#000000"',
-            );
           }
+          // A black stroke is ink too, so strokeInl (already the chosen
+          // colour) is left in place for it.
         } else if (!strokeMatch && isFillBased === false) {
           if (fillMatch && fillMatch[1].toLowerCase() !== "none") {
             pathStroke = `stroke="none"`;
@@ -841,10 +889,12 @@ function renderSvg(paths, opts = {}) {
         } else if (fillMatch) {
           const val = fillMatch[1].toLowerCase();
           if (val === "none") pathFill = "none";
+          // White is a knockout - a hole punched through the artwork - so it
+          // stays white. Black is the ink of a monochrome piece, so it takes
+          // the chosen colour; pinning it meant recolouring silently did
+          // nothing to artwork that hard-codes black.
           else if (val === "#fff" || val === "#ffffff" || val === "white")
             pathFill = "#ffffff";
-          else if (val === "#000" || val === "#000000" || val === "black")
-            pathFill = "#000000";
           else pathFill = color;
         }
 
@@ -947,7 +997,7 @@ function filterIcons() {
 }
 
 function sortGridItems(items) {
-  const list = [...items];
+  const list = Array.isArray(items) ? items.filter(Boolean) : [];
   if (state.sort === "popular") {
     list.sort((a, b) => b.popularity - a.popularity);
   } else if (state.sort === "trending") {
@@ -980,14 +1030,17 @@ function iconCard(icon) {
           <svg viewBox="0 0 24 24" fill="${isIconSaved(icon.id) ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
       </div>
-      <div class="mi-card-preview">${renderStyled(icon)}</div>
+      <div class="mi-card-preview">${renderStyled(icon, { size: state.globalSize })}</div>
       <div class="mi-card-name" title="${icon.name}">${icon.name}</div>
-      <div class="mi-card-source">${icon.sourceName}</div>
+      <div class="mi-card-source"><span>${icon.sourceName}</span></div>
     </div>
   `;
 }
 
-const ITEMS_PER_PAGE = 64;
+// Must match the page size api-loader.js fetches with, or the pager offers
+// pages the API has no data for. api-loader.js owns the value; 64 is only the
+// fallback for the client-side path where nothing is fetched.
+const ITEMS_PER_PAGE = window.ICONS_PAGE_SIZE || 60;
 let currentRenderId = 0;
 // Tracks only the icons currently on screen; guarded against race conditions (see renderGrid).
 let renderedIconsMap = new Map();
@@ -1000,13 +1053,6 @@ async function renderGrid() {
   if (typeof window.populateIconsFromAPI === "function") {
     const grid = $("#icon-grid");
 
-    // Show skeleton for results count - keep existing mi-skeleton class
-    const resultsCountEl = $("#results-count");
-    if (resultsCountEl) {
-      // mi-skeleton class is already in HTML, just ensure it's there
-      resultsCountEl.classList.add("mi-skeleton");
-    }
-
     // Show skeleton loader - use mi-card styling with skeleton animation
     grid.className = `mi-grid density-${state.density}`;
     const skeletonCards = Array.from(
@@ -1018,17 +1064,27 @@ async function renderGrid() {
 
     try {
       // Track search event in Google Analytics before API call
-      if (typeof gtag !== 'undefined' && state.query) {
-        gtag('event', 'search', {
+      if (typeof gtag !== "undefined" && state.query) {
+        gtag("event", "search", {
           search_term: state.query,
           page_location: window.location.pathname,
-          page_title: 'Icons Search'
+          page_title: "Icons Search",
         });
       }
 
       const total = await window.populateIconsFromAPI();
       if (total === -1) return; // aborted
       if (renderId !== currentRenderId) return;
+
+      // Land back inside the result set if the page is past the end - either a
+      // stale page after a filter narrowed the results, or a deep link. Without
+      // this the grid renders empty, the pager hides itself, and there is no
+      // Prev button left to escape with.
+      const lastPage = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+      if (total > 0 && state.page > lastPage) {
+        state.page = lastPage;
+        return renderGrid();
+      }
 
       // The API already filtered by query, category, style, etc.
       // We can just use the returned ICONS directly.
@@ -1057,11 +1113,18 @@ function renderGridContent(list, displayTotal, apiTotal) {
   if (!displayTotal) {
     if (state.showSaved) {
       grid.innerHTML = `<div class="mi-empty"><h3>No icons are saved</h3><p>Create a collection to see the icons.</p></div>`;
+    } else if (apiTotal > 0) {
+      // The filters do match icons, this page just has none. Keep the pager on
+      // screen so Prev is still reachable.
+      grid.innerHTML = `<div class="mi-empty"><h3>Nothing on this page</h3><p>Go back to an earlier page to see the ${apiTotal.toLocaleString()} matching icons.</p></div>`;
+      renderPagination(apiTotal, Math.max(1, Math.ceil(apiTotal / ITEMS_PER_PAGE)));
     } else {
       grid.innerHTML = `<div class="mi-empty"><h3>No icons match your filters</h3><p>Try clearing filters or a different search.</p></div>`;
     }
-    const pw = $("#pagination-wrapper");
-    if (pw) pw.style.display = "none";
+    if (!(apiTotal > 0) || state.showSaved) {
+      const pw = $("#pagination-wrapper");
+      if (pw) pw.style.display = "none";
+    }
   } else {
     // Pagination - for API mode, list is already paginated
     const totalPages = Math.ceil((apiTotal || displayTotal) / ITEMS_PER_PAGE);
@@ -1081,27 +1144,18 @@ function renderGridContent(list, displayTotal, apiTotal) {
     renderPagination(apiTotal || displayTotal, totalPages);
   }
 
-  const resultsCountEl = $("#results-count");
-  if (resultsCountEl) {
-    resultsCountEl.classList.remove("mi-skeleton");
-    resultsCountEl.style.opacity = "";
-    resultsCountEl.style.animation = "";
-    resultsCountEl.textContent = (apiTotal || displayTotal).toLocaleString();
-  }
-  $("#results-query").textContent = state.query ? `for "${state.query}"` : "";
+  const sortTabCount = document.querySelector(".mi-sort-tab-count");
+  if (sortTabCount)
+    sortTabCount.textContent = (apiTotal || displayTotal).toLocaleString();
 
   // Only show the stroke adjustment slider if there is at least one 'true stroke' icon in the current grid list
   const strokeSection = $("#rp-stroke-section");
   const strokeDivider = $("#rp-stroke-divider");
   if (strokeSection) {
-    const showStroke = list.some(
-      (ic) =>
-        ic &&
-        ic.style &&
-        ic.svg &&
-        (ic.style === "outline" || ic.style === "thin") &&
-        ic.svg.includes("stroke="),
-    );
+    // Outline is the only style with a stroke to adjust: Solid and Bold are
+    // fill artwork, 3D keeps its own colors, and Duotone/Thin are fixed
+    // upstream weights.
+    const showStroke = list.some((ic) => ic && ic.style === "outline");
     strokeSection.style.display = showStroke ? "" : "none";
     if (strokeDivider) strokeDivider.style.display = showStroke ? "" : "none";
   }
@@ -1218,21 +1272,19 @@ function renderFilters() {
     el.innerHTML = visibleItems
       .map((it) => {
         const active = set.has(it.value);
-        let icon = "icons-basic.svg";
-        if (it.label.toLowerCase().includes("duotone solid"))
-          icon = "icons-duotone-solid.svg";
-        else if (it.label.toLowerCase().includes("duotone"))
-          icon = "icons-duotone.svg";
-        else if (
-          it.label.toLowerCase().includes("filled") ||
-          it.label.toLowerCase().includes("solid")
-        )
-          icon = "icons-filled.svg";
-        else if (
-          it.label.toLowerCase().includes("brands") ||
-          it.label.toLowerCase().includes("bold")
-        )
-          icon = "icons-brand.svg";
+        // Keyed on the style value, not the label, so a display name like
+        // "3D Icons" cannot fall through to the wrong swatch.
+        let icon = STYLE_SWATCHES[it.value];
+        if (!icon) {
+          const label = it.label.toLowerCase();
+          if (label.includes("duotone solid")) icon = "icons-duotone-solid.svg";
+          else if (label.includes("duotone")) icon = "icons-duotone.svg";
+          else if (label.includes("filled") || label.includes("solid"))
+            icon = "icons-filled.svg";
+          else if (label.includes("brands") || label.includes("bold"))
+            icon = "icons-brand.svg";
+          else icon = "icons-basic.svg";
+        }
 
         return `
       <div class="mi-rp-style-item ${active ? "is-active" : ""}" data-val="${it.value}" style="cursor:pointer">
@@ -1437,7 +1489,7 @@ function renderFilters() {
     "#filter-style",
     activeStylesList.map((s) => ({
       value: s,
-      label: s[0].toUpperCase() + s.slice(1),
+      label: styleLabel(s),
       count: st[s] || 0,
     })),
     "styleFilter",
@@ -1556,9 +1608,7 @@ function updateFilterBadge() {
 
     // Add style filter names
     if (state.styleFilter.size > 0) {
-      const styleNames = [...state.styleFilter].map(
-        (s) => s[0].toUpperCase() + s.slice(1),
-      );
+      const styleNames = [...state.styleFilter].map(styleLabel);
       filterLines.push("Styles: " + styleNames.join(", "));
     }
 
@@ -1590,6 +1640,163 @@ function renderCompareCount() {
   const badge = $("#compare-count");
   badge.textContent = state.selected.size;
   btn.disabled = state.selected.size < 2;
+  renderBulkActions();
+}
+
+function renderBulkActions() {
+  const renderedIcons = [...renderedIconsMap.values()];
+  const selectedIcons = [...state.selected]
+    .map(
+      (id) => renderedIconsMap.get(id) || ICONS.find((icon) => icon.id === id),
+    )
+    .filter(Boolean);
+  window.MultiActionsStrip?.render({
+    items: selectedIcons,
+    resultCount: $(".mi-sort-tab-count")?.textContent || ICONS.length,
+    query: state.query,
+    allSelected:
+      renderedIcons.length > 0 &&
+      renderedIcons.every((icon) => state.selected.has(icon.id)),
+    onToggleAll: () => {
+      const allSelected = renderedIcons.every((icon) =>
+        state.selected.has(icon.id),
+      );
+      if (allSelected) state.selected.clear();
+      else renderedIcons.forEach((icon) => state.selected.add(icon.id));
+      document
+        .querySelectorAll(".mi-card")
+        .forEach((card) =>
+          card.classList.toggle(
+            "is-selected",
+            state.selected.has(card.dataset.id),
+          ),
+        );
+      renderCompareCount();
+    },
+    onCopy: async (format) => {
+      if (!requireLoginToDownload()) return;
+      const count = selectedIcons.length;
+      const rendered = await Promise.all(
+        selectedIcons.map(async (icon) => ({
+          name: icon.name,
+          svg: await exportSvgFor(icon),
+        })),
+      );
+      // Concatenated <svg> roots are not an SVG document, so anything that
+      // reads the clipboard as artwork (Figma, Illustrator, a saved .svg) keeps
+      // the first icon and drops the rest - merge them into one document.
+      const payload =
+        format === "svg"
+          ? window.BulkExport.combineSvgs(rendered)
+          : rendered
+              .map(({ name, svg }) => {
+                switch (format) {
+                  case "jsx":
+                    return toJsx(svg);
+                  case "vue":
+                    return toVue(svg);
+                  case "html":
+                    return `<img src="${toDataUrl(svg)}" alt="${name}" />`;
+                  case "css":
+                    return `.icon-${name} { mask: url("${toDataUrl(svg)}") no-repeat center / contain; background: currentColor; }`;
+                  case "dataurl":
+                    return toDataUrl(svg);
+                  case "base64":
+                    return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
+                  default:
+                    return svg;
+                }
+              })
+              .join("\n\n");
+      copyText(payload).then((ok) =>
+        toast(
+          ok
+            ? `Copied ${count} ${count === 1 ? "icon" : "icons"}`
+            : "Copy failed",
+        ),
+      );
+    },
+    onDownload: async (format) => {
+      if (!requireLoginToDownload()) return;
+      const count = selectedIcons.length;
+      if (format === "png") {
+        const size = 512;
+        try {
+          const rendered = await Promise.all(
+            selectedIcons.map(async (icon) => ({
+              name: icon.name,
+              svg: await exportSvgFor(icon),
+            })),
+          );
+          const pngFiles = await Promise.all(
+            rendered.map(
+              (item) =>
+                new Promise((resolve, reject) => {
+                  const image = new Image();
+                  const objectUrl = URL.createObjectURL(
+                    new Blob([item.svg], { type: "image/svg+xml" }),
+                  );
+                  image.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = size;
+                    canvas.height = size;
+                    canvas.getContext("2d").drawImage(image, 0, 0, size, size);
+                    URL.revokeObjectURL(objectUrl);
+                    resolve({
+                      name: item.name,
+                      dataUrl: canvas.toDataURL("image/png"),
+                    });
+                  };
+                  image.onerror = () => {
+                    URL.revokeObjectURL(objectUrl);
+                    reject(new Error("png"));
+                  };
+                  image.src = objectUrl;
+                }),
+            ),
+          );
+          window.BulkExport.downloadFiles(
+            pngFiles.map((file) => ({
+              name: `${file.name}-${size}.png`,
+              data: window.BulkExport.dataUrlToBytes(file.dataUrl),
+              type: "image/png",
+            })),
+            `motvin-icons-${count}-png.zip`,
+          );
+          window.StackToast?.show(
+            count === 1
+              ? "PNG downloaded"
+              : `Downloaded ${count} PNGs as a ZIP`,
+          );
+        } catch {
+          toast("PNG export failed");
+        }
+        return;
+      }
+      // One <a download> click per icon only ever produced the first file -
+      // Chrome gates repeated programmatic downloads - so ship a single ZIP.
+      window.BulkExport.downloadFiles(
+        await Promise.all(
+          selectedIcons.map(async (icon) => ({
+            name: `${icon.name}.svg`,
+            data: window.BulkExport.flattenSvg(await exportSvgFor(icon)),
+            type: "image/svg+xml",
+          })),
+        ),
+        `motvin-icons-${count}-svg.zip`,
+      );
+      window.StackToast?.show(
+        count === 1 ? "SVG downloaded" : `Downloaded ${count} SVGs as a ZIP`,
+      );
+    },
+    onClear: () => {
+      state.selected.clear();
+      document
+        .querySelectorAll(".mi-card.is-selected")
+        .forEach((card) => card.classList.remove("is-selected"));
+      renderCompareCount();
+    },
+  });
 }
 
 // --------------------------------------------------------------------
@@ -1880,11 +2087,11 @@ function syncEditorControls() {
     b.classList.toggle("is-active", +b.dataset.stroke === e.stroke),
   );
 
-  // Hide Fill, Stroke, and STROKE advanced section if the icon is fill-based
-  const isFillBased = state.editorIcon
-    ? !state.editorIcon.svg.includes("stroke")
-    : false;
-  const displayVal = isFillBased ? "none" : "";
+  // Hide Fill, Stroke, and the STROKE advanced section unless this is an
+  // Outline icon - that is the only style with a stroke to adjust.
+  const ic = state.editorIcon;
+  const strokeEditable = Boolean(ic) && ic.style === "outline";
+  const displayVal = strokeEditable ? "" : "none";
 
   const strokeGroup = $("#ctrl-stroke")?.closest(".mi-ctrl-group");
   if (strokeGroup) strokeGroup.style.display = displayVal;
@@ -1897,6 +2104,13 @@ function syncEditorControls() {
 
   const strokeDivider = $("#grp-stroke-divider");
   if (strokeDivider) strokeDivider.style.display = displayVal;
+
+  // 3D Icons keep their own palette - renderSvg deliberately leaves coloured
+  // artwork untouched - so a Color picker here would do nothing. Every other
+  // style is recolourable, so it stays.
+  const colorGrp = $("#grp-color-mode");
+  if (colorGrp)
+    colorGrp.style.display = isColorStyle(ic?.style) ? "none" : "";
 
   $("#ctrl-color").value = e.color;
   $("#ctrl-color-hex").value = e.color;
@@ -1966,6 +2180,10 @@ function editorRenderOpts(sizeOverride) {
   return {
     viewBox: state.editorIcon?.viewBox,
     iconStyle: state.editorIcon?.style,
+    // Without this the editor and every export it feeds - Copy SVG, Download
+    // SVG, the code preview - miss the fill-based source check in renderSvg and
+    // stroke artwork that has no stroke, doubling every line.
+    sourceId: state.editorIcon?.source,
     size: sizeOverride ?? e.size,
     stroke: e.stroke,
     color: e.color,
@@ -2130,9 +2348,9 @@ function renderMatchingIcons() {
           <svg viewBox="0 0 24 24" fill="${isIconSaved(candidate.id) ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </span>
       </span>
-      <div class="mi-card-preview">${renderStyled(candidate, { size: 42 })}</div>
+      <div class="mi-card-preview">${renderStyled(candidate, { size: state.globalSize })}</div>
       <div class="mi-card-name">${candidate.name}</div>
-      <div class="mi-card-source">${candidate.sourceName}</div>
+      <div class="mi-card-source"><span>${candidate.sourceName}</span></div>
     </button>
   `,
     )
@@ -2142,9 +2360,34 @@ function renderMatchingIcons() {
 // --------------------------------------------------------------------
 // Export
 // --------------------------------------------------------------------
+/**
+ * Export markup for one icon. Icons the API served without SVG content render
+ * as an `<img>` to the CDN file, which cannot be embedded in a combined SVG or
+ * written to a .svg - so fetch the file first, the way the editor does.
+ */
+async function exportSvgFor(icon) {
+  if (!icon.svg && icon.source && icon.name) {
+    try {
+      const url = window.iconsAPI?.getIconSVGUrl(icon.source, icon.name);
+      if (url) {
+        const markup = window.BulkExport.normalizeSvgFile(
+          await (await fetch(url)).text(),
+        );
+        if (markup) icon.svg = markup;
+      }
+    } catch {}
+  }
+  return renderStyled(icon);
+}
+
 function currentSvgString() {
   if (!state.editorIcon) return "";
-  return renderSvg(state.editorIcon.svg, editorRenderOpts());
+  // Flattened here so every editor export - Copy SVG and its other formats,
+  // the code preview, Download SVG - hands out one `<svg>` instead of the
+  // renderer's wrapper chain, which a design tool imports as nested frames.
+  return window.BulkExport.flattenSvg(
+    renderSvg(state.editorIcon.svg, editorRenderOpts()),
+  );
 }
 function toJsx(svg) {
   return svg
@@ -2734,6 +2977,35 @@ function wire() {
   const searchInput = $("#search-input");
   const searchClear = $("#search-clear");
   const searchIcon = $(".mi-search-icon");
+  const searchPill = $(".mi-search-pill");
+  const revealSearchToolbar = () => {
+    const mainContainer = $(".mi-main");
+    const toolbarWrap = $(".mi-toolbar-wrapper");
+    if (!mainContainer || !toolbarWrap) return;
+    mainContainer.scrollTo({ top: toolbarWrap.offsetTop, behavior: "smooth" });
+  };
+
+  if (searchPill) {
+    searchPill.addEventListener(
+      "click",
+      (event) => {
+        if (event.target.closest("#search-clear")) return;
+        searchPill.classList.add("is-active");
+        revealSearchToolbar();
+      },
+      true,
+    );
+    document.addEventListener("pointerdown", (event) => {
+      if (!searchPill.contains(event.target))
+        searchPill.classList.remove("is-active");
+    });
+  }
+  searchInput.addEventListener("focus", revealSearchToolbar);
+  searchInput.addEventListener("blur", () => {
+    if (searchInput.value) return;
+    const mainContainer = $(".mi-main");
+    if (mainContainer) mainContainer.scrollTo({ top: 0, behavior: "smooth" });
+  });
   const debounced = debounce(() => {
     state.query = searchInput.value;
     localStorage.setItem("mi.query", state.query);
@@ -2763,6 +3035,7 @@ function wire() {
   }
 
   searchInput.addEventListener("input", (e) => {
+    revealSearchToolbar();
     if (searchClear)
       searchClear.style.display = searchInput.value ? "flex" : "none";
     if (searchIcon)
@@ -2787,6 +3060,9 @@ function wire() {
   if (searchClear) {
     searchClear.addEventListener("click", () => {
       searchInput.value = "";
+      if (searchPill) searchPill.classList.remove("is-active");
+      const mainContainer = $(".mi-main");
+      if (mainContainer) mainContainer.scrollTo({ top: 0, behavior: "smooth" });
       searchClear.style.display = "none";
       if (searchIcon) searchIcon.style.display = "flex";
       state.query = "";
@@ -2803,7 +3079,6 @@ function wire() {
 
       state.page = 1;
       renderGrid();
-      searchInput.focus();
     });
   }
 
@@ -2856,34 +3131,6 @@ function wire() {
         .scrollIntoView({ behavior: "smooth" });
     }),
   );
-
-  // AI button
-  $("#btn-ai").addEventListener("click", () => {
-    const q =
-      searchInput.value.trim() ||
-      "an icon for an AI assistant sending a notification";
-    const words = q.toLowerCase().replace(/[.,]/g, "").split(/\s+/);
-    let matched = null;
-    for (const w of words) {
-      if (SYNONYMS[w]) {
-        matched = SYNONYMS[w][0];
-        break;
-      }
-      if (false) {
-        matched = w;
-        break;
-      }
-    }
-    if (!matched) matched = "sparkles";
-    searchInput.value = matched;
-    state.query = matched;
-    state.page = 1;
-    renderGrid();
-    toast(`AI suggests: ${matched}`);
-    document
-      .querySelector(".mi-results-wrap")
-      .scrollIntoView({ behavior: "smooth" });
-  });
 
   // Density
   $$(".mi-view-tabs [data-density]").forEach((b) => {
@@ -3020,9 +3267,9 @@ function wire() {
     if (act) {
       if (act.dataset.act === "copy") {
         if (!requireLoginToDownload()) return;
-        copyText(renderStyled(icon)).then((ok) =>
-          toast(ok ? "Copied SVG" : "Copy failed"),
-        );
+        exportSvgFor(icon)
+          .then((markup) => copyText(window.BulkExport.flattenSvg(markup)))
+          .then((ok) => toast(ok ? "Copied SVG" : "Copy failed"));
       } else if (act.dataset.act === "copy-name") {
         copyText(icon.name).then((ok) =>
           toast(ok ? `Copied "${icon.name}"` : "Copy failed"),
@@ -3588,9 +3835,9 @@ function wire() {
     if (action) {
       if (action.dataset.act === "copy") {
         if (!requireLoginToDownload()) return;
-        copyText(renderStyled(icon)).then((ok) =>
-          toast(ok ? "Copied SVG" : "Copy failed"),
-        );
+        exportSvgFor(icon)
+          .then((markup) => copyText(window.BulkExport.flattenSvg(markup)))
+          .then((ok) => toast(ok ? "Copied SVG" : "Copy failed"));
       } else if (action.dataset.act === "save") {
         window.CollectionManager.openModal(icon.id, icon);
       }
@@ -3659,8 +3906,12 @@ function debounce(fn, ms) {
 // --------------------------------------------------------------------
 function renderHeroStats() {
   const totalMarket = 319252; // Hardcoded per user request
+  // Count the styles the catalogue actually ships, not the legacy bias map,
+  // which only covers a couple of dozen of the sources.
   const totalStyles = new Set(
-    SOURCES.flatMap((s) => SOURCE_STYLE_BIAS[s.id] || []),
+    SOURCES.flatMap((s) => s.styles || SOURCE_STYLE_BIAS[s.id] || []).map((s) =>
+      String(s).toLowerCase(),
+    ),
   ).size;
   const fmt = (n) =>
     n >= 1e6
@@ -3674,7 +3925,20 @@ function renderHeroStats() {
 
   const searchInput = $("#search-input");
   if (searchInput) {
-    searchInput.placeholder = `Search ${getTotalIconCount().toLocaleString()}+ icons...`;
+    // The pill leaves the input ~190px wide on a phone, which truncates the
+    // full count placeholder, so use a short label there and keep it in sync
+    // when the viewport changes.
+    const compact = window.matchMedia("(max-width: 560px)");
+    const applyPlaceholder = () => {
+      searchInput.placeholder = compact.matches
+        ? "Search icons..."
+        : `Search ${getTotalIconCount().toLocaleString()}+ icons...`;
+    };
+    applyPlaceholder();
+    if (!searchInput.dataset.placeholderBound) {
+      searchInput.dataset.placeholderBound = "1";
+      compact.addEventListener("change", applyPlaceholder);
+    }
   }
 }
 
@@ -3884,10 +4148,6 @@ function buildTopCategoryDropdown() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelector(".mi-rp-badge-lg")?.classList.remove("mi-skeleton");
-});
-
-document.addEventListener("DOMContentLoaded", () => {
   const PROMO_KEY = "motvin_promo_hidden_until";
   const banner = document.querySelector(".mi-new-banner");
 
@@ -3975,6 +4235,19 @@ document.addEventListener("DOMContentLoaded", () => {
       };
       restoreSidebarTabUI(savedTab, panels);
     }
+
+    // These read stats, so they belong here rather than at DOMContentLoaded:
+    // clearing the skeletons before STATS_LOADED resolves paints a count of 0
+    // and drops the loading state the markup ships with.
+    const badgeLg = document.querySelector(".mi-rp-badge-lg");
+    if (badgeLg) {
+      badgeLg.textContent = getTotalIconCount().toLocaleString();
+      badgeLg.classList.remove("mi-skeleton");
+    }
+
+    document.querySelectorAll(".mi-sort-tab.mi-skeleton").forEach((tab) => {
+      tab.classList.remove("mi-skeleton");
+    });
   };
 
   // Wait for stats to load before initial render
@@ -3986,18 +4259,6 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     initUI();
   }
-
-  // Dynamically update the overall live icons count in the sidebar
-  const badgeLg = document.querySelector(".mi-rp-badge-lg");
-  if (badgeLg) {
-    badgeLg.textContent = getTotalIconCount().toLocaleString();
-    badgeLg.classList.remove("mi-skeleton");
-  }
-
-  // Remove skeleton loaders from sort tabs
-  document.querySelectorAll(".mi-sort-tab.mi-skeleton").forEach((tab) => {
-    tab.classList.remove("mi-skeleton");
-  });
 
   document.querySelectorAll(".mi-sort-tab").forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -4351,8 +4612,8 @@ function renderSavedPanel() {
   let html = `
     <div class="mi-rp-cat-item ${!state.activeFolderId ? "is-active" : ""}" data-folder="all" style="background: white; box-shadow: 0px 4px 4px rgba(96,96,96,0.15), 0px 0px 0.5px rgba(96,96,96,0.31)${!state.activeFolderId ? ", 0 0 0 3px var(--mi-focus)" : ""}; height: 84px; display: flex; flex-direction: column; justify-content: space-between; padding: 16px 16px 12px 16px; border-radius: 8px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: ${!state.activeFolderId ? "1px solid var(--mi-accent)" : "1px solid transparent"};">
       <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-        <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">All Saved</span>
-        <span style="font-family: 'Inter', sans-serif; font-size: 14px; color: rgba(0,0,0,0.4);">${allCount}</span>
+        <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 16px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">All Saved</span>
+        <span style="font-family: 'Inter', sans-serif; font-size: 16px; color: rgba(0,0,0,0.4);">${allCount}</span>
       </div>
     </div>
   `;
@@ -4362,8 +4623,8 @@ function renderSavedPanel() {
     html += `
       <div class="mi-rp-cat-item ${isActive ? "is-active" : ""}" data-folder="${f.id}" style="background: white; box-shadow: 0px 4px 4px rgba(96,96,96,0.15), 0px 0px 0.5px rgba(96,96,96,0.31)${isActive ? ", 0 0 0 3px var(--mi-focus)" : ""}; height: 84px; display: flex; flex-direction: column; justify-content: space-between; padding: 16px 16px 12px 16px; border-radius: 8px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: ${isActive ? "1px solid var(--mi-accent)" : "1px solid transparent"}; position: relative;">
         <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-          <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${f.name}</span>
-          <span style="font-family: 'Inter', sans-serif; font-size: 14px; color: rgba(0,0,0,0.4);">${f.iconIds.length}</span>
+          <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 16px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${f.name}</span>
+          <span style="font-family: 'Inter', sans-serif; font-size: 16px; color: rgba(0,0,0,0.4);">${f.iconIds.length}</span>
         </div>
         <button class="mi-folder-del" data-del="${f.id}" title="Delete Collection" style="position: absolute; bottom: 12px; right: 16px; background: none; border: none; cursor: pointer; padding: 0; color: #E53935; display: flex; opacity: 0; transition: opacity 0.2s;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path></svg>

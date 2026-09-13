@@ -23,8 +23,8 @@
   --mi-shadow-lg: 0 24px 80px rgba(15, 17, 22, 0.14);
   --mi-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
   --header-h: 0px;
-  --left-sidebar-w: 85px;
-  --right-panel-w: 350px;
+  --left-sidebar-w: 75px;
+  --right-panel-w: 370px;
 }
 
 * {
@@ -50,7 +50,7 @@ body {
   background: var(--mi-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.5;
   overflow: hidden;
 }
@@ -167,7 +167,7 @@ select {
   border-radius: 4px;
   background: transparent;
   color: rgba(0, 0, 0, 0.9);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   border: none;
   cursor: pointer;
@@ -210,7 +210,7 @@ select {
   padding: 6px 12px;
   border-radius: 10px;
   color: #2e3238;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   letter-spacing: -0.16px;
   text-decoration: none;
@@ -286,7 +286,7 @@ select {
   gap: 6px;
   padding: 7px 14px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--mi-ink-2);
   border: 1px solid var(--mi-border);
@@ -315,6 +315,83 @@ select {
   display: grid;
   grid-template-columns: var(--left-sidebar-w) 1fr var(--right-panel-w);
   overflow: hidden;
+}
+
+/* ── Beta banner ─────────────────────────────────────────────────────────
+   The banner is in the page markup rather than injected by Banner.js, so it
+   paints with the first frame and stays put through the loading state. Its
+   styles live here for the same reason - injected styles arrive too late.
+   A head script adds .mi-banner-reserved to <html> before first paint when
+   the banner should show; without it the banner is hidden and the shell
+   stays at the top, so neither ever jumps. */
+.mi-product-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 24px;
+  background: linear-gradient(
+    90deg,
+    #874fff 0%,
+    #000 11.538%,
+    #000 87.981%,
+    #874fff 100%
+  );
+  color: #fff;
+  font-family: "Outfit", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  text-align: center;
+}
+
+.mi-product-banner p {
+  margin: 0;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.mi-product-banner a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-position: from-font;
+}
+
+.mi-product-banner.is-hidden,
+html:not(.mi-banner-reserved) body:not(.mi-has-product-banner) .mi-product-banner {
+  display: none;
+}
+
+html.mi-banner-reserved .mi-app-shell,
+body.mi-has-product-banner .mi-app-shell {
+  top: var(--mi-product-banner-height, 44px);
+  height: calc(100vh - var(--mi-product-banner-height, 44px));
+}
+
+body.mi-has-product-banner.mi-product-banner-hidden .mi-app-shell {
+  top: 0;
+  height: 100vh;
+}
+
+@media (max-width: 720px) {
+  .mi-product-banner {
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .mi-product-banner p {
+    white-space: normal;
+  }
 }
 
 .mi-app-shell,
@@ -407,7 +484,7 @@ select {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
   width: 100%;
   padding: 0 4px;
   position: relative;
@@ -420,10 +497,14 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 7px 13px;
-  border-radius: 200px;
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  padding: 4px;
+  border-radius: 16px;
+  background: transparent;
   transition: background 0.15s ease;
-  color: rgba(0, 0, 0, 0.6);
+  color: #464a56;
 }
 
 .mi-sidebar-item svg {
@@ -432,12 +513,35 @@ select {
   stroke: currentColor;
 }
 
+.mi-sidebar-active-icon,
+.mi-sidebar-inactive-icon {
+  display: none;
+  width: 20px;
+  height: 20px;
+}
+
+.mi-sidebar-tab-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.mi-sidebar-tab-icon--plugins {
+  width: 17.46px;
+  height: 18.46px;
+}
+
+.mi-sidebar-item.is-active .mi-sidebar-tab-icon {
+  filter: brightness(0) invert(1);
+}
+
 .mi-sidebar-label {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13.5px;
-  line-height: 20px;
-  letter-spacing: -0.3px;
-  color: rgba(0, 0, 0, 0.6);
+  font-family: "Outfit", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16.5px;
+  letter-spacing: 0;
+  color: #606576;
   text-align: center;
   transition: color 0.15s ease;
 }
@@ -449,12 +553,29 @@ select {
 
 /* Active styles */
 .mi-sidebar-item.is-active .mi-sidebar-icon-container {
-  background: rgba(92, 74, 228, 0.1);
-  color: #5c4ae4;
+  background: #1d1d1d;
+  color: white;
 }
 
 .mi-sidebar-item.is-active .mi-sidebar-label {
-  color: #5c4ae4;
+  font-weight: 600;
+  color: #1d1d1d;
+}
+
+.mi-sidebar-item[data-sidebar="filters"] .mi-sidebar-icon-container svg {
+  display: none;
+}
+
+.mi-sidebar-item[data-sidebar="filters"] .mi-sidebar-inactive-icon {
+  display: block;
+}
+
+.mi-sidebar-item[data-sidebar="filters"].is-active .mi-sidebar-inactive-icon {
+  display: none;
+}
+
+.mi-sidebar-item[data-sidebar="filters"].is-active .mi-sidebar-active-icon {
+  display: block;
 }
 
 /* Active Arrow indicator */
@@ -489,7 +610,7 @@ body.is-panel-floating .mi-main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 9px 12px 24px;
+  padding: 0px 0 0px 42px;
   width: 100%;
   height: 82px;
   flex-shrink: 0;
@@ -498,7 +619,7 @@ body.is-panel-floating .mi-main {
 .mi-top-header-left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
 }
 
 .mi-top-logo-group {
@@ -508,8 +629,8 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-top-logo-text {
-  width: 110.96px;
-  height: auto;
+  width: 72.3861px;
+  height: 17.2567px;
 }
 
 .mi-top-beta-badge {
@@ -521,7 +642,7 @@ body.is-panel-floating .mi-main {
   justify-content: center;
   padding: 4px 9px;
   color: #000;
-  font-family: "Inter", sans-serif;
+  font-family: "Outfit", sans-serif;
   font-weight: 500;
   font-size: 11px;
   line-height: 10px;
@@ -534,6 +655,18 @@ body.is-panel-floating .mi-main {
   gap: 6px;
 }
 
+.mi-top-nav-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mi-top-header-divider {
+  width: 2px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
 .mi-top-nav-link {
   display: flex;
   align-items: center;
@@ -542,7 +675,7 @@ body.is-panel-floating .mi-main {
   border-radius: 10px;
   font-family: "Outfit", sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   color: #2e3238;
   letter-spacing: -0.16px;
   text-decoration: none;
@@ -559,7 +692,7 @@ body.is-panel-floating .mi-main {
   border-radius: 4px;
   padding: 0 4px;
   color: #000;
-  font-family: "Inter", sans-serif;
+  font-family: "Outfit", sans-serif;
   font-weight: 500;
   font-size: 12px;
   display: flex;
@@ -593,7 +726,7 @@ body.is-panel-floating .mi-main {
   color: #2e3238;
   font-family: "Outfit", sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   letter-spacing: -0.16px;
   transition: background 0.15s ease;
   cursor: pointer;
@@ -653,6 +786,7 @@ body.is-panel-floating .mi-main {
 
 .mi-products-dropdown.is-open {
   display: flex;
+  width: 360px;
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
@@ -676,7 +810,7 @@ body.is-panel-floating .mi-main {
   border-radius: 7px;
   text-decoration: none;
   background: #f7f7f7;
-  width: 312px;
+  width: 100%;
   height: 65.898px;
   box-sizing: border-box;
   transition: background 0.12s ease;
@@ -728,7 +862,7 @@ body.is-panel-floating .mi-main {
 
 .mi-products-dropdown-item-label {
   font-family: "Outfit", sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   color: #252522;
   letter-spacing: -0.2344px;
@@ -737,7 +871,7 @@ body.is-panel-floating .mi-main {
 
 .mi-products-dropdown-item-sub {
   font-family: "Outfit", sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   color: rgba(37, 37, 34, 0.56);
   letter-spacing: -0.0762px;
@@ -771,7 +905,7 @@ body.is-panel-floating .mi-main {
 }
 /* --- Top Toolbar --- */
 .mi-toolbar-wrapper {
-  padding: 0 4px 4px 24px;
+  padding: 0 0 4px 42px;
   width: 100%;
   position: sticky;
   top: 0;
@@ -783,7 +917,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-toolbar-wrapper.is-scrolled {
-  padding-top: 14px;
+  padding: 12px 0 12px 42px;
 }
 
 .mi-toolbar {
@@ -795,24 +929,25 @@ body.is-panel-floating .mi-main {
 
 .mi-search-pill {
   background: white;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 0;
   box-shadow:
-    0px 4px 4px rgba(0, 0, 0, 0.08),
-    0px 0px 0.5px rgba(0, 0, 0, 0.2);
+    0 5px 15px -3px rgba(0, 0, 0, 0.15),
+    0 4px 6px -4px rgba(0, 0, 0, 0.06);
   display: flex;
   flex: 1;
-  gap: 8px;
-  height: 56px;
+  gap: 0;
+  height: 64px;
   align-items: center;
-  padding: 4px 24px 4px 4px;
+  padding: 4px 16px 4px 4px;
   border-radius: 100px;
 }
 
-.mi-search-pill:focus-within {
-  border-color: #5c4ae4;
+.mi-search-pill:focus-within,
+.mi-search-pill.is-active {
   box-shadow:
-    0px 4px 4px rgba(0, 0, 0, 0.08),
-    0px 0px 0px 3px rgba(92, 74, 228, 0.16);
+    inset 0 0 0 2px #1d1d1d,
+    0px 5px 7.5px rgba(0, 0, 0, 0.025),
+    0px 4px 3px rgba(0, 0, 0, 0.025);
 }
 
 .mi-cat-dropdown {
@@ -829,15 +964,15 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-cat-dropdown-label {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Outfit", sans-serif;
   color: #324252;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .mi-cat-dropdown-val {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Outfit", sans-serif;
   color: #0a0a0a;
-  font-size: 14px;
+  font-size: 16px;
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -916,7 +1051,7 @@ body.is-panel-floating .mi-main {
 .mi-category-menu-label {
   font-family: "Outfit", sans-serif;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 16px;
   color: rgba(0, 0, 0, 0.8);
   white-space: nowrap;
   overflow: hidden;
@@ -929,7 +1064,7 @@ body.is-panel-floating .mi-main {
   padding: 4px 8px;
   font-family: "Outfit", sans-serif;
   font-weight: 400;
-  font-size: 13px;
+  font-size: 15px;
   color: rgba(0, 0, 0, 0.7);
   white-space: nowrap;
 }
@@ -946,6 +1081,32 @@ body.is-panel-floating .mi-main {
   padding-left: 16px;
   display: flex;
   align-items: center;
+  color: #808080;
+}
+
+.mi-search-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.mi-search-shortcut kbd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  color: #000;
+  font-family: "SF Pro Text", "Outfit", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
 }
 
 .mi-collections-list-modal {
@@ -983,11 +1144,11 @@ body.is-panel-floating .mi-main {
 
 .mi-coll-modal-name {
   font-weight: 500;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .mi-coll-modal-count {
-  font-size: 13px;
+  font-size: 15px;
   color: rgba(0, 0, 0, 0.5);
 }
 
@@ -998,15 +1159,19 @@ body.is-panel-floating .mi-main {
 .mi-search-icon img {
   width: 20px;
   height: 21px;
+  filter: brightness(0) invert(0.5);
 }
 
 .mi-search-input {
   flex: 1;
+  /* Without this the input keeps its intrinsic (size=20) width on narrow
+     screens and pushes .mi-search-clear outside the pill. */
+  min-width: 0;
   border: none;
   background: transparent;
   padding-left: 12px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 18px;
+  font-family: "Outfit", sans-serif;
+  font-size: 17px;
   color: #000000;
   font-weight: 500;
   opacity: 1;
@@ -1014,9 +1179,9 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-search-input::placeholder {
-  color: #737373;
-  font-weight: 400;
-  font-size: 14px;
+  color: #808080;
+  font-weight: 500;
+  font-size: 16px;
 }
 
 .mi-search-clear {
@@ -1076,7 +1241,7 @@ body.is-panel-floating .mi-main {
 
 .mi-ai-label {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   color: #737373;
   white-space: nowrap;
 }
@@ -1088,7 +1253,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-recolor-btn {
-  background: white;
+  background: transparent;
   border: 1px solid transparent;
   height: 51px;
   border-radius: 200px;
@@ -1118,7 +1283,7 @@ body.is-panel-floating .mi-main {
 
 .mi-recolor-label {
   font-family: "Inter", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   color: rgba(0, 0, 0, 0.9);
 }
 
@@ -1201,7 +1366,7 @@ body.is-panel-floating .mi-main {
   outline: none;
   background: transparent;
   color: #0f1116;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .mi-recolor-swatches {
@@ -1237,7 +1402,7 @@ body.is-panel-floating .mi-main {
   gap: 32px;
   align-items: flex-start;
   justify-content: center;
-  padding: 12px 4px 16px 24px;
+  padding: 16px 0 16px 42px;
   width: 100%;
   flex-shrink: 0;
 }
@@ -1251,24 +1416,52 @@ body.is-panel-floating .mi-main {
 
 .mi-sort-tabs {
   display: flex;
-  gap: 10px;
+  gap: 28px;
   align-items: center;
+}
+
+.mi-sort-tabs:has(.mi-sort-tab.mi-skeleton) {
+  gap: 20px;
 }
 
 .mi-sort-tab {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px 16px;
-  border-radius: 100px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background: white;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  color: #2c2e36;
+  gap: 6px;
+  position: relative;
+  padding: 10px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-family: "Outfit", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #626262;
   cursor: pointer;
   white-space: nowrap;
+}
+
+.mi-sort-tab::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: transparent;
+  content: "";
+}
+.mi-sort-tab-count {
+  display: none;
+  align-items: center;
+  padding: 6px 8px;
+  color: #fff;
+  background: #000;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 12px;
 }
 
 .mi-sort-tab.mi-skeleton {
@@ -1279,10 +1472,27 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-sort-tab.is-active {
-  background: #efedfc;
-  border-color: #efedfc;
-  color: #5c4ae4;
+  background: transparent;
+  color: #000;
   font-weight: 500;
+}
+
+.mi-sort-tab.is-active::after {
+  background: #000;
+}
+.mi-sort-tab.is-active .mi-sort-tab-count {
+  display: flex;
+}
+
+/* The count and the active underline are both stat-derived, so keep them
+   hidden until the tab leaves its loading state - otherwise the active tab
+   shows a filled pill reading 0 above a black underline. */
+.mi-sort-tab.mi-skeleton .mi-sort-tab-count {
+  display: none;
+}
+
+.mi-sort-tab.mi-skeleton::after {
+  background: transparent;
 }
 
 .mi-sort-bar-right {
@@ -1316,7 +1526,7 @@ body.is-panel-floating .mi-main {
 
 .mi-compare-inner span {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: #f3f4f6;
   letter-spacing: -0.07px;
   white-space: nowrap;
@@ -1332,7 +1542,7 @@ body.is-panel-floating .mi-main {
   border-radius: 999px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 16px;
   color: white;
   min-width: 22px;
 }
@@ -1393,7 +1603,7 @@ body.is-panel-floating .mi-main {
   transition:
     background 0.15s var(--mi-ease),
     color 0.15s var(--mi-ease);
-  font-size: 13px;
+  font-size: 15px;
   background: none;
   border: none;
   cursor: pointer;
@@ -1419,34 +1629,6 @@ body.is-panel-floating .mi-main {
   font-weight: 500;
 }
 
-/* --- Count row --- */
-.mi-count-row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  gap: 8px;
-}
-
-.mi-count-num {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: bold;
-  font-size: 24px;
-  color: rgba(0, 0, 0, 0.9);
-  white-space: nowrap;
-}
-
-.mi-count-label {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 18px;
-  color: rgba(0, 0, 0, 0.55);
-}
-
-.mi-query {
-  color: var(--mi-accent);
-  font-weight: 500;
-}
-
 .mi-muted {
   color: var(--mi-muted);
   font-weight: 400;
@@ -1456,7 +1638,7 @@ body.is-panel-floating .mi-main {
 .mi-grid-scroll {
   flex: 1;
   overflow: visible;
-  padding: 0 4px 16px 24px;
+  padding: 0 0 16px 42px;
 }
 
 /* Grid */
@@ -1490,7 +1672,7 @@ body.is-panel-floating .mi-main {
 /* Icon card */
 .mi-card {
   position: relative;
-  background: #f5f5f5;
+  background: #fff;
   border: none;
   border-radius: 10px;
   padding: 16px 8px 12px;
@@ -1498,6 +1680,7 @@ body.is-panel-floating .mi-main {
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  overflow: hidden;
   cursor: pointer;
   transition:
     border-color 0.15s var(--mi-ease),
@@ -1507,14 +1690,21 @@ body.is-panel-floating .mi-main {
 
 .mi-card:hover {
   border-color: var(--mi-border-2);
-  box-shadow: inset 0 0 0 1.8px #5c4ae4;
+  box-shadow: inset 0 0 0 1.8px #1d1d1d;
   background: #ffffff;
   z-index: 10;
 }
 
 .mi-card.is-selected {
-  border-color: var(--mi-accent);
-  box-shadow: 0 0 0 3px var(--mi-focus);
+  border-color: transparent;
+  box-shadow: inset 0 0 0 1.8px #1d1d1d;
+}
+
+.mi-card.is-selected:hover {
+  border-color: var(--mi-border-2);
+  box-shadow: inset 0 0 0 1.8px #1d1d1d;
+  background: #ffffff;
+  z-index: 10;
 }
 
 .mi-card-preview {
@@ -1538,30 +1728,45 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-card-name {
-  font-size: 12px;
-  color: var(--mi-ink-2);
+  height: 18px;
+  font-size: 13px;
+  font-family: "Outfit", sans-serif;
+  line-height: 18px;
+  color: #999999;
   text-align: center;
   width: 80px;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .mi-card-source {
-  font-size: 10px;
-  color: var(--mi-muted);
-  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 20px;
+  padding: 3px 8px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 100px;
+  color: #555555;
+  font-family: "Outfit", sans-serif;
+  font-size: 13px;
+  line-height: 12px;
+  text-transform: capitalize;
   letter-spacing: 0.06em;
-  font-weight: 600;
-  width: 100%;
+  font-weight: 400;
+  text-align: center;
+}
+
+.mi-card-source > span {
+  display: block;
   max-width: 88px;
-  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  text-align: center;
 }
 
 .mi-card-actions {
@@ -1598,13 +1803,13 @@ body.is-panel-floating .mi-main {
 
 .mi-card-act.is-active {
   opacity: 1;
-  color: var(--mi-brand, #5c4ae4);
+  color: #1d1d1d;
 }
 
 .mi-card-act:hover {
-  background: var(--mi-accent);
+  background: #1d1d1d;
   color: #fff;
-  border-color: var(--mi-accent);
+  border-color: #1d1d1d;
 }
 
 .mi-card-act svg {
@@ -1616,9 +1821,9 @@ body.is-panel-floating .mi-main {
   position: absolute;
   top: 6px;
   left: 6px;
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
   border: 1.5px solid var(--mi-border-2);
   background: #fff;
   display: grid;
@@ -1638,17 +1843,9 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-card.is-selected .mi-card-cmp {
-  background: var(--mi-accent);
-  border-color: var(--mi-accent);
-}
-
-.mi-card.is-selected .mi-card-cmp::after {
-  content: "";
-  width: 7px;
-  height: 4px;
-  border-left: 1.5px solid #fff;
-  border-bottom: 1.5px solid #fff;
-  transform: rotate(-45deg) translate(1px, -1px);
+  background: url("../ASSET/Icons/card-compare-selected.svg") center / 18px 18px
+    no-repeat;
+  border-color: transparent;
 }
 
 .mi-empty {
@@ -1687,7 +1884,7 @@ body.is-panel-floating .mi-main {
   height: 36px;
   padding: 0 10px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--mi-ink-2);
   background: none;
@@ -1704,7 +1901,7 @@ body.is-panel-floating .mi-main {
 }
 
 .mi-page-btn.is-active {
-  background: var(--mi-accent);
+  background: #1d1d1d;
   color: #fff;
   font-weight: 700;
 }
@@ -1722,7 +1919,7 @@ body.is-panel-floating .mi-main {
 .mi-page-dots {
   color: var(--mi-muted);
   padding: 0 4px;
-  font-size: 14px;
+  font-size: 16px;
   display: flex;
   align-items: center;
 }
@@ -1735,7 +1932,7 @@ body.is-panel-floating .mi-main {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  padding: 0px 0 0px 20px;
+  padding: 0px 0 0px 42px;
   box-sizing: border-box;
   height: 100%;
   min-height: 0;
@@ -1862,7 +2059,7 @@ body.is-resizing-rp * {
   background: #e8e8e8;
   color: #000 !important;
   border-radius: 100px;
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 800;
   line-height: 1;
   cursor: pointer;
@@ -2009,7 +2206,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-header span {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 16px;
   color: rgba(0, 0, 0, 0.6);
   line-height: 16px;
 }
@@ -2054,14 +2251,15 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-source-all {
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 100px;
-  padding: 8px;
+  padding: 6px 6px 6px 10px;
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 15px;
   cursor: pointer;
   transition: all 0.2s ease;
-  height: 42px;
+  /* Hug the content: the fixed 42px clipped the 31px count badge. */
+  height: auto;
   box-sizing: border-box;
 }
 
@@ -2103,7 +2301,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   background: transparent;
   border: none;
   padding: 0 8px 0 32px;
-  font-size: 14px;
+  font-size: 16px;
   color: black;
   outline: none;
   font-family: inherit;
@@ -2154,7 +2352,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-all-title {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   color: black;
   flex: 1;
   white-space: nowrap;
@@ -2192,14 +2390,14 @@ body.is-panel-floating .mi-rp-edge-resizer {
   padding: 4px 8px;
   font-family: "Outfit", sans-serif;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 15px;
   color: black;
 }
 
 .mi-rp-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   padding-left: 6px;
 }
 
@@ -2235,7 +2433,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-check-custom {
   width: 20px;
   height: 20px;
-  border-radius: 6px;
+  border-radius: 50%;
   border: 1px solid #dbdbdb;
   box-sizing: border-box;
   display: flex;
@@ -2248,8 +2446,8 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-item.is-active .mi-rp-check-custom,
 .mi-rp-license-active.is-active .mi-rp-check-custom {
-  background: #5c4ae4;
-  border-color: #5c4ae4;
+  background: #1d1d1d;
+  border-color: #1d1d1d;
 }
 
 .mi-rp-item.is-active .mi-rp-check-custom::after,
@@ -2279,7 +2477,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-item-label span,
 .mi-rp-item-text {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: black;
   flex: 1;
 }
@@ -2289,7 +2487,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   border-radius: 100px;
   padding: 4px 8px;
   font-family: "Outfit", sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   color: rgba(0, 0, 0, 0.7);
 }
 
@@ -2303,7 +2501,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-more span {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: black;
   opacity: 0.7;
   text-decoration: underline;
@@ -2339,7 +2537,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-style-item span {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   color: black;
   flex: 1;
 }
@@ -2354,7 +2552,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-val {
   font-family: "Inter", sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   color: #6b7280;
 }
 
@@ -2398,7 +2596,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 
 .mi-rp-slider-fill {
   height: 100%;
-  background: #5c4ae4;
+  background: #1d1d1d;
   border-radius: 100px;
 }
 
@@ -2435,7 +2633,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   border-radius: 86.957px;
   font-family: "Inter", sans-serif;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 15px;
   color: #6b7280;
 }
 
@@ -2459,7 +2657,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   flex: 1;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   color: black;
   transition: color 0.2s;
 }
@@ -2481,7 +2679,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   content: "Clear Filters";
   color: black;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .mi-rp-chevron {
@@ -2533,7 +2731,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-cat-label {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 16px;
   color: rgba(0, 0, 0, 0.8);
   white-space: nowrap;
 }
@@ -2549,7 +2747,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   padding: 4px 8px;
   font-family: "Outfit", sans-serif;
   font-weight: 400;
-  font-size: 13px;
+  font-size: 15px;
   color: rgba(0, 0, 0, 0.7);
 }
 
@@ -2560,7 +2758,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   margin: 12px 20px 0;
   padding: 9px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--mi-muted);
   border: 1px solid var(--mi-border);
@@ -2588,7 +2786,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   padding: 9px 16px;
   border-radius: 10px;
   font-weight: 600;
-  font-size: 13px;
+  font-size: 15px;
   background: var(--mi-ink);
   color: #fff;
   border: none;
@@ -2614,7 +2812,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   padding: 9px 16px;
   border-radius: 10px;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 15px;
   background: #fff;
   color: var(--mi-ink-2);
   border: 1px solid var(--mi-border);
@@ -2633,7 +2831,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   border: 1px solid var(--mi-border);
   border-radius: 10px;
   padding: 8px 12px;
-  font-size: 13px;
+  font-size: 15px;
   background: #fff;
   color: var(--mi-ink-2);
   cursor: pointer;
@@ -2742,7 +2940,7 @@ body.is-panel-floating .mi-rp-edge-resizer {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 15px;
   overflow: hidden;
   min-width: 0;
 }
@@ -3043,7 +3241,7 @@ body.mi-full .mi-editor {
 
 .mi-form-sub {
   margin: 0 0 20px;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.5;
 }
 
@@ -3121,7 +3319,7 @@ body.mi-full .mi-editor {
   align-items: center;
   gap: 8px;
   padding: 8px 0;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--mi-ink-2);
 }
 
@@ -3221,7 +3419,7 @@ body.mi-full .mi-editor {
 .mi-ctrl-label {
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
+  font-size: 15px;
   margin-bottom: 8px;
   color: var(--mi-ink-2);
   font-weight: 500;
@@ -3280,7 +3478,7 @@ input[type="color"] {
   border-radius: 8px;
   border: 1px solid var(--mi-border);
   background: #fff;
-  font-size: 13px;
+  font-size: 15px;
   outline: none;
   transition:
     border-color 0.15s var(--mi-ease),
@@ -3344,7 +3542,7 @@ input[type="color"] {
   cursor: pointer;
   padding: 10px 0;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--mi-ink-2);
   border-top: 1px solid var(--mi-border);
   list-style: none;
@@ -3505,7 +3703,7 @@ input[type="color"] {
   padding: 8px 12px;
   border-radius: 8px;
   text-align: left;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--mi-ink-2);
   font-weight: 500;
   cursor: pointer;
@@ -3571,7 +3769,7 @@ input[type="color"] {
   gap: 10px;
   align-items: center;
   margin-top: 4px;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .mi-source-tag {
@@ -3697,7 +3895,7 @@ input[type="color"] {
   display: flex;
   justify-content: space-between;
   padding: 4px 0;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .mi-attrib-note {
@@ -3774,7 +3972,7 @@ input[type="color"] {
   color: #fff;
   padding: 12px 18px;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   box-shadow: var(--mi-shadow-lg);
   opacity: 0;
@@ -3898,7 +4096,7 @@ input[type="color"] {
 }
 
 .mi-page-btn.is-active {
-  background: #5c4ae4;
+  background: #1d1d1d;
   color: white;
   box-shadow:
     0 1px 1.5px rgba(0, 0, 0, 0.1),
@@ -4207,6 +4405,12 @@ input[type="color"] {
     padding: 0 12px 8px 12px;
   }
 
+  /* .is-scrolled is more specific than the rule above, so it has to restate
+     the mobile gutters or it falls back to the 42px desktop inset. */
+  .mi-toolbar-wrapper.is-scrolled {
+    padding: 12px;
+  }
+
   .mi-toolbar {
     height: auto;
     flex-wrap: wrap;
@@ -4219,6 +4423,12 @@ input[type="color"] {
     height: 48px;
     padding: 4px 12px 4px 4px;
     width: 100%;
+  }
+
+  /* The pill's own 12px padding is the right-hand gutter; the extra margin
+     would push the clear button to an uneven 20px inset. */
+  .mi-search-clear {
+    margin-right: 0;
   }
 
   /* Small/compact category pill instead of a full desktop-width dropdown */
@@ -4238,6 +4448,10 @@ input[type="color"] {
 
   .mi-search {
     min-width: 0;
+  }
+
+  .mi-search-shortcut {
+    display: none;
   }
 
   /* AI search isn't available on mobile */
@@ -4281,6 +4495,7 @@ input[type="color"] {
     flex-wrap: nowrap;
     width: 100%;
     padding-bottom: 2px;
+    gap: 24px;
   }
 
   /* Compare is hidden on mobile, so Recolor + the density toggle comfortably
@@ -4318,16 +4533,41 @@ input[type="color"] {
 }
 
 @media (max-width: 520px) {
-  .mi-sort-tabs {
-    gap: 4px;
-  }
-
-  .mi-count-num {
-    font-size: 18px;
-  }
-
   .mi-grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  /* The bar has to fit two nav buttons plus up to seven page chips inside
+     ~370px, so drop the Prev/Next words and let wide page numbers (e.g.
+     6509) widen their chip instead of spilling out of a 36px circle. */
+  .mi-pagination-bar {
+    max-width: 100%;
+    gap: 2px;
+    overflow-x: visible;
+  }
+
+  .mi-page-nav-btn,
+  .mi-page-nav-btn.is-next {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .mi-page-nav-btn span {
+    display: none;
+  }
+
+  .mi-page-btn {
+    width: auto;
+    min-width: 30px;
+    height: 30px;
+    padding: 0 5px;
+    border-radius: 100px;
+    font-size: 13px;
+    flex-shrink: 0;
   }
 }
 
@@ -4355,6 +4595,7 @@ input[type="color"] {
   pointer-events: none;
   user-select: none;
 }
+
 
 /* --- NEW DETAIL MODAL STYLES --- */
 
@@ -4401,7 +4642,7 @@ body.mi-full .mi-new-scroll-area {
 
 .mi-new-crumb {
   color: #6b7280;
-  font-size: 15px;
+  font-size: 16px;
   text-decoration: none;
   padding: 4px 8px;
   border-radius: 6px;
@@ -4593,7 +4834,7 @@ details[open] .mi-new-section-icon {
   padding-bottom: 12px;
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
+  font-size: 15px;
   color: rgba(0, 0, 0, 0.6);
 }
 
@@ -4622,7 +4863,7 @@ details[open] .mi-new-section-icon {
   flex: 1;
   background: transparent;
   border: none;
-  font-size: 13px;
+  font-size: 15px;
   color: #6b7280;
   padding: 6px 0;
   border-radius: 100px;
@@ -4669,7 +4910,7 @@ details[open] .mi-new-section-icon {
 .mi-new-hex {
   border: none;
   background: transparent;
-  font-size: 13px;
+  font-size: 15px;
   color: #0f1116;
   width: 100%;
   outline: none;
@@ -4764,7 +5005,7 @@ details[open] .mi-new-section-icon {
   border-radius: 8px;
   padding: 8px;
   color: #111827;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   margin: 16px 20px 0 20px;
@@ -4892,7 +5133,7 @@ details[open] .mi-new-section-icon {
   color: #2c2e36;
   padding: 8px 14px;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
@@ -4929,7 +5170,7 @@ details[open] .mi-new-section-icon {
 .mi-new-btn-save-collection span {
   font-family: "Outfit", sans-serif;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 20px;
   color: #ffffff;
   letter-spacing: -0.07px;
@@ -4980,7 +5221,7 @@ details[open] .mi-new-section-icon {
   border-radius: 16px;
   overflow: hidden;
   padding: 16px;
-  display: flex;
+  display: none;
   align-items: center;
   gap: 16px;
 }
@@ -5020,7 +5261,7 @@ details[open] .mi-new-section-icon {
 
 .mi-new-banner-text h4 {
   margin: 0;
-  font-size: 13px;
+  font-size: 15px;
   font-family: Outfit, sans-serif;
   font-weight: 700;
   line-height: 20.8px;
@@ -5047,7 +5288,7 @@ details[open] .mi-new-section-icon {
 }
 
 .mi-new-banner-text p {
-  font-size: 13px;
+  font-size: 15px;
   margin: 0;
   line-height: 18px;
   font-family: Outfit, sans-serif;
@@ -5060,7 +5301,7 @@ details[open] .mi-new-section-icon {
   border: none;
   border-radius: 6px;
   height: 34px;
-  font-size: 13px;
+  font-size: 15px;
   font-family: Outfit, sans-serif;
   font-weight: 500;
   cursor: pointer;
@@ -5135,7 +5376,7 @@ details[open] .mi-new-section-icon {
   border-radius: 10px 0 0 10px;
   height: 48px;
   flex: 1;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -5171,7 +5412,7 @@ details[open] .mi-new-section-icon {
   border-radius: 10px;
   height: 48px;
   flex: 1;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -5187,7 +5428,7 @@ details[open] .mi-new-section-icon {
   border-radius: 10px 0 0 10px;
   height: 48px;
   flex: 1;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -5244,7 +5485,7 @@ details[open] .mi-new-section-icon {
   border: 1.2px solid #eaeaee;
   border-radius: 0 10px 10px 0;
   height: 48px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   cursor: pointer;
   display: flex;
@@ -5278,7 +5519,7 @@ details[open] .mi-new-section-icon {
   /* border-radius: 10px; */
   height: 48px;
   padding: 0 16px;
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -5317,7 +5558,7 @@ details[open] .mi-new-section-icon {
   align-items: center;
   padding: 16px 20px;
   border-bottom: 1px solid #eaeaee;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: #6b7280;
 }
@@ -5326,7 +5567,7 @@ details[open] .mi-new-section-icon {
   background: transparent;
   border: none;
   color: #000;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -5342,7 +5583,7 @@ details[open] .mi-new-section-icon {
   font-family:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     monospace;
-  font-size: 14px;
+  font-size: 16px;
   color: #24292e;
   margin: 0;
   line-height: 23.8px;
@@ -5381,7 +5622,7 @@ details[open] .mi-new-section-icon {
 .mi-new-attrib-content {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   width: 100%;
 }
 
@@ -5389,7 +5630,7 @@ details[open] .mi-new-section-icon {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  font-size: 15px;
+  font-size: 16px;
   line-height: normal;
   width: 100%;
 }
@@ -5448,7 +5689,7 @@ details[open] .mi-new-section-icon {
   margin: 0;
   color: #080048;
   font-family: "Outfit", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 20px;
 }
@@ -5474,7 +5715,7 @@ details[open] .mi-new-section-icon {
 }
 
 .mi-new-bottom-header p {
-  font-size: 15px;
+  font-size: 16px;
   color: #808080;
   margin: 0;
 }
@@ -5514,7 +5755,7 @@ details[open] .mi-new-section-icon {
 }
 
 .mi-new-more-tag {
-  font-size: 13px;
+  font-size: 15px;
   color: #000;
   margin-bottom: 4px;
 }

@@ -10,9 +10,12 @@
 
 // Sources are populated exclusively from the backend stats API.
 let SOURCES = window.SOURCES || [];
-
 // SOURCE_STYLE_BIAS is empty; styles are derived dynamically from API stats in renderFilters.
 const SOURCE_STYLE_BIAS = {};
+
+// The two styles the Logos page ships. "color" is stored, and rendered as
+// "Default" in the chip list below.
+const STYLES = ["color", "solid"];
 
 // Helper to get total logo count from stats API or fallback to ICONS.length
 const getTotalLogoCount = () => {
@@ -155,8 +158,13 @@ const state = {
     JSON.parse(localStorage.getItem("ml.sourceFilter") || "[]"),
   ),
   sourcesVisibleCount: 5,
+  // Drop persisted styles this page does not have. A saved filter for a style
+  // that no longer exists renders no chip, so it would sit there invisibly
+  // matching nothing while the grid reports "no results".
   styleFilter: new Set(
-    JSON.parse(localStorage.getItem("ml.styleFilter") || "[]"),
+    JSON.parse(localStorage.getItem("ml.styleFilter") || "[]").filter((s) =>
+      STYLES.includes(String(s).toLowerCase()),
+    ),
   ),
   licenseFilter: new Set(
     JSON.parse(localStorage.getItem("ml.licenseFilter") || "[]"),
@@ -318,23 +326,160 @@ function styleOpts(style) {
 // Render an icon with its native style applied â€” used by the grid, similar
 // row, compare modal, etc. The editor overrides via editorRenderOpts.
 function renderStyled(icon, extra = {}) {
+  // Solid marks are always painted in the current ink, even when no colour has
+  // been picked. Left alone, a white-inked mark (Devicon's *-wordmark, some
+  // VectorLogoZone tiles) renders white-on-white and looks like a blank card.
+  // currentColor is the neutral default and follows the light/dark theme.
+  const isSolid = icon.style === "solid";
+  const ink = isSolid ? state.globalColor || "currentColor" : null;
   return renderSvg(icon.svg, {
     size: state.globalSize,
     viewBox: icon.viewBox,
-    ...(icon.style === "solid" ? { color: state.globalColor } : {}),
+    ...(ink ? { color: ink } : {}),
     ...extra,
+    // Whether the artwork may be repainted is a property of the logo, not of
+    // the colour a caller happens to pass. Callers such as the compare modal
+    // pass color: "#0F1116" for their own surface; that must not flatten a
+    // colour logo's branding, so this deliberately overrides `extra`.
+    repaint: isSolid,
   });
+}
+
+const SHAPE_TAGS = "path|circle|rect|polygon|polyline|line|ellipse|g|use";
+
+/**
+ * Paint monochrome artwork in the chosen colour.
+ *
+ * A wrapper color="" attribute only reaches paths that say fill="currentColor".
+ * Simple Icons do, but most other solid marks either hard-code a fill or omit
+ * it entirely and fall back to black - 1,133 of them - so recolouring appeared
+ * to do nothing. Rewrite the fills directly instead.
+ *
+ * fill="none" is left alone (it is a hole, not a colour), and url(#...) values
+ * are left alone so gradient and mask references keep resolving.
+ */
+const WHITE_PAINTS = new Set(["#fff", "#ffffff", "#ffff", "#ffffffff", "white"]);
+
+/**
+ * Is white the artwork's ink, or a hole punched through it?
+ *
+ * If white is the only paint present, it IS the mark - repainting it is what
+ * makes Devicon's white wordmarks visible instead of white-on-white. If any
+ * other paint is present, white is a knockout and must survive recolouring.
+ *
+ * "Any other paint" includes the paint nobody wrote down: a shape with no fill
+ * declared renders black. Devicon's oauth mark is two white paths plus one
+ * undeclared (so black) path, and missing that implicit black flattened the
+ * whole logo into a silhouette.
+ */
+function whiteIsTheInk(paths) {
+  const paints = [];
+  for (const m of paths.matchAll(/\b(?:fill|stroke)\s*=\s*"([^"]*)"/gi)) {
+    paints.push(m[1]);
+  }
+  for (const m of paths.matchAll(/\b(?:fill|stroke)\s*:\s*([^;}"\s!]+)/gi)) {
+    paints.push(m[1]);
+  }
+
+  // A shape only falls back to black when nothing upstream sets a fill for it,
+  // so ignore anything wrapped in a <g fill="..."> - it inherits that instead.
+  // Checking merely whether such a group exists anywhere is not enough: Ubuntu
+  // Tile is an undeclared (black) <rect> followed by a filled group, and
+  // treating the group as covering the rect flattened the whole tile.
+  const outsideGroups = paths.replace(
+    /<g\b[^>]*\bfill\s*=[^>]*>[\s\S]*?<\/g>/gi,
+    "",
+  );
+  const shapes = /<(path|circle|rect|polygon|polyline|ellipse)\b([^>]*)>/gi;
+  for (const m of outsideGroups.matchAll(shapes)) {
+    const attrs = m[2];
+    if (!/\bfill\s*=/.test(attrs) && !/\bclass\s*=/.test(attrs)) {
+      return false; // implicit black is present, so white is a knockout
+    }
+  }
+  let sawWhite = false;
+  for (const raw of paints) {
+    const v = raw.trim().toLowerCase();
+    if (!v || v === "none" || v.startsWith("url(")) continue;
+    if (WHITE_PAINTS.has(v)) sawWhite = true;
+    else return false; // something else is painted, so white is a knockout
+  }
+  return sawWhite;
+}
+
+function recolorMonochrome(paths, color, { repaintWhite = false } = {}) {
+  const keep = (v) => {
+    const s = v.trim().toLowerCase();
+    if (s === "none" || s.startsWith("url(")) return true;
+    // White is a knockout unless it is the only paint in the artwork.
+    return !repaintWhite && WHITE_PAINTS.has(s);
+  };
+
+  let out = paths.replace(
+    new RegExp(`<(${SHAPE_TAGS})\\b([^>]*)>`, "gi"),
+    (match, tag, attrs) => {
+      if (/\bfill\s*=/.test(attrs)) {
+        attrs = attrs.replace(
+          /\bfill\s*=\s*"([^"]*)"/gi,
+          (m, v) => (keep(v) ? m : `fill="${color}"`),
+        );
+      } else if (tag.toLowerCase() !== "g" && !/\bclass\s*=/.test(attrs)) {
+        // No fill declared means it paints black by default. Elements carrying
+        // a class are painted by the <style> block instead, which is rewritten
+        // below - adding an attribute here would be dead weight, and CSS would
+        // outrank it anyway.
+        const selfClosing = attrs.trimEnd().endsWith("/");
+        const body = selfClosing ? attrs.trimEnd().slice(0, -1) : attrs;
+        attrs = `${body} fill="${color}"${selfClosing ? " /" : ""}`;
+      }
+
+      attrs = attrs.replace(
+        /\bstroke\s*=\s*"([^"]*)"/gi,
+        (m, v) => (keep(v) ? m : `stroke="${color}"`),
+      );
+
+      return `<${tag}${attrs}>`;
+    },
+  );
+
+  // Some marks set their colour through inline CSS rather than attributes.
+  out = out.replace(/\bstyle\s*=\s*"([^"]*)"/gi, (m, decls) => {
+    const next = decls.replace(
+      /(^|;)(\s*)(fill|stroke)\s*:\s*([^;]+)/gi,
+      (d, sep, ws, prop, v) =>
+        keep(v) ? d : `${sep}${ws}${prop}:${color}`,
+    );
+    return `style="${next}"`;
+  });
+
+  // ...and some through a <style> block of class rules. Those must be rewritten
+  // too: a CSS rule outranks the fill attribute added above, so leaving the
+  // block alone would quietly undo the repaint.
+  out = out.replace(/(<style[^>]*>)([\s\S]*?)(<\/style>)/gi, (m, open, css, close) => {
+    const next = css.replace(
+      /(fill|stroke)(\s*:\s*)([^;}\s!]+)/gi,
+      (d, prop, sep, v) => (keep(v) ? d : `${prop}${sep}${color}`),
+    );
+    return `${open}${next}${close}`;
+  });
+
+  return out;
 }
 
 function renderSvg(paths, opts = {}) {
   const size = opts.size ?? 24;
   const viewBox = opts.viewBox || "0 0 24 24";
-  // Apply color attr only when set so fill="currentColor" paths inherit it (solid logos);
-  // color logos get no override and keep their original branding.
-  const colorAttr =
-    opts.color && opts.color !== "currentColor" ? ` color="${opts.color}"` : "";
+  // Colour logos keep their original branding: only artwork flagged repaint
+  // (i.e. solid marks) is rewritten. currentColor counts as an ink, because a
+  // white-inked mark has to be rewritten to it to be visible at all.
+  const ink = opts.color;
+  const colorAttr = ink && ink !== "currentColor" ? ` color="${ink}"` : "";
+  const body =
+    ink && opts.repaint
+      ? recolorMonochrome(paths, ink, { repaintWhite: whiteIsTheInk(paths) })
+      : paths;
 
-  const innerSvg = `<svg viewBox="${viewBox}" width="24" height="24" x="0" y="0" preserveAspectRatio="xMidYMid meet">${paths}</svg>`;
+  const innerSvg = `<svg viewBox="${viewBox}" width="24" height="24" x="0" y="0" preserveAspectRatio="xMidYMid meet">${body}</svg>`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" class="mi-icon"${colorAttr} aria-hidden="true">${innerSvg}</svg>`;
 }
@@ -451,14 +596,16 @@ function iconCard(icon) {
           <svg viewBox="0 0 24 24" fill="${isIconSaved(icon.id) ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
       </div>
-      <div class="mi-card-preview">${renderStyled(icon)}</div>
+      <div class="mi-card-preview">${renderStyled(icon, { size: state.globalSize })}</div>
       <div class="mi-card-name" title="${icon.name}">${icon.name}</div>
-      <div class="mi-card-source">${icon.sourceName}</div>
+      <div class="mi-card-source"><span>${icon.sourceName}</span></div>
     </div>
   `;
 }
 
-const ITEMS_PER_PAGE = 64;
+// Must match the page size api-loader-logos.js fetches with, or the pager's
+// page count disagrees with the data. 64 is only the client-side fallback.
+const ITEMS_PER_PAGE = window.LOGOS_PAGE_SIZE || 60;
 
 let currentRenderId = 0;
 // Tracks only the icons currently on screen; guarded against race conditions (see renderGrid).
@@ -472,12 +619,6 @@ async function renderGrid() {
   if (typeof window.populateLogosFromAPI === "function") {
     const grid = $("#icon-grid");
 
-    // Show skeleton for results count - keep existing mi-skeleton class
-    const resultsCountEl = $("#results-count");
-    if (resultsCountEl) {
-      resultsCountEl.classList.add("mi-skeleton");
-    }
-
     // Show skeleton loader - use mi-card styling with skeleton animation
     grid.className = `mi-grid density-${state.density}`;
     const skeletonCards = Array.from(
@@ -489,11 +630,11 @@ async function renderGrid() {
 
     try {
       // Track search event in Google Analytics before API call
-      if (typeof gtag !== 'undefined' && state.query) {
-        gtag('event', 'search', {
+      if (typeof gtag !== "undefined" && state.query) {
+        gtag("event", "search", {
           search_term: state.query,
           page_location: window.location.pathname,
-          page_title: 'Logos Search'
+          page_title: "Logos Search",
         });
       }
 
@@ -502,6 +643,14 @@ async function renderGrid() {
 
       // Abort if a newer renderGrid call was made while we were fetching
       if (renderId !== currentRenderId) return;
+
+      // Land back inside the result set if the page is past the end, so a stale
+      // page after a filter change cannot leave an empty grid with no pager.
+      const lastPage = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+      if (total > 0 && state.page > lastPage) {
+        state.page = lastPage;
+        return renderGrid();
+      }
 
       // The API already filtered by query, category, style, etc.
       // We can just use the returned ICONS directly.
@@ -558,14 +707,9 @@ function renderGridContent(list, displayTotal, apiTotal) {
     renderPagination(apiTotal || displayTotal, totalPages);
   }
 
-  const resultsCountEl = $("#results-count");
-  if (resultsCountEl) {
-    resultsCountEl.classList.remove("mi-skeleton");
-    resultsCountEl.style.opacity = "";
-    resultsCountEl.style.animation = "";
-    resultsCountEl.textContent = (apiTotal || displayTotal).toLocaleString();
-  }
-  $("#results-query").textContent = state.query ? `for "${state.query}"` : "";
+  const sortTabCount = document.querySelector(".mi-sort-tab-count");
+  if (sortTabCount)
+    sortTabCount.textContent = (apiTotal || displayTotal).toLocaleString();
   // Only show the stroke adjustment slider if there is at least one 'true stroke' icon in the current grid list
   const strokeSection = $("#rp-stroke-section");
   const strokeDivider = $("#rp-stroke-divider");
@@ -1071,6 +1215,163 @@ function renderCompareCount() {
   const badge = $("#compare-count");
   badge.textContent = state.selected.size;
   btn.disabled = state.selected.size < 2;
+  renderBulkActions();
+}
+
+function renderBulkActions() {
+  const renderedIcons = [...renderedIconsMap.values()];
+  const selectedIcons = [...state.selected]
+    .map(
+      (id) => renderedIconsMap.get(id) || ICONS.find((icon) => icon.id === id),
+    )
+    .filter(Boolean);
+  window.MultiActionsStrip?.render({
+    items: selectedIcons,
+    resultCount: $(".mi-sort-tab-count")?.textContent || ICONS.length,
+    query: state.query,
+    allSelected:
+      renderedIcons.length > 0 &&
+      renderedIcons.every((icon) => state.selected.has(icon.id)),
+    onToggleAll: () => {
+      const allSelected = renderedIcons.every((icon) =>
+        state.selected.has(icon.id),
+      );
+      if (allSelected) state.selected.clear();
+      else renderedIcons.forEach((icon) => state.selected.add(icon.id));
+      document
+        .querySelectorAll(".mi-card")
+        .forEach((card) =>
+          card.classList.toggle(
+            "is-selected",
+            state.selected.has(card.dataset.id),
+          ),
+        );
+      renderCompareCount();
+    },
+    onCopy: async (format) => {
+      if (!requireLoginToDownload()) return;
+      const count = selectedIcons.length;
+      const rendered = await Promise.all(
+        selectedIcons.map(async (icon) => ({
+          name: icon.name,
+          svg: await exportSvgFor(icon),
+        })),
+      );
+      // Concatenated <svg> roots are not an SVG document, so anything that
+      // reads the clipboard as artwork (Figma, Illustrator, a saved .svg) keeps
+      // the first logo and drops the rest - merge them into one document.
+      const payload =
+        format === "svg"
+          ? window.BulkExport.combineSvgs(rendered)
+          : rendered
+              .map(({ name, svg }) => {
+                switch (format) {
+                  case "jsx":
+                    return toJsx(svg);
+                  case "vue":
+                    return toVue(svg);
+                  case "html":
+                    return `<img src="${toDataUrl(svg)}" alt="${name}" />`;
+                  case "css":
+                    return `.icon-${name} { mask: url("${toDataUrl(svg)}") no-repeat center / contain; background: currentColor; }`;
+                  case "dataurl":
+                    return toDataUrl(svg);
+                  case "base64":
+                    return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
+                  default:
+                    return svg;
+                }
+              })
+              .join("\n\n");
+      copyText(payload).then((ok) =>
+        toast(
+          ok
+            ? `Copied ${count} ${count === 1 ? "logo" : "logos"}`
+            : "Copy failed",
+        ),
+      );
+    },
+    onDownload: async (format) => {
+      if (!requireLoginToDownload()) return;
+      const count = selectedIcons.length;
+      if (format === "png") {
+        const size = 512;
+        try {
+          const rendered = await Promise.all(
+            selectedIcons.map(async (icon) => ({
+              name: icon.name,
+              svg: await exportSvgFor(icon),
+            })),
+          );
+          const pngFiles = await Promise.all(
+            rendered.map(
+              (item) =>
+                new Promise((resolve, reject) => {
+                  const image = new Image();
+                  const objectUrl = URL.createObjectURL(
+                    new Blob([item.svg], { type: "image/svg+xml" }),
+                  );
+                  image.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = size;
+                    canvas.height = size;
+                    canvas.getContext("2d").drawImage(image, 0, 0, size, size);
+                    URL.revokeObjectURL(objectUrl);
+                    resolve({
+                      name: item.name,
+                      dataUrl: canvas.toDataURL("image/png"),
+                    });
+                  };
+                  image.onerror = () => {
+                    URL.revokeObjectURL(objectUrl);
+                    reject(new Error("png"));
+                  };
+                  image.src = objectUrl;
+                }),
+            ),
+          );
+          window.BulkExport.downloadFiles(
+            pngFiles.map((file) => ({
+              name: `${file.name}-${size}.png`,
+              data: window.BulkExport.dataUrlToBytes(file.dataUrl),
+              type: "image/png",
+            })),
+            `motvin-logos-${count}-png.zip`,
+          );
+          window.StackToast?.show(
+            count === 1
+              ? "PNG downloaded"
+              : `Downloaded ${count} PNGs as a ZIP`,
+          );
+        } catch {
+          toast("PNG export failed");
+        }
+        return;
+      }
+      // One <a download> click per logo only ever produced the first file -
+      // Chrome gates repeated programmatic downloads - so ship a single ZIP.
+      window.BulkExport.downloadFiles(
+        await Promise.all(
+          selectedIcons.map(async (icon) => ({
+            name: `${icon.name}.svg`,
+            data: window.BulkExport.flattenSvg(await exportSvgFor(icon)),
+            type: "image/svg+xml",
+          })),
+        ),
+        `motvin-logos-${count}-svg.zip`,
+      );
+      window.StackToast?.show(
+        count === 1 ? "SVG downloaded" : `Downloaded ${count} SVGs as a ZIP`,
+      );
+    },
+    onClear: () => {
+      state.selected.clear();
+      document
+        .querySelectorAll(".mi-card.is-selected")
+        .forEach((card) => card.classList.remove("is-selected"));
+      renderCompareCount();
+    },
+  });
 }
 
 // --------------------------------------------------------------------
@@ -1438,6 +1739,9 @@ function editorRenderOpts(sizeOverride) {
   return {
     viewBox: state.editorIcon?.viewBox,
     iconStyle: state.editorIcon?.style,
+    // Same rule as renderStyled: only solid marks may be repainted, and the
+    // editor has to say so explicitly or its colour picker does nothing.
+    repaint: state.editorIcon?.style === "solid",
     size: sizeOverride ?? e.size,
     stroke: e.stroke,
     color: e.color,
@@ -1585,9 +1889,9 @@ function renderMatchingIcons() {
           <svg viewBox="0 0 24 24" fill="${isIconSaved(candidate.id) ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </span>
       </span>
-      <div class="mi-card-preview">${renderStyled(candidate, { size: 42 })}</div>
+      <div class="mi-card-preview">${renderStyled(candidate, { size: state.globalSize })}</div>
       <div class="mi-card-name">${candidate.name}</div>
-      <div class="mi-card-source">${candidate.sourceName}</div>
+      <div class="mi-card-source"><span>${candidate.sourceName}</span></div>
     </button>
   `,
     )
@@ -1597,9 +1901,34 @@ function renderMatchingIcons() {
 // --------------------------------------------------------------------
 // Export
 // --------------------------------------------------------------------
+/**
+ * Export markup for one logo. renderStyled needs the artwork itself, so fetch
+ * the file for any logo the API served without SVG content rather than letting
+ * an empty payload reach the clipboard or a .svg.
+ */
+async function exportSvgFor(icon) {
+  if (!icon.svg && icon.source && icon.name) {
+    try {
+      const url = window.logosAPI?.getLogoSVGUrl(icon.source, icon.name);
+      if (url) {
+        const markup = window.BulkExport.normalizeSvgFile(
+          await (await fetch(url)).text(),
+        );
+        if (markup) icon.svg = markup;
+      }
+    } catch {}
+  }
+  return icon.svg ? renderStyled(icon) : "";
+}
+
 function currentSvgString() {
   if (!state.editorIcon) return "";
-  return renderSvg(state.editorIcon.svg, editorRenderOpts());
+  // Flattened here so every editor export - Copy SVG and its other formats,
+  // the code preview, Download SVG - hands out one `<svg>` instead of the
+  // renderer's wrapper chain, which a design tool imports as nested frames.
+  return window.BulkExport.flattenSvg(
+    renderSvg(state.editorIcon.svg, editorRenderOpts()),
+  );
 }
 function toJsx(svg) {
   return svg
@@ -2190,6 +2519,35 @@ function wire() {
   const searchInput = $("#search-input");
   const searchClear = $("#search-clear");
   const searchIcon = $(".mi-search-icon");
+  const searchPill = $(".mi-search-pill");
+  const revealSearchToolbar = () => {
+    const mainContainer = $(".mi-main");
+    const toolbarWrap = $(".mi-toolbar-wrapper");
+    if (!mainContainer || !toolbarWrap) return;
+    mainContainer.scrollTo({ top: toolbarWrap.offsetTop, behavior: "smooth" });
+  };
+
+  if (searchPill) {
+    searchPill.addEventListener(
+      "click",
+      (event) => {
+        if (event.target.closest("#search-clear")) return;
+        searchPill.classList.add("is-active");
+        revealSearchToolbar();
+      },
+      true,
+    );
+    document.addEventListener("pointerdown", (event) => {
+      if (!searchPill.contains(event.target))
+        searchPill.classList.remove("is-active");
+    });
+  }
+  searchInput.addEventListener("focus", revealSearchToolbar);
+  searchInput.addEventListener("blur", () => {
+    if (searchInput.value) return;
+    const mainContainer = $(".mi-main");
+    if (mainContainer) mainContainer.scrollTo({ top: 0, behavior: "smooth" });
+  });
   const debounced = debounce(() => {
     state.query = searchInput.value;
     localStorage.setItem("ml.query", state.query);
@@ -2205,6 +2563,7 @@ function wire() {
   }
 
   searchInput.addEventListener("input", (e) => {
+    revealSearchToolbar();
     if (searchClear)
       searchClear.style.display = searchInput.value ? "flex" : "none";
     if (searchIcon)
@@ -2229,6 +2588,9 @@ function wire() {
   if (searchClear) {
     searchClear.addEventListener("click", () => {
       searchInput.value = "";
+      if (searchPill) searchPill.classList.remove("is-active");
+      const mainContainer = $(".mi-main");
+      if (mainContainer) mainContainer.scrollTo({ top: 0, behavior: "smooth" });
       searchClear.style.display = "none";
       if (searchIcon) searchIcon.style.display = "flex";
       state.query = "";
@@ -2246,7 +2608,6 @@ function wire() {
       state.page = 1;
       localStorage.setItem("ml.page", state.page);
       renderGrid();
-      searchInput.focus();
     });
   }
 
@@ -2290,8 +2651,9 @@ function wire() {
           .scrollIntoView({ behavior: "smooth" });
         return;
       } else if (mode === "styles") {
+        // "outline" is an icons-page style; Logos only has Default and Solid.
         state.styleFilter.clear();
-        state.styleFilter.add("outline");
+        state.styleFilter.add("color");
         renderFilters();
       }
       state.page = 1;
@@ -2302,35 +2664,6 @@ function wire() {
         .scrollIntoView({ behavior: "smooth" });
     }),
   );
-
-  // AI button
-  $("#btn-ai").addEventListener("click", () => {
-    const q =
-      searchInput.value.trim() ||
-      "an icon for an AI assistant sending a notification";
-    const words = q.toLowerCase().replace(/[.,]/g, "").split(/\s+/);
-    let matched = null;
-    for (const w of words) {
-      if (SYNONYMS[w]) {
-        matched = SYNONYMS[w][0];
-        break;
-      }
-      if (false) {
-        matched = w;
-        break;
-      }
-    }
-    if (!matched) matched = "sparkles";
-    searchInput.value = matched;
-    state.query = matched;
-    state.page = 1;
-    localStorage.setItem("ml.page", state.page);
-    renderGrid();
-    toast(`AI suggests: ${matched}`);
-    document
-      .querySelector(".mi-results-wrap")
-      .scrollIntoView({ behavior: "smooth" });
-  });
 
   // Density
   $$(".mi-view-tabs [data-density]").forEach((b) => {
@@ -2468,9 +2801,9 @@ function wire() {
     if (act) {
       if (act.dataset.act === "copy") {
         if (!requireLoginToDownload()) return;
-        copyText(renderStyled(icon)).then((ok) =>
-          toast(ok ? "Copied SVG" : "Copy failed"),
-        );
+        exportSvgFor(icon)
+          .then((markup) => copyText(window.BulkExport.flattenSvg(markup)))
+          .then((ok) => toast(ok ? "Copied SVG" : "Copy failed"));
       } else if (act.dataset.act === "copy-name") {
         copyText(icon.name).then((ok) =>
           toast(ok ? `Copied "${icon.name}"` : "Copy failed"),
@@ -3038,9 +3371,9 @@ function wire() {
     if (action) {
       if (action.dataset.act === "copy") {
         if (!requireLoginToDownload()) return;
-        copyText(renderStyled(icon)).then((ok) =>
-          toast(ok ? "Copied SVG" : "Copy failed"),
-        );
+        exportSvgFor(icon)
+          .then((markup) => copyText(window.BulkExport.flattenSvg(markup)))
+          .then((ok) => toast(ok ? "Copied SVG" : "Copy failed"));
       } else if (action.dataset.act === "save") {
         window.CollectionManager.openModal(icon.id, icon);
       }
@@ -3122,7 +3455,20 @@ function renderHeroStats() {
 
   const searchInput = $("#search-input");
   if (searchInput && searchInput.placeholder) {
-    searchInput.placeholder = `Search ${getTotalLogoCount().toLocaleString()}+ logos...`;
+    // The pill leaves the input ~190px wide on a phone, which truncates the
+    // full count placeholder, so use a short label there and keep it in sync
+    // when the viewport changes.
+    const compact = window.matchMedia("(max-width: 560px)");
+    const applyPlaceholder = () => {
+      searchInput.placeholder = compact.matches
+        ? "Search logos..."
+        : `Search ${getTotalLogoCount().toLocaleString()}+ logos...`;
+    };
+    applyPlaceholder();
+    if (!searchInput.dataset.placeholderBound) {
+      searchInput.dataset.placeholderBound = "1";
+      compact.addEventListener("change", applyPlaceholder);
+    }
   }
 }
 
@@ -3339,10 +3685,6 @@ function buildCategoryList() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelector(".mi-rp-badge-lg")?.classList.remove("mi-skeleton");
-});
-
-document.addEventListener("DOMContentLoaded", () => {
   const PROMO_KEY = "motvin_promo_hidden_until";
   const banner = document.querySelector(".mi-new-banner");
 
@@ -3432,6 +3774,13 @@ document.addEventListener("DOMContentLoaded", () => {
       badgeLg.textContent = getTotalLogoCount().toLocaleString();
       badgeLg.classList.remove("mi-skeleton");
     }
+
+    // Kept here rather than at DOMContentLoaded: the tabs show stat-derived
+    // counts, so clearing their skeletons before STATS_LOADED resolves drops
+    // the loading state the markup ships with.
+    document.querySelectorAll(".mi-sort-tab.mi-skeleton").forEach((tab) => {
+      tab.classList.remove("mi-skeleton");
+    });
   };
 
   // Wait for stats to load before initial render
@@ -3443,11 +3792,6 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     initUI();
   }
-
-  // Remove skeleton loaders from sort tabs
-  document.querySelectorAll(".mi-sort-tab.mi-skeleton").forEach((tab) => {
-    tab.classList.remove("mi-skeleton");
-  });
 
   document.querySelectorAll(".mi-sort-tab").forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -3801,8 +4145,8 @@ function renderSavedPanel() {
   let html = `
     <div class="mi-rp-cat-item ${!state.activeFolderId ? "is-active" : ""}" data-folder="all" style="background: white; box-shadow: 0px 4px 4px rgba(96,96,96,0.15), 0px 0px 0.5px rgba(96,96,96,0.31)${!state.activeFolderId ? ", 0 0 0 3px var(--mi-focus)" : ""}; height: 84px; display: flex; flex-direction: column; justify-content: space-between; padding: 16px 16px 12px 16px; border-radius: 8px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: ${!state.activeFolderId ? "1px solid var(--mi-accent)" : "1px solid transparent"};">
       <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-        <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">All Saved</span>
-        <span style="font-family: 'Inter', sans-serif; font-size: 14px; color: rgba(0,0,0,0.4);">${allCount}</span>
+        <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 16px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">All Saved</span>
+        <span style="font-family: 'Inter', sans-serif; font-size: 16px; color: rgba(0,0,0,0.4);">${allCount}</span>
       </div>
     </div>
   `;
@@ -3812,8 +4156,8 @@ function renderSavedPanel() {
     html += `
       <div class="mi-rp-cat-item ${isActive ? "is-active" : ""}" data-folder="${f.id}" style="background: white; box-shadow: 0px 4px 4px rgba(96,96,96,0.15), 0px 0px 0.5px rgba(96,96,96,0.31)${isActive ? ", 0 0 0 3px var(--mi-focus)" : ""}; height: 84px; display: flex; flex-direction: column; justify-content: space-between; padding: 16px 16px 12px 16px; border-radius: 8px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: ${isActive ? "1px solid var(--mi-accent)" : "1px solid transparent"}; position: relative;">
         <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-          <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${f.name}</span>
-          <span style="font-family: 'Inter', sans-serif; font-size: 14px; color: rgba(0,0,0,0.4);">${f.iconIds.length}</span>
+          <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 16px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${f.name}</span>
+          <span style="font-family: 'Inter', sans-serif; font-size: 16px; color: rgba(0,0,0,0.4);">${f.iconIds.length}</span>
         </div>
         <button class="mi-folder-del" data-del="${f.id}" title="Delete Collection" style="position: absolute; bottom: 12px; right: 16px; background: none; border: none; cursor: pointer; padding: 0; color: #E53935; display: flex; opacity: 0; transition: opacity 0.2s;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path></svg>

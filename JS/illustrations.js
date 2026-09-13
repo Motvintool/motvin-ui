@@ -9,11 +9,7 @@ const getTotalIllustrationCount = () =>
   0;
 
 function createIllustrationsArray() {
-  if (
-    typeof REAL_ILLUSTRATIONS === "undefined" ||
-    !REAL_ILLUSTRATIONS ||
-    REAL_ILLUSTRATIONS.length === 0
-  ) {
+  if (!REAL_ILLUSTRATIONS || REAL_ILLUSTRATIONS.length === 0) {
     return [];
   }
   return REAL_ILLUSTRATIONS.map((ic, i) => ({
@@ -134,7 +130,16 @@ const SYNONYMS = {
   volume: ["volume", "volume-1", "volume-2", "volume-x"],
   light: ["sun"],
   dark: ["moon"],
-  weather: ["sun", "moon", "cloud", "cloud-drizzle", "cloud-lightning", "cloud-rain", "cloud-snow", "wind"],
+  weather: [
+    "sun",
+    "moon",
+    "cloud",
+    "cloud-drizzle",
+    "cloud-lightning",
+    "cloud-rain",
+    "cloud-snow",
+    "wind",
+  ],
   temperature: ["thermometer"],
   code: ["code"],
   terminal: ["terminal"],
@@ -222,8 +227,26 @@ const SYNONYMS = {
   more: ["more-horizontal", "more-vertical"],
   menu: ["menu"],
   hamburger: ["menu"],
-  arrow: ["arrow-up", "arrow-down", "arrow-left", "arrow-right", "arrow-up-left", "arrow-up-right", "arrow-down-left", "arrow-down-right"],
-  chevron: ["chevron-up", "chevron-down", "chevron-left", "chevron-right", "chevrons-up", "chevrons-down", "chevrons-left", "chevrons-right"],
+  arrow: [
+    "arrow-up",
+    "arrow-down",
+    "arrow-left",
+    "arrow-right",
+    "arrow-up-left",
+    "arrow-up-right",
+    "arrow-down-left",
+    "arrow-down-right",
+  ],
+  chevron: [
+    "chevron-up",
+    "chevron-down",
+    "chevron-left",
+    "chevron-right",
+    "chevrons-up",
+    "chevrons-down",
+    "chevrons-left",
+    "chevrons-right",
+  ],
   triangle: ["triangle"],
   square: ["square"],
   circle: ["circle"],
@@ -244,14 +267,22 @@ window.recreateIllustrations = function () {
   if (typeof buildCategoryList === "function") buildCategoryList();
 };
 
+// The two styles the Illustrations page ships.
+const STYLES = ["color", "solid"];
+
 const state = {
   query: localStorage.getItem("mill.query") || "",
   sourceFilter: new Set(
     JSON.parse(localStorage.getItem("mill.sourceFilter") || "[]"),
   ),
   sourcesVisibleCount: 5,
+  // Drop persisted styles this page does not have. A saved filter for a
+  // style that no longer exists renders no chip, so it would sit there
+  // invisibly matching nothing while the grid reports "no results".
   styleFilter: new Set(
-    JSON.parse(localStorage.getItem("mill.styleFilter") || "[]"),
+    JSON.parse(localStorage.getItem("mill.styleFilter") || "[]").filter((s) =>
+      STYLES.includes(String(s).toLowerCase()),
+    ),
   ),
   licenseFilter: new Set(
     JSON.parse(localStorage.getItem("mill.licenseFilter") || "[]"),
@@ -561,12 +592,9 @@ function renderSvg(paths, opts = {}) {
               /stroke="[^"]+"/,
               'stroke="#ffffff"',
             );
-          } else if (val === "#000" || val === "#000000" || val === "black") {
-            pathStroke = strokeInl.replace(
-              /stroke="[^"]+"/,
-              'stroke="#000000"',
-            );
           }
+          // A black stroke is ink too, so strokeInl (already the chosen
+          // colour) is left in place for it.
         } else if (!strokeMatch && isFillBased === false) {
           if (fillMatch && fillMatch[1].toLowerCase() !== "none") {
             pathStroke = `stroke="none"`;
@@ -582,10 +610,12 @@ function renderSvg(paths, opts = {}) {
         } else if (fillMatch) {
           const val = fillMatch[1].toLowerCase();
           if (val === "none") pathFill = "none";
+          // White is a knockout - a hole punched through the artwork - so it
+          // stays white. Black is the ink of a monochrome piece, so it takes
+          // the chosen colour; pinning it meant recolouring silently did
+          // nothing to artwork that hard-codes black.
           else if (val === "#fff" || val === "#ffffff" || val === "white")
             pathFill = "#ffffff";
-          else if (val === "#000" || val === "#000000" || val === "black")
-            pathFill = "#000000";
           else pathFill = color;
         }
 
@@ -703,14 +733,16 @@ function iconCard(icon) {
           <svg viewBox="0 0 24 24" fill="${isIconSaved(icon.id) ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
       </div>
-      <div class="mi-card-preview">${renderStyled(icon)}</div>
+      <div class="mi-card-preview">${renderStyled(icon, { size: state.globalSize })}</div>
       <div class="mi-card-name" title="${icon.name}">${icon.name}</div>
-      <div class="mi-card-source">${icon.sourceName}</div>
+      <div class="mi-card-source"><span>${icon.sourceName}</span></div>
     </div>
   `;
 }
 
-const ITEMS_PER_PAGE = 60;
+// Must match the page size api-loader-illustrations.js fetches with, or the
+// pager's page count disagrees with the data. 60 is the client-side fallback.
+const ITEMS_PER_PAGE = window.ILLUSTRATIONS_PAGE_SIZE || 60;
 let currentRenderId = 0;
 
 async function renderGrid() {
@@ -720,8 +752,6 @@ async function renderGrid() {
   if (typeof window.populateIllustrationsFromAPI === "function") {
     const grid = $("#icon-grid");
     grid.className = `mi-grid density-${state.density}`;
-    const resultsCountEl = $("#results-count");
-    if (resultsCountEl) resultsCountEl.classList.add("mi-skeleton");
     grid.innerHTML = Array.from(
       { length: 48 },
       () =>
@@ -730,17 +760,26 @@ async function renderGrid() {
 
     try {
       // Track search event in Google Analytics before API call
-      if (typeof gtag !== 'undefined' && state.query) {
-        gtag('event', 'search', {
+      if (typeof gtag !== "undefined" && state.query) {
+        gtag("event", "search", {
           search_term: state.query,
           page_location: window.location.pathname,
-          page_title: 'Illustrations Search'
+          page_title: "Illustrations Search",
         });
       }
 
       const total = await window.populateIllustrationsFromAPI();
       if (total === -1) return; // aborted
       if (renderId !== currentRenderId) return;
+
+      // Land back inside the result set if the page is past the end, so a stale
+      // page after a filter change cannot leave an empty grid with no pager.
+      const lastPage = Math.max(1, Math.ceil(total / ITEMS_PER_PAGE));
+      if (total > 0 && state.page > lastPage) {
+        state.page = lastPage;
+        return renderGrid();
+      }
+
       const list = filterIcons();
       renderedIconsMap = new Map(list.map((ic) => [ic.id, ic]));
       renderGridContent(list, list.length, total);
@@ -789,12 +828,9 @@ function renderGridContent(list, displayTotal, apiTotal) {
     renderPagination(apiTotal, totalPages);
   }
 
-  const resultsCountEl = $("#results-count");
-  if (resultsCountEl) {
-    resultsCountEl.textContent = (apiTotal || total).toLocaleString();
-    resultsCountEl.classList.remove("mi-skeleton");
-  }
-  $("#results-query").textContent = state.query ? `for "${state.query}"` : "";
+  const sortTabCount = document.querySelector(".mi-sort-tab-count");
+  if (sortTabCount)
+    sortTabCount.textContent = (apiTotal || total).toLocaleString();
 
   const strokeSection = $("#rp-stroke-section");
   const strokeDivider = $("#rp-stroke-divider");
@@ -1303,6 +1339,163 @@ function renderCompareCount() {
   const badge = $("#compare-count");
   badge.textContent = state.selected.size;
   btn.disabled = state.selected.size < 2;
+  renderBulkActions();
+}
+
+function renderBulkActions() {
+  const renderedIcons = [...renderedIconsMap.values()];
+  const selectedIcons = [...state.selected]
+    .map(
+      (id) => renderedIconsMap.get(id) || ICONS.find((icon) => icon.id === id),
+    )
+    .filter(Boolean);
+  window.MultiActionsStrip?.render({
+    items: selectedIcons,
+    resultCount: $(".mi-sort-tab-count")?.textContent || ICONS.length,
+    query: state.query,
+    allSelected:
+      renderedIcons.length > 0 &&
+      renderedIcons.every((icon) => state.selected.has(icon.id)),
+    onToggleAll: () => {
+      const allSelected = renderedIcons.every((icon) =>
+        state.selected.has(icon.id),
+      );
+      if (allSelected) state.selected.clear();
+      else renderedIcons.forEach((icon) => state.selected.add(icon.id));
+      document
+        .querySelectorAll(".mi-card")
+        .forEach((card) =>
+          card.classList.toggle(
+            "is-selected",
+            state.selected.has(card.dataset.id),
+          ),
+        );
+      renderCompareCount();
+    },
+    onCopy: async (format) => {
+      if (!requireLoginToDownload()) return;
+      const count = selectedIcons.length;
+      const rendered = await Promise.all(
+        selectedIcons.map(async (icon) => ({
+          name: icon.name,
+          svg: await exportSvgFor(icon),
+        })),
+      );
+      // Concatenated <svg> roots are not an SVG document, so anything that
+      // reads the clipboard as artwork (Figma, Illustrator, a saved .svg) keeps
+      // the first illustration and drops the rest - merge them into one.
+      const payload =
+        format === "svg"
+          ? window.BulkExport.combineSvgs(rendered)
+          : rendered
+              .map(({ name, svg }) => {
+                switch (format) {
+                  case "jsx":
+                    return toJsx(svg);
+                  case "vue":
+                    return toVue(svg);
+                  case "html":
+                    return `<img src="${toDataUrl(svg)}" alt="${name}" />`;
+                  case "css":
+                    return `.icon-${name} { mask: url("${toDataUrl(svg)}") no-repeat center / contain; background: currentColor; }`;
+                  case "dataurl":
+                    return toDataUrl(svg);
+                  case "base64":
+                    return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
+                  default:
+                    return svg;
+                }
+              })
+              .join("\n\n");
+      copyText(payload).then((ok) =>
+        toast(
+          ok
+            ? `Copied ${count} ${count === 1 ? "illustration" : "illustrations"}`
+            : "Copy failed",
+        ),
+      );
+    },
+    onDownload: async (format) => {
+      if (!requireLoginToDownload()) return;
+      const count = selectedIcons.length;
+      if (format === "png") {
+        const size = 512;
+        try {
+          const rendered = await Promise.all(
+            selectedIcons.map(async (icon) => ({
+              name: icon.name,
+              svg: await exportSvgFor(icon),
+            })),
+          );
+          const pngFiles = await Promise.all(
+            rendered.map(
+              (item) =>
+                new Promise((resolve, reject) => {
+                  const image = new Image();
+                  const objectUrl = URL.createObjectURL(
+                    new Blob([item.svg], { type: "image/svg+xml" }),
+                  );
+                  image.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = size;
+                    canvas.height = size;
+                    canvas.getContext("2d").drawImage(image, 0, 0, size, size);
+                    URL.revokeObjectURL(objectUrl);
+                    resolve({
+                      name: item.name,
+                      dataUrl: canvas.toDataURL("image/png"),
+                    });
+                  };
+                  image.onerror = () => {
+                    URL.revokeObjectURL(objectUrl);
+                    reject(new Error("png"));
+                  };
+                  image.src = objectUrl;
+                }),
+            ),
+          );
+          window.BulkExport.downloadFiles(
+            pngFiles.map((file) => ({
+              name: `${file.name}-${size}.png`,
+              data: window.BulkExport.dataUrlToBytes(file.dataUrl),
+              type: "image/png",
+            })),
+            `motvin-illustrations-${count}-png.zip`,
+          );
+          window.StackToast?.show(
+            count === 1
+              ? "PNG downloaded"
+              : `Downloaded ${count} PNGs as a ZIP`,
+          );
+        } catch {
+          toast("PNG export failed");
+        }
+        return;
+      }
+      // One <a download> click per item only ever produced the first file -
+      // Chrome gates repeated programmatic downloads - so ship a single ZIP.
+      window.BulkExport.downloadFiles(
+        await Promise.all(
+          selectedIcons.map(async (icon) => ({
+            name: `${icon.name}.svg`,
+            data: window.BulkExport.flattenSvg(await exportSvgFor(icon)),
+            type: "image/svg+xml",
+          })),
+        ),
+        `motvin-illustrations-${count}-svg.zip`,
+      );
+      window.StackToast?.show(
+        count === 1 ? "SVG downloaded" : `Downloaded ${count} SVGs as a ZIP`,
+      );
+    },
+    onClear: () => {
+      state.selected.clear();
+      document
+        .querySelectorAll(".mi-card.is-selected")
+        .forEach((card) => card.classList.remove("is-selected"));
+      renderCompareCount();
+    },
+  });
 }
 
 // --------------------------------------------------------------------
@@ -1825,9 +2018,9 @@ function renderMatchingIcons() {
           <svg viewBox="0 0 24 24" fill="${isIconSaved(candidate.id) ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </span>
       </span>
-      <div class="mi-card-preview">${renderStyled(candidate, { size: 42 })}</div>
+      <div class="mi-card-preview">${renderStyled(candidate, { size: state.globalSize })}</div>
       <div class="mi-card-name">${candidate.name}</div>
-      <div class="mi-card-source">${candidate.sourceName}</div>
+      <div class="mi-card-source"><span>${candidate.sourceName}</span></div>
     </button>
   `,
     )
@@ -1837,9 +2030,35 @@ function renderMatchingIcons() {
 // --------------------------------------------------------------------
 // Export
 // --------------------------------------------------------------------
+/**
+ * Export markup for one item. Items the API served without SVG content render
+ * as an `<img>` to the source file, which cannot be embedded in a combined SVG
+ * or written to a .svg - so fetch the file first and render it for real.
+ */
+async function exportSvgFor(icon) {
+  if (!icon.svg && icon.imageUrl) {
+    try {
+      const markup = window.BulkExport.normalizeSvgFile(
+        await (await fetch(icon.imageUrl)).text(),
+      );
+      if (markup) icon.svg = markup;
+    } catch {}
+  }
+  // renderStyled prefers imageUrl whenever it is set, so hide it once the real
+  // file is in hand.
+  return icon.svg
+    ? renderStyled({ ...icon, imageUrl: undefined })
+    : renderStyled(icon);
+}
+
 function currentSvgString() {
   if (!state.editorIcon) return "";
-  return renderSvg(state.editorIcon.svg, editorRenderOpts());
+  // Flattened here so every editor export - Copy SVG and its other formats,
+  // the code preview, Download SVG - hands out one `<svg>` instead of the
+  // renderer's wrapper chain, which a design tool imports as nested frames.
+  return window.BulkExport.flattenSvg(
+    renderSvg(state.editorIcon.svg, editorRenderOpts()),
+  );
 }
 function toJsx(svg) {
   return svg
@@ -2430,6 +2649,35 @@ function wire() {
   const searchInput = $("#search-input");
   const searchClear = $("#search-clear");
   const searchIcon = $(".mi-search-icon");
+  const searchPill = $(".mi-search-pill");
+  const revealSearchToolbar = () => {
+    const mainContainer = $(".mi-main");
+    const toolbarWrap = $(".mi-toolbar-wrapper");
+    if (!mainContainer || !toolbarWrap) return;
+    mainContainer.scrollTo({ top: toolbarWrap.offsetTop, behavior: "smooth" });
+  };
+
+  if (searchPill) {
+    searchPill.addEventListener(
+      "click",
+      (event) => {
+        if (event.target.closest("#search-clear")) return;
+        searchPill.classList.add("is-active");
+        revealSearchToolbar();
+      },
+      true,
+    );
+    document.addEventListener("pointerdown", (event) => {
+      if (!searchPill.contains(event.target))
+        searchPill.classList.remove("is-active");
+    });
+  }
+  searchInput.addEventListener("focus", revealSearchToolbar);
+  searchInput.addEventListener("blur", () => {
+    if (searchInput.value) return;
+    const mainContainer = $(".mi-main");
+    if (mainContainer) mainContainer.scrollTo({ top: 0, behavior: "smooth" });
+  });
   const debounced = debounce(() => {
     state.query = searchInput.value;
     localStorage.setItem("mill.query", state.query);
@@ -2445,6 +2693,7 @@ function wire() {
   }
 
   searchInput.addEventListener("input", (e) => {
+    revealSearchToolbar();
     if (searchClear)
       searchClear.style.display = searchInput.value ? "flex" : "none";
     if (searchIcon)
@@ -2469,6 +2718,9 @@ function wire() {
   if (searchClear) {
     searchClear.addEventListener("click", () => {
       searchInput.value = "";
+      if (searchPill) searchPill.classList.remove("is-active");
+      const mainContainer = $(".mi-main");
+      if (mainContainer) mainContainer.scrollTo({ top: 0, behavior: "smooth" });
       searchClear.style.display = "none";
       if (searchIcon) searchIcon.style.display = "flex";
       state.query = "";
@@ -2486,7 +2738,6 @@ function wire() {
       state.page = 1;
       localStorage.setItem("mill.page", state.page);
       renderGrid();
-      searchInput.focus();
     });
   }
 
@@ -2530,8 +2781,10 @@ function wire() {
           .scrollIntoView({ behavior: "smooth" });
         return;
       } else if (mode === "styles") {
+        // "outline" is an icons-page style; Illustrations only has Color
+        // and Solid.
         state.styleFilter.clear();
-        state.styleFilter.add("outline");
+        state.styleFilter.add("color");
         renderFilters();
       }
       state.page = 1;
@@ -2542,35 +2795,6 @@ function wire() {
         .scrollIntoView({ behavior: "smooth" });
     }),
   );
-
-  // AI button
-  $("#btn-ai").addEventListener("click", () => {
-    const q =
-      searchInput.value.trim() ||
-      "an icon for an AI assistant sending a notification";
-    const words = q.toLowerCase().replace(/[.,]/g, "").split(/\s+/);
-    let matched = null;
-    for (const w of words) {
-      if (SYNONYMS[w]) {
-        matched = SYNONYMS[w][0];
-        break;
-      }
-      if (false) {
-        matched = w;
-        break;
-      }
-    }
-    if (!matched) matched = "sparkles";
-    searchInput.value = matched;
-    state.query = matched;
-    state.page = 1;
-    localStorage.setItem("mill.page", state.page);
-    renderGrid();
-    toast(`AI suggests: ${matched}`);
-    document
-      .querySelector(".mi-results-wrap")
-      .scrollIntoView({ behavior: "smooth" });
-  });
 
   // Density
   $$(".mi-view-tabs [data-density]").forEach((b) => {
@@ -2708,9 +2932,9 @@ function wire() {
     if (act) {
       if (act.dataset.act === "copy") {
         if (!requireLoginToDownload()) return;
-        copyText(renderStyled(icon)).then((ok) =>
-          toast(ok ? "Copied SVG" : "Copy failed"),
-        );
+        exportSvgFor(icon)
+          .then((markup) => copyText(window.BulkExport.flattenSvg(markup)))
+          .then((ok) => toast(ok ? "Copied SVG" : "Copy failed"));
       } else if (act.dataset.act === "copy-name") {
         copyText(icon.name).then((ok) =>
           toast(ok ? `Copied "${icon.name}"` : "Copy failed"),
@@ -3279,9 +3503,9 @@ function wire() {
     if (action) {
       if (action.dataset.act === "copy") {
         if (!requireLoginToDownload()) return;
-        copyText(renderStyled(icon)).then((ok) =>
-          toast(ok ? "Copied SVG" : "Copy failed"),
-        );
+        exportSvgFor(icon)
+          .then((markup) => copyText(window.BulkExport.flattenSvg(markup)))
+          .then((ok) => toast(ok ? "Copied SVG" : "Copy failed"));
       } else if (action.dataset.act === "save") {
         window.CollectionManager.openModal(icon.id, icon);
       }
@@ -3364,7 +3588,20 @@ function renderHeroStats() {
 
   const searchInput = $("#search-input");
   if (searchInput) {
-    searchInput.placeholder = `Search ${getTotalIllustrationCount().toLocaleString()}+ illustrations...`;
+    // The pill leaves the input ~190px wide on a phone, which truncates the
+    // full count placeholder, so use a short label there and keep it in sync
+    // when the viewport changes.
+    const compact = window.matchMedia("(max-width: 560px)");
+    const applyPlaceholder = () => {
+      searchInput.placeholder = compact.matches
+        ? "Search illustrations..."
+        : `Search ${getTotalIllustrationCount().toLocaleString()}+ illustrations...`;
+    };
+    applyPlaceholder();
+    if (!searchInput.dataset.placeholderBound) {
+      searchInput.dataset.placeholderBound = "1";
+      compact.addEventListener("change", applyPlaceholder);
+    }
   }
 }
 
@@ -3581,10 +3818,6 @@ function buildCategoryList() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelector(".mi-rp-badge-lg")?.classList.remove("mi-skeleton");
-});
-
-document.addEventListener("DOMContentLoaded", () => {
   const PROMO_KEY = "motvin_promo_hidden_until";
   const banner = document.querySelector(".mi-new-banner");
 
@@ -3667,6 +3900,19 @@ document.addEventListener("DOMContentLoaded", () => {
         renderSavedPanel();
       if (savedTab === "categories") buildCategoryList();
     }
+
+    // These read stats, so they belong here rather than at DOMContentLoaded:
+    // clearing the skeletons before ILLUSTRATION_STATS_LOADED resolves paints a
+    // count of 0 and drops the loading state the markup ships with.
+    const badgeLg = document.querySelector(".mi-rp-badge-lg");
+    if (badgeLg) {
+      badgeLg.textContent = getTotalIllustrationCount().toLocaleString();
+      badgeLg.classList.remove("mi-skeleton");
+    }
+
+    document.querySelectorAll(".mi-sort-tab.mi-skeleton").forEach((tab) => {
+      tab.classList.remove("mi-skeleton");
+    });
   };
 
   if (window.ILLUSTRATION_STATS_LOADED) {
@@ -3677,18 +3923,6 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     initUI();
   }
-
-  // Dynamically update the overall live icons count in the sidebar
-  const badgeLg = document.querySelector(".mi-rp-badge-lg");
-  if (badgeLg) {
-    badgeLg.textContent = getTotalIllustrationCount().toLocaleString();
-    badgeLg.classList.remove("mi-skeleton");
-  }
-
-  // Remove skeleton loaders from sort tabs
-  document.querySelectorAll(".mi-sort-tab.mi-skeleton").forEach((tab) => {
-    tab.classList.remove("mi-skeleton");
-  });
 
   document.querySelectorAll(".mi-sort-tab").forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -4042,8 +4276,8 @@ function renderSavedPanel() {
   let html = `
     <div class="mi-rp-cat-item ${!state.activeFolderId ? "is-active" : ""}" data-folder="all" style="background: white; box-shadow: 0px 4px 4px rgba(96,96,96,0.15), 0px 0px 0.5px rgba(96,96,96,0.31)${!state.activeFolderId ? ", 0 0 0 3px var(--mi-focus)" : ""}; height: 84px; display: flex; flex-direction: column; justify-content: space-between; padding: 16px 16px 12px 16px; border-radius: 8px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: ${!state.activeFolderId ? "1px solid var(--mi-accent)" : "1px solid transparent"};">
       <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-        <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">All Saved</span>
-        <span style="font-family: 'Inter', sans-serif; font-size: 14px; color: rgba(0,0,0,0.4);">${allCount}</span>
+        <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 16px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">All Saved</span>
+        <span style="font-family: 'Inter', sans-serif; font-size: 16px; color: rgba(0,0,0,0.4);">${allCount}</span>
       </div>
     </div>
   `;
@@ -4053,8 +4287,8 @@ function renderSavedPanel() {
     html += `
       <div class="mi-rp-cat-item ${isActive ? "is-active" : ""}" data-folder="${f.id}" style="background: white; box-shadow: 0px 4px 4px rgba(96,96,96,0.15), 0px 0px 0.5px rgba(96,96,96,0.31)${isActive ? ", 0 0 0 3px var(--mi-focus)" : ""}; height: 84px; display: flex; flex-direction: column; justify-content: space-between; padding: 16px 16px 12px 16px; border-radius: 8px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: ${isActive ? "1px solid var(--mi-accent)" : "1px solid transparent"}; position: relative;">
         <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-          <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 15px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${f.name}</span>
-          <span style="font-family: 'Inter', sans-serif; font-size: 14px; color: rgba(0,0,0,0.4);">${f.iconIds.length}</span>
+          <span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 500; font-size: 16px; color: rgba(0,0,0,0.9); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${f.name}</span>
+          <span style="font-family: 'Inter', sans-serif; font-size: 16px; color: rgba(0,0,0,0.4);">${f.iconIds.length}</span>
         </div>
         <button class="mi-folder-del" data-del="${f.id}" title="Delete Collection" style="position: absolute; bottom: 12px; right: 16px; background: none; border: none; cursor: pointer; padding: 0; color: #E53935; display: flex; opacity: 0; transition: opacity 0.2s;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path></svg>

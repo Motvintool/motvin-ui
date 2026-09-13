@@ -5,6 +5,13 @@
 (function () {
   "use strict";
 
+  // Single source of truth for page size. The grid renders exactly what this
+  // fetch returns, so the page-count maths must use the same number - when they
+  // disagreed (fetch 100, UI 64) the pager advertised 5,395 pages for 3,453
+  // pages of data and clicking Next ran into empty grids.
+  // Kept at 60 to match the Logos and Illustrations pages.
+  window.ICONS_PAGE_SIZE = 60;
+
   /**
    * Load icons from API based on current state (filters, search, pagination)
    * @returns {Promise<{icons: Array, total: number}>}
@@ -12,7 +19,7 @@
   window.loadIconsFromAPI = async function () {
     const q = state.query.trim();
     const page = state.page || 1;
-    const limit = 40;
+    const limit = window.ICONS_PAGE_SIZE;
     const offset = (page - 1) * limit;
 
     try {
@@ -61,14 +68,19 @@
       if (result && result.aborted) return { aborted: true };
 
       // If no results and no active filters/query, the index may still be building — retry
-      const hasFilters = activeSourceFilters.length || activeStyleFilters.length ||
-                         activeCategoryFilters.length || activeLicenseFilters.length;
+      const hasFilters =
+        activeSourceFilters.length ||
+        activeStyleFilters.length ||
+        activeCategoryFilters.length ||
+        activeLicenseFilters.length;
       if (!q && !hasFilters && result.total === 0 && !apiOptions.ids) {
         window._iconIndexRetryCount = (window._iconIndexRetryCount || 0) + 1;
         if (window._iconIndexRetryCount <= 10) {
           const delay = Math.min(2000 * window._iconIndexRetryCount, 15000);
-          console.log(`[API Loader] Index still building, retrying in ${delay}ms (attempt ${window._iconIndexRetryCount})...`);
-          await new Promise(r => setTimeout(r, delay));
+          console.log(
+            `[API Loader] Index still building, retrying in ${delay}ms (attempt ${window._iconIndexRetryCount})...`,
+          );
+          await new Promise((r) => setTimeout(r, delay));
           return window.loadIconsFromAPI();
         }
       } else {
@@ -104,8 +116,14 @@
       return c ? c.name : id;
     };
 
+    // API responses can contain sparse slots while collections are being indexed.
+    // Normalize them here so they cannot reach the gallery renderer as undefined.
+    const icons = Array.isArray(result.icons)
+      ? result.icons.filter((icon) => icon && typeof icon === "object")
+      : [];
+
     // Populate REAL_ICONS
-    window.REAL_ICONS = result.icons.map((icon) => {
+    window.REAL_ICONS = icons.map((icon) => {
       const sourceId = icon.source || icon.collection;
       const collection = collections.find((c) => c.id === sourceId);
 
@@ -120,7 +138,9 @@
         id: icon.id || `${sourceId}_${icon.name}`,
         name: icon.name,
         tags: icon.tags || [],
-        style: icon.style || "outline",
+        // Outline means "adjustable stroke", so it is the wrong default for an
+        // icon whose style is missing - it would land in Outline without one.
+        style: icon.style || "solid",
         viewBox: icon.viewBox || "0 0 24 24",
         category: icon.category || "UI",
       };

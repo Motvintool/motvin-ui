@@ -1,14 +1,14 @@
 // firebase-auth.js: shared Google authentication helper for sidebar/float profile menus.
 (function initFirebaseAuthService() {
-  const SDK_VERSION = '10.12.5';
-  const AUTH_SYNC_CHANNEL = 'motvin-auth-sync-v1';
-  const AUTH_SYNC_STORAGE_KEY = '__motvin_auth_sync_v1__';
+  const SDK_VERSION = "10.12.5";
+  const AUTH_SYNC_CHANNEL = "motvin-auth-sync-v1";
+  const AUTH_SYNC_STORAGE_KEY = "__motvin_auth_sync_v1__";
   // Synchronous, same-origin snapshot of the last known signed-in user.
   // Firebase's own persistence restore is async (IndexedDB), which is what
   // makes a freshly-navigated page briefly look "logged out" until it
   // resolves. Reading this snapshot lets any page on this origin paint the
   // correct auth state instantly on load, without waiting for that round trip.
-  const AUTH_SNAPSHOT_STORAGE_KEY = 'motvin-auth-snapshot-v1';
+  const AUTH_SNAPSHOT_STORAGE_KEY = "motvin-auth-snapshot-v1";
   const instanceId = `root-${Math.random().toString(36).slice(2)}-${Date.now()}`;
 
   let auth = null;
@@ -36,14 +36,17 @@
   function persistSnapshot(user) {
     try {
       if (user && !user.isAnonymous) {
-        localStorage.setItem(AUTH_SNAPSHOT_STORAGE_KEY, JSON.stringify({
-          uid: user.uid || '',
-          displayName: user.displayName || '',
-          email: user.email || '',
-          photoURL: user.photoURL || '',
-          isAnonymous: false,
-          at: Date.now(),
-        }));
+        localStorage.setItem(
+          AUTH_SNAPSHOT_STORAGE_KEY,
+          JSON.stringify({
+            uid: user.uid || "",
+            displayName: user.displayName || "",
+            email: user.email || "",
+            photoURL: user.photoURL || "",
+            isAnonymous: false,
+            at: Date.now(),
+          }),
+        );
       } else if (!user) {
         localStorage.removeItem(AUTH_SNAPSHOT_STORAGE_KEY);
       }
@@ -69,7 +72,7 @@
     const payload = {
       source: instanceId,
       type,
-      uid: user && user.uid ? String(user.uid) : '',
+      uid: user && user.uid ? String(user.uid) : "",
       at: Date.now(),
     };
 
@@ -93,7 +96,7 @@
     const authInstance = await ensureReady();
     if (!authInstance || !authSdk) return;
 
-    if (payload.type === 'sign-out') {
+    if (payload.type === "sign-out") {
       if (authInstance.currentUser && !isApplyingExternalSignOut) {
         isApplyingExternalSignOut = true;
         try {
@@ -105,29 +108,36 @@
         }
       }
       emit(null);
-      
+
       const path = window.location.pathname;
-      const isLanding = path === '/' || path === '/index' || path.includes('index.html');
+      const isLanding =
+        path === "/" || path === "/index" || path.includes("index.html");
       if (!isLanding) {
         window.location.href = `/login?next=${encodeURIComponent(path)}`;
       }
-      
+
       return;
     }
 
-    const activeUser = (authInstance.currentUser && !authInstance.currentUser.isAnonymous)
-      ? authInstance.currentUser
-      : readSnapshot();
+    const activeUser =
+      authInstance.currentUser && !authInstance.currentUser.isAnonymous
+        ? authInstance.currentUser
+        : readSnapshot();
 
     if (activeUser) {
       emit(activeUser);
-      
+
       const p = window.location.pathname.toLowerCase();
-      if (p === '/login' || p === '/login.html') {
+      if (p === "/login" || p === "/login.html") {
         const params = new URLSearchParams(window.location.search);
-        const next = params.get('next');
-        let target = '/files';
-        if (next && next.startsWith('/') && !next.startsWith('//') && !next.startsWith('/\\')) {
+        const next = params.get("next");
+        let target = "/files";
+        if (
+          next &&
+          next.startsWith("/") &&
+          !next.startsWith("//") &&
+          !next.startsWith("/\\")
+        ) {
           target = next;
         }
         window.location.href = target;
@@ -136,12 +146,12 @@
   }
 
   function initSyncListeners() {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
-    if (typeof BroadcastChannel !== 'undefined') {
+    if (typeof BroadcastChannel !== "undefined") {
       try {
         channel = new BroadcastChannel(AUTH_SYNC_CHANNEL);
-        channel.addEventListener('message', (event) => {
+        channel.addEventListener("message", (event) => {
           void applyExternalSync(event && event.data ? event.data : null);
         });
       } catch {
@@ -149,8 +159,9 @@
       }
     }
 
-    window.addEventListener('storage', (event) => {
-      if (!event || event.key !== AUTH_SYNC_STORAGE_KEY || !event.newValue) return;
+    window.addEventListener("storage", (event) => {
+      if (!event || event.key !== AUTH_SYNC_STORAGE_KEY || !event.newValue)
+        return;
       const payload = safeJsonParse(event.newValue);
       if (!payload) return;
       void applyExternalSync(payload);
@@ -170,7 +181,11 @@
   }
 
   async function configureBestPersistence(authInstance) {
-    if (!authSdk || !authInstance || typeof authSdk.setPersistence !== 'function') {
+    if (
+      !authSdk ||
+      !authInstance ||
+      typeof authSdk.setPersistence !== "function"
+    ) {
       return;
     }
 
@@ -199,10 +214,15 @@
         return null;
       }
 
-      const [{ initializeApp, getApps, getApp }, loadedAuthSdk] = await Promise.all([
-        import(`https://www.gstatic.com/firebasejs/${SDK_VERSION}/firebase-app.js`),
-        import(`https://www.gstatic.com/firebasejs/${SDK_VERSION}/firebase-auth.js`),
-      ]);
+      const [{ initializeApp, getApps, getApp }, loadedAuthSdk] =
+        await Promise.all([
+          import(
+            `https://www.gstatic.com/firebasejs/${SDK_VERSION}/firebase-app.js`
+          ),
+          import(
+            `https://www.gstatic.com/firebasejs/${SDK_VERSION}/firebase-auth.js`
+          ),
+        ]);
 
       authSdk = loadedAuthSdk;
 
@@ -217,14 +237,19 @@
       authSdk.onAuthStateChanged(auth, (user) => {
         if (user && !user.isAnonymous) {
           emit(user);
-          publishSyncEvent('auth-state-changed', user);
-          
+          publishSyncEvent("auth-state-changed", user);
+
           const p = window.location.pathname.toLowerCase();
-          if (p === '/login' || p === '/login.html') {
+          if (p === "/login" || p === "/login.html") {
             const params = new URLSearchParams(window.location.search);
-            const next = params.get('next');
-            let target = '/files';
-            if (next && next.startsWith('/') && !next.startsWith('//') && !next.startsWith('/\\')) {
+            const next = params.get("next");
+            let target = "/files";
+            if (
+              next &&
+              next.startsWith("/") &&
+              !next.startsWith("//") &&
+              !next.startsWith("/\\")
+            ) {
               target = next;
             }
             window.location.href = target;
@@ -232,19 +257,27 @@
         } else if (!user || user.isAnonymous) {
           persistSnapshot(null);
           emit(null);
-          publishSyncEvent('auth-state-changed', null);
+          publishSyncEvent("auth-state-changed", null);
 
           // Redirect to login if on a protected page without auth
           const p = window.location.pathname.toLowerCase();
           const protectedPaths = [
-            '/files', '/files.html',
-            '/my-post', '/my-post.html',
-            '/saved-templates', '/saved-templates.html',
-            '/about-me', '/about-me.html',
-            '/motvin', '/motvin/', '/motvin/index.html'
+            "/files",
+            "/files.html",
+            "/my-post",
+            "/my-post.html",
+            "/saved-templates",
+            "/saved-templates.html",
+            "/about-me",
+            "/about-me.html",
+            "/motvin",
+            "/motvin/",
+            "/motvin/index.html",
           ];
-          let isProtected = protectedPaths.some(path => p === path || p.startsWith(path + '/'));
-          if (p.startsWith('/updates')) isProtected = false;
+          let isProtected = protectedPaths.some(
+            (path) => p === path || p.startsWith(path + "/"),
+          );
+          if (p.startsWith("/updates")) isProtected = false;
           if (isProtected) {
             window.location.href = `/login?next=${encodeURIComponent(p)}`;
           }
@@ -262,53 +295,61 @@
   }
 
   function shouldFallbackToRedirect(errorCode) {
-    return errorCode === 'auth/popup-blocked' || errorCode === 'auth/popup-closed-by-user' || errorCode === 'auth/cancelled-popup-request';
+    return (
+      errorCode === "auth/popup-blocked" ||
+      errorCode === "auth/popup-closed-by-user" ||
+      errorCode === "auth/cancelled-popup-request"
+    );
   }
 
   function buildAuthErrorMessage(error) {
-    const code = String(error && error.code || '');
+    const code = String((error && error.code) || "");
 
-    if (window.location.protocol === 'file:') {
-      return 'Authentication cannot run from file:// URLs. Open this site via localhost or Firebase Hosting.';
+    if (window.location.protocol === "file:") {
+      return "Authentication cannot run from file:// URLs. Open this site via localhost or Firebase Hosting.";
     }
 
-    if (code === 'auth/unauthorized-domain') {
-      return 'This domain is not authorized in Firebase Authentication. Add it under Firebase Console > Authentication > Settings > Authorized domains.';
+    if (code === "auth/unauthorized-domain") {
+      return "This domain is not authorized in Firebase Authentication. Add it under Firebase Console > Authentication > Settings > Authorized domains.";
     }
 
-    if (code === 'auth/operation-not-allowed') {
-      return 'This sign-in method is disabled in Firebase. Enable it in Firebase Console > Authentication > Sign-in method.';
+    if (code === "auth/operation-not-allowed") {
+      return "This sign-in method is disabled in Firebase. Enable it in Firebase Console > Authentication > Sign-in method.";
     }
 
-    if (code === 'auth/wrong-password' || code === 'auth/user-not-found' || code === 'auth/invalid-credential') {
-      return 'Invalid email or password.';
+    if (
+      code === "auth/wrong-password" ||
+      code === "auth/user-not-found" ||
+      code === "auth/invalid-credential"
+    ) {
+      return "Invalid email or password.";
     }
 
-    if (code === 'auth/email-already-in-use') {
-      return 'An account with this email already exists.';
+    if (code === "auth/email-already-in-use") {
+      return "An account with this email already exists.";
     }
 
-    if (code === 'auth/weak-password') {
-      return 'Password should be at least 6 characters.';
+    if (code === "auth/weak-password") {
+      return "Password should be at least 6 characters.";
     }
 
     if (code) {
       return `Authentication failed (${code}).`;
     }
 
-    return 'Authentication failed. Please try again.';
+    return "Authentication failed. Please try again.";
   }
 
   async function loginWithGoogle(options) {
     const opts = options || {};
-    const method = opts.method === 'redirect' ? 'redirect' : 'popup';
+    const method = opts.method === "redirect" ? "redirect" : "popup";
     const authInstance = await ensureReady();
     if (!authInstance || !provider || !authSdk) return null;
 
     await configureBestPersistence(authInstance);
 
     provider.setCustomParameters({
-      prompt: 'select_account',
+      prompt: "select_account",
     });
 
     if (authInstance.currentUser && authInstance.currentUser.isAnonymous) {
@@ -320,31 +361,39 @@
     }
 
     try {
-      if (method === 'redirect') {
+      if (method === "redirect") {
         await authSdk.signInWithRedirect(authInstance, provider);
         return null;
       }
 
       const result = await authSdk.signInWithPopup(authInstance, provider);
-      
+
       // Sync login to Compat SDK (window.firebase.auth) so Firestore queries succeed
-      if (result && window.firebase && typeof window.firebase.auth === 'function') {
+      if (
+        result &&
+        window.firebase &&
+        typeof window.firebase.auth === "function"
+      ) {
         try {
           const cred = authSdk.GoogleAuthProvider.credentialFromResult(result);
           if (cred) {
             await window.firebase.auth().signInWithCredential(cred);
           }
         } catch (credErr) {
-          console.warn('[firebase-auth] Compat auth credential sync error:', credErr);
+          console.warn(
+            "[firebase-auth] Compat auth credential sync error:",
+            credErr,
+          );
         }
       }
 
-      const signedInUser = (result && result.user) || authInstance.currentUser || null;
+      const signedInUser =
+        (result && result.user) || authInstance.currentUser || null;
       emit(signedInUser);
       return signedInUser;
     } catch (error) {
-      const code = String(error && error.code || '');
-      if (method === 'popup' && shouldFallbackToRedirect(code)) {
+      const code = String((error && error.code) || "");
+      if (method === "popup" && shouldFallbackToRedirect(code)) {
         await authSdk.signInWithRedirect(authInstance, provider);
         return null;
       }
@@ -359,21 +408,33 @@
     await configureBestPersistence(authInstance);
 
     try {
-      const result = await authSdk.signInWithEmailAndPassword(authInstance, email, password);
-      
+      const result = await authSdk.signInWithEmailAndPassword(
+        authInstance,
+        email,
+        password,
+      );
+
       // Sync login to Compat SDK
-      if (result && window.firebase && typeof window.firebase.auth === 'function') {
+      if (
+        result &&
+        window.firebase &&
+        typeof window.firebase.auth === "function"
+      ) {
         try {
           const cred = authSdk.EmailAuthProvider.credential(email, password);
           if (cred) {
             await window.firebase.auth().signInWithCredential(cred);
           }
         } catch (credErr) {
-          console.warn('[firebase-auth] Compat auth credential sync error:', credErr);
+          console.warn(
+            "[firebase-auth] Compat auth credential sync error:",
+            credErr,
+          );
         }
       }
 
-      const signedInUser = (result && result.user) || authInstance.currentUser || null;
+      const signedInUser =
+        (result && result.user) || authInstance.currentUser || null;
       emit(signedInUser);
       return signedInUser;
     } catch (error) {
@@ -388,21 +449,33 @@
     await configureBestPersistence(authInstance);
 
     try {
-      const result = await authSdk.createUserWithEmailAndPassword(authInstance, email, password);
-      
+      const result = await authSdk.createUserWithEmailAndPassword(
+        authInstance,
+        email,
+        password,
+      );
+
       // Sync login to Compat SDK
-      if (result && window.firebase && typeof window.firebase.auth === 'function') {
+      if (
+        result &&
+        window.firebase &&
+        typeof window.firebase.auth === "function"
+      ) {
         try {
           const cred = authSdk.EmailAuthProvider.credential(email, password);
           if (cred) {
             await window.firebase.auth().signInWithCredential(cred);
           }
         } catch (credErr) {
-          console.warn('[firebase-auth] Compat auth credential sync error:', credErr);
+          console.warn(
+            "[firebase-auth] Compat auth credential sync error:",
+            credErr,
+          );
         }
       }
 
-      const signedInUser = (result && result.user) || authInstance.currentUser || null;
+      const signedInUser =
+        (result && result.user) || authInstance.currentUser || null;
       emit(signedInUser);
       return signedInUser;
     } catch (error) {
@@ -437,10 +510,10 @@
   async function logout() {
     const authInstance = await ensureReady();
 
-    if (window.firebase && typeof window.firebase.auth === 'function') {
+    if (window.firebase && typeof window.firebase.auth === "function") {
       try {
         const compatAuth = window.firebase.auth();
-        if (compatAuth && typeof compatAuth.signOut === 'function') {
+        if (compatAuth && typeof compatAuth.signOut === "function") {
           await compatAuth.signOut();
         }
       } catch {
@@ -452,17 +525,32 @@
       await authSdk.signOut(authInstance);
     }
     emit(null);
-    publishSyncEvent('sign-out', null);
+    publishSyncEvent("sign-out", null);
 
-    const path = window.location.pathname;
-    const isLanding = path === '/' || path === '/index' || path.includes('index.html');
-    if (!isLanding) {
+    const path = window.location.pathname.toLowerCase();
+    const protectedPaths = [
+      "/files",
+      "/files.html",
+      "/my-post",
+      "/my-post.html",
+      "/saved-templates",
+      "/saved-templates.html",
+      "/about-me",
+      "/about-me.html",
+      "/motvin",
+      "/motvin/",
+      "/motvin/index.html",
+    ];
+    const isProtected = protectedPaths.some(
+      (route) => path === route || path.startsWith(route + "/"),
+    );
+    if (isProtected) {
       window.location.href = `/login?next=${encodeURIComponent(path)}`;
     }
   }
 
   function onChange(listener) {
-    if (typeof listener !== 'function') {
+    if (typeof listener !== "function") {
       return function noop() {};
     }
 
@@ -488,7 +576,6 @@
       throw new Error(buildAuthErrorMessage(error));
     }
   }
-
 
   async function getIdToken(forceRefresh) {
     const authInstance = await ensureReady();

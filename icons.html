@@ -11,12 +11,17 @@
       content="Search, compare, customize, and use icons from your favorite libraries — all in one place."
     />
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4DTKXD35BH"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-4DTKXD35BH"
+    ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-4DTKXD35BH');
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-4DTKXD35BH");
     </script>
     <script>
       (function () {
@@ -26,6 +31,27 @@
           ".mi-sidebar-icon-container, .mi-sidebar-label { transition: none !important; }",
         );
         document.write("</style>");
+      })();
+    </script>
+    <script>
+      (function () {
+        // Banner.js mounts the beta banner on DOMContentLoaded, which shifts
+        // the app shell down by the banner height. Decide here — before first
+        // paint — whether that space is needed, so the header renders in its
+        // final position instead of jumping once the banner appears.
+        try {
+          var snapshot = JSON.parse(
+            localStorage.getItem("motvin-auth-snapshot-v1"),
+          );
+          var signedIn = Boolean(
+            snapshot && snapshot.uid && !snapshot.isAnonymous,
+          );
+          if (!signedIn) {
+            document.documentElement.classList.add("mi-banner-reserved");
+          }
+        } catch (e) {
+          document.documentElement.classList.add("mi-banner-reserved");
+        }
       })();
     </script>
     <link rel="stylesheet" href="CSS/motvin-icons.css?v=17" />
@@ -58,6 +84,21 @@
     <!-- =====================================================
        APP SHELL — Left sidebar + Main + Right panel
        ===================================================== -->
+    <!-- Beta banner: in the markup (not injected) so it paints with the first
+         frame and holds its place through loading. Banner.js adopts this node,
+         sets the return URL on the login link, and owns show/hide from here. -->
+    <section
+      id="mi-product-banner"
+      class="mi-product-banner"
+      aria-label="Motvin beta announcement"
+    >
+      <p>
+        Motvin v1 beta is here, explore 345K+ icons, 10.5K logos and 1K+
+        illustrations in one powerful library.
+      </p>
+      <a href="/login">Login &rarr;</a>
+    </section>
+
     <div class="mi-app-shell">
       <!-- ── LEFT ICON SIDEBAR ── -->
       <aside class="mi-left-sidebar" aria-label="Navigation">
@@ -93,6 +134,16 @@
                 <line x1="8" y1="10" x2="8" y2="14" />
                 <line x1="16" y1="18" x2="16" y2="22" />
               </svg>
+              <img
+                src="ASSET/Icons/sidebar-filters-active.svg"
+                alt=""
+                class="mi-sidebar-active-icon"
+              />
+              <img
+                src="ASSET/Icons/sidebar-filters-inactive.svg"
+                alt=""
+                class="mi-sidebar-inactive-icon"
+              />
             </span>
             <span class="mi-sidebar-label">Filters</span>
             <img
@@ -107,19 +158,11 @@
             title="Categories"
           >
             <span class="mi-sidebar-icon-container">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.75"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect x="3" y="3" width="7" height="7" rx="1" />
-                <rect x="14" y="3" width="7" height="7" rx="1" />
-                <rect x="3" y="14" width="7" height="7" rx="1" />
-                <rect x="14" y="14" width="7" height="7" rx="1" />
-              </svg>
+              <img
+                src="ASSET/Icons/sidebar-packs.svg"
+                alt=""
+                class="mi-sidebar-tab-icon"
+              />
             </span>
             <span class="mi-sidebar-label">Packs</span>
             <img
@@ -136,16 +179,11 @@
             aria-label="Favorites"
           >
             <span class="mi-sidebar-icon-container">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.75"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-              </svg>
+              <img
+                src="ASSET/Icons/sidebar-saved.svg"
+                alt=""
+                class="mi-sidebar-tab-icon"
+              />
             </span>
             <span class="mi-sidebar-label">Saved</span>
             <img
@@ -163,18 +201,11 @@
             title="Plugins"
           >
             <span class="mi-sidebar-icon-container">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.75"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
-                <line x1="16" y1="8" x2="2" y2="22" />
-                <line x1="17.5" y1="15" x2="9" y2="15" />
-              </svg>
+              <img
+                src="ASSET/Icons/sidebar-plugins.svg"
+                alt=""
+                class="mi-sidebar-tab-icon mi-sidebar-tab-icon--plugins"
+              />
             </span>
             <span class="mi-sidebar-label">Plugins</span>
             <img
@@ -185,18 +216,11 @@
           </button>
           <button class="mi-sidebar-item" data-sidebar="help" title="Help">
             <span class="mi-sidebar-icon-container">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.75"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                <line x1="12" y1="17" x2="12.01" y2="17" />
-              </svg>
+              <img
+                src="ASSET/Icons/sidebar-helps.svg"
+                alt=""
+                class="mi-sidebar-tab-icon"
+              />
             </span>
             <span class="mi-sidebar-label">Helps</span>
             <img
@@ -248,25 +272,32 @@
           <div class="mi-top-header-left">
             <div class="mi-top-logo-group">
               <img
-                src="ASSET/Icons/motvin-logo-text.svg"
+                src="ASSET/Icons/header-motvin-wordmark.svg"
                 alt="Motvin"
                 class="mi-top-logo-text"
               />
               <div class="mi-top-beta-badge">Beta</div>
             </div>
-            <nav class="mi-top-nav">
-              <a
-                href="https://chat.whatsapp.com/JxLUrQpNpaXJ4ido6muIW6?s=cl&p=i&ilr=4"
-                target="_blank"
-                class="mi-top-nav-link"
-              >
-                Community
-                <span class="mi-top-nav-badge">New</span>
-              </a>
-              <a href="/updates/" target="_blank" class="mi-top-nav-link">
-                Release Notes
-              </a>
-            </nav>
+            <div class="mi-top-nav-wrap">
+              <img
+                src="ASSET/Icons/header-nav-divider.svg"
+                class="mi-top-header-divider"
+                alt=""
+              />
+              <nav class="mi-top-nav">
+                <a
+                  href="https://chat.whatsapp.com/JxLUrQpNpaXJ4ido6muIW6?s=cl&p=i&ilr=4"
+                  target="_blank"
+                  class="mi-top-nav-link"
+                >
+                  Community
+                  <span class="mi-top-nav-badge">New</span>
+                </a>
+                <a href="/updates/" target="_blank" class="mi-top-nav-link">
+                  Release Notes
+                </a>
+              </nav>
+            </div>
           </div>
 
           <div class="mi-top-header-right">
@@ -329,12 +360,12 @@
                         />
                       </div>
                       <div class="mi-cluster-circle">
-                        <img
-                          src="ASSET/Icons/Heroicons.svg"
-                          alt=""
-                          class="mi-cluster-img"
-                        />
-                      </div>
+                          <img
+                            src="ASSET/Icons/Heroicons.svg"
+                            alt=""
+                            class="mi-cluster-img"
+                          />
+                        </div>
                       <div class="mi-cluster-circle">
                         <img
                           src="ASSET/Icons/Tabler%20Icons.svg"
@@ -438,6 +469,11 @@
                 />
               </div>
             </div>
+            <!-- Theme Toggle Button - hidden for this release
+            <button class="mi-theme-toggle-btn" id="theme-toggle-btn" aria-label="Switch theme" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 50%; color: var(--text-color-text);" onclick="window.ThemeManager && window.ThemeManager.setTheme(window.ThemeManager.getCurrentTheme() === 'light' ? 'dark' : 'light')">
+              <img src="ASSET/Icons/theme-toggle.svg" alt="" style="width: 24px; height: 24px;" />
+            </button>
+            -->
           </div>
         </header>
 
@@ -511,27 +547,10 @@
                 </button>
               </form>
 
-              <!-- AI search toggle -->
-              <label
-                class="mi-ai-toggle"
-                for="ai-toggle-switch"
-                title="Coming Soon"
-                style="cursor: not-allowed"
-              >
-                <span
-                  class="mi-toggle-switch"
-                  id="btn-ai"
-                  role="switch"
-                  aria-checked="false"
-                  tabindex="-1"
-                  style="pointer-events: none; opacity: 0.5"
-                >
-                  <span class="mi-toggle-knob"></span>
-                </span>
-                <span class="mi-ai-label" style="pointer-events: none"
-                  >AI search</span
-                >
-              </label>
+              <div class="mi-search-shortcut" aria-hidden="true">
+                <kbd>⌘</kbd>
+                <kbd>K</kbd>
+              </div>
             </div>
 
             <!-- Recolor button -->
@@ -671,7 +690,7 @@
                 role="tab"
                 aria-selected="true"
               >
-                All
+                All <span class="mi-sort-tab-count" aria-hidden="true">0</span>
               </button>
               <button
                 class="mi-sort-tab mi-skeleton"
@@ -794,15 +813,6 @@
               window.syncRecolorLayout();
             })();
           </script>
-
-          <!-- Results count -->
-          <div class="mi-count-row">
-            <span class="mi-count-num mi-skeleton" id="results-count"
-              >261,657</span
-            >
-            <span class="mi-count-label">icons found</span>
-            <span id="results-query" class="mi-query"></span>
-          </div>
         </div>
 
         <!-- Scrollable icon grid -->
@@ -981,7 +991,7 @@
               <div class="mi-rp-section">
                 <div class="mi-rp-header-row">
                   <span class="mi-rp-title">Size</span>
-                  <span class="mi-rp-val" id="size-panel-val">42</span>
+                  <span class="mi-rp-val" id="size-panel-val">36</span>
                 </div>
                 <div class="mi-rp-slider-wrapper">
                   <input
@@ -990,7 +1000,7 @@
                     class="mi-rp-slider-invisible"
                     min="12"
                     max="64"
-                    value="42"
+                    value="36"
                     step="1"
                     aria-label="Icon size"
                   />
@@ -999,13 +1009,13 @@
                       <div
                         class="mi-rp-slider-fill"
                         id="size-panel-fill"
-                        style="width: 57.69%"
+                        style="width: 46.15%"
                       ></div>
                     </div>
                     <div
                       class="mi-rp-slider-thumb"
                       id="size-panel-thumb"
-                      style="left: 57.69%"
+                      style="left: 46.15%"
                     ></div>
                   </div>
                 </div>
@@ -1186,7 +1196,7 @@
                     style="
                       font-family:
                         &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;
-                      font-size: 15px;
+                      font-size: 16px;
                       color: rgba(0, 0, 0, 0.9);
                     "
                     >Create collection</span
@@ -1231,7 +1241,7 @@
                             &quot;Helvetica Neue&quot;, Helvetica, Arial,
                             sans-serif;
                           font-weight: 500;
-                          font-size: 15px;
+                          font-size: 16px;
                         "
                         >All Saved</span
                       >
@@ -1239,7 +1249,7 @@
                         class="mi-rp-cat-count mi-skeleton"
                         style="
                           font-family: &quot;Inter&quot;, sans-serif;
-                          font-size: 14px;
+                          font-size: 15px;
                         "
                         >0</span
                       >
@@ -1276,7 +1286,7 @@
                             &quot;Helvetica Neue&quot;, Helvetica, Arial,
                             sans-serif;
                           font-weight: 500;
-                          font-size: 15px;
+                          font-size: 16px;
                         "
                         >My Collection</span
                       >
@@ -1284,7 +1294,7 @@
                         class="mi-rp-cat-count mi-skeleton"
                         style="
                           font-family: &quot;Inter&quot;, sans-serif;
-                          font-size: 14px;
+                          font-size: 15px;
                         "
                         >0</span
                       >
@@ -1621,21 +1631,6 @@
               }
             });
           });
-
-          // ── AI toggle ───────────────────────────────────────────────────────
-          var aiToggle = document.getElementById("btn-ai");
-          if (aiToggle) {
-            aiToggle.addEventListener("click", function () {
-              var isOn = aiToggle.classList.toggle("is-on");
-              aiToggle.setAttribute("aria-checked", String(isOn));
-            });
-            aiToggle.addEventListener("keydown", function (e) {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                aiToggle.click();
-              }
-            });
-          }
 
           // ── Panel size slider ───────────────────────────────────────────────
           var sizeSlider = document.getElementById("ctrl-size-panel");
@@ -2020,19 +2015,22 @@
     <!-- Environment configuration (generated at runtime in Docker) -->
     <script src="env-config.js"></script>
     <!-- API Integration: Load stats before main app -->
-    <script src="JS/api-client.js?v=2"></script>
+    <script src="JS/api-client.js?v=3"></script>
     <script src="JS/stats-bridge.js"></script>
-    <script src="JS/api-loader.js?v=2"></script>
+    <script src="JS/api-loader.js?v=3"></script>
     <!-- <script src="real_icons_data.js?v=39"></script> -->
     <script src="COMPONENT/Save Collection Modal.js?v=7"></script>
     <script src="COMPONENT/Pagination.js"></script>
+    <script src="COMPONENT/Banner.js"></script>
+    <script src="COMPONENT/Multi Actions Strip.js"></script>
+    <script src="JS/bulk-export.js?v=4"></script>
     <script src="JS/firebase-config.js"></script>
     <script src="COMPONENT/Library Profile Badge.js"></script>
     <script src="COMPONENT/Library Profile Menu.js"></script>
     <script src="JS/firebase-auth.js"></script>
     <script src="COMPONENT/Auth Modal.js"></script>
     <script src="COMPONENT/Stack Toast.js"></script>
-    <script src="JS/motvin-icons.js?v=9"></script>
+    <script src="JS/motvin-icons.js?v=20"></script>
     <script>
       window.addEventListener("load", function () {
         setTimeout(function () {

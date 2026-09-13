@@ -5,10 +5,16 @@
 (function () {
   'use strict';
 
+  // Single source of truth for page size. The grid renders exactly what this
+  // fetch returns, so the page-count maths must use the same number - when they
+  // disagreed (fetch 40, UI 60) the pager stopped 25 pages short of the data.
+  // Kept at 60 to match the Icons and Logos pages.
+  window.ILLUSTRATIONS_PAGE_SIZE = 60;
+
   window.loadIllustrationsFromAPI = async function () {
     const q = state.query.trim();
     const page = state.page || 1;
-    const limit = 40;
+    const limit = window.ILLUSTRATIONS_PAGE_SIZE;
     const offset = (page - 1) * limit;
 
     try {
