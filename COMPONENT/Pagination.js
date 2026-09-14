@@ -56,13 +56,13 @@ window.Pagination = (function () {
 
     bar.innerHTML = `
       <button class="mi-page-nav-btn" id="btn-page-prev" ${page === 1 ? "disabled" : ""}>
-        <img src="ASSET/Icons/icons-navigate.svg" style="transform: rotate(180deg);" alt=""/>
+        <svg class="mi-page-nav-icon" style="transform: rotate(180deg);" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span>Prev</span>
       </button>
       ${pageButtons}
       <button class="mi-page-nav-btn is-next" id="btn-page-next" ${page === totalPages ? "disabled" : ""}>
         <span>Next</span>
-        <img src="ASSET/Icons/icons-navigate.svg" alt=""/>
+        <svg class="mi-page-nav-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     `;
 

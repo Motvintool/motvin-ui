@@ -48,6 +48,11 @@ window.MultiActionsStrip = (function () {
       .mi-sidebar-collapse-toggle:hover img { filter: brightness(0.682); }
       .mi-sidebar-collapse-toggle img { display: block; width: 7px; height: 24px; transition: filter 160ms ease; }
       body.mi-sidebar-collapsed .mi-app-shell { grid-template-columns: minmax(0, 1fr) var(--right-panel-w); }
+      /* This stylesheet is injected after the page CSS, so the rule above
+         would otherwise out-order body.is-panel-floating .mi-app-shell and
+         re-reserve the docked column while the panel floats, leaving an
+         empty gap on the right. Collapse it again for the combined state. */
+      body.mi-sidebar-collapsed.is-panel-floating .mi-app-shell { grid-template-columns: minmax(0, 1fr) 0px; }
       body.mi-sidebar-collapsed .mi-left-sidebar { display: none; }
       body.mi-sidebar-collapsed .mi-sidebar-collapse-toggle { left: 9px; transform: translateY(-50%) scaleX(-1); }
       /* Below 1300px the left sidebar becomes a horizontal bar, so the collapse

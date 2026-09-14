@@ -2263,6 +2263,10 @@ body.is-panel-floating .mi-rp-edge-resizer {
   transition: all 0.2s ease;
   /* Hug the content: the fixed 42px clipped the 31px count badge. */
   height: auto;
+  /* .has-filters:hover hides the avatars and the count badge, and the badge is
+     what sets the hugged height - without this floor the pill would shrink by
+     ~6px under the cursor. 44px is the height it hugs at rest. */
+  min-height: 44px;
   box-sizing: border-box;
 }
 
@@ -2456,13 +2460,13 @@ body.is-panel-floating .mi-rp-edge-resizer {
 .mi-rp-item.is-active .mi-rp-check-custom::after,
 .mi-rp-license-active.is-active .mi-rp-check-custom::after {
   content: "";
-  width: 9px;
-  height: 5px;
-  border-left: 2px solid white;
-  border-bottom: 2px solid white;
-  transform: rotate(-45deg);
-  margin-top: -3px;
-  box-sizing: border-box;
+  width: 12px;
+  height: 12px;
+  /* The old tick was two borders rotated -45deg, which leaves the ink off
+     centre inside its own box; the -3px nudge then over-corrected upwards.
+     This path's stroked bounds are centred in the viewBox, so the flex
+     centring above places it correctly with no nudge. */
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .mi-rp-item-label {
@@ -4053,6 +4057,13 @@ input[type="color"] {
   border-radius: 24px;
   cursor: pointer;
   transition: all 0.2s ease;
+  /* The arrow strokes with currentColor, so it is black while the button is
+     usable and falls back to grey (plus the :disabled opacity) when not. */
+  color: #000;
+}
+
+.mi-page-nav-btn:disabled {
+  color: #6b7280;
 }
 
 .mi-page-nav-btn.is-next {
@@ -4068,7 +4079,8 @@ input[type="color"] {
   cursor: not-allowed;
 }
 
-.mi-page-nav-btn img {
+.mi-page-nav-btn img,
+.mi-page-nav-btn .mi-page-nav-icon {
   width: 16px;
   height: 16px;
 }
