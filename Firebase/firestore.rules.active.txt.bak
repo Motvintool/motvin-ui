@@ -128,53 +128,6 @@ service cloud.firestore {
       }
     }
 
-    // Inspirations app ratings. One aggregate doc per app, one vote doc per
-    // user beneath it. Written by motvin-web/src/lib/firebase/ratings.ts.
-    match /inspirationRatings/{appId} {
-      // The score is public; only writing is gated.
-      allow read: if true;
-
-      // The aggregate is maintained client-side inside a transaction, so a
-      // signed-in user must be able to write it. These conditions block the
-      // obvious abuses: unknown fields, non-numeric totals, a count jumping by
-      // more than the single vote one transaction can add, and an average
-      // outside the 1..5 the stars can display.
-      //
-      // They do NOT make it tamper-proof — a signed-in user could still write a
-      // self-consistent but dishonest sum. Moving the aggregate into a Cloud
-      // Function triggered by userRatings writes is what closes that.
-      allow create, update: if request.auth != null
-        && request.resource.data.keys().hasOnly(['sum', 'count', 'updatedAtMs'])
-        && request.resource.data.sum is number
-        && request.resource.data.count is int
-        && request.resource.data.sum >= 0
-        && request.resource.data.count >= 0
-        && (!exists(/databases/$(database)/documents/inspirationRatings/$(appId))
-            || request.resource.data.count <= resource.data.count + 1)
-        && (request.resource.data.count == 0
-            || (request.resource.data.sum >= request.resource.data.count
-                && request.resource.data.sum <= request.resource.data.count * 5));
-
-      allow delete: if false;
-
-      // One person's vote. This is the rule that actually enforces "only
-      // signed-in users can rate"; the UI hiding the stars is a courtesy.
-      match /userRatings/{uid} {
-        allow read: if true;
-        allow create, update: if request.auth != null
-          && request.auth.uid == uid
-          && request.resource.data.keys().hasOnly(['uid', 'value', 'updatedAtMs'])
-          && request.resource.data.uid == uid
-          && request.resource.data.value is int
-          && request.resource.data.value >= 1
-          && request.resource.data.value <= 5;
-
-        // Ratings change by re-rating, never by deletion, so the aggregate can
-        // never be left counting a vote that no longer exists.
-        allow delete: if false;
-      }
-    }
-
     match /releaseNotesAdmins/{emailDocId} {
       allow get: if isReleaseNotesOwner()
         || (isVerifiedSignedIn() && getSignedInEmail() == emailDocId);
